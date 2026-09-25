@@ -1,0 +1,44 @@
+name: Publish release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - name: Validate release
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          version="${TAG#v}"
+          npm ci
+          npx playwright install --with-deps chromium
+          npm run release:check
+          grep -q "^// @version[[:space:]]*$version$" prisma.user.js
+      - name: Publish assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          if gh release view "$TAG" >/dev/null 2>&1; then exit 0; fi
+          awk '
+            /^## / { section += 1; if (section > 1) exit }
+            { print }
+          ' CHANGELOG.md > release-notes.md
+          gh release create "$TAG" \
+            prisma.user.js \
+            assets/prisma.svg \
+            --title "PRISMA $TAG" \
+            --notes-file release-notes.md

@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
+  <title id="title">PRISMA Launcher Gem</title><desc id="desc">A borderless triangular spectrum crystal with magenta, violet, and cyan facets.</desc>
+  <polygon points="512,188 820,782 204,782" fill="#151020"/><polygon points="512,188 512,494 332,690 204,782" fill="#ff9af0"/><polygon points="512,188 690,690 512,494" fill="#a985ff"/><polygon points="512,188 820,782 690,690" fill="#5fe9f4"/><polygon points="204,782 332,690 512,494 512,782" fill="#d933bf"/><polygon points="512,494 690,690 820,782 512,782" fill="#277ddd"/><polygon points="332,690 512,494 512,782" fill="#7137d6"/><polygon points="512,494 690,690 512,782" fill="#3752e8"/><polygon points="512,188 548,466 512,494 476,466" fill="#fff0b0"/>
+</svg>

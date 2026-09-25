@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
+  <title id="title">PRISMA Icon</title><desc id="desc">A triangular spectrum-cut faceted gem in a matching gradient badge.</desc>
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#171021"/><stop offset="1" stop-color="#08131e"/></linearGradient><linearGradient id="border" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff9af0"/><stop offset=".5" stop-color="#8f61ff"/><stop offset="1" stop-color="#5fe9f4"/></linearGradient></defs>
+  <rect x="32" y="32" width="960" height="960" rx="185" fill="url(#bg)"/><rect x="42" y="42" width="940" height="940" rx="175" fill="none" stroke="url(#border)" stroke-width="28"/>
+  <polygon points="512,188 820,782 204,782" fill="#151020"/><polygon points="512,188 512,494 332,690 204,782" fill="#ff9af0"/><polygon points="512,188 690,690 512,494" fill="#a985ff"/><polygon points="512,188 820,782 690,690" fill="#5fe9f4"/><polygon points="204,782 332,690 512,494 512,782" fill="#d933bf"/><polygon points="512,494 690,690 820,782 512,782" fill="#277ddd"/><polygon points="332,690 512,494 512,782" fill="#7137d6"/><polygon points="512,494 690,690 512,782" fill="#3752e8"/><polygon points="512,188 548,466 512,494 476,466" fill="#fff0b0"/>
+</svg>
