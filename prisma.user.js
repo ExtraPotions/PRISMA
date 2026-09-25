@@ -2116,8 +2116,8 @@ const ExtraPotionsCore = (() => {
     }
     function normalize(state) {
       const next = { ...(state || {}) };
-      if (!next.lastCheckAt && next.checkedAt) next.lastCheckAt = Number(next.checkedAt) || 0;
-      if (!next.lastRemoteVersion && next.latest) next.lastRemoteVersion = String(next.latest || '');
+      if (!Object.hasOwn(next, 'lastCheckAt') && next.checkedAt) next.lastCheckAt = Number(next.checkedAt) || 0;
+      if (!Object.hasOwn(next, 'lastRemoteVersion') && next.latest) next.lastRemoteVersion = String(next.latest || '');
       if (!Array.isArray(next.details)) next.details = [];
       return next;
     }
@@ -3771,6 +3771,7 @@ EXP.Updates = ExtraPotionsCore.createReleaseUpdateChecker({
   onError: error => EXP.Core.safeError(Object.assign(error, { code: 'UPDATE_CHECK' }), 'prisma'),
 });
 
+// Dropper 3.2.8 is the canonical shared UI; product-specific color stays declarative.
 EXP.MenuChrome = Object.freeze({ create: options => ExtraPotionsCore.create({ ...options, launcherSrc: 'https://raw.githubusercontent.com/ExtraPotions/PRISMA/main/assets/prisma-launcher.svg', productTheme: {"id":"prisma","name":"PRISMA gem","swatch":"linear-gradient(135deg,#ff9af0 0 34%,#8f61ff 34% 67%,#5fe9f4 67%)","bg":"#101116","panel":"#191b22","line":"#30333e","text":"#f4f2f7","muted":"#aeadb8","accent":"#d264df","accent2":"#49c7ef","skin":"linear-gradient(135deg,#ff9af0 0 34%,#8f61ff 34% 67%,#5fe9f4 67%)","skinVertical":"linear-gradient(180deg,#ff9af0 0 34%,#8f61ff 34% 67%,#5fe9f4 67%)"} }) });
 
 /* Diagnostics reports and controls follow Dropper's shared implementation. */
