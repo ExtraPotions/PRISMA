@@ -106,27 +106,31 @@ test('menu palette recolors the shell and narrow rows do not create nested scrol
   assert.deepEqual(facts.swatches, ['Ember', 'Midnight', 'Glacier', 'High contrast', 'Verdant', 'Pride', 'Crimson', 'PRISMA gem']);
 });
 
-test('version and update-complete cards show the concise current changelog', async (t) => {
+test('version action reuses the update-complete card for the current changelog', async (t) => {
   const browser = await chromium.launch({ headless: true });
   t.after(() => browser.close());
   const page = await browser.newPage();
-  await page.addInitScript({ content: `localStorage.setItem('exp:v3:prisma:last-version-v2','3.0.22');\n${script}` });
+  await page.addInitScript({ content: `localStorage.setItem('exp:v3:prisma:last-version-v2','3.0.31');\n${script}` });
   await page.route('https://fixture.test/**', (route) => route.fulfill({ status:200, contentType:'text/html', body:'<!doctype html><html><body><main>bisexual identity</main></body></html>' }));
   await page.goto('https://fixture.test/page');
   await page.waitForSelector('#exp-prisma-root', { state:'attached' });
   const facts = await page.locator('#exp-prisma-root').evaluate((host) => {
     const root=host.shadowRoot;
-    const notices=[...root.querySelectorAll('.update-notice')];
-    const completed=notices[0];
+    const card=root.querySelector('.update-notice');
+    const read=(node)=>({kind:node.dataset.noticeKind,title:node.querySelector('.update-title')?.textContent||'',version:node.querySelector('.update-version')?.textContent||'',bullets:[...node.querySelectorAll('li')].map((item)=>item.textContent.trim()),visible:!node.hidden});
+    const completed=read(card);
     root.querySelector('.version').click();
-    const current=notices[1];
-    const read=(node)=>({title:node.querySelector('.update-title')?.textContent||'',bullets:[...node.querySelectorAll('li')].map((item)=>item.textContent.trim()),visible:!node.hidden});
-    return {completed:read(completed),current:read(current)};
+    const current=read(card);
+    return {completed,current,sameNode:card===root.querySelector('.update-notice')};
   });
+  assert.equal(facts.sameNode,true);
+  assert.equal(facts.completed.kind,'complete');
   assert.equal(facts.completed.title,'PRISMA Updated');
   assert.equal(facts.completed.visible,true);
   assert.ok(facts.completed.bullets.length>=2&&facts.completed.bullets.length<=4,JSON.stringify(facts));
+  assert.equal(facts.current.kind,'current');
   assert.equal(facts.current.title,'PRISMA Changelog');
+  assert.equal(facts.current.version,'v3.0.32');
   assert.equal(facts.current.visible,true);
   assert.deepEqual(facts.current.bullets,facts.completed.bullets);
 });
