@@ -1,15 +1,12 @@
 EXP.UI = (() => {
   const ICON_URL = 'https://raw.githubusercontent.com/ExtraPotions/PRISMA/main/assets/prisma-launcher.svg';
-  const routeNames = Object.freeze([['page', 'Highlights'], ['style', 'Highlight Style'], ['look', 'Appearance'], ['tools', 'Language'], ['sites', 'Sites'], ['menu', 'Settings']]);
-  let host, shadow, launcher, panel, nav, workspace, live, toast, chrome, toastTimer, updateTimer, updateCard, currentRoute = '', lastRoute = '', open = false, engineState, importDraft = null, launcherCleanup, unsubscribe;
+  const routeNames = Object.freeze([['page', 'Highlights'], ['style', 'Highlight Style'], ['look', 'Appearance'], ['tools', 'Language'], ['sites', 'Sites'], ['system', 'System']]);
+  let host, shadow, launcher, panel, nav, workspace, live, toast, chrome, toastTimer, updateTimer, updateCard, currentRoute = '', lastRoute = '', open = false, engineState, importDraft = null, launcherCleanup, unsubscribe, noticeCleanups = [];
   const UI_THEMES = ExtraPotionsCore.themes({"id":"prisma","name":"PRISMA gem","swatch":"linear-gradient(135deg,#100814 0 38%,#a843b6 38% 69%,#2e98a5 69% 100%)","canvas":"#100814","surface":"#211029","primary":"#a843b6","companion":"#6853c9","counterpoint":"#2e98a5","interactive":"#c05bca","bg":"#100814","panel":"#211029","line":"#4a2e55","text":"#eadcf0","muted":"#ad96b5","accent":"#a843b6","accent2":"#c05bca","skin":"linear-gradient(135deg,#a843b6 0%,#6853c9 52%,#2e98a5 100%)","skinVertical":"linear-gradient(180deg,#a843b6 0%,#6853c9 52%,#2e98a5 100%)"});
   const el = (tag, attrs = {}, text) => { const node = document.createElement(tag); for (const [name, value] of Object.entries(attrs)) { if (name === 'class') node.className = value; else node.setAttribute(name, value); } if (text !== undefined) node.textContent = text; return node; };
   function positionFloating(node) {
-    const pr=panel?.getBoundingClientRect(), lr=launcher?.getBoundingClientRect();
-    if(!node||!lr)return;
-    const h=node.offsetHeight||190, anchor=open&&pr?.height?pr.top:lr.top;
-    node.style.right=Math.max(12,innerWidth-(open&&pr?.width?pr.right:lr.right))+'px';
-    node.style.top=Math.max(8,anchor-h-8)+'px'; node.style.bottom='auto';
+    if(!node)return;
+    EXP.Core.layoutFloatingNotices();
   }
   function makeNotice() {
     const notice=el('div',{class:'update-notice',hidden:true});
@@ -22,7 +19,7 @@ EXP.UI = (() => {
   }
   function updateNotice(){const notice=makeNotice();notice.querySelector('.update-dismiss').addEventListener('click',()=>notice.hidden=true);return notice;}
   function hideUpdateCard(){clearTimeout(updateTimer);updateTimer=null;if(updateCard)updateCard.hidden=true;chrome?.layout();}
-  function showUpdateCard(result={},complete=false,previous=''){const fallback=['A newer PRISMA build is available.','Install the latest userscript for the newest fixes and improvements.'];const details=complete?EXP.ReleaseNotes.current():(Array.isArray(result.details)&&result.details.length?result.details:fallback);showNotice(updateCard,{kicker:complete?'Update Complete':'Update Available',title:complete?'PRISMA Updated':'New PRISMA Version Available',version:complete?EXP.VERSION:result.latest,text:complete?`Updated from v${previous} to v${EXP.VERSION}.`:`v${result.latest} is ready to install.`,details,available:!complete},true);}
+  function showUpdateCard(result={},complete=false,previous=''){const version=complete?EXP.VERSION:result.latest;if(!complete&&!EXP.Core.claimNotice('prisma',`available:${version}`))return;const fallback=['A newer PRISMA build is available.','Install the latest userscript for the newest fixes and improvements.'];const details=complete?EXP.ReleaseNotes.current():(Array.isArray(result.details)&&result.details.length?result.details:fallback);showNotice(updateCard,{kicker:complete?'Update Complete':'Update Available',title:complete?'PRISMA Updated':'New PRISMA Version Available',version,text:complete?`Updated from v${previous} to v${EXP.VERSION}.`:`v${result.latest} is ready to install.`,details,available:!complete},true);}
   const button = (label, action, className = 'action') => { const node = el('button', { type: 'button', class: className }, label); node.addEventListener('click', action); return node; };
   const announce = (message, kind = 'status') => { if (live) { live.textContent = message; live.dataset.kind = kind; } if (!toast || !EXP.Settings.snapshot().menuNotifications) return; toast.textContent=message;toast.hidden=false;toast.style.top=`${Math.max(8,(launcher?.getBoundingClientRect().top||60)-48)}px`;clearTimeout(toastTimer);toastTimer=setTimeout(()=>{if(toast)toast.hidden=true;},3000); };
   function group(title) { const node = el('section', { class: 'group' }); node.append(el('h3', {}, title)); return node; }
@@ -112,7 +109,7 @@ EXP.UI = (() => {
     return section;
   }
   function renderSettings() {
-    const state = EXP.Settings.snapshot(); const section = group('Settings', 'PRISMA stores schema-1 settings locally and reads no predecessor storage.');
+    const state = EXP.Settings.snapshot(); const section = group('Menu & Data', 'PRISMA stores schema-1 settings locally and reads no predecessor storage.');
     section.append(selectControl('Panel + menu width', 'Matches Dropper’s Full, Compact, and Narrow sizing.', state.menuWidth, [['full','Full'],['compact','Compact'],['narrow','Narrow']], (menuWidth) => update({ menuWidth }, 'menu-width')));
     section.append(switchControl('Auto-close menu', 'Closes after 15 seconds without interaction.', state.menuAutoClose, (menuAutoClose) => update({ menuAutoClose }, 'menu-auto-close')));
     section.append(switchControl('Menu notifications', 'Shows short local status toasts.', state.menuNotifications, (menuNotifications) => update({ menuNotifications }, 'menu-notifications')));
@@ -123,7 +120,7 @@ EXP.UI = (() => {
     section.append(actionRow('Reset PRISMA', 'Resets PRISMA V3 only. Other products are untouched.', () => { if (!confirm('Reset all PRISMA V3 settings?')) return; EXP.Settings.replace(EXP.Settings.defaults, 'product-reset'); render(); announce('PRISMA reset complete.'); }, 'Reset'));
     const fragment = document.createDocumentFragment(); fragment.append(renderAdvanced(), section); return fragment;
   }
-  const routeRenderers = { page: renderPage, style: renderHighlightStyle, look: renderLook, tools: renderTools, sites: renderSites, menu: renderSettings };
+  const routeRenderers = { page: renderPage, style: renderHighlightStyle, look: renderLook, tools: renderTools, sites: renderSites, system: renderSettings };
   function render() {
     if (!nav) return;
     engineState = EXP.Engine.snapshot({ includeMatchText: false });
@@ -164,8 +161,8 @@ EXP.UI = (() => {
     live = el('p', { class: 'live', role: 'status', 'aria-live': 'polite' }); nav = el('nav', { class: 'nav', 'aria-label': 'PRISMA sections' });
     for (const [id, name] of routeNames) { const section = el('section', { class: 'tool-panel' }); const item = button(name, () => { currentRoute = currentRoute===id?'':id; render(); }, 'route'); item.dataset.route = id; item.setAttribute('aria-controls', `exp-prisma-route-${id}`); const body = el('div', { class: 'route-body', id: `exp-prisma-route-${id}` }); body.hidden = true; section.append(item, body); nav.append(section); }
     panel.append(head, el('div', { class: 'header-divider' }), live, nav);updateCard=makeNotice();toast=el('div',{class:'toast'});toast.hidden=true;EXP.Core.injectStyle(shadow,styleCss,{expPrismaUi:'1'});shadow.append(panel, updateCard, changelog, launcher,toast); (document.body || document.documentElement).append(host);
-    applyUiTheme(EXP.Settings.snapshot().uiTheme);try{const key='exp:v3:prisma:last-version-v2',prev=localStorage.getItem(key);if(prev&&prev!==EXP.VERSION)showUpdateCard({},true,prev);localStorage.setItem(key,EXP.VERSION);}catch{}if(EXP.Settings.snapshot().updateNotifications)EXP.Updates.check(false).then(r=>{if(r.available)showUpdateCard(r);});launcherCleanup = EXP.Core.registerLauncher(host, { productId: 'prisma', priority: 40 });chrome=EXP.MenuChrome.create({id:'prisma',host,shadow,launcher,panel,getSettings:()=>EXP.Settings.snapshot(),setOpen,shortcutKey:'p'}); unsubscribe = EXP.Engine.subscribe((value) => { engineState = value; if (open && ['page', 'tools', 'menu'].includes(currentRoute)) render(); }); addEventListener('keydown', bindKeys); document.addEventListener('pointerdown', outsidePointer, true); render();
+    noticeCleanups=[EXP.Core.registerFloatingNotice(host,updateCard),EXP.Core.registerFloatingNotice(host,changelog)];applyUiTheme(EXP.Settings.snapshot().uiTheme);const prev=EXP.Core.consumeVersionChange('prisma',EXP.VERSION,'exp:v3:prisma:last-version-v2');if(prev)showUpdateCard({},true,prev);if(EXP.Settings.snapshot().updateNotifications)EXP.Updates.check(false).then(r=>{if(r.available)showUpdateCard(r);});launcherCleanup = EXP.Core.registerLauncher(host, { productId: 'prisma', priority: 40 });chrome=EXP.MenuChrome.create({id:'prisma',host,shadow,launcher,panel,getSettings:()=>EXP.Settings.snapshot(),setOpen,shortcutKey:'p'}); unsubscribe = EXP.Engine.subscribe((value) => { engineState = value; if (open && ['page', 'tools', 'system'].includes(currentRoute)) render(); }); addEventListener('keydown', bindKeys); document.addEventListener('pointerdown', outsidePointer, true); render();
   }
-  function cleanup() { removeEventListener('keydown', bindKeys); document.removeEventListener('pointerdown', outsidePointer, true); unsubscribe?.(); launcherCleanup?.();chrome?.destroy();clearTimeout(toastTimer);clearTimeout(updateTimer); host?.remove(); host = shadow = launcher = panel = nav = workspace = live = toast = chrome = null; }
+  function cleanup() { removeEventListener('keydown', bindKeys); document.removeEventListener('pointerdown', outsidePointer, true); unsubscribe?.(); launcherCleanup?.();noticeCleanups.forEach(dispose=>dispose());noticeCleanups=[];chrome?.destroy();clearTimeout(toastTimer);clearTimeout(updateTimer); host?.remove(); host = shadow = launcher = panel = nav = workspace = live = toast = chrome = null; }
   return Object.freeze({ init, cleanup, open: () => setOpen(true), refresh: render });
 })();

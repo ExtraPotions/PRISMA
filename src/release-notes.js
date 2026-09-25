@@ -1,5 +1,10 @@
 EXP.ReleaseNotes = (() => {
   const notes = Object.freeze({
+    '3.0.30': Object.freeze([
+      'Shows each automatic update notice once for that version instead of on every page load.',
+      'Stacks simultaneous notices beside the complete launcher grid.',
+      'Moves diagnostics and data actions under the final System menu.'
+    ]),
     '3.0.29': Object.freeze([
       'Keeps every launcher clickable when multiple ExtraPotions products share the page.',
       'Prevents transparent launcher containers from intercepting pointer input.'

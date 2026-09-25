@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PRISMA
 // @namespace    https://github.com/ExtraPotions
-// @version      3.0.29
+// @version      3.0.30
 // @description  Local LGBTQ+ identity-language recognition with context-aware highlighting.
 // @icon         https://raw.githubusercontent.com/ExtraPotions/PRISMA/main/assets/prisma-launcher.svg
 // @tag          LGBTQ+
@@ -33,7 +33,7 @@
 'use strict';
 const EXP = Object.create(null);
 
-// Generated from the approved Dropper v3.2.20 install artifact. Do not edit.
+// Generated from the approved Dropper v3.2.21 install artifact. Do not edit.
 const DropperReference = (() => {
 const LAUNCHER_ORDER_KEY = "exp:v3:launcher-order";
 const LAUNCHER_GRID_DELTA_KEY = "exp:v3:launcher-grid-delta";
@@ -1406,15 +1406,22 @@ function createProductLifecycle(shared) {
   function focusMenuSurface(surface) { if (!(surface instanceof HTMLElement)) return false; if (!surface.hasAttribute('tabindex')) surface.setAttribute('tabindex', '-1'); surface.style.outline='none'; surface.focus({ preventScroll: true }); return true; }
 
   addEventListener('pagehide', () => { for (const cleanup of cleanups) { try { cleanup(); } catch {} } }, { once: true });
-  return Object.freeze({ VERSION, PROTOCOL, register, createScheduler, onNavigation, registerLauncher, announce, negotiate, safeError, diagnosticSnapshot, diagnostics: diagnosticSnapshot, focusMenuSurface, injectStyle });
+  return Object.freeze({
+    VERSION, PROTOCOL, register, createScheduler, onNavigation, registerLauncher, announce, negotiate, safeError,
+    diagnosticSnapshot, diagnostics: diagnosticSnapshot, focusMenuSurface, injectStyle,
+    registerFloatingNotice: shared.registerFloatingNotice,
+    layoutFloatingNotices: shared.layoutFloatingNotices,
+    claimNotice: shared.claimNotice,
+    consumeVersionChange: shared.consumeVersionChange,
+  });
 }
 
 // Product-neutral host for the code extracted from Dropper 3.2.10.
 // Product engines own their settings, content, and actions. Core owns shared UI.
 const ExtraPotionsCore = (() => {
   'use strict';
-  const version = '3.2.19';
-  const sourceVersion = '3.2.19';
+  const version = '3.2.20';
+  const sourceVersion = '3.2.21';
   const protocol = 'exp-core-coordination-v1';
   const gridProtocol = 'exp-launcher-grid-v3';
   const GRID_ORDER = 'exp:v3:launcher-order';
@@ -1422,6 +1429,7 @@ const ExtraPotionsCore = (() => {
   const PRIORITY = { shift: 100, dropper: 90, ward: 60, prisma: 40 };
   const THEME_PRIORITY = { dropper: 4, shift: 3, prisma: 2, ward: 1 };
   const registrations = new WeakMap();
+  const floatingNoticeRegistrations = new WeakMap();
   const controllers = new WeakMap();
   const tokenNames = ['bg', 'panel', 'line', 'text', 'muted', 'accent', 'accent2'];
   const partIds = {
@@ -1602,6 +1610,67 @@ const ExtraPotionsCore = (() => {
     products.forEach((node, index) => assign(node, (dropper ? 1 : 0) + index));
     write(GRID_ORDER, products.map(node => node.dataset.productId));
   }
+  function storageRead(key, fallback = null) {
+    try { if (typeof GM_getValue === 'function') return GM_getValue(key, fallback); } catch {}
+    try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; }
+  }
+  function storageWrite(key, value) {
+    try { if (typeof GM_setValue === 'function') { GM_setValue(key, value); return; } } catch {}
+    try { localStorage.setItem(key, JSON.stringify(value)); } catch {}
+  }
+  function claimNotice(productId, changeId) {
+    const key = `exp:v3:${String(productId || 'product')}:notice:${String(changeId || 'change')}`;
+    if (storageRead(key, false) === true) return false;
+    storageWrite(key, true);
+    return true;
+  }
+  function consumeVersionChange(productId, currentVersion, legacyKey = '') {
+    const key = `exp:v3:${String(productId || 'product')}:installed-version`;
+    let previous = String(storageRead(key, '') || '');
+    if (!previous && legacyKey) { try { previous = String(localStorage.getItem(legacyKey) || ''); } catch {} }
+    storageWrite(key, String(currentVersion || ''));
+    return previous && previous !== currentVersion && claimNotice(productId, `updated:${currentVersion}`) ? previous : '';
+  }
+  function visibleFloatingNotices() {
+    return [...document.querySelectorAll('[data-exp-product-launcher="1"][data-product-id]')]
+      .flatMap(host => [...(host.shadowRoot?.querySelectorAll('[data-exp-floating-notice="1"]') || [])].map(notice => ({ host, notice })))
+      .filter(({ notice }) => !notice.hidden && notice.getClientRects().length)
+      .sort((a,b) => Number(a.host.dataset.launcherSlot || 0) - Number(b.host.dataset.launcherSlot || 0) || a.host.dataset.productId.localeCompare(b.host.dataset.productId));
+  }
+  function layoutFloatingNotices() {
+    const launchers = [...document.querySelectorAll('[data-exp-product-launcher="1"][data-product-id]')]
+      .map(host => host.shadowRoot?.querySelector('[data-exp-part="launcher"],.ward-launcher,.launcher,#tdh-settings-launcher'))
+      .filter(Boolean).map(node => node.getBoundingClientRect()).filter(box => box.width && box.height);
+    const notices = visibleFloatingNotices();
+    if (!launchers.length || !notices.length) return;
+    const anchor = document.documentElement.dataset.expLauncherAnchor === 'top' ? 'top' : 'bottom';
+    const gridTop = Math.min(...launchers.map(box => box.top));
+    const gridBottom = Math.max(...launchers.map(box => box.bottom));
+    const gridRight = Math.max(...launchers.map(box => box.right));
+    let cursor = anchor === 'top' ? gridBottom + 8 : gridTop - 8;
+    for (const { notice } of notices) {
+      const width = Math.min(notice.offsetWidth || notice.scrollWidth || 260, Math.max(0, innerWidth - 24));
+      const height = notice.offsetHeight || notice.scrollHeight || 72;
+      const top = anchor === 'top' ? cursor : cursor - height;
+      notice.style.setProperty('width', `${width}px`, 'important');
+      notice.style.setProperty('left', `${Math.max(8, Math.min(innerWidth - width - 8, gridRight - width))}px`, 'important');
+      notice.style.setProperty('right', 'auto', 'important');
+      notice.style.setProperty('top', `${Math.max(8, Math.min(innerHeight - height - 8, top))}px`, 'important');
+      notice.style.setProperty('bottom', 'auto', 'important');
+      cursor = anchor === 'top' ? top + height + 8 : top - 8;
+    }
+  }
+  function registerFloatingNotice(host, notice) {
+    if (!(host instanceof Element) || !(notice instanceof Element)) return () => {};
+    if (floatingNoticeRegistrations.has(notice)) return floatingNoticeRegistrations.get(notice);
+    notice.dataset.expFloatingNotice = '1';
+    const refresh = () => requestAnimationFrame(layoutFloatingNotices);
+    const mutation = new MutationObserver(refresh); mutation.observe(notice, { attributes:true, attributeFilter:['hidden','class'] });
+    const resize = new ResizeObserver(refresh); resize.observe(notice);
+    addEventListener('resize', refresh, { passive:true }); document.addEventListener('exp-core:coordination', refresh);
+    const dispose = () => { mutation.disconnect(); resize.disconnect(); removeEventListener('resize', refresh); document.removeEventListener('exp-core:coordination', refresh); floatingNoticeRegistrations.delete(notice); };
+    floatingNoticeRegistrations.set(notice, dispose); refresh(); return dispose;
+  }
   function registerLauncher(host, options = {}) {
     if (registrations.has(host)) return registrations.get(host);
     const id = options.productId || options.id || host.dataset.productId;
@@ -1647,6 +1716,7 @@ const ExtraPotionsCore = (() => {
   function focusMenuSurface(panel) { if (!(panel instanceof HTMLElement)) return false; panel.tabIndex = -1; panel.style.outline = 'none'; panel.focus({ preventScroll: true }); return true; }
   function createFloatingNotice(options = {}) {
     const { shadow, panel, notice, versionButton = null } = options;
+    const host = options.host || shadow?.host;
     if (!(shadow instanceof ShadowRoot) || !(panel instanceof Element) || !(notice instanceof Element)) return Object.freeze({ show() {}, hide() {}, toggle() {}, layout() {}, setMenuOpen() {}, destroy() {} });
     const durationMs = Math.max(0, Number(options.durationMs ?? 30000));
     const manageVersion = options.manageVersion !== false;
@@ -1658,7 +1728,7 @@ const ExtraPotionsCore = (() => {
     notice.classList.add('update-notice','exp-floating-update'); notice.setAttribute('role','status');
     let dismiss = notice.querySelector(':scope > .exp-floating-update-dismiss');
     if (!dismiss) { dismiss=document.createElement('button'); dismiss.type='button'; dismiss.className='exp-floating-update-dismiss'; dismiss.setAttribute('aria-label','Dismiss changelog'); dismiss.textContent='×'; notice.prepend(dismiss); }
-    shadow.append(notice);
+    shadow.append(notice); const unregisterNotice = registerFloatingNotice(host, notice);
     const themeSource = options.themeSource instanceof Element ? options.themeSource : panel;
     function syncTheme() {
       const theme=getComputedStyle(themeSource); const first=(names,fallback)=>names.map(name=>theme.getPropertyValue(name).trim()).find(Boolean)||fallback;
@@ -1668,15 +1738,15 @@ const ExtraPotionsCore = (() => {
       notice.style.setProperty('--exp-notice-text',first(['--exp-notice-text','--theme-text','--text','--mb-ink'],theme.color||'#f4f4f6'));
     }
     const clearTimer=()=>{clearTimeout(timer);timer=0;};
-    function layout(){if(destroyed||notice.hidden||!menuOpen)return;syncTheme();const r=panel.getBoundingClientRect();if(!r.width)return;const width=Math.min(r.width,innerWidth-24);notice.style.width=width+'px';notice.style.left=Math.max(8,Math.min(innerWidth-width-8,r.right-width))+'px';const height=notice.offsetHeight||notice.scrollHeight||72;const above=r.top-height-8;notice.style.top=(above>=8?above:Math.min(innerHeight-height-8,r.bottom+8))+'px';notice.style.right='auto';notice.style.bottom='auto';}
-    function hide(){clearTimer();notice.hidden=true;versionButton?.setAttribute('aria-expanded','false');}
-    function show(){notice.hidden=false;versionButton?.setAttribute('aria-expanded','true');clearTimer();if(durationMs)timer=setTimeout(hide,durationMs);requestAnimationFrame(layout);}
+    function layout(){if(destroyed||notice.hidden)return;syncTheme();layoutFloatingNotices();}
+    function hide(){clearTimer();notice.hidden=true;versionButton?.setAttribute('aria-expanded','false');layoutFloatingNotices();}
+    function show(){notice.hidden=false;versionButton?.setAttribute('aria-expanded','true');clearTimer();if(durationMs)timer=setTimeout(hide,durationMs);requestAnimationFrame(layoutFloatingNotices);}
     function toggle(){if(notice.hidden)show();else hide();}
     function versionClick(){if(manageVersion)toggle();else if(!notice.hidden)show();}
     function setMenuOpen(value){menuOpen=Boolean(value);if(!menuOpen)hide();else requestAnimationFrame(layout);}
     const coordination=()=>requestAnimationFrame(layout);
     dismiss.addEventListener('click',hide);versionButton?.addEventListener('click',versionClick);addEventListener('resize',layout,{passive:true});document.addEventListener('exp-core:coordination',coordination);
-    return Object.freeze({show,hide,toggle,layout,setMenuOpen,destroy(){destroyed=true;clearTimer();dismiss.removeEventListener('click',hide);versionButton?.removeEventListener('click',versionClick);removeEventListener('resize',layout);document.removeEventListener('exp-core:coordination',coordination);}});
+    return Object.freeze({show,hide,toggle,layout,setMenuOpen,destroy(){destroyed=true;clearTimer();unregisterNotice();dismiss.removeEventListener('click',hide);versionButton?.removeEventListener('click',versionClick);removeEventListener('resize',layout);document.removeEventListener('exp-core:coordination',coordination);}});
   }
   function applyTheme(host, value, choices) {
     const controller = controllers.get(host); if (!controller) return;
@@ -1741,7 +1811,7 @@ const ExtraPotionsCore = (() => {
     applyContentDrivenMenuLayout(shadow);
     applyMatteToggleChrome(shadow);
     const versionButton=panel.querySelector('.version,[data-exp-part="version"]');
-    const floatingNotices=[...themeRoot.querySelectorAll('.update-notice,.changelog')].map(notice=>createFloatingNotice({shadow,panel,notice,versionButton:notice.classList.contains('changelog')?versionButton:null,manageVersion:false,durationMs:30000}));
+    const floatingNotices=[...themeRoot.querySelectorAll('.update-notice,.changelog')].map(notice=>createFloatingNotice({host,shadow,panel,notice,versionButton:notice.classList.contains('changelog')?versionButton:null,manageVersion:false,durationMs:30000}));
     if (launcherSrc) panel.querySelectorAll('.header-icon img').forEach(image => image.src = launcherSrc);
     host.dataset.coreVersion = version; host.dataset.coreSource = 'Dropper/3.2.10';
     let choices = themes(productTheme), selected = choices.at(-1), open = false, destroyed = false, timer = 0, deadline = 0, frame = 0;
@@ -1859,7 +1929,7 @@ const ExtraPotionsCore = (() => {
   if(document.documentElement)startGrid();else addEventListener('DOMContentLoaded',startGrid,{once:true});
   document.addEventListener('exp-core:coordination',scheduleGrid);
   addEventListener('resize',scheduleGrid,{passive:true});
-  const api = Object.freeze({version,sourceVersion,protocol,gridProtocol,reference:DropperReference,css:canonicalCss,themes,create,createProduct,createLifecycle:()=>createProductLifecycle(api),registerLauncher,layout:layoutGrid,injectStyle,applyTheme,applyMatteToggleChrome,applyTwoColumnSettingsGrid,applyContentDrivenMenuLayout,createThemeSwatches,createFloatingNotice,focusMenuSurface,registerDiagnosticsProduct:ExtraPotionsDiagnostics.registerProduct,productCompatibility:ExtraPotionsDiagnostics.compatibility,createDiagnosticsReport,downloadDiagnostics,createDiagnosticsControls,compareVersions:DropperReference.compareVersions});
+  const api = Object.freeze({version,sourceVersion,protocol,gridProtocol,reference:DropperReference,css:canonicalCss,themes,create,createProduct,createLifecycle:()=>createProductLifecycle(api),registerLauncher,layout:layoutGrid,injectStyle,applyTheme,applyMatteToggleChrome,applyTwoColumnSettingsGrid,applyContentDrivenMenuLayout,createThemeSwatches,createFloatingNotice,registerFloatingNotice,layoutFloatingNotices,claimNotice,consumeVersionChange,focusMenuSurface,registerDiagnosticsProduct:ExtraPotionsDiagnostics.registerProduct,productCompatibility:ExtraPotionsDiagnostics.compatibility,createDiagnosticsReport,downloadDiagnostics,createDiagnosticsControls,compareVersions:DropperReference.compareVersions});
   return api;
 })();
 
@@ -3275,6 +3345,11 @@ EXP.Engine = (() => {
 
 EXP.ReleaseNotes = (() => {
   const notes = Object.freeze({
+    '3.0.30': Object.freeze([
+      'Shows each automatic update notice once for that version instead of on every page load.',
+      'Stacks simultaneous notices beside the complete launcher grid.',
+      'Moves diagnostics and data actions under the final System menu.'
+    ]),
     '3.0.29': Object.freeze([
       'Keeps every launcher clickable when multiple ExtraPotions products share the page.',
       'Prevents transparent launcher containers from intercepting pointer input.'
@@ -3374,16 +3449,13 @@ EXP.Diagnostics = Object.freeze({
 
 EXP.UI = (() => {
   const ICON_URL = 'https://raw.githubusercontent.com/ExtraPotions/PRISMA/main/assets/prisma-launcher.svg';
-  const routeNames = Object.freeze([['page', 'Highlights'], ['style', 'Highlight Style'], ['look', 'Appearance'], ['tools', 'Language'], ['sites', 'Sites'], ['menu', 'Settings']]);
-  let host, shadow, launcher, panel, nav, workspace, live, toast, chrome, toastTimer, updateTimer, updateCard, currentRoute = '', lastRoute = '', open = false, engineState, importDraft = null, launcherCleanup, unsubscribe;
+  const routeNames = Object.freeze([['page', 'Highlights'], ['style', 'Highlight Style'], ['look', 'Appearance'], ['tools', 'Language'], ['sites', 'Sites'], ['system', 'System']]);
+  let host, shadow, launcher, panel, nav, workspace, live, toast, chrome, toastTimer, updateTimer, updateCard, currentRoute = '', lastRoute = '', open = false, engineState, importDraft = null, launcherCleanup, unsubscribe, noticeCleanups = [];
   const UI_THEMES = ExtraPotionsCore.themes({"id":"prisma","name":"PRISMA gem","swatch":"linear-gradient(135deg,#100814 0 38%,#a843b6 38% 69%,#2e98a5 69% 100%)","canvas":"#100814","surface":"#211029","primary":"#a843b6","companion":"#6853c9","counterpoint":"#2e98a5","interactive":"#c05bca","bg":"#100814","panel":"#211029","line":"#4a2e55","text":"#eadcf0","muted":"#ad96b5","accent":"#a843b6","accent2":"#c05bca","skin":"linear-gradient(135deg,#a843b6 0%,#6853c9 52%,#2e98a5 100%)","skinVertical":"linear-gradient(180deg,#a843b6 0%,#6853c9 52%,#2e98a5 100%)"});
   const el = (tag, attrs = {}, text) => { const node = document.createElement(tag); for (const [name, value] of Object.entries(attrs)) { if (name === 'class') node.className = value; else node.setAttribute(name, value); } if (text !== undefined) node.textContent = text; return node; };
   function positionFloating(node) {
-    const pr=panel?.getBoundingClientRect(), lr=launcher?.getBoundingClientRect();
-    if(!node||!lr)return;
-    const h=node.offsetHeight||190, anchor=open&&pr?.height?pr.top:lr.top;
-    node.style.right=Math.max(12,innerWidth-(open&&pr?.width?pr.right:lr.right))+'px';
-    node.style.top=Math.max(8,anchor-h-8)+'px'; node.style.bottom='auto';
+    if(!node)return;
+    EXP.Core.layoutFloatingNotices();
   }
   function makeNotice() {
     const notice=el('div',{class:'update-notice',hidden:true});
@@ -3396,7 +3468,7 @@ EXP.UI = (() => {
   }
   function updateNotice(){const notice=makeNotice();notice.querySelector('.update-dismiss').addEventListener('click',()=>notice.hidden=true);return notice;}
   function hideUpdateCard(){clearTimeout(updateTimer);updateTimer=null;if(updateCard)updateCard.hidden=true;chrome?.layout();}
-  function showUpdateCard(result={},complete=false,previous=''){const fallback=['A newer PRISMA build is available.','Install the latest userscript for the newest fixes and improvements.'];const details=complete?EXP.ReleaseNotes.current():(Array.isArray(result.details)&&result.details.length?result.details:fallback);showNotice(updateCard,{kicker:complete?'Update Complete':'Update Available',title:complete?'PRISMA Updated':'New PRISMA Version Available',version:complete?EXP.VERSION:result.latest,text:complete?`Updated from v${previous} to v${EXP.VERSION}.`:`v${result.latest} is ready to install.`,details,available:!complete},true);}
+  function showUpdateCard(result={},complete=false,previous=''){const version=complete?EXP.VERSION:result.latest;if(!complete&&!EXP.Core.claimNotice('prisma',`available:${version}`))return;const fallback=['A newer PRISMA build is available.','Install the latest userscript for the newest fixes and improvements.'];const details=complete?EXP.ReleaseNotes.current():(Array.isArray(result.details)&&result.details.length?result.details:fallback);showNotice(updateCard,{kicker:complete?'Update Complete':'Update Available',title:complete?'PRISMA Updated':'New PRISMA Version Available',version,text:complete?`Updated from v${previous} to v${EXP.VERSION}.`:`v${result.latest} is ready to install.`,details,available:!complete},true);}
   const button = (label, action, className = 'action') => { const node = el('button', { type: 'button', class: className }, label); node.addEventListener('click', action); return node; };
   const announce = (message, kind = 'status') => { if (live) { live.textContent = message; live.dataset.kind = kind; } if (!toast || !EXP.Settings.snapshot().menuNotifications) return; toast.textContent=message;toast.hidden=false;toast.style.top=`${Math.max(8,(launcher?.getBoundingClientRect().top||60)-48)}px`;clearTimeout(toastTimer);toastTimer=setTimeout(()=>{if(toast)toast.hidden=true;},3000); };
   function group(title) { const node = el('section', { class: 'group' }); node.append(el('h3', {}, title)); return node; }
@@ -3486,7 +3558,7 @@ EXP.UI = (() => {
     return section;
   }
   function renderSettings() {
-    const state = EXP.Settings.snapshot(); const section = group('Settings', 'PRISMA stores schema-1 settings locally and reads no predecessor storage.');
+    const state = EXP.Settings.snapshot(); const section = group('Menu & Data', 'PRISMA stores schema-1 settings locally and reads no predecessor storage.');
     section.append(selectControl('Panel + menu width', 'Matches Dropper’s Full, Compact, and Narrow sizing.', state.menuWidth, [['full','Full'],['compact','Compact'],['narrow','Narrow']], (menuWidth) => update({ menuWidth }, 'menu-width')));
     section.append(switchControl('Auto-close menu', 'Closes after 15 seconds without interaction.', state.menuAutoClose, (menuAutoClose) => update({ menuAutoClose }, 'menu-auto-close')));
     section.append(switchControl('Menu notifications', 'Shows short local status toasts.', state.menuNotifications, (menuNotifications) => update({ menuNotifications }, 'menu-notifications')));
@@ -3497,7 +3569,7 @@ EXP.UI = (() => {
     section.append(actionRow('Reset PRISMA', 'Resets PRISMA V3 only. Other products are untouched.', () => { if (!confirm('Reset all PRISMA V3 settings?')) return; EXP.Settings.replace(EXP.Settings.defaults, 'product-reset'); render(); announce('PRISMA reset complete.'); }, 'Reset'));
     const fragment = document.createDocumentFragment(); fragment.append(renderAdvanced(), section); return fragment;
   }
-  const routeRenderers = { page: renderPage, style: renderHighlightStyle, look: renderLook, tools: renderTools, sites: renderSites, menu: renderSettings };
+  const routeRenderers = { page: renderPage, style: renderHighlightStyle, look: renderLook, tools: renderTools, sites: renderSites, system: renderSettings };
   function render() {
     if (!nav) return;
     engineState = EXP.Engine.snapshot({ includeMatchText: false });
@@ -3538,13 +3610,13 @@ EXP.UI = (() => {
     live = el('p', { class: 'live', role: 'status', 'aria-live': 'polite' }); nav = el('nav', { class: 'nav', 'aria-label': 'PRISMA sections' });
     for (const [id, name] of routeNames) { const section = el('section', { class: 'tool-panel' }); const item = button(name, () => { currentRoute = currentRoute===id?'':id; render(); }, 'route'); item.dataset.route = id; item.setAttribute('aria-controls', `exp-prisma-route-${id}`); const body = el('div', { class: 'route-body', id: `exp-prisma-route-${id}` }); body.hidden = true; section.append(item, body); nav.append(section); }
     panel.append(head, el('div', { class: 'header-divider' }), live, nav);updateCard=makeNotice();toast=el('div',{class:'toast'});toast.hidden=true;EXP.Core.injectStyle(shadow,styleCss,{expPrismaUi:'1'});shadow.append(panel, updateCard, changelog, launcher,toast); (document.body || document.documentElement).append(host);
-    applyUiTheme(EXP.Settings.snapshot().uiTheme);try{const key='exp:v3:prisma:last-version-v2',prev=localStorage.getItem(key);if(prev&&prev!==EXP.VERSION)showUpdateCard({},true,prev);localStorage.setItem(key,EXP.VERSION);}catch{}if(EXP.Settings.snapshot().updateNotifications)EXP.Updates.check(false).then(r=>{if(r.available)showUpdateCard(r);});launcherCleanup = EXP.Core.registerLauncher(host, { productId: 'prisma', priority: 40 });chrome=EXP.MenuChrome.create({id:'prisma',host,shadow,launcher,panel,getSettings:()=>EXP.Settings.snapshot(),setOpen,shortcutKey:'p'}); unsubscribe = EXP.Engine.subscribe((value) => { engineState = value; if (open && ['page', 'tools', 'menu'].includes(currentRoute)) render(); }); addEventListener('keydown', bindKeys); document.addEventListener('pointerdown', outsidePointer, true); render();
+    noticeCleanups=[EXP.Core.registerFloatingNotice(host,updateCard),EXP.Core.registerFloatingNotice(host,changelog)];applyUiTheme(EXP.Settings.snapshot().uiTheme);const prev=EXP.Core.consumeVersionChange('prisma',EXP.VERSION,'exp:v3:prisma:last-version-v2');if(prev)showUpdateCard({},true,prev);if(EXP.Settings.snapshot().updateNotifications)EXP.Updates.check(false).then(r=>{if(r.available)showUpdateCard(r);});launcherCleanup = EXP.Core.registerLauncher(host, { productId: 'prisma', priority: 40 });chrome=EXP.MenuChrome.create({id:'prisma',host,shadow,launcher,panel,getSettings:()=>EXP.Settings.snapshot(),setOpen,shortcutKey:'p'}); unsubscribe = EXP.Engine.subscribe((value) => { engineState = value; if (open && ['page', 'tools', 'system'].includes(currentRoute)) render(); }); addEventListener('keydown', bindKeys); document.addEventListener('pointerdown', outsidePointer, true); render();
   }
-  function cleanup() { removeEventListener('keydown', bindKeys); document.removeEventListener('pointerdown', outsidePointer, true); unsubscribe?.(); launcherCleanup?.();chrome?.destroy();clearTimeout(toastTimer);clearTimeout(updateTimer); host?.remove(); host = shadow = launcher = panel = nav = workspace = live = toast = chrome = null; }
+  function cleanup() { removeEventListener('keydown', bindKeys); document.removeEventListener('pointerdown', outsidePointer, true); unsubscribe?.(); launcherCleanup?.();noticeCleanups.forEach(dispose=>dispose());noticeCleanups=[];chrome?.destroy();clearTimeout(toastTimer);clearTimeout(updateTimer); host?.remove(); host = shadow = launcher = panel = nav = workspace = live = toast = chrome = null; }
   return Object.freeze({ init, cleanup, open: () => setOpen(true), refresh: render });
 })();
 
-EXP.VERSION = '3.0.27';
+EXP.VERSION = '3.0.30';
 ExtraPotionsCore.registerDiagnosticsProduct('prisma', EXP.VERSION);
 EXP.App = (() => {
   let scheduler, navigationCleanup, settingsCleanup, lifecycle;

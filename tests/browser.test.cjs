@@ -358,7 +358,7 @@ test('global and site identity switches affect the same matcher', async () => {
 test('Safe Mode restores the page and can recover through the menu', async () => {
   const { browser, page } = await fixture('<main>bisexual</main>');
   try {
-    await page.locator('#exp-prisma-root').evaluate((host) => { host.shadowRoot.querySelector('.launcher').click(); host.shadowRoot.querySelector('[data-route="menu"]').click(); host.shadowRoot.querySelector('button[role="switch"][aria-label="Safe Mode"]').click(); });
+    await page.locator('#exp-prisma-root').evaluate((host) => { host.shadowRoot.querySelector('.launcher').click(); host.shadowRoot.querySelector('[data-route="system"]').click(); host.shadowRoot.querySelector('button[role="switch"][aria-label="Safe Mode"]').click(); });
     await page.waitForFunction(() => document.querySelectorAll('.exp-prisma-hit').length === 0);
     await page.locator('#exp-prisma-root').evaluate((host) => host.shadowRoot.querySelector('button[role="switch"][aria-label="Safe Mode"]').click());
     await page.waitForFunction(() => document.querySelectorAll('.exp-prisma-hit').length === 1);
@@ -533,17 +533,17 @@ test('menu routes use accurate labels and scoped section contents', async (t) =>
       appearance: openRoute('Appearance'),
       language: openRoute('Language'),
       sites: openRoute('Sites'),
-      settings: openRoute('Settings'),
+      settings: openRoute('System'),
     };
   });
-  assert.deepEqual(facts.labels, ['Highlights', 'Highlight Style', 'Appearance', 'Language', 'Sites', 'Settings']);
+  assert.deepEqual(facts.labels, ['Highlights', 'Highlight Style', 'Appearance', 'Language', 'Sites', 'System']);
   assert.equal(facts.subtitle, 'Your self-identity. Recognized.');
   assert.deepEqual(facts.highlights, ['Highlights']);
   assert.deepEqual(facts.style, ['Highlight style']);
   assert.deepEqual(facts.appearance, ['Appearance', 'Accessibility']);
   assert.deepEqual(facts.language, ['Identity Catalog', 'Context Engine']);
   assert.deepEqual(facts.sites, ['Current Site']);
-  assert.deepEqual(facts.settings, ['Diagnostics', 'Settings']);
+  assert.deepEqual(facts.settings, ['Diagnostics', 'Menu & Data']);
 });
 
 test('README screenshots exist at stable docs paths', () => {
