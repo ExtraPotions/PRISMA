@@ -1,5 +1,9 @@
 EXP.ReleaseNotes = (() => {
   const notes = Object.freeze({
+    '3.0.31': Object.freeze([
+      'Preserves PRISMA settings across userscript updates by recovering from browser-local backup storage when manager storage is missing.',
+      'Mirrors validated settings to both manager storage and the local fallback so future updates can self-heal without resetting preferences.'
+    ]),
     '3.0.30': Object.freeze([
       'Shows each automatic update notice once for that version instead of on every page load.',
       'Stacks simultaneous notices beside the complete launcher grid.',
