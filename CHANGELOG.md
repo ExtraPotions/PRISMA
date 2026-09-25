@@ -1,3 +1,9 @@
+## 3.0.32 - 2026-09-25
+
+- Uses the same menu-width notice surface for Current Version, Update Available, and Update Complete, matching Dropper.
+- Forces a fresh update check for each newly installed PRISMA version instead of inheriting the previous version's 15-minute throttle or stale remote version.
+- Reports separate progress-card, launcher, launcher-row, menu, and notice geometry, and limits resource-error details to ownership plus asset hostname.
+
 ## 3.0.31 - 2026-09-25
 
 - Preserves PRISMA settings across userscript updates by recovering from browser-local backup storage when manager storage is missing.
