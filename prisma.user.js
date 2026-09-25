@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PRISMA
 // @namespace    https://github.com/ExtraPotions
-// @version      3.0.30
+// @version      3.0.31
 // @description  Local LGBTQ+ identity-language recognition with context-aware highlighting.
 // @icon         https://raw.githubusercontent.com/ExtraPotions/PRISMA/main/assets/prisma-launcher.svg
 // @tag          LGBTQ+
@@ -3366,6 +3366,10 @@ EXP.Engine = (() => {
 
 EXP.ReleaseNotes = (() => {
   const notes = Object.freeze({
+    '3.0.31': Object.freeze([
+      'Preserves PRISMA settings across userscript updates by recovering from browser-local backup storage when manager storage is missing.',
+      'Mirrors validated settings to both manager storage and the local fallback so future updates can self-heal without resetting preferences.'
+    ]),
     '3.0.30': Object.freeze([
       'Shows each automatic update notice once for that version instead of on every page load.',
       'Stacks simultaneous notices beside the complete launcher grid.',
@@ -3637,7 +3641,7 @@ EXP.UI = (() => {
   return Object.freeze({ init, cleanup, open: () => setOpen(true), refresh: render });
 })();
 
-EXP.VERSION = '3.0.30';
+EXP.VERSION = '3.0.31';
 ExtraPotionsCore.registerDiagnosticsProduct('prisma', EXP.VERSION);
 EXP.App = (() => {
   let scheduler, navigationCleanup, settingsCleanup, lifecycle;
