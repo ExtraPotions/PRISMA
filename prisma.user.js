@@ -2076,7 +2076,7 @@ const ExtraPotionsCore = (() => {
     const onError = typeof options.onError === 'function' ? options.onError : () => {};
     if (!productId || !repository || !currentVersion) throw new Error('Incomplete update checker configuration');
 
-    const ENDPOINT = 'https://api.github.com/repos/' + repository + '/releases/latest';
+    const ENDPOINT = String(options.endpoint || ('https://api.github.com/repos/' + repository + '/releases/latest'));
     const CACHE_KEY = 'exp:v3:' + productId + ':update-cache';
     const CHECK_INTERVAL = 15 * 60 * 1000;
     const CHECK_LEASE = 30 * 1000;
@@ -3696,6 +3696,8 @@ EXP.Engine = (() => {
   return Object.freeze({ start, stop, cleanup, rebuild, navigation, processBatch, snapshot, navigateNext: () => navigate(1), navigatePrevious: () => navigate(-1), navigateTo, setTemporaryHidden, highlightAll: () => setTemporaryHidden(false), subscribe(listener) { listeners.add(listener); return () => listeners.delete(listener); } });
 })();
 
+EXP.VERSION = '3.0.32';
+
 EXP.ReleaseNotes = (() => {
   const notes = Object.freeze({
     '3.0.32': Object.freeze([
@@ -3764,6 +3766,7 @@ EXP.ReleaseNotes = (() => {
 EXP.Updates = ExtraPotionsCore.createReleaseUpdateChecker({
   productId: 'prisma',
   repository: 'ExtraPotions/PRISMA',
+  endpoint: 'https://api.github.com/repos/ExtraPotions/PRISMA/releases/latest',
   currentVersion: EXP.VERSION,
   enabled: () => EXP.Settings.snapshot().updateNotifications,
   onError: error => EXP.Core.safeError(Object.assign(error, { code: 'UPDATE_CHECK' }), 'prisma'),
@@ -3792,7 +3795,7 @@ EXP.UI = (() => {
   }
   function showNotice(node,{kicker,title,version=EXP.VERSION,text='',details=[],available=false},auto=false){
     node.querySelector('.update-kicker').textContent=kicker;node.querySelector('.update-title').textContent=title;node.querySelector('.update-version').textContent=`v${version}`;node.querySelector('.update-text').textContent=text;
-    const list=node.querySelector('.update-list');list.replaceChildren(...details.slice(0,4).map(x=>el('li',{},x)));list.hidden=!details.length;node.querySelector('.update-action').hidden=!available;node.dataset.placement='menu';node.hidden=false;chrome?.layout();if(auto){clearTimeout(updateTimer);updateTimer=setTimeout(hideUpdateCard,30000);}
+    const list=node.querySelector('.update-list');list.replaceChildren(...details.slice(0,4).map(x=>el('li',{},x)));list.hidden=!details.length;node.querySelector('.update-action').hidden=!available;node.dataset.noticeKind=available?'available':kicker==='Update Complete'?'complete':'current';node.dataset.placement='menu';node.hidden=false;chrome?.layout();if(auto){clearTimeout(updateTimer);updateTimer=setTimeout(hideUpdateCard,30000);}
   }
   function hideUpdateCard(){clearTimeout(updateTimer);updateTimer=null;if(updateCard)updateCard.hidden=true;chrome?.layout();}
   function showUpdateCard(result={},complete=false,previous=''){const version=complete?EXP.VERSION:result.latest;if(!complete&&!EXP.Core.claimNotice('prisma',`available:${version}`))return;const fallback=['A newer PRISMA build is available.','Install the latest userscript for the newest fixes and improvements.'];const details=complete?EXP.ReleaseNotes.current():(Array.isArray(result.details)&&result.details.length?result.details:fallback);showNotice(updateCard,{kicker:complete?'Update Complete':'Update Available',title:complete?'PRISMA Updated':'New PRISMA Version Available',version,text:complete?`Updated from v${previous} to v${EXP.VERSION}.`:`v${result.latest} is ready to install.`,details,available:!complete},true);}
@@ -3933,7 +3936,7 @@ EXP.UI = (() => {
     const styleCss = '';
     launcher = el('button', { type: 'button', class: 'launcher', 'aria-label': 'Open PRISMA', 'aria-expanded': 'false', 'data-help': 'Drag To Move · Click To Open PRISMA' }); launcher.append(el('img',{class:'launcher-icon',src:ICON_URL,alt:''})); launcher.addEventListener('click', () => setOpen(!open));
     panel = el('aside', { class: 'panel', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'PRISMA settings' }); panel.hidden = true;
-    const head = el('header', { class: 'head' }); const brand = el('div', { class: 'header-brand' }); brand.append(el('img', { class: 'header-badge', src: ICON_URL, alt: '' })); const copy = el('div', { class: 'header-copy' }); const title = el('div', { class: 'title-row' }); title.append(el('h2', {}, 'PRISMA'), button(`v${EXP.VERSION}`, () => { if(updateCard?.hidden !== false) showNotice(updateCard,{kicker:'Current Version',title:'PRISMA Changelog',version:EXP.VERSION,text:`What's new in v${EXP.VERSION}.`,details:EXP.ReleaseNotes.current(),available:false},true); else hideUpdateCard(); }, 'version')); copy.append(title, el('div', { class: 'subtitle' }, 'Your self-identity. Recognized.')); brand.append(copy); head.append(brand, button('×', () => setOpen(false), 'close'));
+    const head = el('header', { class: 'head' }); const brand = el('div', { class: 'header-brand' }); brand.append(el('img', { class: 'header-badge', src: ICON_URL, alt: '' })); const copy = el('div', { class: 'header-copy' }); const title = el('div', { class: 'title-row' }); title.append(el('h2', {}, 'PRISMA'), button(`v${EXP.VERSION}`, () => { if(updateCard?.hidden !== false || updateCard.dataset.noticeKind!=='current') showNotice(updateCard,{kicker:'Current Version',title:'PRISMA Changelog',version:EXP.VERSION,text:`What's new in v${EXP.VERSION}.`,details:EXP.ReleaseNotes.current(),available:false},true); else hideUpdateCard(); }, 'version')); copy.append(title, el('div', { class: 'subtitle' }, 'Your self-identity. Recognized.')); brand.append(copy); head.append(brand, button('×', () => setOpen(false), 'close'));
     live = el('p', { class: 'live', role: 'status', 'aria-live': 'polite' }); nav = el('nav', { class: 'nav', 'aria-label': 'PRISMA sections' });
     for (const [id, name] of routeNames) { const section = el('section', { class: 'tool-panel' }); const item = button(name, () => { currentRoute = currentRoute===id?'':id; render(); }, 'route'); item.dataset.route = id; item.setAttribute('aria-controls', `exp-prisma-route-${id}`); const body = el('div', { class: 'route-body', id: `exp-prisma-route-${id}` }); body.hidden = true; section.append(item, body); nav.append(section); }
     panel.append(head, el('div', { class: 'header-divider' }), live, nav);updateCard=makeNotice();toast=el('div',{class:'toast'});toast.hidden=true;EXP.Core.injectStyle(shadow,styleCss,{expPrismaUi:'1'});shadow.append(panel, updateCard, launcher,toast); (document.body || document.documentElement).append(host);
