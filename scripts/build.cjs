@@ -12,12 +12,10 @@ const coreManifest = JSON.parse(fs.readFileSync(path.join(root, 'vendor', 'exp-c
 if (crypto.createHash('sha256').update(coreSource).digest('hex') !== coreManifest.bundleSha256) throw new Error('Bundled Core hash mismatch');
 
 const sources = ['core.js', 'catalog-data.js', 'catalog.js', 'settings.js', 'matcher.js', 'renderer.js', 'engine.js', 'release-notes.js', 'updates.js', 'menu-chrome.js', 'diagnostics.js', 'ui.js', 'main.js'];
-let metadata = normalize(fs.readFileSync(path.join(root, 'src', 'metadata.txt'), 'utf8')).trimEnd();
-const badgeData = `data:image/svg+xml;base64,${fs.readFileSync(path.join(root, 'assets', 'prisma.svg')).toString('base64')}`;
-metadata = metadata.replaceAll('__EXP_PRISMA_BADGE_DATA__', badgeData);
-const launcherData = `data:image/svg+xml;base64,${fs.readFileSync(path.join(root, 'assets', 'prisma-launcher.svg')).toString('base64')}`;
+const metadata = normalize(fs.readFileSync(path.join(root, 'src', 'metadata.txt'), 'utf8')).trimEnd();
 const body = sources.map((name) => normalize(fs.readFileSync(path.join(root, 'src', name), 'utf8')).trim()).join('\n\n');
-const output = `${metadata}\n\n(() => {\n'use strict';\nconst EXP = Object.create(null);\n\n${core}\n${body}\n})();\n`.replaceAll('__EXP_PRISMA_BADGE_DATA__', badgeData).replaceAll('__EXP_PRISMA_LAUNCHER_DATA__', launcherData);
+const output = `${metadata}\n\n(() => {\n'use strict';\nconst EXP = Object.create(null);\n\n${core}\n${body}\n})();\n`;
+if (/data:image\//u.test(output)) throw new Error('Images must be referenced by URL instead of embedded data');
 const target = path.join(root, 'prisma.user.js');
 
 if (process.argv.includes('--check')) {

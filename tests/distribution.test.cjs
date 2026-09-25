@@ -3,7 +3,6 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const crypto = require('node:crypto');
 const root = path.resolve(__dirname, '..');
 const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
 const source = fs.readFileSync(path.join(root, 'prisma.user.js'), 'utf8');
@@ -12,7 +11,8 @@ const bytes = Buffer.byteLength(source, 'utf8');
 test('distribution metadata and privacy boundaries are present', () => {
   assert.match(source, /@name\s+PRISMA/);
   assert.match(source, new RegExp(`@version\\s+${pkg.version.replaceAll('.', '\\.')}`));
-  assert.deepEqual(Buffer.from(source.match(/^\/\/ @icon\s+data:image\/svg\+xml;base64,(.+)$/m)[1], 'base64'), fs.readFileSync(path.join(root, 'assets', 'prisma.svg')));
+  assert.match(source, /^\/\/ @icon\s+https:\/\/raw\.githubusercontent\.com\/ExtraPotions\/PRISMA\/main\/assets\/prisma-launcher\.svg$/m);
+  assert.doesNotMatch(source, /data:image\//u);
   assert.match(source, /@homepageURL\s+https:\/\/github\.com\/ExtraPotions\/PRISMA/);
   assert.match(source, /@supportURL\s+https:\/\/github\.com\/ExtraPotions\/PRISMA\/issues/);
   assert.match(source, /@updateURL\s+https:\/\/github\.com\/ExtraPotions\/PRISMA\/releases\/latest\/download\/prisma\.user\.js/);
@@ -73,27 +73,16 @@ test('underline and soft-fill highlights have target-level important fallbacks',
   assert.match(source, /setProperty\('padding-inline', '\.08em', 'important'\)/);
 });
 
-test('canonical badge and borderless launcher mark are embedded separately', () => {
-  const badge = fs.readFileSync(path.join(root, 'assets', 'prisma.svg'));
+test('canonical borderless artwork is referenced without embedded image bytes', () => {
   const launcher = fs.readFileSync(path.join(root, 'assets', 'prisma-launcher.svg'));
-  assert.equal(crypto.createHash('sha256').update(badge).digest('hex'), '58914247a119063190cbb6bdedb06936ccb896fc674563f137d89f2aa4c71697');
-  assert.equal(crypto.createHash('sha256').update(launcher).digest('hex'), 'ea79b746630d42b88161c806aeb459003a4d745276f009c2a895aa76217b354a');
   assert.match(source, /\[data-exp-part="launcher"\]\{[^}]*width:48px!important;[^}]*height:48px!important/u);
   assert.match(source, /\[data-exp-part="launcher"\] \.launcher-icon\{width:40px!important;height:40px!important\}/u);
   assert.match(source, /\.header-icon \.menu-icon\{width:38px!important;height:38px!important\}/u);
-  assert.ok(source.includes(`data:image/svg+xml;base64,${badge.toString('base64')}`));
-  assert.ok(source.includes(`data:image/svg+xml;base64,${launcher.toString('base64')}`));
-  assert.ok((source.match(/data:image\/svg\+xml;base64,/g)?.length || 0) >= 2);
+  assert.ok(source.includes('https://raw.githubusercontent.com/ExtraPotions/PRISMA/main/assets/prisma-launcher.svg'));
   assert.doesNotMatch(launcher.toString('utf8'), /<rect\b/u);
+  for (const removed of ['prisma.svg', 'prisma-128.png', 'prisma-48.png', 'prisma-32.png']) {
+    assert.equal(fs.existsSync(path.join(root, 'assets', removed)), false, removed);
+  }
   assert.doesNotMatch(fs.readFileSync(path.join(root, 'src', 'ui.js'), 'utf8'), /<svg class="launcher-ring"/u);
   assert.match(source, /launcher\.replaceChildren\(mark\)/u);
-});
-
-test('approved badge derivatives have exact pixel dimensions', () => {
-  for (const size of [128, 48, 32]) {
-    const png = fs.readFileSync(path.join(root, 'assets', `prisma-${size}.png`));
-    assert.equal(png.subarray(1, 4).toString(), 'PNG');
-    assert.equal(png.readUInt32BE(16), size);
-    assert.equal(png.readUInt32BE(20), size);
-  }
 });

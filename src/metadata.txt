@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         PRISMA
 // @namespace    https://github.com/ExtraPotions
-// @version      3.0.27
+// @version      3.0.28
 // @description  Local LGBTQ+ identity-language recognition with context-aware highlighting.
-// @icon         __EXP_PRISMA_BADGE_DATA__
+// @icon         https://raw.githubusercontent.com/ExtraPotions/PRISMA/main/assets/prisma-launcher.svg
 // @tag          LGBTQ+
 // @tag          highlighting
 // @tag          accessibility

@@ -374,12 +374,12 @@ test('SPA navigation replaces the route-scoped match set', async () => {
   } finally { await browser.close(); }
 });
 
-test('launcher uses the supplied square PRISMA badge', async () => {
+test('launcher uses the borderless PRISMA artwork URL', async () => {
   const { browser, page } = await fixture('<main>bisexual</main>');
   try {
     const badge = await page.locator('#exp-prisma-root').evaluate((host) => { const launcher = host.shadowRoot.querySelector('.launcher'); const image = launcher.querySelector('img'); const rect = launcher.getBoundingClientRect(); return { width: rect.width, height: rect.height, src: image.src, naturalWidth: image.naturalWidth, naturalHeight: image.naturalHeight, radius: getComputedStyle(launcher).borderRadius }; });
     assert.deepEqual({ width: badge.width, height: badge.height, naturalWidth: badge.naturalWidth, naturalHeight: badge.naturalHeight }, { width: 48, height: 48, naturalWidth: 1024, naturalHeight: 1024 });
-    assert.match(badge.src, /^data:image\/svg\+xml;base64,/);
+    assert.equal(badge.src, 'https://raw.githubusercontent.com/ExtraPotions/PRISMA/main/assets/prisma-launcher.svg');
     assert.equal(badge.radius, '10px');
     const chrome = await page.locator('#exp-prisma-root').evaluate((host) => { const root=host.shadowRoot;return {button:root.querySelector('.launcher').getBoundingClientRect().width,hasRing:Boolean(root.querySelector('.launcher-ring')),icon:root.querySelector('.launcher-icon').getBoundingClientRect().width}; });
     assert.deepEqual(chrome,{button:48,hasRing:false,icon:40});

@@ -1,3 +1,9 @@
+## 3.0.28 - 2026-09-25
+
+- Uses the borderless PRISMA launcher artwork everywhere an icon is shown.
+- References the SVG by URL instead of embedding image bytes in the userscript.
+- Removes the superseded bordered SVG and raster badge files.
+
 ## 3.0.27 - 2026-09-25
 
 - Makes Underline and Soft Fill resilient to hostile page styles.

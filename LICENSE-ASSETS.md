@@ -8,7 +8,7 @@ https://creativecommons.org/licenses/by-nc-sa/4.0/
 
 This includes, unless otherwise noted:
 
-- `assets/prisma.svg`, raster derivatives, PRISMA documentation, and the icon embedded in userscript metadata
+- `assets/prisma-launcher.svg`, PRISMA documentation, and the borderless icon referenced by userscript metadata
 
 You must provide appropriate attribution, may not use the licensed material for commercial purposes, and must license adapted material under the same license. Refer to the official Creative Commons license for the legally controlling terms.
 

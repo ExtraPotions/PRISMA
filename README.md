@@ -22,10 +22,10 @@
 ## Install
 
 <p>
-  <a href="https://raw.githubusercontent.com/ExtraPotions/PRISMA/main/prisma.user.js?v=3.0.27">
+  <a href="https://raw.githubusercontent.com/ExtraPotions/PRISMA/main/prisma.user.js?v=3.0.28">
     <img alt="Install PRISMA" src="https://img.shields.io/badge/Install-PRISMA-7C3AED?style=flat-square">
   </a>
-  <img alt="Version 3.0.27" src="https://img.shields.io/badge/version-3.0.27-22C55E?style=flat-square">
+  <img alt="Version 3.0.28" src="https://img.shields.io/badge/version-3.0.28-22C55E?style=flat-square">
   <a href="https://github.com/ExtraPotions/PRISMA/releases">
     <img alt="GitHub Downloads" src="https://img.shields.io/github/downloads/ExtraPotions/PRISMA/total?style=flat-square&label=Downloads">
   </a>

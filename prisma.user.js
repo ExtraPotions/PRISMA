@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         PRISMA
 // @namespace    https://github.com/ExtraPotions
-// @version      3.0.27
+// @version      3.0.28
 // @description  Local LGBTQ+ identity-language recognition with context-aware highlighting.
-// @icon         data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDI0IiBoZWlnaHQ9IjEwMjQiIHZpZXdCb3g9IjAgMCAxMDI0IDEwMjQiIHJvbGU9ImltZyIgYXJpYS1sYWJlbGxlZGJ5PSJ0aXRsZSBkZXNjIj4NCiAgPHRpdGxlIGlkPSJ0aXRsZSI+UFJJU01BIEljb248L3RpdGxlPjxkZXNjIGlkPSJkZXNjIj5BIHRyaWFuZ3VsYXIgc3BlY3RydW0tY3V0IGZhY2V0ZWQgZ2VtIGluIGEgbWF0Y2hpbmcgZ3JhZGllbnQgYmFkZ2UuPC9kZXNjPg0KICA8ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agc3RvcC1jb2xvcj0iIzE3MTAyMSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzA4MTMxZSIvPjwvbGluZWFyR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJib3JkZXIiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBzdG9wLWNvbG9yPSIjZmY5YWYwIi8+PHN0b3Agb2Zmc2V0PSIuNSIgc3RvcC1jb2xvcj0iIzhmNjFmZiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzVmZTlmNCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPg0KICA8cmVjdCB4PSIzMiIgeT0iMzIiIHdpZHRoPSI5NjAiIGhlaWdodD0iOTYwIiByeD0iMTg1IiBmaWxsPSJ1cmwoI2JnKSIvPjxyZWN0IHg9IjQyIiB5PSI0MiIgd2lkdGg9Ijk0MCIgaGVpZ2h0PSI5NDAiIHJ4PSIxNzUiIGZpbGw9Im5vbmUiIHN0cm9rZT0idXJsKCNib3JkZXIpIiBzdHJva2Utd2lkdGg9IjI4Ii8+DQogIDxwb2x5Z29uIHBvaW50cz0iNTEyLDE4OCA4MjAsNzgyIDIwNCw3ODIiIGZpbGw9IiMxNTEwMjAiLz48cG9seWdvbiBwb2ludHM9IjUxMiwxODggNTEyLDQ5NCAzMzIsNjkwIDIwNCw3ODIiIGZpbGw9IiNmZjlhZjAiLz48cG9seWdvbiBwb2ludHM9IjUxMiwxODggNjkwLDY5MCA1MTIsNDk0IiBmaWxsPSIjYTk4NWZmIi8+PHBvbHlnb24gcG9pbnRzPSI1MTIsMTg4IDgyMCw3ODIgNjkwLDY5MCIgZmlsbD0iIzVmZTlmNCIvPjxwb2x5Z29uIHBvaW50cz0iMjA0LDc4MiAzMzIsNjkwIDUxMiw0OTQgNTEyLDc4MiIgZmlsbD0iI2Q5MzNiZiIvPjxwb2x5Z29uIHBvaW50cz0iNTEyLDQ5NCA2OTAsNjkwIDgyMCw3ODIgNTEyLDc4MiIgZmlsbD0iIzI3N2RkZCIvPjxwb2x5Z29uIHBvaW50cz0iMzMyLDY5MCA1MTIsNDk0IDUxMiw3ODIiIGZpbGw9IiM3MTM3ZDYiLz48cG9seWdvbiBwb2ludHM9IjUxMiw0OTQgNjkwLDY5MCA1MTIsNzgyIiBmaWxsPSIjMzc1MmU4Ii8+PHBvbHlnb24gcG9pbnRzPSI1MTIsMTg4IDU0OCw0NjYgNTEyLDQ5NCA0NzYsNDY2IiBmaWxsPSIjZmZmMGIwIi8+DQo8L3N2Zz4NCg==
+// @icon         https://raw.githubusercontent.com/ExtraPotions/PRISMA/main/assets/prisma-launcher.svg
 // @tag          LGBTQ+
 // @tag          highlighting
 // @tag          accessibility
@@ -33,7 +33,7 @@
 'use strict';
 const EXP = Object.create(null);
 
-// Generated from the approved Dropper v3.2.18 install artifact. Do not edit.
+// Generated from the approved Dropper v3.2.19 install artifact. Do not edit.
 const DropperReference = (() => {
 const LAUNCHER_ORDER_KEY = "exp:v3:launcher-order";
 const LAUNCHER_GRID_DELTA_KEY = "exp:v3:launcher-grid-delta";
@@ -1012,7 +1012,7 @@ const ExtraPotionsDiagnostics = (() => {
   return Object.freeze({ createReport, registerProduct, compatibility, bindControls, createControls, dispose });
 })();
 
-/* exp-core 3.2.17: canonical ExtraPotions shared runtime. */
+/* exp-core 3.2.18: canonical ExtraPotions shared runtime. */
 function createProductLifecycle(shared) {
   const VERSION = shared.version;
   const PROTOCOL = 'exp-core-coordination-v1';
@@ -1411,8 +1411,8 @@ function createProductLifecycle(shared) {
 // Product engines own their settings, content, and actions. Core owns shared UI.
 const ExtraPotionsCore = (() => {
   'use strict';
-  const version = '3.2.17';
-  const sourceVersion = '3.2.18';
+  const version = '3.2.18';
+  const sourceVersion = '3.2.19';
   const protocol = 'exp-core-coordination-v1';
   const gridProtocol = 'exp-launcher-grid-v3';
   const GRID_ORDER = 'exp:v3:launcher-order';
@@ -3273,6 +3273,11 @@ EXP.Engine = (() => {
 
 EXP.ReleaseNotes = (() => {
   const notes = Object.freeze({
+    '3.0.28': Object.freeze([
+      'Uses the borderless PRISMA launcher artwork everywhere an icon is shown.',
+      'References the SVG by URL instead of embedding image bytes in the userscript.',
+      'Removes the superseded bordered SVG and raster badge files.'
+    ]),
     '3.0.27': Object.freeze([
       'Makes Underline and Soft Fill resilient to hostile page styles.',
       'Makes the Animation switch visibly affect every highlight style while respecting reduced motion.',
@@ -3352,7 +3357,7 @@ EXP.Updates = (() => {
 })();
 
 // Dropper 3.2.8 is the canonical shared UI; product-specific color stays declarative.
-EXP.MenuChrome = Object.freeze({ create: options => ExtraPotionsCore.create({ ...options, launcherSrc: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDI0IiBoZWlnaHQ9IjEwMjQiIHZpZXdCb3g9IjAgMCAxMDI0IDEwMjQiIHJvbGU9ImltZyIgYXJpYS1sYWJlbGxlZGJ5PSJ0aXRsZSBkZXNjIj4KICA8dGl0bGUgaWQ9InRpdGxlIj5QUklTTUEgTGF1bmNoZXIgR2VtPC90aXRsZT48ZGVzYyBpZD0iZGVzYyI+QSBib3JkZXJsZXNzIHRyaWFuZ3VsYXIgc3BlY3RydW0gY3J5c3RhbCB3aXRoIG1hZ2VudGEsIHZpb2xldCwgYW5kIGN5YW4gZmFjZXRzLjwvZGVzYz4KICA8cG9seWdvbiBwb2ludHM9IjUxMiwxODggODIwLDc4MiAyMDQsNzgyIiBmaWxsPSIjMTUxMDIwIi8+PHBvbHlnb24gcG9pbnRzPSI1MTIsMTg4IDUxMiw0OTQgMzMyLDY5MCAyMDQsNzgyIiBmaWxsPSIjZmY5YWYwIi8+PHBvbHlnb24gcG9pbnRzPSI1MTIsMTg4IDY5MCw2OTAgNTEyLDQ5NCIgZmlsbD0iI2E5ODVmZiIvPjxwb2x5Z29uIHBvaW50cz0iNTEyLDE4OCA4MjAsNzgyIDY5MCw2OTAiIGZpbGw9IiM1ZmU5ZjQiLz48cG9seWdvbiBwb2ludHM9IjIwNCw3ODIgMzMyLDY5MCA1MTIsNDk0IDUxMiw3ODIiIGZpbGw9IiNkOTMzYmYiLz48cG9seWdvbiBwb2ludHM9IjUxMiw0OTQgNjkwLDY5MCA4MjAsNzgyIDUxMiw3ODIiIGZpbGw9IiMyNzdkZGQiLz48cG9seWdvbiBwb2ludHM9IjMzMiw2OTAgNTEyLDQ5NCA1MTIsNzgyIiBmaWxsPSIjNzEzN2Q2Ii8+PHBvbHlnb24gcG9pbnRzPSI1MTIsNDk0IDY5MCw2OTAgNTEyLDc4MiIgZmlsbD0iIzM3NTJlOCIvPjxwb2x5Z29uIHBvaW50cz0iNTEyLDE4OCA1NDgsNDY2IDUxMiw0OTQgNDc2LDQ2NiIgZmlsbD0iI2ZmZjBiMCIvPgo8L3N2Zz4K', productTheme: {"id":"prisma","name":"PRISMA gem","swatch":"linear-gradient(135deg,#ff9af0 0 34%,#8f61ff 34% 67%,#5fe9f4 67%)","bg":"#101116","panel":"#191b22","line":"#30333e","text":"#f4f2f7","muted":"#aeadb8","accent":"#d264df","accent2":"#49c7ef","skin":"linear-gradient(135deg,#ff9af0 0 34%,#8f61ff 34% 67%,#5fe9f4 67%)","skinVertical":"linear-gradient(180deg,#ff9af0 0 34%,#8f61ff 34% 67%,#5fe9f4 67%)"} }) });
+EXP.MenuChrome = Object.freeze({ create: options => ExtraPotionsCore.create({ ...options, launcherSrc: 'https://raw.githubusercontent.com/ExtraPotions/PRISMA/main/assets/prisma-launcher.svg', productTheme: {"id":"prisma","name":"PRISMA gem","swatch":"linear-gradient(135deg,#ff9af0 0 34%,#8f61ff 34% 67%,#5fe9f4 67%)","bg":"#101116","panel":"#191b22","line":"#30333e","text":"#f4f2f7","muted":"#aeadb8","accent":"#d264df","accent2":"#49c7ef","skin":"linear-gradient(135deg,#ff9af0 0 34%,#8f61ff 34% 67%,#5fe9f4 67%)","skinVertical":"linear-gradient(180deg,#ff9af0 0 34%,#8f61ff 34% 67%,#5fe9f4 67%)"} }) });
 
 /* Diagnostics reports and controls follow Dropper's shared implementation. */
 EXP.Diagnostics = Object.freeze({
@@ -3362,8 +3367,7 @@ EXP.Diagnostics = Object.freeze({
 });
 
 EXP.UI = (() => {
-  const BADGE_DATA = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDI0IiBoZWlnaHQ9IjEwMjQiIHZpZXdCb3g9IjAgMCAxMDI0IDEwMjQiIHJvbGU9ImltZyIgYXJpYS1sYWJlbGxlZGJ5PSJ0aXRsZSBkZXNjIj4NCiAgPHRpdGxlIGlkPSJ0aXRsZSI+UFJJU01BIEljb248L3RpdGxlPjxkZXNjIGlkPSJkZXNjIj5BIHRyaWFuZ3VsYXIgc3BlY3RydW0tY3V0IGZhY2V0ZWQgZ2VtIGluIGEgbWF0Y2hpbmcgZ3JhZGllbnQgYmFkZ2UuPC9kZXNjPg0KICA8ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agc3RvcC1jb2xvcj0iIzE3MTAyMSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzA4MTMxZSIvPjwvbGluZWFyR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJib3JkZXIiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBzdG9wLWNvbG9yPSIjZmY5YWYwIi8+PHN0b3Agb2Zmc2V0PSIuNSIgc3RvcC1jb2xvcj0iIzhmNjFmZiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzVmZTlmNCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPg0KICA8cmVjdCB4PSIzMiIgeT0iMzIiIHdpZHRoPSI5NjAiIGhlaWdodD0iOTYwIiByeD0iMTg1IiBmaWxsPSJ1cmwoI2JnKSIvPjxyZWN0IHg9IjQyIiB5PSI0MiIgd2lkdGg9Ijk0MCIgaGVpZ2h0PSI5NDAiIHJ4PSIxNzUiIGZpbGw9Im5vbmUiIHN0cm9rZT0idXJsKCNib3JkZXIpIiBzdHJva2Utd2lkdGg9IjI4Ii8+DQogIDxwb2x5Z29uIHBvaW50cz0iNTEyLDE4OCA4MjAsNzgyIDIwNCw3ODIiIGZpbGw9IiMxNTEwMjAiLz48cG9seWdvbiBwb2ludHM9IjUxMiwxODggNTEyLDQ5NCAzMzIsNjkwIDIwNCw3ODIiIGZpbGw9IiNmZjlhZjAiLz48cG9seWdvbiBwb2ludHM9IjUxMiwxODggNjkwLDY5MCA1MTIsNDk0IiBmaWxsPSIjYTk4NWZmIi8+PHBvbHlnb24gcG9pbnRzPSI1MTIsMTg4IDgyMCw3ODIgNjkwLDY5MCIgZmlsbD0iIzVmZTlmNCIvPjxwb2x5Z29uIHBvaW50cz0iMjA0LDc4MiAzMzIsNjkwIDUxMiw0OTQgNTEyLDc4MiIgZmlsbD0iI2Q5MzNiZiIvPjxwb2x5Z29uIHBvaW50cz0iNTEyLDQ5NCA2OTAsNjkwIDgyMCw3ODIgNTEyLDc4MiIgZmlsbD0iIzI3N2RkZCIvPjxwb2x5Z29uIHBvaW50cz0iMzMyLDY5MCA1MTIsNDk0IDUxMiw3ODIiIGZpbGw9IiM3MTM3ZDYiLz48cG9seWdvbiBwb2ludHM9IjUxMiw0OTQgNjkwLDY5MCA1MTIsNzgyIiBmaWxsPSIjMzc1MmU4Ii8+PHBvbHlnb24gcG9pbnRzPSI1MTIsMTg4IDU0OCw0NjYgNTEyLDQ5NCA0NzYsNDY2IiBmaWxsPSIjZmZmMGIwIi8+DQo8L3N2Zz4NCg==';
-  const LAUNCHER_DATA = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDI0IiBoZWlnaHQ9IjEwMjQiIHZpZXdCb3g9IjAgMCAxMDI0IDEwMjQiIHJvbGU9ImltZyIgYXJpYS1sYWJlbGxlZGJ5PSJ0aXRsZSBkZXNjIj4KICA8dGl0bGUgaWQ9InRpdGxlIj5QUklTTUEgTGF1bmNoZXIgR2VtPC90aXRsZT48ZGVzYyBpZD0iZGVzYyI+QSBib3JkZXJsZXNzIHRyaWFuZ3VsYXIgc3BlY3RydW0gY3J5c3RhbCB3aXRoIG1hZ2VudGEsIHZpb2xldCwgYW5kIGN5YW4gZmFjZXRzLjwvZGVzYz4KICA8cG9seWdvbiBwb2ludHM9IjUxMiwxODggODIwLDc4MiAyMDQsNzgyIiBmaWxsPSIjMTUxMDIwIi8+PHBvbHlnb24gcG9pbnRzPSI1MTIsMTg4IDUxMiw0OTQgMzMyLDY5MCAyMDQsNzgyIiBmaWxsPSIjZmY5YWYwIi8+PHBvbHlnb24gcG9pbnRzPSI1MTIsMTg4IDY5MCw2OTAgNTEyLDQ5NCIgZmlsbD0iI2E5ODVmZiIvPjxwb2x5Z29uIHBvaW50cz0iNTEyLDE4OCA4MjAsNzgyIDY5MCw2OTAiIGZpbGw9IiM1ZmU5ZjQiLz48cG9seWdvbiBwb2ludHM9IjIwNCw3ODIgMzMyLDY5MCA1MTIsNDk0IDUxMiw3ODIiIGZpbGw9IiNkOTMzYmYiLz48cG9seWdvbiBwb2ludHM9IjUxMiw0OTQgNjkwLDY5MCA4MjAsNzgyIDUxMiw3ODIiIGZpbGw9IiMyNzdkZGQiLz48cG9seWdvbiBwb2ludHM9IjMzMiw2OTAgNTEyLDQ5NCA1MTIsNzgyIiBmaWxsPSIjNzEzN2Q2Ii8+PHBvbHlnb24gcG9pbnRzPSI1MTIsNDk0IDY5MCw2OTAgNTEyLDc4MiIgZmlsbD0iIzM3NTJlOCIvPjxwb2x5Z29uIHBvaW50cz0iNTEyLDE4OCA1NDgsNDY2IDUxMiw0OTQgNDc2LDQ2NiIgZmlsbD0iI2ZmZjBiMCIvPgo8L3N2Zz4K';
+  const ICON_URL = 'https://raw.githubusercontent.com/ExtraPotions/PRISMA/main/assets/prisma-launcher.svg';
   const routeNames = Object.freeze([['page', 'Highlights'], ['style', 'Highlight Style'], ['look', 'Appearance'], ['tools', 'Language'], ['sites', 'Sites'], ['menu', 'Settings']]);
   let host, shadow, launcher, panel, nav, workspace, live, toast, chrome, toastTimer, updateTimer, updateCard, currentRoute = '', lastRoute = '', open = false, engineState, importDraft = null, launcherCleanup, unsubscribe;
   const UI_THEMES = ExtraPotionsCore.themes({"id":"prisma","name":"PRISMA gem","swatch":"linear-gradient(135deg,#100814 0 38%,#a843b6 38% 69%,#2e98a5 69% 100%)","canvas":"#100814","surface":"#211029","primary":"#a843b6","companion":"#6853c9","counterpoint":"#2e98a5","interactive":"#c05bca","bg":"#100814","panel":"#211029","line":"#4a2e55","text":"#eadcf0","muted":"#ad96b5","accent":"#a843b6","accent2":"#c05bca","skin":"linear-gradient(135deg,#a843b6 0%,#6853c9 52%,#2e98a5 100%)","skinVertical":"linear-gradient(180deg,#a843b6 0%,#6853c9 52%,#2e98a5 100%)"});
@@ -3522,9 +3526,9 @@ EXP.UI = (() => {
     if (window.top !== window.self || host) return;
     host = el('div', { id: 'exp-prisma-root', 'data-exp-owned': '1' }); shadow = host.attachShadow({ mode: 'open' });
     const styleCss = '';
-    launcher = el('button', { type: 'button', class: 'launcher', 'aria-label': 'Open PRISMA', 'aria-expanded': 'false', 'data-help': 'Drag To Move · Click To Open PRISMA' }); launcher.append(el('img',{class:'launcher-icon',src:LAUNCHER_DATA,alt:''})); launcher.addEventListener('click', () => setOpen(!open));
+    launcher = el('button', { type: 'button', class: 'launcher', 'aria-label': 'Open PRISMA', 'aria-expanded': 'false', 'data-help': 'Drag To Move · Click To Open PRISMA' }); launcher.append(el('img',{class:'launcher-icon',src:ICON_URL,alt:''})); launcher.addEventListener('click', () => setOpen(!open));
     panel = el('aside', { class: 'panel', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'PRISMA settings' }); panel.hidden = true;
-    const head = el('header', { class: 'head' }); const brand = el('div', { class: 'header-brand' }); brand.append(el('img', { class: 'header-badge', src: BADGE_DATA, alt: '' })); const copy = el('div', { class: 'header-copy' }); const title = el('div', { class: 'title-row' }); const changelog = updateNotice(); title.append(el('h2', {}, 'PRISMA'), button(`v${EXP.VERSION}`, () => { if(changelog.hidden) showNotice(changelog,{kicker:"What's New",title:'PRISMA Changelog',version:EXP.VERSION,text:`What's new in v${EXP.VERSION}.`,details:EXP.ReleaseNotes.current(),available:false}); else changelog.hidden=true; chrome?.layout(); }, 'version')); copy.append(title, el('div', { class: 'subtitle' }, 'Your self-identity. Recognized.')); brand.append(copy); head.append(brand, button('×', () => setOpen(false), 'close'));
+    const head = el('header', { class: 'head' }); const brand = el('div', { class: 'header-brand' }); brand.append(el('img', { class: 'header-badge', src: ICON_URL, alt: '' })); const copy = el('div', { class: 'header-copy' }); const title = el('div', { class: 'title-row' }); const changelog = updateNotice(); title.append(el('h2', {}, 'PRISMA'), button(`v${EXP.VERSION}`, () => { if(changelog.hidden) showNotice(changelog,{kicker:"What's New",title:'PRISMA Changelog',version:EXP.VERSION,text:`What's new in v${EXP.VERSION}.`,details:EXP.ReleaseNotes.current(),available:false}); else changelog.hidden=true; chrome?.layout(); }, 'version')); copy.append(title, el('div', { class: 'subtitle' }, 'Your self-identity. Recognized.')); brand.append(copy); head.append(brand, button('×', () => setOpen(false), 'close'));
     live = el('p', { class: 'live', role: 'status', 'aria-live': 'polite' }); nav = el('nav', { class: 'nav', 'aria-label': 'PRISMA sections' });
     for (const [id, name] of routeNames) { const section = el('section', { class: 'tool-panel' }); const item = button(name, () => { currentRoute = currentRoute===id?'':id; render(); }, 'route'); item.dataset.route = id; item.setAttribute('aria-controls', `exp-prisma-route-${id}`); const body = el('div', { class: 'route-body', id: `exp-prisma-route-${id}` }); body.hidden = true; section.append(item, body); nav.append(section); }
     panel.append(head, el('div', { class: 'header-divider' }), live, nav);updateCard=makeNotice();toast=el('div',{class:'toast'});toast.hidden=true;EXP.Core.injectStyle(shadow,styleCss,{expPrismaUi:'1'});shadow.append(panel, updateCard, changelog, launcher,toast); (document.body || document.documentElement).append(host);

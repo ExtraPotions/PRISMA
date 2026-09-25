@@ -1,5 +1,10 @@
 EXP.ReleaseNotes = (() => {
   const notes = Object.freeze({
+    '3.0.28': Object.freeze([
+      'Uses the borderless PRISMA launcher artwork everywhere an icon is shown.',
+      'References the SVG by URL instead of embedding image bytes in the userscript.',
+      'Removes the superseded bordered SVG and raster badge files.'
+    ]),
     '3.0.27': Object.freeze([
       'Makes Underline and Soft Fill resilient to hostile page styles.',
       'Makes the Animation switch visibly affect every highlight style while respecting reduced motion.',

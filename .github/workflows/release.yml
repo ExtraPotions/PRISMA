@@ -39,6 +39,6 @@ jobs:
           ' CHANGELOG.md > release-notes.md
           gh release create "$TAG" \
             prisma.user.js \
-            assets/prisma.svg \
+            assets/prisma-launcher.svg \
             --title "PRISMA $TAG" \
             --notes-file release-notes.md
