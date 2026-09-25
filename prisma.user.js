@@ -2962,13 +2962,29 @@ EXP.Settings = (() => {
   const listeners = new Set();
   const key = (name) => `${PREFIX}:${name}`;
   function rawRead(name) {
-    try { if (typeof GM_getValue === 'function') return GM_getValue(key(name), undefined); } catch {}
-    try { const value = localStorage.getItem(key(name)); return value === null ? undefined : JSON.parse(value); } catch { return memory.get(key(name)); }
+    const storageKey = key(name);
+    try {
+      if (typeof GM_getValue === 'function') {
+        const value = GM_getValue(storageKey, undefined);
+        if (value !== undefined) return value;
+      }
+    } catch {}
+    try {
+      const value = localStorage.getItem(storageKey);
+      if (value !== null) {
+        const parsed = JSON.parse(value);
+        memory.set(storageKey, parsed);
+        try { if (typeof GM_setValue === 'function') GM_setValue(storageKey, parsed); } catch {}
+        return parsed;
+      }
+    } catch {}
+    return memory.get(storageKey);
   }
   function rawWrite(name, value) {
-    memory.set(key(name), value);
-    try { if (typeof GM_setValue === 'function') { GM_setValue(key(name), value); return; } } catch {}
-    try { localStorage.setItem(key(name), JSON.stringify(value)); } catch {}
+    const storageKey = key(name);
+    memory.set(storageKey, value);
+    try { if (typeof GM_setValue === 'function') GM_setValue(storageKey, value); } catch {}
+    try { localStorage.setItem(storageKey, JSON.stringify(value)); } catch {}
   }
   const isHost = (value) => typeof value === 'string' && value.length > 0 && value.length <= 253 && !/[/?#\s]/.test(value);
   const uniqueStrings = (value, maximum = 500) => Array.isArray(value) ? [...new Set(value.filter((item) => typeof item === 'string'))].slice(0, maximum) : [];
@@ -3005,7 +3021,12 @@ EXP.Settings = (() => {
     }
     return next;
   }
-  function load() { state = validate(rawRead('settings') || defaults); return snapshot(); }
+  function load() {
+    const stored = rawRead('settings');
+    state = validate(stored || defaults);
+    rawWrite('settings', state);
+    return snapshot();
+  }
   function snapshot() { return structuredClone(state || defaults); }
   function replace(value, reason = 'replace') { const next = validate(value); rawWrite('settings', next); state = next; for (const listener of listeners) listener(snapshot(), reason); return snapshot(); }
   function update(patch, reason = 'update') { return replace({ ...snapshot(), ...patch }, reason); }
