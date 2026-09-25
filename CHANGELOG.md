@@ -1,3 +1,8 @@
+## 3.0.29 - 2026-09-25
+
+- Keeps every launcher clickable when Dropper and multiple ExtraPotions products share the page.
+- Uses exp-core 3.2.19 to prevent transparent launcher containers from intercepting pointer input.
+
 ## 3.0.28 - 2026-09-25
 
 - Uses the borderless PRISMA launcher artwork everywhere an icon is shown.

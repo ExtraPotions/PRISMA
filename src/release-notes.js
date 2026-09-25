@@ -1,5 +1,9 @@
 EXP.ReleaseNotes = (() => {
   const notes = Object.freeze({
+    '3.0.29': Object.freeze([
+      'Keeps every launcher clickable when multiple ExtraPotions products share the page.',
+      'Prevents transparent launcher containers from intercepting pointer input.'
+    ]),
     '3.0.28': Object.freeze([
       'Uses the borderless PRISMA launcher artwork everywhere an icon is shown.',
       'References the SVG by URL instead of embedding image bytes in the userscript.',

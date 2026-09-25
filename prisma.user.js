@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PRISMA
 // @namespace    https://github.com/ExtraPotions
-// @version      3.0.28
+// @version      3.0.29
 // @description  Local LGBTQ+ identity-language recognition with context-aware highlighting.
 // @icon         https://raw.githubusercontent.com/ExtraPotions/PRISMA/main/assets/prisma-launcher.svg
 // @tag          LGBTQ+
@@ -33,7 +33,7 @@
 'use strict';
 const EXP = Object.create(null);
 
-// Generated from the approved Dropper v3.2.19 install artifact. Do not edit.
+// Generated from the approved Dropper v3.2.20 install artifact. Do not edit.
 const DropperReference = (() => {
 const LAUNCHER_ORDER_KEY = "exp:v3:launcher-order";
 const LAUNCHER_GRID_DELTA_KEY = "exp:v3:launcher-grid-delta";
@@ -134,8 +134,10 @@ function css() {
       .progress-age.warn { color:#f59e0b; }
       .progress-age.bad { color:#ef4444; font-weight:800; }
       /* 3.2.0 progress panel */
-      .cluster .progress-stack{height:48px;min-height:48px}
-      .cluster .badge-row{position:fixed!important;min-height:48px!important;height:48px!important;width:inherit!important;justify-content:flex-end!important}
+      .cluster{pointer-events:none!important}
+      .cluster :is(#tdh-tools-dock,.update-notice,#tdh-drop-card,#tdh-settings-launcher){pointer-events:auto!important}
+      .cluster .progress-stack{height:48px;min-height:48px;pointer-events:none!important}
+      .cluster .badge-row{position:fixed!important;min-height:48px!important;height:48px!important;width:inherit!important;justify-content:flex-end!important;pointer-events:none!important}
       .cluster #tdh-drop-card{position:absolute!important;right:0!important;width:100%!important;bottom:calc(100% + var(--exp-product-grid-height,0px) + 8px)!important;top:auto!important}
       .cluster[data-launcher-anchor="top"] #tdh-drop-card{top:calc(100% + var(--exp-product-grid-height,0px) + 8px)!important;bottom:auto!important}
 
@@ -1012,7 +1014,7 @@ const ExtraPotionsDiagnostics = (() => {
   return Object.freeze({ createReport, registerProduct, compatibility, bindControls, createControls, dispose });
 })();
 
-/* exp-core 3.2.18: canonical ExtraPotions shared runtime. */
+/* exp-core 3.2.19: canonical ExtraPotions shared runtime. */
 function createProductLifecycle(shared) {
   const VERSION = shared.version;
   const PROTOCOL = 'exp-core-coordination-v1';
@@ -1411,7 +1413,7 @@ function createProductLifecycle(shared) {
 // Product engines own their settings, content, and actions. Core owns shared UI.
 const ExtraPotionsCore = (() => {
   'use strict';
-  const version = '3.2.18';
+  const version = '3.2.19';
   const sourceVersion = '3.2.19';
   const protocol = 'exp-core-coordination-v1';
   const gridProtocol = 'exp-launcher-grid-v3';
@@ -3273,6 +3275,10 @@ EXP.Engine = (() => {
 
 EXP.ReleaseNotes = (() => {
   const notes = Object.freeze({
+    '3.0.29': Object.freeze([
+      'Keeps every launcher clickable when multiple ExtraPotions products share the page.',
+      'Prevents transparent launcher containers from intercepting pointer input.'
+    ]),
     '3.0.28': Object.freeze([
       'Uses the borderless PRISMA launcher artwork everywhere an icon is shown.',
       'References the SVG by URL instead of embedding image bytes in the userscript.',
