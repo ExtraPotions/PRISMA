@@ -2,6 +2,8 @@ name: Publish release
 
 on:
   push:
+    branches:
+      - main
     tags:
       - "v*.*.*"
 
@@ -10,26 +12,40 @@ permissions:
 
 jobs:
   release:
+    if: startsWith(github.ref, 'refs/tags/') || startsWith(github.event.head_commit.message, 'Release ')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
         with:
           node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Resolve release tag
+        id: release
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
+            tag="$GITHUB_REF_NAME"
+          else
+            version="$(node -p "require('./package.json').version")"
+            tag="v$version"
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
       - name: Validate release
         env:
-          TAG: ${{ github.ref_name }}
+          TAG: ${{ steps.release.outputs.tag }}
         run: |
           set -euo pipefail
           version="${TAG#v}"
-          npm ci
-          npx playwright install --with-deps chromium
           npm run release:check
           grep -q "^// @version[[:space:]]*$version$" prisma.user.js
       - name: Publish assets
         env:
           GH_TOKEN: ${{ github.token }}
-          TAG: ${{ github.ref_name }}
+          TAG: ${{ steps.release.outputs.tag }}
         run: |
           set -euo pipefail
           if gh release view "$TAG" >/dev/null 2>&1; then exit 0; fi
@@ -37,8 +53,4 @@ jobs:
             /^## / { section += 1; if (section > 1) exit }
             { print }
           ' CHANGELOG.md > release-notes.md
-          gh release create "$TAG" \
-            prisma.user.js \
-            assets/prisma-launcher.svg \
-            --title "PRISMA $TAG" \
-            --notes-file release-notes.md
+          gh release create "$TAG"             prisma.user.js             assets/prisma-launcher.svg             --target "$GITHUB_SHA"             --title "PRISMA $TAG"             --notes-file release-notes.md
