@@ -1,20 +1,14 @@
 EXP.UI = (() => {
   const ICON_URL = 'https://raw.githubusercontent.com/ExtraPotions/PRISMA/main/assets/prisma-launcher.svg';
   const routeNames = Object.freeze([['page', 'Highlights'], ['style', 'Highlight Style'], ['look', 'Appearance'], ['tools', 'Language'], ['sites', 'Sites'], ['system', 'System']]);
-  let host, shadow, launcher, panel, nav, workspace, live, toast, chrome, toastTimer, updateTimer, updateCard, currentRoute = '', lastRoute = '', open = false, engineState, importDraft = null, launcherCleanup, unsubscribe;
-  const UI_THEMES = ExtraPotionsCore.themes({"id":"prisma","name":"PRISMA gem","swatch":"linear-gradient(135deg,#100814 0 38%,#a843b6 38% 69%,#2e98a5 69% 100%)","canvas":"#100814","surface":"#211029","primary":"#a843b6","companion":"#6853c9","counterpoint":"#2e98a5","interactive":"#c05bca","bg":"#100814","panel":"#211029","line":"#4a2e55","text":"#eadcf0","muted":"#ad96b5","accent":"#a843b6","accent2":"#c05bca","skin":"linear-gradient(135deg,#a843b6 0%,#6853c9 52%,#2e98a5 100%)","skinVertical":"linear-gradient(180deg,#a843b6 0%,#6853c9 52%,#2e98a5 100%)"});
+  let host, shadow, launcher, panel, live, toast, product, noticeController, toastTimer, updateCard, engineState, importDraft = null, unsubscribe;
+  const PRODUCT_THEME = {"id":"prisma","name":"PRISMA gem","swatch":"linear-gradient(135deg,#100814 0 38%,#a843b6 38% 69%,#2e98a5 69% 100%)","canvas":"#100814","surface":"#211029","primary":"#a843b6","companion":"#6853c9","counterpoint":"#2e98a5","interactive":"#c05bca","bg":"#100814","panel":"#211029","line":"#4a2e55","text":"#eadcf0","muted":"#ad96b5","accent":"#a843b6","accent2":"#c05bca","skin":"linear-gradient(135deg,#a843b6 0%,#6853c9 52%,#2e98a5 100%)","skinVertical":"linear-gradient(180deg,#a843b6 0%,#6853c9 52%,#2e98a5 100%)"};
+  const UI_THEMES = ExtraPotionsCore.themes(PRODUCT_THEME);
   const el = (tag, attrs = {}, text) => { const node = document.createElement(tag); for (const [name, value] of Object.entries(attrs)) { if (name === 'class') node.className = value; else node.setAttribute(name, value); } if (text !== undefined) node.textContent = text; return node; };
-  function makeNotice() {
-    const notice=el('div',{class:'update-notice',hidden:true});
-    notice.innerHTML='<button type="button" class="update-dismiss" aria-label="Dismiss">×</button><div class="update-head"><div><div class="update-kicker"></div><div class="update-title"></div></div><div class="update-version"></div></div><div class="update-text"></div><ul class="update-list"></ul><div class="update-footer"><a class="update-release" href="https://github.com/ExtraPotions/PRISMA/releases" target="_blank" rel="noopener noreferrer">GitHub Release</a><a class="update-action" href="https://raw.githubusercontent.com/ExtraPotions/PRISMA/main/prisma.user.js" target="_blank" rel="noopener noreferrer">Install Update</a></div>';
-    notice.querySelector('.update-dismiss').addEventListener('click', hideUpdateCard);
-    return notice;
+  function showNotice(node, {kicker,title,version=EXP.VERSION,text='',details=[],available=false}) {
+    noticeController?.show({kicker,title,version,text,details,showAction:available,kind:available?'available':kicker==='Update Complete'?'complete':'current'});
   }
-  function showNotice(node,{kicker,title,version=EXP.VERSION,text='',details=[],available=false},auto=false){
-    node.querySelector('.update-kicker').textContent=kicker;node.querySelector('.update-title').textContent=title;node.querySelector('.update-version').textContent=`v${version}`;node.querySelector('.update-text').textContent=text;
-    const list=node.querySelector('.update-list');list.replaceChildren(...details.slice(0,4).map(x=>el('li',{},x)));list.hidden=!details.length;node.querySelector('.update-action').hidden=!available;node.dataset.noticeKind=available?'available':kicker==='Update Complete'?'complete':'current';node.dataset.placement='menu';node.hidden=false;chrome?.layout();if(auto){clearTimeout(updateTimer);updateTimer=setTimeout(hideUpdateCard,30000);}
-  }
-  function hideUpdateCard(){clearTimeout(updateTimer);updateTimer=null;if(updateCard)updateCard.hidden=true;chrome?.layout();}
+  function hideUpdateCard() { noticeController?.hide(); }
   function showUpdateCard(result={},complete=false,previous=''){const version=complete?EXP.VERSION:result.latest;if(!complete&&!EXP.Core.claimNotice('prisma',`available:${version}`))return;const fallback=['A newer PRISMA build is available.','Install the latest userscript for the newest fixes and improvements.'];const details=complete?EXP.ReleaseNotes.current():(Array.isArray(result.details)&&result.details.length?result.details:fallback);showNotice(updateCard,{kicker:complete?'Update Complete':'Update Available',title:complete?'PRISMA Updated':'New PRISMA Version Available',version,text:complete?`Updated from v${previous} to v${EXP.VERSION}.`:`v${result.latest} is ready to install.`,details,available:!complete},true);}
   const button = (label, action, className = 'action') => { const node = el('button', { type: 'button', class: className }, label); node.addEventListener('click', action); return node; };
   const announce = (message, kind = 'status') => { if (live) { live.textContent = message; live.dataset.kind = kind; } if (!toast || !EXP.Settings.snapshot().menuNotifications) return; toast.textContent=message;toast.hidden=false;toast.style.top=`${Math.max(8,(launcher?.getBoundingClientRect().top||60)-48)}px`;clearTimeout(toastTimer);toastTimer=setTimeout(()=>{if(toast)toast.hidden=true;},3000); };
@@ -35,6 +29,7 @@ EXP.UI = (() => {
     section.append(selectControl('Style', 'Uses the same eligible match set.', state.style, [['gradient', 'Gradient'], ['underline', 'Underline'], ['soft-fill', 'Soft Fill']], (style) => update({ style }, 'style')));
     section.append(selectControl('Intensity', 'Changes rendering only.', state.intensity, [['subtle', 'Subtle'], ['balanced', 'Balanced'], ['vivid', 'Vivid']], (intensity) => update({ intensity }, 'intensity')));
     section.append(switchControl('Animation', 'Disabled whenever reduced motion is active.', state.animation, (animation) => update({ animation }, 'animation')));
+    section.append(selectControl('Animation style', '', state.animationStyle, [['pulse', 'Pulse'], ['shimmer', 'Shimmer'], ['glow', 'Glow']], (animationStyle) => update({ animationStyle }, 'animation-style'), !state.animation));
     section.append(switchControl('Identity labels', 'Available by pointer and keyboard focus when enabled.', state.labels, (labels) => update({ labels }, 'labels')));
     return section;
   }
@@ -50,14 +45,51 @@ EXP.UI = (() => {
   }
   function identityRow(identity, state) {
     const enabled = !state.disabledIdentities.includes(identity.id); const item = el('div', { class: 'identity' }); const copy = el('div', { class: 'copy' }); copy.append(el('span', { class: 'label' }, identity.label), el('span', { class: 'help' }, `${identity.terms.length} recognition term${identity.terms.length === 1 ? '' : 's'}`)); item.append(copy);
-    const details = button('Details', () => { const terms = identity.terms.map((term) => term.text).join(', '); announce(`${identity.label}: ${terms}`); }, 'compact');
+    const detail = el('div', { class: 'catalog-detail', id: `prisma-detail-${identity.id}`, hidden: true });
+    if (identity.verification.status !== 'unverified') copy.querySelector('.label').append(el('span', { role: 'img', 'aria-label': 'Verified entry', title: identity.verification.status === 'wikipedia' ? 'Verified under the Wikipedia-listed rule' : 'Verified by a peer-reviewed source' }, ' ✓'));
+    detail.append(el('strong', {}, identity.category), el('p', {}, identity.definition || 'Definition review pending for this inherited entry.'), el('p', {}, `Recognizes: ${identity.terms.map(term => term.text).join(', ')}`));
+    if (identity.definitionStatus === 'public-reference-pending') detail.append(el('p', {}, 'Public reference review pending.'));
+    if (identity.recognitionNote) detail.append(el('p', {}, identity.recognitionNote));
+    const verified = identity.verification.status !== 'unverified';
+    detail.append(el('p', { class: 'definition-verification' }, verified ? `✓ Verified — ${identity.verification.status === 'wikipedia' ? 'Wikipedia-listed' : 'peer-reviewed source'}` : 'Unverified — no Wikipedia or peer-reviewed reference confirmed.'));
+    if (identity.romantic) detail.append(el('p', {}, state.includeRomantic ? 'Romantic identity recognition is on.' : 'Romantic identity recognition is off. Enable Romantic identities to highlight this entry.'));
+    if (identity.colors.length) {
+      const preview = el('div', { class: 'catalog-palette', role: 'img', 'aria-label': `${identity.label} highlight palette: ${identity.colors.join(', ')}` });
+      const stops = identity.colors.flatMap((color, index) => [`${color} ${index / identity.colors.length * 100}%`, `${color} ${(index + 1) / identity.colors.length * 100}%`]);
+      preview.style.backgroundImage = `linear-gradient(90deg,${stops.join(',')})`;
+      detail.append(preview, el('p', {}, `${identity.flag.status === 'verified' ? 'Verified palette' : 'Inherited palette'}: ${identity.colors.join(', ')}. Palette preview, not a complete flag drawing.`));
+    } else detail.append(el('p', {}, 'Flag colors await verification. This term uses a neutral underline.'));
+    if (identity.flag.variant) detail.append(el('p', {}, `Flag design: ${identity.flag.variant}`));
+    if (identity.flag.note) detail.append(el('p', {}, identity.flag.note));
+    if (identity.flag.reviewStatus === 'unresolved') detail.append(el('p', {}, 'A public flag reference has not been confirmed.'));
+    for (const url of [...new Set(identity.sources)]) detail.append(el('a', { href: url, target: '_blank', rel: 'noopener noreferrer' }, `Definition source: ${new URL(url).hostname}`));
+    for (const url of [...new Set([...(identity.flag.sources || []), identity.flag.source].filter(Boolean))]) detail.append(el('a', { href: url, target: '_blank', rel: 'noopener noreferrer' }, `Flag source: ${new URL(url).hostname}`));
+    const details = button('Details', () => { detail.hidden = !detail.hidden; details.setAttribute('aria-expanded', String(!detail.hidden)); product?.refresh(); }, 'compact');
+    details.setAttribute('aria-expanded', 'false'); details.setAttribute('aria-controls', detail.id);
     const control = el('button', { type: 'button', class: 'switch', role: 'switch', 'aria-checked': String(enabled), 'aria-label': `Enable ${identity.label}` }); control.append(el('span', { 'aria-hidden': 'true' })); control.addEventListener('click', () => { const disabled = new Set(EXP.Settings.snapshot().disabledIdentities); if (enabled) disabled.add(identity.id); else disabled.delete(identity.id); update({ disabledIdentities: [...disabled] }, 'identity-toggle'); });
-    const actions = el('div', { class: 'identity-actions' }); actions.style.cssText='display:flex;align-items:center;gap:6px'; actions.append(control, details); item.append(actions); return item;
+    const actions = el('div', { class: 'identity-actions' }); actions.style.cssText='display:flex;align-items:center;gap:6px'; actions.append(control, details); item.append(actions); const wrapper = el('div', { class: 'catalog-entry' }); wrapper.append(item, detail); return wrapper;
   }
   function renderIdentities() {
     const state = EXP.Settings.snapshot(); const section = group('Identity Catalog', `${EXP.Catalog.identities.length} reviewed source identities. Context rules remain active for ambiguous terms.`); const search = el('input', { type: 'search', class: 'search', placeholder: 'Search identities and aliases', 'aria-label': 'Search identity catalog' }); const list = el('div', { class: 'identity-list' });
-    const paint = () => { const query=search.value.trim(); const results=EXP.Catalog.search(query); list.replaceChildren(...results.slice(0,3).map((identity) => identityRow(identity, state))); if (!list.childElementCount) list.append(el('p', { class: 'empty' }, 'No identities match this search.')); };
-    search.addEventListener('input', paint); paint(); section.append(search, list);
+    let offset = 0;
+    const pagination = el('div', { class: 'button-grid' });
+    const count = el('p', { class: 'catalog-results', role: 'status' });
+    section.append(switchControl('Romantic identities', '', state.includeRomantic, (includeRomantic) => update({ includeRomantic }, 'romantic-identities')));
+    section.append(el('p', {}, 'Include romantic and combined aroace labels in page highlighting. Definitions stay available in this catalog.'));
+    section.append(el('p', {}, 'Check marks indicate Wikipedia or peer-reviewed source support.'));
+    const previous = button('Previous results', () => { offset = Math.max(0, offset - 3); paint(); });
+    const next = button('Next results', () => { offset += 3; paint(); });
+    pagination.append(previous, next);
+    const paint = () => {
+      const results = EXP.Catalog.search(search.value.trim());
+      offset = Math.min(offset, Math.max(0, Math.floor((results.length - 1) / 3) * 3));
+      list.replaceChildren(...results.slice(offset, offset + 3).map(identity => identityRow(identity, state)));
+      if (!list.childElementCount) list.append(el('p', { class: 'empty' }, 'No identities match this search.'));
+      count.textContent = results.length ? `${offset + 1}–${Math.min(offset + 3, results.length)} of ${results.length} entries` : '0 entries';
+      previous.disabled = offset === 0; next.disabled = offset + 3 >= results.length;
+      pagination.hidden = results.length <= 3; product?.refresh();
+    };
+    search.addEventListener('input', () => { offset = 0; paint(); }); paint(); section.append(search, list, count, pagination);
     section.append(actionRow('Restore catalog defaults', 'Enables all reviewed identities without changing context protection.', () => { update({ disabledIdentities: [] }, 'identity-defaults'); announce('Catalog defaults restored.'); }, 'Restore'));
     return section;
   }
@@ -118,27 +150,24 @@ EXP.UI = (() => {
   }
   const routeRenderers = { page: renderPage, style: renderHighlightStyle, look: renderLook, tools: renderTools, sites: renderSites, system: renderSettings };
   function render() {
-    if (!nav) return;
     engineState = EXP.Engine.snapshot({ includeMatchText: false });
-    for (const item of nav.querySelectorAll(':scope > .tool-panel > .route')) {
-      const active = item.dataset.route === currentRoute;
-      if (active) lastRoute = currentRoute;
-      item.classList.toggle('last-opened', item.dataset.route === lastRoute);
-      const body = item.parentElement.querySelector('.route-body');
-      item.setAttribute('aria-current', active ? 'page' : 'false');
-      item.setAttribute('aria-expanded', String(active));
-      body.hidden = !active;
-      if (active) { workspace = body; body.replaceChildren(routeRenderers[currentRoute]()); }
-    }
-    panel.dataset.route = currentRoute || 'collapsed'; chrome?.update();
+    product?.renderActive();
+    product?.refresh();
   }
-  function setOpen(value, focus = true) { open = Boolean(value); panel.hidden = !open; launcher.setAttribute('aria-expanded', String(open)); chrome?.state(open); if (open) { currentRoute='';render(); if (focus) EXP.Core.focusMenuSurface(panel); } else if (focus) launcher.focus(); }
   function bindKeys(event) {
-    if (EXP.Settings.snapshot().shortcut && event.altKey && `Alt+${event.key.toUpperCase()}` === EXP.Settings.snapshot().shortcut.toUpperCase()) { event.preventDefault(); setOpen(!open); }
-    if (!open) return;
-    if (event.key === 'Escape') { event.preventDefault(); if (importDraft) { importDraft = null; render(); announce('Import draft cancelled.'); } else setOpen(false); return; }
+    const shortcut = EXP.Settings.snapshot().shortcut;
+    const defaultShortcut = event.shiftKey && event.key.toLowerCase() === 'p';
+    const savedShortcut = shortcut && !event.shiftKey && `Alt+${event.key.toUpperCase()}` === shortcut.toUpperCase();
+    if (event.altKey && !event.repeat && !event.ctrlKey && !event.metaKey && (defaultShortcut || savedShortcut)) {
+      event.preventDefault(); product?.toggle();
+    }
+    if (!product?.isOpen) return;
+    if (event.key === 'Escape' && importDraft) {
+      event.preventDefault(); event.stopImmediatePropagation();
+      importDraft = null; render(); announce('Import draft cancelled.'); return;
+    }
     if (event.key === 'Tab') {
-      const focusable = [...panel.querySelectorAll('button:not(:disabled),select:not(:disabled),input:not(:disabled),summary,[tabindex]:not([tabindex="-1"])')].filter((node) => !node.hidden && node.getClientRects().length);
+      const focusable = [...panel.querySelectorAll('button:not(:disabled),select:not(:disabled),input:not(:disabled),summary,[tabindex]:not([tabindex="-1"])')].filter(node => !node.hidden && node.getClientRects().length);
       if (!focusable.length) return;
       const first = focusable[0], last = focusable.at(-1), active = shadow.activeElement;
       if (active === panel) { event.preventDefault(); (event.shiftKey ? last : first).focus(); }
@@ -146,19 +175,67 @@ EXP.UI = (() => {
       else if (!event.shiftKey && active === last) { event.preventDefault(); first.focus(); }
     }
   }
-  function outsidePointer(event) { if (open && !event.composedPath().includes(host) && !importDraft) setOpen(false); }
+  function outsidePointer(event) { if (product?.isOpen && !event.composedPath().includes(host) && !importDraft) product.close(); }
   function init() {
     if (window.top !== window.self || host) return;
-    host = el('div', { id: 'exp-prisma-root', 'data-exp-owned': '1' }); shadow = host.attachShadow({ mode: 'open' });
-    const styleCss = '';
-    launcher = el('button', { type: 'button', class: 'launcher', 'aria-label': 'Open PRISMA', 'aria-expanded': 'false', 'data-help': 'Drag To Move · Click To Open PRISMA' }); launcher.append(el('img',{class:'launcher-icon',src:ICON_URL,alt:''})); launcher.addEventListener('click', () => setOpen(!open));
-    panel = el('aside', { class: 'panel', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'PRISMA settings' }); panel.hidden = true;
-    const head = el('header', { class: 'head' }); const brand = el('div', { class: 'header-brand' }); brand.append(el('img', { class: 'header-badge', src: ICON_URL, alt: '' })); const copy = el('div', { class: 'header-copy' }); const title = el('div', { class: 'title-row' }); title.append(el('h2', {}, 'PRISMA'), button(`v${EXP.VERSION}`, () => { if(updateCard?.hidden !== false || updateCard.dataset.noticeKind!=='current') showNotice(updateCard,{kicker:'Current Version',title:'PRISMA Changelog',version:EXP.VERSION,text:`What's new in v${EXP.VERSION}.`,details:EXP.ReleaseNotes.current(),available:false},true); else hideUpdateCard(); }, 'version')); copy.append(title, el('div', { class: 'subtitle' }, 'Your self-identity. Recognized.')); brand.append(copy); head.append(brand, button('×', () => setOpen(false), 'close'));
-    live = el('p', { class: 'live', role: 'status', 'aria-live': 'polite' }); nav = el('nav', { class: 'nav', 'aria-label': 'PRISMA sections' });
-    for (const [id, name] of routeNames) { const section = el('section', { class: 'tool-panel' }); const item = button(name, () => { currentRoute = currentRoute===id?'':id; render(); }, 'route'); item.dataset.route = id; item.setAttribute('aria-controls', `exp-prisma-route-${id}`); const body = el('div', { class: 'route-body', id: `exp-prisma-route-${id}` }); body.hidden = true; section.append(item, body); nav.append(section); }
-    panel.append(head, el('div', { class: 'header-divider' }), live, nav);updateCard=makeNotice();toast=el('div',{class:'toast'});toast.hidden=true;EXP.Core.injectStyle(shadow,styleCss,{expPrismaUi:'1'});shadow.append(panel, updateCard, launcher,toast); (document.body || document.documentElement).append(host);
-    applyUiTheme(EXP.Settings.snapshot().uiTheme);launcherCleanup = EXP.Core.registerLauncher(host, { productId: 'prisma', priority: 40 });chrome=EXP.MenuChrome.create({id:'prisma',host,shadow,launcher,panel,getSettings:()=>EXP.Settings.snapshot(),setOpen,shortcutKey:'p'});const prev=EXP.Core.consumeVersionChange('prisma',EXP.VERSION,'exp:v3:prisma:last-version-v2');if(prev)showUpdateCard({},true,prev);if(EXP.Settings.snapshot().updateNotifications)EXP.Updates.check(false).then(r=>{if(r.available)showUpdateCard(r);}); unsubscribe = EXP.Engine.subscribe((value) => { engineState = value; if (open && ['page', 'tools', 'system'].includes(currentRoute)) render(); }); addEventListener('keydown', bindKeys); document.addEventListener('pointerdown', outsidePointer, true); render();
+    engineState = EXP.Engine.snapshot({ includeMatchText: false });
+    product = ExtraPotionsCore.createProduct({
+      id: 'prisma', name: 'PRISMA', version: EXP.VERSION,
+      subtitle: 'Your self-identity. Recognized.', artwork: ICON_URL,
+      theme: PRODUCT_THEME, priority: 40,
+      getSettings: () => EXP.Settings.snapshot(),
+      onSettings: (next, reason) => update(next, reason),
+      sections: routeNames.map(([id, label]) => ({ id, label, render: () => routeRenderers[id]() })),
+    });
+    ({ host, shadow, launcher, panel } = product);
+    EXP.Core.injectStyle(shadow, '.catalog-detail{padding:8px;margin:4px 0 8px;border:1px solid var(--theme-line);border-radius:7px;background:var(--theme-bg);font-size:10px;line-height:1.45;overflow-wrap:anywhere}.catalog-detail[hidden]{display:none!important}.catalog-detail p{margin:6px 0}.catalog-detail a{display:block;color:var(--theme-accent2);margin-top:5px}.catalog-palette{height:20px;border:1px solid var(--theme-line);border-radius:4px}', { expPrismaCatalog: '1' });
+    panel.classList.add('panel');
+    panel.setAttribute('aria-modal', 'true');
+    const nav = panel.querySelector('nav');
+    nav.classList.add('nav');
+    for (const item of nav.querySelectorAll('[data-section]')) {
+      item.classList.add('route');
+      const body = item.parentElement.querySelector('.route-body');
+      body.id = `exp-prisma-route-${item.dataset.section}`;
+      item.setAttribute('aria-controls', body.id);
+    }
+    const syncSectionState = () => {
+      for (const item of nav.querySelectorAll('[data-section]')) item.setAttribute('aria-current', item.getAttribute('aria-expanded') === 'true' ? 'page' : 'false');
+    };
+    nav.addEventListener('click', syncSectionState);
+    launcher.addEventListener('click', syncSectionState);
+    live = el('p', { class: 'live', role: 'status', 'aria-live': 'polite' });
+    panel.querySelector('nav').before(live);
+    toast = el('div', { class: 'toast', role: 'status', 'aria-live': 'polite', hidden: true });
+    (shadow.querySelector('.exp-core-theme') || shadow).append(toast);
+    noticeController = ExtraPotionsCore.createProductNotice({
+      host, shadow, panel, versionButton: product.versionButton,
+      releaseUrl: 'https://github.com/ExtraPotions/PRISMA/releases',
+      installUrl: 'https://github.com/ExtraPotions/PRISMA/releases/latest/download/prisma.user.js',
+      onVersion: () => {
+        if (updateCard?.hidden === false && updateCard.dataset.noticeKind === 'current') hideUpdateCard();
+        else showNotice(updateCard, { kicker:'Current Version', title:'PRISMA Changelog', version:EXP.VERSION, text:`What's new in v${EXP.VERSION}.`, details:EXP.ReleaseNotes.current(), available:false });
+      },
+    });
+    updateCard = noticeController.element;
+    applyUiTheme(EXP.Settings.snapshot().uiTheme);
+    const previous = EXP.Core.consumeVersionChange('prisma', EXP.VERSION, 'exp:v3:prisma:last-version-v2');
+    if (previous) showUpdateCard({}, true, previous);
+    if (EXP.Settings.snapshot().updateNotifications) EXP.Updates.check(false).then(result => { if (host && result.available) showUpdateCard(result); });
+    unsubscribe = EXP.Engine.subscribe(value => {
+      engineState = value;
+      if (product?.isOpen && panel.querySelector('[data-section="page"][aria-expanded="true"],[data-section="system"][aria-expanded="true"]')) render();
+    });
+    document.addEventListener('keydown', bindKeys, true);
+    document.addEventListener('pointerdown', outsidePointer, true);
+    render();
   }
-  function cleanup() { removeEventListener('keydown', bindKeys); document.removeEventListener('pointerdown', outsidePointer, true); unsubscribe?.(); launcherCleanup?.();chrome?.destroy();clearTimeout(toastTimer);clearTimeout(updateTimer); host?.remove(); host = shadow = launcher = panel = nav = workspace = live = toast = chrome = null; }
-  return Object.freeze({ init, cleanup, open: () => setOpen(true), refresh: render });
+  function cleanup() {
+    document.removeEventListener('keydown', bindKeys, true);
+    document.removeEventListener('pointerdown', outsidePointer, true);
+    unsubscribe?.(); clearTimeout(toastTimer); noticeController?.destroy(); product?.destroy();
+    host = shadow = launcher = panel = live = toast = product = noticeController = updateCard = null;
+    importDraft = null;
+  }
+  return Object.freeze({ init, cleanup, open: () => product?.open(), refresh: render });
 })();

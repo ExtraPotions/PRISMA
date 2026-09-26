@@ -8,10 +8,12 @@ EXP.Settings = (() => {
     style: 'gradient',
     intensity: 'balanced',
     animation: false,
+    animationStyle: 'pulse',
     labels: false,
     matcherMode: 'balanced',
     ambiguityProtection: true,
     surroundingContext: true,
+    includeRomantic: false,
     disabledIdentities: [],
     reducedMotion: 'system',
     highContrast: false,
@@ -63,8 +65,9 @@ EXP.Settings = (() => {
     const next = structuredClone(defaults);
 	const themeAliases = { warm: 'ember', discord: 'glacier', pine: 'verdant', obsidian: 'contrast' };
 	const normalizedUiTheme = themeAliases[candidate.uiTheme] || candidate.uiTheme;
-    for (const name of ['enabled', 'animation', 'labels', 'ambiguityProtection', 'surroundingContext', 'highContrast', 'safeMode', 'updateNotifications', 'menuAutoClose', 'menuNotifications']) if (typeof candidate[name] === 'boolean') next[name] = candidate[name];
+    for (const name of ['enabled', 'animation', 'labels', 'ambiguityProtection', 'surroundingContext', 'includeRomantic', 'highContrast', 'safeMode', 'updateNotifications', 'menuAutoClose', 'menuNotifications']) if (typeof candidate[name] === 'boolean') next[name] = candidate[name];
     const enums = {
+      animationStyle: ['pulse', 'shimmer', 'glow'],
       style: ['gradient', 'underline', 'soft-fill'], intensity: ['subtle', 'balanced', 'vivid'], matcherMode: ['strict', 'balanced', 'inclusive'],
       reducedMotion: ['system', 'reduce', 'allow'], nonColorIndicator: ['underline', 'outline', 'off'],
       screenReaderBehavior: ['original-text', 'announce-on-focus'], launcherPosition: ['automatic-end-bottom', 'end-top', 'end-bottom', 'start-top', 'start-bottom'], menuWidth: ['full', 'compact', 'narrow'], uiTheme: ['ember', 'midnight', 'glacier', 'contrast', 'verdant', 'pride', 'crimson', 'prisma']

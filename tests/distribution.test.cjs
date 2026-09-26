@@ -47,11 +47,11 @@ test('current and completed update notices use concise concrete release notes', 
   assert.doesNotMatch(workflow, /--generate-notes/);
 });
 
-test('catalog retains the reviewed source baseline', () => {
+test('catalog matches the reviewed expansion inventory', () => {
   const catalog = JSON.parse(source.match(/EXP\.CatalogData = (\[[\s\S]*?\n\]);\n/)[1]);
-  assert.equal(catalog.length, 59);
-  assert.equal(catalog.reduce((sum, identity) => sum + identity.words.length, 0), 124);
-  assert.equal(new Set(catalog.map(({ id }) => id)).size, 59);
+  assert.equal(catalog.length, 135);
+  assert.equal(catalog.reduce((sum, identity) => sum + identity.words.length, 0), 257);
+  assert.equal(new Set(catalog.map(({ id }) => id)).size, 135);
 });
 
 test('no checkbox input is introduced', () => {
@@ -97,4 +97,3 @@ test('PRISMA settings survive manager storage gaps and mirror to fallback storag
   assert.match(settings, /function load\(\) \{\s*const stored = rawRead\('settings'\);\s*state = validate\(stored \|\| defaults\);\s*rawWrite\('settings', state\);/u);
   assert.doesNotMatch(settings, /GM_setValue\(key\(name\), value\); return;/u);
 });
-

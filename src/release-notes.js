@@ -1,7 +1,16 @@
-EXP.VERSION = '3.0.32';
+EXP.VERSION = '3.1.0';
 
 EXP.ReleaseNotes = (() => {
   const notes = Object.freeze({
+    '3.1.0': Object.freeze([
+      'Adds Pulse, Shimmer, and Glow animation styles with saved preferences and reduced-motion support.',
+      'Keeps gradient-highlighted text visible when page dark-mode styles override element backgrounds, including Wikipedia portals.',
+      'Adds Wikipedia-listed check icons while keeping other definitions unverified without qualifying evidence.',
+      'Adds an optional Romantic identities switch; romantic and aroace definitions remain available in the database.',
+      'Adds an individual public definition and flag review for every catalog entry.',
+      'Documents 133 definitions and 112 flag designs; keeps unresolved evidence visible.',
+      'Verifies 30 palettes and separates definition sources from flag sources in Details.'
+    ]),
     '3.0.32': Object.freeze([
       'Uses the same menu-width notice surface for Current Version, Update Available, and Update Complete, matching Dropper.',
       'Forces a fresh update check for each newly installed PRISMA version instead of inheriting the previous version\'s 15-minute throttle or stale remote version.',

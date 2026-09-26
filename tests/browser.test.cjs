@@ -65,8 +65,9 @@ test('GM_addElement cannot leak menu CSS onto the page', async (t) => {
 async function fixture(html) {
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
+  await page.addInitScript(() => { const key = 'exp:v3:prisma:settings'; if (!localStorage.getItem(key)) localStorage.setItem(key, JSON.stringify({ includeRomantic: true })); });
   await page.addInitScript({ content: script });
-  await page.route('https://fixture.test/**', (route) => route.fulfill({ status: 200, contentType: 'text/html', body: html }));
+  await page.route('https://fixture.test/**', (route) => route.fulfill({ status: 200, contentType: 'text/html; charset=utf-8', body: html }));
   await page.goto('https://fixture.test/page');
   await page.waitForSelector('.exp-prisma-hit');
   return { browser, page };
@@ -80,7 +81,7 @@ test('menu palette recolors the shell and narrow rows do not create nested scrol
   const facts = await root.evaluate((node) => {
     const shadow = node.shadowRoot;
     shadow.querySelector('.launcher').click();
-    shadow.querySelector('[data-route="look"]').click();
+    shadow.querySelector('[data-section="look"]').click();
     const panel = shadow.querySelector('.panel');
     const before = getComputedStyle(panel).backgroundColor;
     shadow.querySelector('.exp-theme-swatch[aria-label="Midnight"]').click();
@@ -130,7 +131,7 @@ test('version action reuses the update-complete card for the current changelog',
   assert.ok(facts.completed.bullets.length>=2&&facts.completed.bullets.length<=4,JSON.stringify(facts));
   assert.equal(facts.current.kind,'current');
   assert.equal(facts.current.title,'PRISMA Changelog');
-  assert.equal(facts.current.version,'v3.0.32');
+  assert.equal(facts.current.version,'v' + require('../package.json').version);
   assert.equal(facts.current.visible,true);
   assert.deepEqual(facts.current.bullets,facts.completed.bullets);
 });
@@ -141,7 +142,7 @@ test('Pride theme applies a distinct palette, muted rainbow accents, and persist
   const pride = await page.locator('#exp-prisma-root').evaluate((host) => {
     const root = host.shadowRoot;
     root.querySelector('.launcher').click();
-    root.querySelector('[data-route="look"]').click();
+    root.querySelector('[data-section="look"]').click();
     const panel = root.querySelector('.panel');
     const before = {
       bg: getComputedStyle(panel).backgroundColor,
@@ -197,7 +198,7 @@ test('explicit terms and supported aliases match while negative ambiguity is blo
   } finally { await browser.close(); }
 });
 
-test('all 124 reviewed terms resolve to their catalog identity with supporting context', async () => {
+test('every reviewed term resolves to its catalog entry with supporting context', async () => {
   const rows = catalog.flatMap((identity) => identity.words.map((term, index) => `<p data-key="${identity.id}-${index}">${term} · LGBTQ identity community</p>`)).join('');
   const { browser, page } = await fixture(`<main>${rows}</main>`);
   try {
@@ -237,7 +238,7 @@ test('renderer controls change style without changing the match count', async ()
   const { browser, page } = await fixture('<main>bisexual and pansexual</main>');
   try {
     const before = await page.locator('.exp-prisma-hit').count();
-    await page.locator('#exp-prisma-root').evaluate((host) => { const root=host.shadowRoot;root.querySelector('.launcher').click();root.querySelector('[data-route="style"]').click(); });
+    await page.locator('#exp-prisma-root').evaluate((host) => { const root=host.shadowRoot;root.querySelector('.launcher').click();root.querySelector('[data-section="style"]').click(); });
     await page.locator('#exp-prisma-root').evaluate((host) => { const select = host.shadowRoot.querySelector('select[aria-label="Style"]'); select.value = 'underline'; select.dispatchEvent(new Event('change', { bubbles: true })); });
     await page.waitForFunction(() => [...document.querySelectorAll('.exp-prisma-hit')].every((node) => node.dataset.style === 'underline'));
     const underline = await page.locator('.exp-prisma-hit').first().evaluate((node) => {
@@ -267,7 +268,7 @@ test('underline and soft fill resist hostile site CSS', async () => {
     await page.locator('#exp-prisma-root').evaluate((host) => {
       const root = host.shadowRoot;
       root.querySelector('.launcher').click();
-      root.querySelector('[data-route="style"]').click();
+      root.querySelector('[data-section="style"]').click();
     });
     const setStyle = async (value) => {
       await page.locator('#exp-prisma-root').evaluate((host, next) => {
@@ -310,7 +311,7 @@ test('underline and soft fill retain target-level rendering without the managed 
     await page.locator('#exp-prisma-root').evaluate((host) => {
       const root = host.shadowRoot;
       root.querySelector('.launcher').click();
-      root.querySelector('[data-route="style"]').click();
+      root.querySelector('[data-section="style"]').click();
     });
     const setStyle = async (value) => {
       await page.locator('#exp-prisma-root').evaluate((host, next) => {
@@ -342,7 +343,7 @@ test('underline and soft fill retain target-level rendering without the managed 
 test('site exclusion and Safe Mode fully restore page text', async () => {
   const { browser, page } = await fixture('<main>bisexual</main>');
   try {
-    await page.locator('#exp-prisma-root').evaluate((host) => { host.shadowRoot.querySelector('.launcher').click(); host.shadowRoot.querySelector('[data-route="sites"]').click(); host.shadowRoot.querySelector('button[role="switch"][aria-label="Enable on this site"]').click(); });
+    await page.locator('#exp-prisma-root').evaluate((host) => { host.shadowRoot.querySelector('.launcher').click(); host.shadowRoot.querySelector('[data-section="sites"]').click(); host.shadowRoot.querySelector('button[role="switch"][aria-label="Enable on this site"]').click(); });
     await page.waitForFunction(() => document.querySelectorAll('.exp-prisma-hit').length === 0);
     assert.equal(await page.locator('body > main').textContent(), 'bisexual');
   } finally { await browser.close(); }
@@ -351,10 +352,10 @@ test('site exclusion and Safe Mode fully restore page text', async () => {
 test('global and site identity switches affect the same matcher', async () => {
   const { browser, page } = await fixture('<main>bisexual pansexual</main>');
   try {
-    await page.locator('#exp-prisma-root').evaluate((host) => { const root = host.shadowRoot; root.querySelector('.launcher').click(); root.querySelector('[data-route="tools"]').click(); if(root.querySelectorAll('.identity-list .identity').length!==3)throw new Error('Identity catalog must show three defaults');const search=root.querySelector('.search');search.value='Bisexual';search.dispatchEvent(new Event('input',{bubbles:true}));root.querySelector('button[aria-label="Enable Bisexual"]').click(); });
+    await page.locator('#exp-prisma-root').evaluate((host) => { const root = host.shadowRoot; root.querySelector('.launcher').click(); root.querySelector('[data-section="tools"]').click(); if(root.querySelectorAll('.identity-list .identity').length!==3)throw new Error('Identity catalog must show three defaults');const search=root.querySelector('.search');search.value='Bisexual';search.dispatchEvent(new Event('input',{bubbles:true}));root.querySelector('button[aria-label="Enable Bisexual"]').click(); });
     await page.waitForFunction(() => !document.querySelector('.exp-prisma-hit[data-identity="bisexual"]'));
     assert.equal(await page.locator('.exp-prisma-hit[data-identity="pansexual"]').count(), 1);
-    await page.locator('#exp-prisma-root').evaluate((host) => { const root = host.shadowRoot; root.querySelector('[data-route="sites"]').click(); root.querySelector('button[role="switch"][aria-label="Use site overrides"]').click(); const search=root.querySelector('input[aria-label="Search site identity overrides"]'); search.value='Pansexual'; search.dispatchEvent(new Event('input',{bubbles:true})); const select = root.querySelector('select[aria-label="Pansexual"]'); select.value = 'off'; select.dispatchEvent(new Event('change', { bubbles: true })); });
+    await page.locator('#exp-prisma-root').evaluate((host) => { const root = host.shadowRoot; root.querySelector('[data-section="sites"]').click(); root.querySelector('button[role="switch"][aria-label="Use site overrides"]').click(); const search=root.querySelector('input[aria-label="Search site identity overrides"]'); search.value='Pansexual'; search.dispatchEvent(new Event('input',{bubbles:true})); const select = root.querySelector('select[aria-label="Pansexual"]'); select.value = 'off'; select.dispatchEvent(new Event('change', { bubbles: true })); });
     await page.waitForFunction(() => document.querySelectorAll('.exp-prisma-hit').length === 0);
   } finally { await browser.close(); }
 });
@@ -362,7 +363,7 @@ test('global and site identity switches affect the same matcher', async () => {
 test('Safe Mode restores the page and can recover through the menu', async () => {
   const { browser, page } = await fixture('<main>bisexual</main>');
   try {
-    await page.locator('#exp-prisma-root').evaluate((host) => { host.shadowRoot.querySelector('.launcher').click(); host.shadowRoot.querySelector('[data-route="system"]').click(); host.shadowRoot.querySelector('button[role="switch"][aria-label="Safe Mode"]').click(); });
+    await page.locator('#exp-prisma-root').evaluate((host) => { host.shadowRoot.querySelector('.launcher').click(); host.shadowRoot.querySelector('[data-section="system"]').click(); host.shadowRoot.querySelector('button[role="switch"][aria-label="Safe Mode"]').click(); });
     await page.waitForFunction(() => document.querySelectorAll('.exp-prisma-hit').length === 0);
     await page.locator('#exp-prisma-root').evaluate((host) => host.shadowRoot.querySelector('button[role="switch"][aria-label="Safe Mode"]').click());
     await page.waitForFunction(() => document.querySelectorAll('.exp-prisma-hit').length === 1);
@@ -393,7 +394,7 @@ test('launcher uses the borderless PRISMA artwork URL', async () => {
 test('page view retains match count without identity summary or match list', async () => {
   const { browser, page } = await fixture('<main>bisexual bisexual pansexual</main>');
   try {
-    const result = await page.locator('#exp-prisma-root').evaluate((host) => { host.shadowRoot.querySelector('.launcher').click(); host.shadowRoot.querySelector('[data-route="page"]').click(); const root = host.shadowRoot; const countRow = [...root.querySelectorAll('.row')].find((node) => node.querySelector('.label')?.textContent === 'Match count'); return { matches: root.querySelectorAll('.match-list .match').length, summary: [...root.querySelectorAll('.summary-row')].map((node) => node.textContent), count: countRow.querySelector('output').textContent }; });
+    const result = await page.locator('#exp-prisma-root').evaluate((host) => { host.shadowRoot.querySelector('.launcher').click(); host.shadowRoot.querySelector('[data-section="page"]').click(); const root = host.shadowRoot; const countRow = [...root.querySelectorAll('.row')].find((node) => node.querySelector('.label')?.textContent === 'Match count'); return { matches: root.querySelectorAll('.match-list .match').length, summary: [...root.querySelectorAll('.summary-row')].map((node) => node.textContent), count: countRow.querySelector('output').textContent }; });
     assert.equal(result.matches, 0);
     assert.equal(result.count, '3');
     assert.deepEqual(result.summary, []);
@@ -403,7 +404,7 @@ test('page view retains match count without identity summary or match list', asy
 test('temporary hide preserves the page set and reload-persistent settings', async () => {
   const { browser, page } = await fixture('<main>bisexual pansexual</main>');
   try {
-    const result = await page.locator('#exp-prisma-root').evaluate((host) => { const root = host.shadowRoot; root.querySelector('.launcher').click(); root.querySelector('[data-route="page"]').click(); root.querySelector('button[role="switch"][aria-label="Temporarily Hide Highlights"]').click(); const countRow = [...root.querySelectorAll('.row')].find((node) => node.querySelector('.label')?.textContent === 'Match count'); return { list: root.querySelectorAll('.match-list .match').length, count: countRow.querySelector('output').textContent }; });
+    const result = await page.locator('#exp-prisma-root').evaluate((host) => { const root = host.shadowRoot; root.querySelector('.launcher').click(); root.querySelector('[data-section="page"]').click(); root.querySelector('button[role="switch"][aria-label="Temporarily Hide Highlights"]').click(); const countRow = [...root.querySelectorAll('.row')].find((node) => node.querySelector('.label')?.textContent === 'Match count'); return { list: root.querySelectorAll('.match-list .match').length, count: countRow.querySelector('output').textContent }; });
     assert.deepEqual(result, { list: 0, count: '2' });
     assert.equal(await page.locator('.exp-prisma-hit[data-hidden="1"]').count(), 2);
   } finally { await browser.close(); }
@@ -437,14 +438,14 @@ test('reference-led compact dock keeps one expandable section open', async () =>
         sections: root.querySelectorAll('.tool-panel').length,
         visibleBodies: [...root.querySelectorAll('.route-body')].filter((body) => !body.hidden).length,
         openRoute: root.querySelector('.route[aria-expanded="true"]')?.textContent,
-        headerBadge: root.querySelector('.header-badge')?.getBoundingClientRect().width,
+        headerBadge: root.querySelector('.header-icon .menu-icon')?.getBoundingClientRect().width,
       };
     });
     assert.equal(initial.width, 260);
     assert.deepEqual(initial, { ...initial, sections: 6, visibleBodies: 0, openRoute: undefined, headerBadge: 38 });
     const changed = await page.locator('#exp-prisma-root').evaluate((host) => {
       const root = host.shadowRoot;
-      root.querySelector('[data-route="page"]').click();
+      root.querySelector('[data-section="page"]').click();
       return {
         visibleBodies: [...root.querySelectorAll('.route-body')].filter((body) => !body.hidden).length,
         openRoute: root.querySelector('.route[aria-expanded="true"] .fl-tool-title')?.textContent,
@@ -523,7 +524,7 @@ test('menu routes use accurate labels and scoped section contents', async (t) =>
     const root = host.shadowRoot;
     root.querySelector('.launcher').click();
     const labels = [...root.querySelectorAll('.nav button.route')].map((button) => button.querySelector('.fl-tool-title')?.textContent);
-    const subtitle = root.querySelector('.subtitle')?.textContent || '';
+    const subtitle = root.querySelector('[data-exp-part="subtitle"]')?.textContent || '';
     const openRoute = (label) => {
       [...root.querySelectorAll('.nav button.route')].find((button) => button.querySelector('.fl-tool-title')?.textContent === label).click();
       const body = root.querySelector('.route-body:not([hidden])');
@@ -589,7 +590,7 @@ test('route headers do not carry restated helper tips', async (t) => {
   const tips = await root.evaluate((host) => {
     const shadow = host.shadowRoot;
     shadow.querySelector('.launcher').click();
-    shadow.querySelector('[data-route="look"]')?.click();
+    shadow.querySelector('[data-section="look"]')?.click();
     return {
       headers: [...shadow.querySelectorAll('.fl-tool-header')].map((node) => ({
         tip: node.dataset.tip || '',

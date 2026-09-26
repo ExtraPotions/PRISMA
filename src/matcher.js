@@ -29,7 +29,9 @@ EXP.Matcher = (() => {
     const windowStart = Math.max(0, start - 96);
     const windowEnd = Math.min(sourceText.length, end + 96);
     const context = EXP.Catalog.normalize(`${sourceText.slice(windowStart, start)} ${sourceText.slice(end, windowEnd)}`);
-    const hasPositive = settings.surroundingContext && EXP.Catalog.positiveWords.some((word) => context.includes(word));
+    const hasPositive = settings.surroundingContext && (term.requiresIdentityContext
+      ? /\b(?:gender|orientation|sexuality|pride|lgbtq?(?:ia)?|identity label)\b/u.test(context)
+      : EXP.Catalog.positiveWords.some((word) => new RegExp(`\\b${escape(word)}\\b`, 'u').test(context)));
     const hasNegative = settings.ambiguityProtection && term.negatives.some((word) => context.includes(word));
     if (hasNegative) return { band: 'blocked-negative', rules: [term.contextRuleId, 'NEGATIVE_CONTEXT'] };
     if (hasPositive) return { band: 'eligible-supported', rules: [term.contextRuleId, 'POSITIVE_CONTEXT'] };
@@ -48,6 +50,7 @@ EXP.Matcher = (() => {
       if (!boundary(text, start, end)) continue;
       const records = lookup.get(EXP.Catalog.normalize(match[0])) || [];
       if (records.length !== 1) { decisions['blocked-negative'] += 1; continue; }
+      if (records[0].identity.romantic && settings.includeRomantic !== true) continue;
       const result = evaluate(records[0], text, start, end, settings);
       decisions[result.band] += 1;
       const allowed = result.band === 'eligible-explicit' || result.band === 'eligible-supported';

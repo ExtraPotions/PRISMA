@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PRISMA
 // @namespace    https://github.com/ExtraPotions
-// @version      3.0.32
+// @version      3.1.0
 // @description  Local LGBTQ+ identity-language recognition with context-aware highlighting.
 // @icon         https://raw.githubusercontent.com/ExtraPotions/PRISMA/main/assets/prisma-launcher.svg
 // @tag          LGBTQ+
@@ -33,7 +33,7 @@
 'use strict';
 const EXP = Object.create(null);
 
-// Generated from the approved Dropper v3.2.25 install artifact. Do not edit.
+// Generated from the approved Dropper v3.3.2 install artifact. Do not edit.
 const DropperReference = (() => {
 const LAUNCHER_ORDER_KEY = "exp:v3:launcher-order";
 const LAUNCHER_GRID_DELTA_KEY = "exp:v3:launcher-grid-delta";
@@ -98,7 +98,7 @@ function css() {
         border-radius:12px;
         border-left:1px solid color-mix(in srgb, var(--theme-accent) 47%, transparent);
       }
-      .badge-only-progress-slot{display:block;grid-column:1/-1;margin:0 0 8px;min-width:0}
+      .badge-only-progress-slot{display:block;width:100%;margin:0 0 5px;min-width:0}
       .badge-only-progress-slot[hidden]{display:none!important}
       .badge-only-progress-slot #tdh-drop-card{position:relative!important;inset:auto!important;display:block!important;width:100%!important;min-width:0!important;max-width:none!important;margin:0!important}
       .compact-line { height:auto; min-height:48px; padding:6px 10px; display:grid; grid-template-columns:6px minmax(0,1fr) auto auto; gap:7px; align-items:center; cursor:pointer; }
@@ -138,10 +138,10 @@ function css() {
       /* 3.2.0 progress panel */
       .cluster{pointer-events:none!important}
       .cluster :is(#tdh-tools-dock,.update-notice,#tdh-drop-card,#tdh-settings-launcher){pointer-events:auto!important}
-      .cluster .progress-stack{height:48px;min-height:48px;pointer-events:none!important}
-      .cluster .badge-row{position:fixed!important;min-height:48px!important;height:48px!important;width:inherit!important;justify-content:flex-end!important;pointer-events:none!important}
-      .cluster #tdh-drop-card{position:absolute!important;right:0!important;width:100%!important;bottom:calc(100% + var(--exp-product-grid-height,0px) + 8px)!important;top:auto!important}
-      .cluster[data-launcher-anchor="top"] #tdh-drop-card{top:calc(100% + var(--exp-product-grid-height,0px) + 8px)!important;bottom:auto!important}
+      .cluster .progress-stack{height:auto;min-height:48px;pointer-events:none!important}
+      .cluster .badge-row{position:fixed!important;min-height:112px!important;height:auto!important;justify-content:flex-end!important;align-items:center!important;pointer-events:none!important}
+      .cluster #tdh-drop-card[data-presentation="page-card"]{position:relative!important;inset:auto!important;right:auto!important;left:auto!important;top:auto!important;bottom:auto!important;flex:0 0 auto!important;margin:0!important}
+      .cluster .badge-only-progress-slot #tdh-drop-card[data-presentation="menu-card"]{position:relative!important;inset:auto!important;right:auto!important;left:auto!important;width:100%!important;min-width:0!important;max-width:none!important;margin:0!important}
 
       .badge-row {display:flex!important;flex-wrap:nowrap!important;align-items:center!important;gap:8px!important;width:100%!important;min-height:112px!important;height:auto!important;position:relative!important}
       #tdh-drop-card {position:relative!important;order:0!important;flex:1 1 auto!important;width:auto!important;min-width:0!important;max-width:none!important;min-height:112px!important;margin:0!important;overflow:hidden!important;isolation:isolate!important;cursor:default!important;background:var(--theme-panel)!important;border:1px solid color-mix(in srgb,var(--theme-line) 94%,var(--theme-accent) 6%)!important;border-radius:12px!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.03),inset 0 0 18px rgba(255,255,255,.012),0 8px 28px #0006!important;opacity:1!important;transition:border-color .16s ease,box-shadow .16s ease!important}
@@ -288,6 +288,7 @@ function css() {
       #tdh-settings-launcher .fill { fill:none; stroke:var(--theme-accent,#9147ff); stroke-width:2.5; stroke-linecap:round; transition:.2s stroke; }
       #tdh-settings-launcher .icon { position:absolute; top:50%; left:50%; width:40px; height:40px; pointer-events:none; z-index:1; transform:translate(-50%,-50%); }
       #tdh-tools-dock {
+        position:fixed; right:12px; top:auto; bottom:auto;
         display:none; width:min(var(--dropper-width, 312px), calc(100vw - 24px)); max-width:calc(100vw - 24px);
         height:max-content; min-height:0; max-height:none; overflow:visible; flex:0 0 auto;
         transition:.15s width;
@@ -296,8 +297,42 @@ function css() {
       #tdh-tools-dock.fl-rail-open { display:block; height:max-content; min-height:0; max-height:none; }
       #tdh-tools-dock:focus { outline:none; }
       .menu-head {
-        display:grid; grid-template-columns:minmax(0,1fr) 30px;
+        position:relative;
+        display:grid; grid-template-columns:minmax(0,1fr) auto;
         align-items:start; gap:8px; width:100%;
+      }
+      .header-actions { display:flex; align-items:flex-start; gap:5px; position:static; }
+      .support-wrap { position:static; }
+      #tdh-support-button, #tdh-rail-close {
+        width:30px; height:30px; min-width:30px; padding:0;
+        border:1px solid #3a3a42; border-radius:8px; background:#151519; color:#b8b8c0;
+        cursor:pointer;
+      }
+      #tdh-support-button { display:grid; place-items:center; }
+      #tdh-support-button svg { width:15px; height:15px; fill:currentColor; }
+      #tdh-support-button:hover, #tdh-support-button:focus-visible {
+        border-color:var(--theme-accent); color:var(--theme-accent2); background:#211b2b; outline:none;
+      }
+      .support-popover {
+        position:absolute; z-index:14; top:35px; right:0;
+        width:min(190px,100%); max-width:100%;
+        box-sizing:border-box; padding:8px 9px;
+        border:1px solid color-mix(in srgb,var(--theme-accent) 46%,var(--theme-line));
+        border-radius:9px; background:var(--theme-panel); color:var(--theme-text);
+        box-shadow:0 10px 28px #0009;
+      }
+      .support-popover[hidden] { display:none; }
+      .support-popover strong { display:block; margin-bottom:3px; font-size:10px; }
+      .support-popover span { display:block; color:var(--theme-muted); font-size:8px; line-height:1.35; }
+      .support-popover a {
+        display:flex; align-items:center; justify-content:center; min-height:26px; margin-top:7px; padding:0 9px;
+        border:1px solid color-mix(in srgb,var(--theme-accent) 58%,var(--theme-line));
+        border-radius:7px; background:color-mix(in srgb,var(--theme-panel) 76%,var(--theme-accent) 24%);
+        color:var(--theme-text); text-decoration:none; font-size:9px; font-weight:800;
+      }
+      .support-popover a:hover, .support-popover a:focus-visible {
+        border-color:var(--theme-accent2); outline:none;
+        background:color-mix(in srgb,var(--theme-panel) 66%,var(--theme-accent) 34%);
       }
       .header-brand {
         display:grid; grid-template-columns:38px minmax(0,1fr);
@@ -325,12 +360,8 @@ function css() {
         margin-top:2px; font-size:9px; line-height:1.2; color:#adadb8;
         white-space:normal; overflow-wrap:anywhere;
       }
-      #tdh-rail-close {
-        width:30px; height:30px; min-width:30px; padding:0; justify-self:end;
-        border:1px solid #3a3a42; border-radius:8px; background:#151519; color:#b8b8c0;
-        cursor:pointer; font:18px/1 Arial,sans-serif;
-      }
-      #tdh-rail-close:hover { border-color:#9147ff; color:#fff; background:#211b2b; }
+      #tdh-rail-close { font:18px/1 Arial,sans-serif; }
+      #tdh-rail-close:hover, #tdh-rail-close:focus-visible { border-color:#9147ff; color:#fff; background:#211b2b; outline:none; }
       .header-divider { height:1px; width:100%; margin:5px 0; background:linear-gradient(90deg,transparent,#9147ff88 50%,transparent); }
       .update-notice {
         position:fixed; display:block; width:100%; max-width:calc(100vw - 24px); margin:0; padding:10px;
@@ -649,6 +680,30 @@ function css() {
       .campaign-manager-summary { flex:0 0 auto; font-size:8px; font-weight:700; color:var(--theme-muted); }
       .campaign-manager[open] > summary { border-bottom:1px solid var(--theme-line); }
       .campaign-manager-note { padding:6px 8px 3px; font-size:8px; line-height:1.35; color:var(--theme-muted); }
+      .eligibility-chip {
+        grid-column:1/-1; margin-top:6px;
+        border:1px solid color-mix(in srgb,var(--theme-line) 68%,var(--theme-accent) 32%);
+        border-radius:8px; background:var(--theme-panel); overflow:hidden;
+      }
+      .eligibility-chip > summary {
+        list-style:none; display:flex; align-items:center; gap:6px; min-height:28px;
+        box-sizing:border-box; padding:5px 8px; cursor:pointer;
+        color:var(--theme-text); font-size:9px; font-weight:800;
+      }
+      .eligibility-chip > summary::-webkit-details-marker { display:none; }
+      .eligibility-chip > summary::after {
+        content:"▸"; margin-left:auto; color:var(--theme-muted); font-size:9px; transition:.12s transform;
+      }
+      .eligibility-chip[open] > summary::after { transform:rotate(90deg); }
+      .eligibility-chip[data-tone="good"] { border-color:color-mix(in srgb,#3ac978 58%,var(--theme-line)); }
+      .eligibility-chip[data-tone="warn"] { border-color:color-mix(in srgb,#e2b34a 58%,var(--theme-line)); }
+      .eligibility-chip[data-tone="bad"] { border-color:color-mix(in srgb,#df5b65 58%,var(--theme-line)); }
+      .eligibility-chip[data-tone="muted"] { border-color:var(--theme-line); }
+      .eligibility-detail {
+        padding:0 8px 7px; border-top:1px solid var(--theme-line);
+        color:var(--theme-muted); font-size:8px; line-height:1.4;
+      }
+      .eligibility-detail[hidden] { display:none; }
       .campaign-game-list { max-height:240px; overflow:auto; padding:2px 7px 6px; }
       .campaign-game-row { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:8px; align-items:center; min-height:36px; padding:6px 0; }
       .campaign-game-row + .campaign-game-row { border-top:1px solid #242429; }
@@ -1463,12 +1518,12 @@ function createProductLifecycle(shared) {
   });
 }
 
-// Product-neutral host for the code extracted from Dropper 3.2.10.
+// Product-neutral host for the code extracted from Dropper 3.3.2.
 // Product engines own their settings, content, and actions. Core owns shared UI.
 const ExtraPotionsCore = (() => {
   'use strict';
-  const version = '3.2.25';
-  const sourceVersion = '3.2.31';
+  const version = '3.3.4';
+  const sourceVersion = '3.3.2';
   const protocol = 'exp-core-coordination-v1';
   const gridProtocol = 'exp-launcher-grid-v3';
   const GRID_ORDER = 'exp:v3:launcher-order';
@@ -1479,6 +1534,17 @@ const ExtraPotionsCore = (() => {
   const floatingNoticeRegistrations = new WeakMap();
   const controllers = new WeakMap();
   const tokenNames = ['bg', 'panel', 'line', 'text', 'muted', 'accent', 'accent2'];
+  // Callers own foreground, accessibility fallbacks, and removing these inline properties.
+  function applyTextGradient(element, backgroundImage) {
+    const properties = {'background-color':'transparent','background-image':backgroundImage,'background-clip':'text','-webkit-background-clip':'text','background-size':'auto','background-position':'0% 0%','background-repeat':'repeat'};
+    for (const [property,value] of Object.entries(properties)) element.style.setProperty(property,value,'important');
+  }
+  function menuWidthForMode(mode = 'compact', fullWidth = 312) {
+    if (mode === 'narrow') return 220;
+    if (mode === 'compact') return 260;
+    const full = Number(fullWidth);
+    return Number.isFinite(full) ? Math.max(280, Math.min(full, 340)) : 312;
+  }
   const partIds = {
     'tdh-tools-dock': 'dock', 'tdh-settings-launcher': 'launcher',
     'tdh-rail-title': 'title', 'tdh-header-version': 'version',
@@ -1570,7 +1636,8 @@ const ExtraPotionsCore = (() => {
   function menuPalette(host) {
     if (host?.dataset.productId === 'dropper') {
       const selected = host.shadowRoot?.querySelector('#tdh-cluster')?.dataset.uiTheme;
-      return DropperReference.UI_THEMES.find(theme => theme.id === selected) || null;
+      const theme = DropperReference.UI_THEMES.find(item => item.id === selected);
+      if (theme) return theme;
     }
     try {
       const value = JSON.parse(host.dataset.expMenuPalette || 'null');
@@ -1723,13 +1790,18 @@ const ExtraPotionsCore = (() => {
     const id = options.productId || options.id || host.dataset.productId;
     Object.assign(host.dataset, { expProductLauncher:'1', productId:id, launcherPriority:String(options.priority ?? PRIORITY[id] ?? 0) });
     applyMatteToggleChrome(host);
+    // The launcher is non-modal: site-wide dialog backdrop styles must never
+    // paint over the page when the reference opens its manual popover.
+    const backdropStyle = host.shadowRoot ? injectStyle(host.shadowRoot,
+      ':host::backdrop{all:initial!important;display:none!important;background:transparent!important;pointer-events:none!important}',
+      { expLauncherBackdrop: '1' }) : null;
     const stopProtect = DropperReference.protectLauncherHost(host);
     let frame = 0;
     const refresh = () => { if (!frame) frame = requestAnimationFrame(() => { frame = 0; layoutGrid(); controllers.get(host)?.layout(); }); };
     document.addEventListener('exp-core:coordination', refresh);
     addEventListener('resize', refresh);
     layoutGrid(); emit('launcher-added', id);
-    const dispose = () => { stopProtect(); cancelAnimationFrame(frame); document.removeEventListener('exp-core:coordination', refresh); removeEventListener('resize', refresh); delete host.dataset.expProductLauncher; registrations.delete(host); layoutGrid(); emit('launcher-removed', id); };
+    const dispose = () => { stopProtect(); backdropStyle?.dispose(); cancelAnimationFrame(frame); document.removeEventListener('exp-core:coordination', refresh); removeEventListener('resize', refresh); delete host.dataset.expProductLauncher; registrations.delete(host); layoutGrid(); emit('launcher-removed', id); };
     registrations.set(host, dispose);
     return dispose;
   }
@@ -1837,8 +1909,7 @@ const ExtraPotionsCore = (() => {
       notice.style.setProperty('--exp-notice-text', first(['--exp-notice-text','--theme-text','--text','--mb-ink'], theme.color || '#f4f4f6'));
     }
     function widthForMode() {
-      const mode = host?.dataset.menuWidth || 'compact';
-      return mode === 'narrow' ? 220 : mode === 'full' ? 312 : 260;
+      return menuWidthForMode(host?.dataset.menuWidth || 'compact');
     }
     function clearTimer() { clearTimeout(timer); timer = 0; }
     function queueLayout() {
@@ -1982,7 +2053,7 @@ const ExtraPotionsCore = (() => {
     const versionButton=panel.querySelector('.version,[data-exp-part="version"]');
     const menuNotices=[...themeRoot.querySelectorAll('.update-notice,.changelog')].map(notice=>createMenuNotice({host,shadow,panel,notice,versionButton:notice.classList.contains('changelog')?versionButton:null,manageVersion:false,durationMs:30000}));
     if (launcherSrc) panel.querySelectorAll('.header-icon img').forEach(image => image.src = launcherSrc);
-    host.dataset.coreVersion = version; host.dataset.coreSource = 'Dropper/3.2.10';
+    host.dataset.coreVersion = version; host.dataset.coreSource = 'Dropper/3.3.2';
     let choices = themes(productTheme), selected = choices.at(-1), open = false, destroyed = false, timer = 0, deadline = 0, frame = 0;
     const removers = [];
     const on = (node,type,fn,opts) => { node.addEventListener(type,fn,opts); removers.push(() => node.removeEventListener(type,fn,opts)); };
@@ -1999,10 +2070,12 @@ const ExtraPotionsCore = (() => {
     const dropperThemeObserver = new MutationObserver(syncThemeOwner);
     function syncThemeOwner() {
       const owner = menuThemeOwner();
-      const dropperCluster = owner?.dataset.productId === 'dropper' ? owner.shadowRoot?.querySelector('#tdh-cluster') : null;
-      if (dropperCluster !== observedDropper) {
+      const dropperThemeSurface = owner?.dataset.productId === 'dropper'
+        ? owner.shadowRoot?.querySelector('#tdh-cluster')
+        : null;
+      if (dropperThemeSurface !== observedDropper) {
         dropperThemeObserver.disconnect();
-        observedDropper = dropperCluster;
+        observedDropper = dropperThemeSurface;
         if (observedDropper) dropperThemeObserver.observe(observedDropper, { attributes:true, attributeFilter:['data-ui-theme'] });
       }
       const deprioritized = Boolean(owner && owner !== host);
@@ -2036,7 +2109,7 @@ const ExtraPotionsCore = (() => {
 
       top = Math.max(8,Math.min(innerHeight-56,top));
       Object.assign(launcher.style,{top:top+'px',right:(12+x)+'px',bottom:'auto',left:'auto',zIndex:open?'2147483647':'2147483600'});
-      const maxWidth = Math.max(0,innerWidth-24), panelWidth = Math.min({full:312,compact:260,narrow:220}[width],maxWidth);
+      const maxWidth = Math.max(0,innerWidth-24), panelWidth = Math.min(menuWidthForMode(width),maxWidth);
       Object.assign(panel.style,{width:panelWidth+'px',maxHeight:Math.max(80,innerHeight-80)+'px',overflowY:'auto',right:'12px',left:'auto',bottom:'auto',zIndex:open?'2147483647':'2147483599'});
       if (!open) return;
       const h = panel.offsetHeight, below = innerHeight-top-56, above = top-8;
@@ -2230,6 +2303,123 @@ const ExtraPotionsCore = (() => {
     });
   }
 
+  function createSupportControl({ url, label = 'Support' } = {}) {
+    if (!url) return null;
+    const wrapper = document.createElement('div');
+    wrapper.className = 'support-wrap';
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.id = 'tdh-support-button';
+    button.className = 'support-button';
+    button.setAttribute('aria-label', label);
+    button.setAttribute('aria-expanded', 'false');
+    button.setAttribute('aria-controls', 'tdh-support-popover');
+    button.title = label;
+    button.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.2-4.35-9.55-8.45C.42 9.02 2.3 5 6.25 5c2.15 0 3.56 1.21 4.33 2.3C11.36 6.21 12.77 5 14.92 5c3.95 0 5.83 4.02 3.8 7.55C16.36 16.65 12 21 12 21Z"/></svg>';
+    const popover = document.createElement('div');
+    popover.id = 'tdh-support-popover';
+    popover.className = 'support-popover';
+    popover.setAttribute('role', 'dialog');
+    popover.setAttribute('aria-label', label);
+    popover.hidden = true;
+    const strong = document.createElement('strong');
+    strong.textContent = label;
+    const copy = document.createElement('span');
+    copy.textContent = 'Donations are optional. All features stay free.';
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.target = '_blank';
+    anchor.rel = 'noopener noreferrer';
+    anchor.textContent = 'Open Ko-fi';
+    popover.append(strong, copy, anchor);
+    wrapper.append(button, popover);
+    const toggle = event => {
+      event?.stopPropagation?.();
+      popover.hidden = !popover.hidden;
+      button.setAttribute('aria-expanded', String(!popover.hidden));
+    };
+    const outside = event => {
+      if (popover.hidden || event.composedPath().includes(wrapper)) return;
+      popover.hidden = true;
+      button.setAttribute('aria-expanded', 'false');
+    };
+    button.addEventListener('click', toggle);
+    document.addEventListener('pointerdown', outside, true);
+    return Object.freeze({
+      element: wrapper,
+      button,
+      popover,
+      hide() { popover.hidden = true; button.setAttribute('aria-expanded', 'false'); },
+      destroy() { button.removeEventListener('click', toggle); document.removeEventListener('pointerdown', outside, true); wrapper.remove(); },
+    });
+  }
+
+  function createProductNotice(options = {}) {
+    const { host, shadow, panel, versionButton = null } = options;
+    if (!(host instanceof Element) || !(shadow instanceof ShadowRoot) || !(panel instanceof Element)) {
+      throw new Error('Product notice requires a mounted Core product');
+    }
+    const notice = document.createElement('div');
+    notice.className = 'update-notice';
+    notice.hidden = true;
+    notice.innerHTML = '<button type="button" class="update-dismiss" aria-label="Dismiss Update Notice">×</button><div class="update-head"><div class="update-heading"><div class="update-kicker">What\'s New</div><div class="update-title"></div></div><div class="update-version"></div></div><div class="update-text"></div><ul class="update-list"></ul><div class="update-footer"><a class="update-release" target="_blank" rel="noopener noreferrer">GitHub Release</a><a class="update-action" target="_blank" rel="noopener noreferrer">Install Update</a></div>';
+    (shadow.querySelector('.exp-core-theme') || shadow).append(notice);
+    const controller = createMenuNotice({
+      host,
+      shadow,
+      panel,
+      notice,
+      versionButton: null,
+      manageVersion: false,
+      durationMs: options.durationMs ?? 30000,
+    });
+    function show(state = {}) {
+      notice.querySelector('.update-kicker').textContent = state.kicker || "What's New";
+      notice.querySelector('.update-title').textContent = state.title || '';
+      notice.querySelector('.update-version').textContent = state.version ? 'v' + state.version : '';
+      notice.querySelector('.update-text').textContent = state.text || '';
+      const list = notice.querySelector('.update-list');
+      list.replaceChildren();
+      const details = Array.isArray(state.details) ? state.details.slice(0, 4) : [];
+      for (const detail of details) {
+        const item = document.createElement('li');
+        item.textContent = detail;
+        list.append(item);
+      }
+      list.hidden = !details.length;
+      const release = notice.querySelector('.update-release');
+      const releaseUrl = state.releaseUrl || options.releaseUrl || '';
+      release.hidden = !releaseUrl;
+      if (releaseUrl) release.href = releaseUrl;
+      const action = notice.querySelector('.update-action');
+      const actionUrl = state.actionUrl || options.installUrl || '';
+      action.hidden = !actionUrl || state.showAction === false;
+      if (actionUrl) action.href = actionUrl;
+      action.textContent = state.actionText || 'Install Update';
+      notice.dataset.noticeKind = state.kind || 'current';
+      controller.setMenuOpen(!panel.hidden);
+      controller.show();
+    }
+    const versionClick = () => {
+      if (typeof options.onVersion === 'function') options.onVersion();
+      else controller.toggle();
+    };
+    versionButton?.addEventListener('click', versionClick);
+    return Object.freeze({
+      element: notice,
+      show,
+      hide: controller.hide,
+      toggle: controller.toggle,
+      layout: controller.layout,
+      setMenuOpen: controller.setMenuOpen,
+      destroy() {
+        versionButton?.removeEventListener('click', versionClick);
+        controller.destroy();
+        notice.remove();
+      },
+    });
+  }
+
   function createDiagnosticsReport(product, details = {}) {
     return ExtraPotionsDiagnostics.createReport(product, details, { version, source: 'Dropper', sourceVersion });
   }
@@ -2243,15 +2433,18 @@ const ExtraPotionsCore = (() => {
     const area=document.createElement('textarea');area.value=text;area.style.cssText='position:fixed;left:-9999px';document.documentElement.append(area);area.select();const success=document.execCommand('copy');area.remove();if(!success)throw new Error('Clipboard unavailable');
   }
   function createDiagnosticsControls(getReport, notify = () => {}) { return ExtraPotionsDiagnostics.createControls(getReport, notify); }
-  function createProduct({id,name,version:productVersion,subtitle='',artwork,theme,sections=[],getSettings,onSettings=()=>{},priority}) {
-    const host=document.createElement('div');host.id='exp-'+id+'-root';const shadow=host.attachShadow({mode:'open'});const panel=document.createElement('aside');panel.hidden=true;panel.setAttribute('role','dialog');panel.setAttribute('aria-label',name+' settings');
-    const header=document.createElement('header');header.className='menu-head';const brand=document.createElement('div');brand.className='header-brand';const image=document.createElement('img');image.src=artwork;image.alt='';const copy=document.createElement('div');const titleRow=document.createElement('div');const title=document.createElement('strong');title.textContent=name;const v=document.createElement('button');v.type='button';v.className='version';v.textContent='v'+productVersion;titleRow.append(title,v);const sub=document.createElement('small');sub.textContent=subtitle;copy.append(titleRow,sub);brand.append(image,copy);const close=document.createElement('button');close.className='close';close.textContent='×';close.setAttribute('aria-label','Close '+name);header.append(brand,close);const divider=document.createElement('div');divider.className='header-divider';const nav=document.createElement('nav');
-    let isOpen=false, last='';let chrome;
-    function setOpen(value,focus=true){isOpen=Boolean(value);panel.hidden=!isOpen;launcher.setAttribute('aria-expanded',String(isOpen));if(isOpen)nav.querySelectorAll('.route-body').forEach(n=>n.hidden=true);chrome.state(isOpen);if(focus)(isOpen?focusMenuSurface(panel):launcher.focus());}
-    for(const section of sections){const group=document.createElement('section');group.className='tool-panel';const button=document.createElement('button');button.type='button';button.textContent=section.label;button.dataset.section=section.id;const body=document.createElement('div');body.className='route-body';body.hidden=true;button.addEventListener('click',()=>{const opening=body.hidden;nav.querySelectorAll('.route-body').forEach(n=>n.hidden=true);nav.querySelectorAll('button[data-section]').forEach(n=>{n.classList.toggle('last-opened',n===button);n.setAttribute('aria-expanded',String(opening&&n===button));});body.hidden=!opening;if(opening){last=section.id;const content=section.render({core:api,onSettings});body.replaceChildren(content);}chrome.update();});group.append(button,body);nav.append(group);}
+  function createProduct({id,name,version:productVersion,subtitle='',artwork,theme,sections=[],getSettings,onSettings=()=>{},priority,supportUrl=''}) {
+    const host=document.createElement('div');host.id='exp-'+id+'-root';host.dataset.expOwned='1';const shadow=host.attachShadow({mode:'open'});const panel=document.createElement('aside');panel.hidden=true;panel.setAttribute('role','dialog');panel.setAttribute('aria-label',name+' settings');
+    const header=document.createElement('header');header.className='menu-head';const brand=document.createElement('div');brand.className='header-brand';const image=document.createElement('img');image.src=artwork;image.alt='';const copy=document.createElement('div');const titleRow=document.createElement('div');const title=document.createElement('strong');title.textContent=name;const v=document.createElement('button');v.type='button';v.className='version';v.textContent='v'+productVersion;titleRow.append(title,v);const sub=document.createElement('small');sub.textContent=subtitle;copy.append(titleRow,sub);brand.append(image,copy);const close=document.createElement('button');close.className='close';close.textContent='×';close.setAttribute('aria-label','Close '+name);const actions=document.createElement('div');actions.className='header-actions';const support=createSupportControl({url:supportUrl,label:'Support '+name});if(support)actions.append(support.element);actions.append(close);header.append(brand,actions);const divider=document.createElement('div');divider.className='header-divider';const nav=document.createElement('nav');
+    let isOpen=false, activeId='';let chrome;
+    const sectionMap=new Map();
+    function renderSection(section,body){const content=section.render({core:api,onSettings});body.replaceChildren(content);chrome?.update();}
+    function renderActive(){if(!activeId)return false;const entry=sectionMap.get(activeId);if(!entry||entry.body.hidden)return false;renderSection(entry.section,entry.body);return true;}
+    function setOpen(value,focus=true){isOpen=Boolean(value);panel.hidden=!isOpen;launcher.setAttribute('aria-expanded',String(isOpen));if(isOpen){activeId='';nav.querySelectorAll('.route-body').forEach(n=>n.hidden=true);nav.querySelectorAll('button[data-section]').forEach(n=>n.setAttribute('aria-expanded','false'));}chrome.state(isOpen);if(focus)(isOpen?focusMenuSurface(panel):launcher.focus());}
+    for(const section of sections){const group=document.createElement('section');group.className='tool-panel';const button=document.createElement('button');button.type='button';button.textContent=section.label;button.dataset.section=section.id;const body=document.createElement('div');body.className='route-body';body.hidden=true;sectionMap.set(section.id,{section,body,button});button.addEventListener('click',()=>{const opening=body.hidden;nav.querySelectorAll('.route-body').forEach(n=>n.hidden=true);nav.querySelectorAll('button[data-section]').forEach(n=>{n.classList.toggle('last-opened',n===button);n.setAttribute('aria-expanded',String(opening&&n===button));});body.hidden=!opening;activeId=opening?section.id:'';if(opening)renderSection(section,body);chrome.update();});group.append(button,body);nav.append(group);}
     const launcher=document.createElement('button');launcher.className='launcher';launcher.type='button';launcher.setAttribute('aria-label','Open '+name);const mark=image.cloneNode(true);launcher.append(mark);launcher.addEventListener('click',()=>setOpen(!isOpen));close.addEventListener('click',()=>setOpen(false));panel.append(header,divider,nav);shadow.append(panel,launcher);document.documentElement.append(host);chrome=create({id,host,shadow,panel,launcher,getSettings,setOpen,productTheme:theme});const unregister=registerLauncher(host,{productId:id,priority});
     const key=e=>{if(e.key==='Escape'&&isOpen)setOpen(false);};document.addEventListener('keydown',key);
-    return {host,shadow,panel,launcher,open:()=>setOpen(true),close:()=>setOpen(false),refresh:()=>chrome.update(),destroy(){document.removeEventListener('keydown',key);chrome.destroy();unregister();host.remove();}};
+    return {host,shadow,panel,launcher,versionButton:v,open:()=>setOpen(true),close:()=>setOpen(false),toggle:()=>setOpen(!isOpen),refresh:()=>chrome.update(),renderActive,get isOpen(){return isOpen;},destroy(){document.removeEventListener('keydown',key);support?.destroy();chrome.destroy();unregister();host.remove();}};
   }
   let gridFrame=0;
   const scheduleGrid=()=>{if(!gridFrame)gridFrame=requestAnimationFrame(()=>{gridFrame=0;layoutGrid();});};
@@ -2260,14 +2453,14 @@ const ExtraPotionsCore = (() => {
   if(document.documentElement)startGrid();else addEventListener('DOMContentLoaded',startGrid,{once:true});
   document.addEventListener('exp-core:coordination',scheduleGrid);
   addEventListener('resize',scheduleGrid,{passive:true});
-  const api = Object.freeze({version,sourceVersion,protocol,gridProtocol,reference:DropperReference,css:canonicalCss,themes,create,createProduct,createLifecycle:()=>createProductLifecycle(api),registerLauncher,layout:layoutGrid,injectStyle,applyTheme,applyMatteToggleChrome,applyTwoColumnSettingsGrid,applyContentDrivenMenuLayout,createThemeSwatches,createFloatingNotice,createMenuNotice,createReleaseUpdateChecker,registerFloatingNotice,layoutFloatingNotices,claimNotice,consumeVersionChange,focusMenuSurface,registerDiagnosticsProduct:ExtraPotionsDiagnostics.registerProduct,productCompatibility:ExtraPotionsDiagnostics.compatibility,createDiagnosticsReport,downloadDiagnostics,createDiagnosticsControls,compareVersions:DropperReference.compareVersions});
+  const api = Object.freeze({version,sourceVersion,protocol,gridProtocol,reference:DropperReference,css:canonicalCss,themes,create,createProduct,createSupportControl,createProductNotice,createLifecycle:()=>createProductLifecycle(api),registerLauncher,layout:layoutGrid,menuWidthForMode,applyTextGradient,injectStyle,applyTheme,applyMatteToggleChrome,applyTwoColumnSettingsGrid,applyContentDrivenMenuLayout,createThemeSwatches,createFloatingNotice,createMenuNotice,createReleaseUpdateChecker,registerFloatingNotice,layoutFloatingNotices,claimNotice,consumeVersionChange,focusMenuSurface,registerDiagnosticsProduct:ExtraPotionsDiagnostics.registerProduct,productCompatibility:ExtraPotionsDiagnostics.compatibility,createDiagnosticsReport,downloadDiagnostics,createDiagnosticsControls,compareVersions:DropperReference.compareVersions});
   return api;
 })();
 
 // The verified, bundled Core owns lifecycle and shared services.
 EXP.Core = ExtraPotionsCore.createLifecycle();
 
-/* Mechanically extracted from the reviewed v2.1.7 catalog; runtime logic is V3-only. */
+/* Identity-language catalog with public references only. See docs/catalog-sources.md. */
 EXP.CatalogData = [
   {
     "id": "rainbow",
@@ -2284,13 +2477,38 @@ EXP.CatalogData = [
       "pride flags"
     ],
     "colors": [
-      "#E40303",
-      "#FF8C00",
-      "#FFED00",
-      "#008026",
-      "#004DFF",
-      "#750787"
-    ]
+      "#E50000",
+      "#FF8D00",
+      "#FFEE00",
+      "#028121",
+      "#004CFF",
+      "#770088"
+    ],
+    "definition": "A shared symbol of LGBTQ+ communities and pride.",
+    "category": "Community term",
+    "sources": [
+      "https://gilbertbaker.com/rainbow-flag-color-meanings/",
+      "https://en.wikipedia.org/wiki/Pride_flag"
+    ],
+    "flag": {
+      "status": "verified",
+      "note": "Exact ordered colors read from Commons inline SVG or explicit RGB table; asset revision 2023-04-12.",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Gay_Pride_Flag.svg"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Six-stripe rainbow, Commons 2023 representation",
+      "source": "https://commons.wikimedia.org/wiki/File:Gay_Pride_Flag.svg"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Pride_flag"
+      ],
+      "evidence": "Pride flag introduction identifies the rainbow as an LGBTQ community symbol."
+    }
   },
   {
     "id": "progress-pride",
@@ -2312,7 +2530,31 @@ EXP.CatalogData = [
       "#008026",
       "#004DFF",
       "#750787"
-    ]
+    ],
+    "definition": "A rainbow flag with a chevron emphasizing inclusion and continued progress.",
+    "category": "Community term",
+    "sources": [
+      "https://progress.gay/",
+      "https://en.wikipedia.org/wiki/Rainbow_flag_(LGBTQ)"
+    ],
+    "flag": {
+      "status": "legacy",
+      "note": "Creator documents chevron design and CC0 status; not the intersex-inclusive variant.",
+      "sources": [
+        "https://progress.gay/"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Daniel Quasar Progress Pride design"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Rainbow_flag_(LGBTQ)"
+      ],
+      "evidence": "Progress subsection defines the inclusion-focused chevron redesign."
+    }
   },
   {
     "id": "philadelphia-pride",
@@ -2331,7 +2573,31 @@ EXP.CatalogData = [
       "#008026",
       "#004DFF",
       "#750787"
-    ]
+    ],
+    "definition": "A rainbow flag adding black and brown stripes to recognize LGBTQ+ people of color.",
+    "category": "Community term",
+    "sources": [
+      "https://www.phila.gov/press-releases/kenney/city-and-office-of-lgbt-affairs-kick-off-pride-month/",
+      "https://en.wikipedia.org/wiki/Rainbow_flag_(LGBTQ)"
+    ],
+    "flag": {
+      "status": "legacy",
+      "note": "City launch announcement identifies Tierney collaboration and added stripes.",
+      "sources": [
+        "https://www.phila.gov/press-releases/kenney/city-and-office-of-lgbt-affairs-kick-off-pride-month/"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Philadelphia More Color, More Pride (2017)"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Rainbow_flag_(LGBTQ)"
+      ],
+      "evidence": "Philadelphia subsection explains added black/brown stripes recognizing LGBTQ people of color."
+    }
   },
   {
     "id": "gay",
@@ -2345,11 +2611,37 @@ EXP.CatalogData = [
       "#078D70",
       "#26CEAA",
       "#98E8C1",
-      "#DDDDDD",
+      "#FFFFFF",
       "#7BADE2",
       "#5049CC",
       "#3D1A78"
-    ]
+    ],
+    "definition": "Attraction to people of the same gender.",
+    "category": "Community term",
+    "sources": [
+      "https://pflag.org/glossary/",
+      "https://en.wikipedia.org/wiki/Gay"
+    ],
+    "flag": {
+      "status": "verified",
+      "note": "Exact ordered fills read from current Commons SVG on 2026-09-26. Preserve distinction from general gay/MLM/achillean identities.",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:New_Gay_Pride_Flag.svg"
+      ],
+      "reviewStatus": "documented",
+      "variant": "gayflagblog seven-stripe gay-men design, Commons SVG",
+      "source": "https://commons.wikimedia.org/wiki/File:New_Gay_Pride_Flag.svg"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Gay"
+      ],
+      "evidence": "Lead defines same-sex attraction and notes frequent male-specific usage."
+    },
+    "recognitionNote": "This recognition group retains achillean and MLM for saved-setting compatibility. Those terms can include men attracted to multiple genders; they are not exact synonyms for gay. The selected flag represents gay men."
   },
   {
     "id": "lesbian",
@@ -2362,17 +2654,44 @@ EXP.CatalogData = [
       "#D52D00",
       "#EF7627",
       "#FF9A56",
-      "#DDDDDD",
+      "#FFFFFF",
       "#D162A4",
       "#B55690",
       "#A30262"
-    ]
+    ],
+    "definition": "A woman attracted to women; some nonbinary people also use this identity.",
+    "category": "Community term",
+    "sources": [
+      "https://pflag.org/glossary/",
+      "https://en.wikipedia.org/wiki/Lesbian"
+    ],
+    "flag": {
+      "status": "verified",
+      "note": "Exact fills and y coordinates read from current 669-byte Commons SVG on 2026-09-26.",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Lesbian_pride_flag_2018.svg"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Emily Gwen seven-stripe orange-pink lesbian design, Commons SVG",
+      "source": "https://commons.wikimedia.org/wiki/File:Lesbian_pride_flag_2018.svg"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Lesbian"
+      ],
+      "evidence": "Lead defines female homosexuality; self-identification section expressly includes nonbinary lesbians."
+    },
+    "recognitionNote": "This recognition group retains WLW for saved-setting compatibility. WLW is broader than lesbian and can include women attracted to multiple genders. The selected flag represents lesbians."
   },
   {
     "id": "bisexual",
     "label": "Bisexual",
     "words": [
-      "bisexual"
+      "bisexual",
+      "bisexuality"
     ],
     "colors": [
       "#D60270",
@@ -2380,19 +2699,70 @@ EXP.CatalogData = [
       "#9B4F96",
       "#0038A8",
       "#0038A8"
-    ]
+    ],
+    "definition": "Attraction to more than one gender.",
+    "category": "Sexual orientation",
+    "sources": [
+      "https://www.healthline.com/health/different-types-of-sexuality",
+      "https://en.wikipedia.org/wiki/Bisexuality"
+    ],
+    "flag": {
+      "status": "verified",
+      "note": "Exact ordered colors read from Commons inline SVG or explicit RGB table; asset revision current file inspected 2026-09-26.",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Bisexual_Pride_Flag.svg"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Michael Page three-band bisexual design, 2:1:2 proportions",
+      "source": "https://commons.wikimedia.org/wiki/File:Bisexual_Pride_Flag.svg"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Bisexuality"
+      ],
+      "evidence": "Lead defines attraction to more than one gender."
+    }
   },
   {
     "id": "pansexual",
     "label": "Pansexual",
     "words": [
-      "pansexual"
+      "pansexual",
+      "pansexuality"
     ],
     "colors": [
       "#FF218C",
       "#FFD800",
       "#21B1FF"
-    ]
+    ],
+    "definition": "Attraction regardless of gender.",
+    "category": "Sexual orientation",
+    "sources": [
+      "https://www.healthline.com/health/different-types-of-sexuality",
+      "https://en.wikipedia.org/wiki/Pansexuality"
+    ],
+    "flag": {
+      "status": "verified",
+      "note": "Exact ordered colors read from Commons inline SVG or explicit RGB table; asset revision 2023-03-20.",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Pansexuality_Pride_Flag.svg"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Three-stripe pansexual flag",
+      "source": "https://commons.wikimedia.org/wiki/File:Pansexuality_Pride_Flag.svg"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Pansexuality"
+      ],
+      "evidence": "Lead includes attraction regardless of gender."
+    }
   },
   {
     "id": "transgender",
@@ -2403,10 +2773,35 @@ EXP.CatalogData = [
     "colors": [
       "#5BCEFA",
       "#F5A9B8",
-      "#DDDDDD",
+      "#FFFFFF",
       "#F5A9B8",
       "#5BCEFA"
-    ]
+    ],
+    "definition": "A gender that differs from the sex assigned at birth.",
+    "category": "Gender identity",
+    "sources": [
+      "https://www.healthline.com/health/different-genders",
+      "https://en.wikipedia.org/wiki/Transgender"
+    ],
+    "flag": {
+      "status": "verified",
+      "note": "Exact ordered colors read from Commons inline SVG or explicit RGB table; asset revision 2023-06-26.",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Transgender_Pride_flag.svg"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Monica Helms five-stripe design",
+      "source": "https://commons.wikimedia.org/wiki/File:Transgender_Pride_flag.svg"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Transgender"
+      ],
+      "evidence": "Lead distinguishes gender identity from assigned sex."
+    }
   },
   {
     "id": "transmasculine",
@@ -2423,7 +2818,31 @@ EXP.CatalogData = [
       "#9AEBFF",
       "#CDF5FE",
       "#FF8ABD"
-    ]
+    ],
+    "definition": "A transgender identity aligned with masculinity; not necessarily a man.",
+    "category": "Gender identity",
+    "sources": [
+      "https://www.healthline.com/health/different-genders",
+      "https://en.wikipedia.org/wiki/Transgender"
+    ],
+    "flag": {
+      "status": "legacy",
+      "note": "Commons source identifies an alternative design; does not validate inherited seven-stripe palette.",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Transmasculine_Pride_Flag.png"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Throwawayacountyay alternative transmasculine design (2019)"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Transgender"
+      ],
+      "evidence": "Related terminology defines masculine-aligned binary or nonbinary people assigned female at birth."
+    }
   },
   {
     "id": "transfeminine",
@@ -2441,7 +2860,31 @@ EXP.CatalogData = [
       "#FFB5D5",
       "#FFE0ED",
       "#73DEFF"
-    ]
+    ],
+    "definition": "A transgender identity aligned with femininity; not necessarily a woman.",
+    "category": "Gender identity",
+    "sources": [
+      "https://www.healthline.com/health/different-genders",
+      "https://en.wikipedia.org/wiki/Transgender"
+    ],
+    "flag": {
+      "status": "legacy",
+      "note": "Public flag file documented; inherited palette not matched.",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Transfeminine_Pride_Flag.png"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Transfeminine alternative flag represented on Commons"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Transgender"
+      ],
+      "evidence": "Related terminology defines feminine-aligned binary or nonbinary people assigned male at birth."
+    }
   },
   {
     "id": "non-binary",
@@ -2449,41 +2892,119 @@ EXP.CatalogData = [
     "words": [
       "nonbinary",
       "non-binary",
-      "enby"
+      "enby",
+      "non binary"
     ],
     "colors": [
-      "#FCF434",
-      "#DDDDDD",
-      "#9C59D1",
-      "#2C2C2C"
-    ]
+      "#FFF433",
+      "#FFFFFF",
+      "#9B59D0",
+      "#2D2D2D"
+    ],
+    "definition": "A gender identity outside an exclusively man-or-woman binary.",
+    "category": "Gender identity",
+    "sources": [
+      "https://www.healthline.com/health/different-genders",
+      "https://en.wikipedia.org/wiki/Non-binary"
+    ],
+    "flag": {
+      "status": "verified",
+      "variant": "Kye Rowan four-stripe design",
+      "source": "https://commons.wikimedia.org/wiki/File:Nonbinary_flag.svg",
+      "note": "Exact ordered colors read from Commons inline SVG or explicit RGB table; asset revision 2023-05-25.",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Nonbinary_flag.svg"
+      ],
+      "reviewStatus": "documented"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Non-binary"
+      ],
+      "evidence": "Lead defines genders beyond the male/female binary."
+    }
   },
   {
     "id": "asexual",
     "label": "Asexual",
     "words": [
-      "asexual"
+      "asexual",
+      "asexuality"
     ],
     "colors": [
       "#000000",
       "#A3A3A3",
-      "#DDDDDD",
+      "#FFFFFF",
       "#800080"
-    ]
+    ],
+    "definition": "Little or no sexual attraction.",
+    "category": "Sexual orientation",
+    "sources": [
+      "https://www.healthline.com/health/different-types-of-sexuality",
+      "https://en.wikipedia.org/wiki/Asexuality"
+    ],
+    "flag": {
+      "status": "verified",
+      "variant": "Four-stripe asexual flag",
+      "source": "https://commons.wikimedia.org/wiki/File:Asexual_Pride_Flag.svg",
+      "note": "Exact ordered colors read from Commons inline SVG or explicit RGB table; asset revision 2018-04-06.",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Asexual_Pride_Flag.svg"
+      ],
+      "reviewStatus": "documented"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Asexuality"
+      ],
+      "evidence": "Lead and infobox describe absent or minimal sexual attraction."
+    }
   },
   {
     "id": "aromantic",
     "label": "Aromantic",
     "words": [
-      "aromantic"
+      "aromantic",
+      "aromanticism"
     ],
     "colors": [
       "#3DA542",
       "#A7D379",
-      "#DDDDDD",
+      "#FFFFFF",
       "#A9A9A9",
       "#000000"
-    ]
+    ],
+    "definition": "Little or no romantic attraction.",
+    "category": "Romantic orientation",
+    "sources": [
+      "https://www.healthline.com/health/different-types-of-sexuality",
+      "https://en.wikipedia.org/wiki/Aromanticism"
+    ],
+    "flag": {
+      "status": "verified",
+      "note": "Exact ordered colors read from Commons inline SVG or explicit RGB table; asset revision 2018-04-07.",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Aromantic_Pride_Flag.svg"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Cameron Whimsy five-stripe design",
+      "source": "https://commons.wikimedia.org/wiki/File:Aromantic_Pride_Flag.svg"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": true,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Aromanticism"
+      ],
+      "evidence": "Lead defines absent or minimal romantic attraction."
+    }
   },
   {
     "id": "aroace",
@@ -2495,12 +3016,37 @@ EXP.CatalogData = [
       "aromantic/asexual"
     ],
     "colors": [
-      "#DD8A00",
-      "#E9CC07",
-      "#DDDDDD",
-      "#65B0DD",
-      "#213C57"
-    ]
+      "#E28C00",
+      "#ECCD00",
+      "#FFFFFF",
+      "#62AEDC",
+      "#203856"
+    ],
+    "definition": "Both aromantic and asexual.",
+    "category": "Community term",
+    "sources": [
+      "https://www.aromanticism.org/en/basic-terms",
+      "https://en.wikipedia.org/wiki/Aromanticism"
+    ],
+    "flag": {
+      "status": "verified",
+      "note": "Exact rect fill colors and heights read from Commons SVG; header identifies aroaesflags original post and public-domain design.",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Aroace_flag.svg"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Aroaesflags sunset aroace design, Rummskartoffel Commons SVG",
+      "source": "https://commons.wikimedia.org/wiki/File:Aroace_flag.svg"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": true,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Aromanticism"
+      ],
+      "evidence": "Definition section explicitly identifies people both aromantic and asexual as aroace."
+    }
   },
   {
     "id": "oriented-aroace",
@@ -2511,12 +3057,36 @@ EXP.CatalogData = [
       "orientedaroace"
     ],
     "colors": [
-      "#B2B2B2",
-      "#D8D8D8",
+      "#161639",
+      "#7EA2B6",
       "#FFFFFF",
-      "#A8D0E6",
-      "#3D7EA6"
-    ]
+      "#36AEA0"
+    ],
+    "definition": "An aroace identity that also recognizes significant attraction that is neither romantic nor sexual.",
+    "category": "Community term",
+    "sources": [
+      "https://www.aromanticism.org/en/identity-terms",
+      "https://de.wikipedia.org/wiki/Aromantik"
+    ],
+    "flag": {
+      "status": "verified",
+      "note": "Creator explicitly supplies ordered hex colors on July 11, 2018.",
+      "sources": [
+        "https://biaroace.tumblr.com/post/175789820577/oriented-aroace-flag-this-flag-is-meant-to"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Biaroace four-stripe oriented aroace flag (2018)",
+      "source": "https://biaroace.tumblr.com/post/175789820577/oriented-aroace-flag-this-flag-is-meant-to"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": true,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://de.wikipedia.org/wiki/Aromantik"
+      ],
+      "evidence": "German article defines oriented/angled aroace through significant tertiary attraction; separately defines tertiary attraction as neither romantic nor sexual. It groups the two labels, so do not infer they are always interchangeable."
+    }
   },
   {
     "id": "acespec",
@@ -2533,7 +3103,31 @@ EXP.CatalogData = [
       "#FFFFFF",
       "#CB7FCC",
       "#800080"
-    ]
+    ],
+    "definition": "An umbrella for asexual identities and experiences of limited or conditional sexual attraction.",
+    "category": "Community term",
+    "sources": [
+      "https://www.aromanticism.org/en/basic-terms",
+      "https://en.wikipedia.org/wiki/Asexuality"
+    ],
+    "flag": {
+      "status": "legacy",
+      "note": "Public spectrum article documents an ace-spectrum flag and use of asexual flag; inherited five-stripe palette not matched.",
+      "sources": [
+        "https://lgbtqia.fandom.com/wiki/Asexual_spectrum"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Asexual-spectrum flag variants"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Asexuality"
+      ],
+      "evidence": "Lead describes ace spectrum as the broader range of asexual subidentities."
+    }
   },
   {
     "id": "arospec",
@@ -2550,7 +3144,31 @@ EXP.CatalogData = [
       "#FFFFFF",
       "#E89EC8",
       "#C94C9C"
-    ]
+    ],
+    "definition": "An umbrella for aromantic identities and experiences of limited, conditional, or otherwise nonnormative romantic attraction.",
+    "category": "Community term",
+    "sources": [
+      "https://www.aromanticism.org/en/basic-terms",
+      "https://en.wikipedia.org/wiki/Aromanticism"
+    ],
+    "flag": {
+      "status": "legacy",
+      "note": "Named flag is catalogued in the public flag gallery; this establishes documentation, not exact colors.",
+      "sources": [
+        "https://lgbtqia.fandom.com/wiki/Pride_flag_gallery"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Variant attribution unresolved"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": true,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Aromanticism"
+      ],
+      "evidence": "Spectrum section explains umbrella and conditional, weak or rare attraction."
+    }
   },
   {
     "id": "demisexual",
@@ -2561,10 +3179,36 @@ EXP.CatalogData = [
     ],
     "colors": [
       "#000000",
-      "#DDDDDD",
+      "#FFFFFF",
       "#6E0070",
       "#D2D2D2"
-    ]
+    ],
+    "definition": "Sexual attraction that develops after an emotional bond.",
+    "category": "Sexual orientation",
+    "sources": [
+      "https://www.healthline.com/health/different-types-of-sexuality",
+      "https://en.wikipedia.org/wiki/Demisexuality"
+    ],
+    "flag": {
+      "status": "verified",
+      "note": "Exact ordered colors read from Commons inline SVG or explicit RGB table; asset revision 2018-04-07.",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Demisexual_Pride_Flag.svg"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Black triangle with white-purple-gray bands",
+      "source": "https://commons.wikimedia.org/wiki/File:Demisexual_Pride_Flag.svg"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Demisexuality"
+      ],
+      "evidence": "Definition section requires an emotional bond before sexual attraction."
+    },
+    "recognitionNote": "The retained shorthand demi is broader than demisexual and requires supporting context."
   },
   {
     "id": "demiromantic",
@@ -2573,12 +3217,36 @@ EXP.CatalogData = [
       "demiromantic"
     ],
     "colors": [
-      "#39A94A",
-      "#B5DF9B",
-      "#DDDDDD",
-      "#A9A9A9",
-      "#000000"
-    ]
+      "#000000",
+      "#FFFFFF",
+      "#338A37",
+      "#D2D2D2"
+    ],
+    "definition": "Romantic attraction only after an emotional connection forms.",
+    "category": "Community term",
+    "sources": [
+      "https://www.aromanticism.org/en/identity-terms",
+      "https://en.wikipedia.org/wiki/Aromanticism"
+    ],
+    "flag": {
+      "status": "verified",
+      "note": "Exact path fill colors and coordinates read from Commons SVG, revision 2025-06-12.",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Demiromantic_Pride_Flag.svg"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Demiromantic black triangle with white-green-gray bands",
+      "source": "https://commons.wikimedia.org/wiki/File:Demiromantic_Pride_Flag.svg"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": true,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Aromanticism"
+      ],
+      "evidence": "Spectrum section defines attraction after a close nonromantic bond."
+    }
   },
   {
     "id": "graysexual",
@@ -2595,7 +3263,32 @@ EXP.CatalogData = [
       "#FFFFFF",
       "#B2B2B2",
       "#740195"
-    ]
+    ],
+    "definition": "Sexual attraction experienced rarely or under limited circumstances.",
+    "category": "Sexual orientation",
+    "sources": [
+      "https://www.healthline.com/health/different-types-of-sexuality",
+      "https://en.wikipedia.org/wiki/Gray_asexuality"
+    ],
+    "flag": {
+      "status": "verified",
+      "note": "Exact path fill colors and y coordinates read from current Commons SVG on 2026-09-26.",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Grey_asexuality_flag.svg"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Five-stripe gray-asexual flag, Commons SVG",
+      "source": "https://commons.wikimedia.org/wiki/File:Grey_asexuality_flag.svg"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Gray_asexuality"
+      ],
+      "evidence": "Definitions describe infrequent, weak or conditional sexual attraction."
+    }
   },
   {
     "id": "grayromantic",
@@ -2612,7 +3305,31 @@ EXP.CatalogData = [
       "#FFFFFF",
       "#B2B2B2",
       "#087D16"
-    ]
+    ],
+    "definition": "Romantic attraction that is rare, weak, unreliable, or arises under limited circumstances.",
+    "category": "Community term",
+    "sources": [
+      "https://www.aromanticism.org/en/identity-terms",
+      "https://en.wikipedia.org/wiki/Aromanticism"
+    ],
+    "flag": {
+      "status": "legacy",
+      "note": "Public flag archive linked by AUREA inspected; exact values not verified.",
+      "sources": [
+        "https://pride-color-schemes.tumblr.com/post/146792327505/gray-aromantic"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Gray-aromantic flag variants"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": true,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Aromanticism"
+      ],
+      "evidence": "Spectrum section defines weak, infrequent or conditional romantic attraction."
+    }
   },
   {
     "id": "cupiosexual",
@@ -2626,7 +3343,31 @@ EXP.CatalogData = [
       "#FFFFFF",
       "#CBCBCB",
       "#161616"
-    ]
+    ],
+    "definition": "Desiring a sexual relationship despite experiencing little or no sexual attraction.",
+    "category": "Community term",
+    "sources": [
+      "https://lgbtqia.fandom.com/wiki/Asexual_spectrum",
+      "https://en.wikipedia.org/wiki/Asexuality"
+    ],
+    "flag": {
+      "status": "legacy",
+      "note": "Article displays named cupiosexual flag; legacy pink-white-gray-black palette not corroborated.",
+      "sources": [
+        "https://lgbtqia.fandom.com/wiki/Asexual_spectrum"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Cupiosexual flag documented in spectrum article"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Asexuality"
+      ],
+      "evidence": "Microlabels section defines relationship desire without sexual attraction."
+    }
   },
   {
     "id": "fraysexual",
@@ -2640,7 +3381,31 @@ EXP.CatalogData = [
       "#94CEF1",
       "#FFFFFF",
       "#636363"
-    ]
+    ],
+    "definition": "Attraction to less familiar people that can fade as familiarity or emotional connection grows.",
+    "category": "Community term",
+    "sources": [
+      "https://lgbtqia.fandom.com/wiki/Asexual_spectrum",
+      "https://en.wikipedia.org/wiki/Gray_asexuality"
+    ],
+    "flag": {
+      "status": "legacy",
+      "note": "Article displays named fraysexual flag; exact values not verified.",
+      "sources": [
+        "https://lgbtqia.fandom.com/wiki/Asexual_spectrum"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Fraysexual flag documented in spectrum article"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Gray_asexuality"
+      ],
+      "evidence": "Fraysexuality section describes attraction to unfamiliar people that can disappear with emotional connection."
+    }
   },
   {
     "id": "lithromantic",
@@ -2657,22 +3422,72 @@ EXP.CatalogData = [
       "#FFF152",
       "#FFFFFF",
       "#000000"
-    ]
+    ],
+    "definition": "Romantic attraction without wanting reciprocation, or attraction that fades when reciprocated.",
+    "category": "Community term",
+    "sources": [
+      "https://www.aromanticism.org/en/identity-terms",
+      "https://en.wikipedia.org/wiki/Aromanticism"
+    ],
+    "flag": {
+      "status": "legacy",
+      "note": "Public flag archive linked by AUREA inspected; exact values not verified.",
+      "sources": [
+        "https://pride-color-schemes.tumblr.com/post/146499968709/akoi-akoine-lith-akoin"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Akoi/lith flag variants"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": true,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Aromanticism"
+      ],
+      "evidence": "Spectrum section describes unwanted reciprocation or attraction disappearing when reciprocated."
+    }
   },
   {
     "id": "genderfluid",
     "label": "Genderfluid",
     "words": [
       "genderfluid",
-      "gender-fluid"
+      "gender-fluid",
+      "gender fluid"
     ],
     "colors": [
       "#FF75A2",
-      "#DDDDDD",
+      "#F5F5F5",
       "#BE18D6",
-      "#000000",
+      "#2C2C2C",
       "#333EBD"
-    ]
+    ],
+    "definition": "A gender experience that changes over time.",
+    "category": "Gender identity",
+    "sources": [
+      "https://www.healthline.com/health/different-genders",
+      "https://en.wikipedia.org/wiki/Non-binary"
+    ],
+    "flag": {
+      "status": "verified",
+      "note": "Exact ordered colors read from Commons inline SVG or explicit RGB table; asset revision 2021-09-02.",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Genderfluidity_Pride-Flag.svg"
+      ],
+      "reviewStatus": "documented",
+      "variant": "JJ Poole five-stripe design, Commons representation",
+      "source": "https://commons.wikimedia.org/wiki/File:Genderfluidity_Pride-Flag.svg"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Non-binary"
+      ],
+      "evidence": "Genderfluid section defines gender changing with time and situation."
+    }
   },
   {
     "id": "genderflux",
@@ -2687,20 +3502,70 @@ EXP.CatalogData = [
       "#7CE0F7",
       "#3ECDF9",
       "#FFF48E"
-    ]
+    ],
+    "definition": "A gender experience whose intensity changes over time.",
+    "category": "Gender identity",
+    "sources": [
+      "https://lgbtqia.fandom.com/wiki/Genderflux",
+      "https://en.wikipedia.org/wiki/List_of_gender_identities"
+    ],
+    "flag": {
+      "status": "legacy",
+      "note": "Article identifies six stripe colors and uncertain creator.",
+      "sources": [
+        "https://lgbtqia.fandom.com/wiki/Genderflux"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Six-stripe genderflux flag"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/List_of_gender_identities"
+      ],
+      "evidence": "Identity name appears in the Wikipedia list; this supports listed status only, not the full catalog definition or scientific approval."
+    }
   },
   {
     "id": "genderqueer",
     "label": "Genderqueer",
     "words": [
       "genderqueer",
-      "gender-queer"
+      "gender-queer",
+      "gender queer"
     ],
     "colors": [
       "#B57EDC",
-      "#DDDDDD",
+      "#FFFFFF",
       "#4A8123"
-    ]
+    ],
+    "definition": "A gender identity outside exclusively binary categories.",
+    "category": "Gender identity",
+    "sources": [
+      "https://www.healthline.com/health/different-genders",
+      "https://en.wikipedia.org/wiki/Non-binary"
+    ],
+    "flag": {
+      "status": "verified",
+      "note": "Exact ordered colors read from Commons inline SVG or explicit RGB table; asset revision 2018-04-07.",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Genderqueer_Pride_Flag.svg"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Marilyn Roxie three-stripe design",
+      "source": "https://commons.wikimedia.org/wiki/File:Genderqueer_Pride_Flag.svg"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Non-binary"
+      ],
+      "evidence": "Terms section describes identities beyond binary categories."
+    }
   },
   {
     "id": "agender",
@@ -2711,12 +3576,37 @@ EXP.CatalogData = [
     "colors": [
       "#000000",
       "#B9B9B9",
-      "#DDDDDD",
+      "#FFFFFF",
       "#B8F483",
-      "#DDDDDD",
+      "#FFFFFF",
       "#B9B9B9",
       "#000000"
-    ]
+    ],
+    "definition": "Having no gender, or not identifying with gender.",
+    "category": "Gender identity",
+    "sources": [
+      "https://www.healthline.com/health/different-genders",
+      "https://en.wikipedia.org/wiki/Non-binary"
+    ],
+    "flag": {
+      "status": "verified",
+      "variant": "Salem Fontana seven-stripe design",
+      "source": "https://commons.wikimedia.org/wiki/File:Agender_pride_flag.svg",
+      "note": "Exact ordered colors read from Commons inline SVG or explicit RGB table; asset revision 2023-06-18.",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Agender_pride_flag.svg"
+      ],
+      "reviewStatus": "documented"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Non-binary"
+      ],
+      "evidence": "Agender section describes lacking gender."
+    }
   },
   {
     "id": "bigender",
@@ -2730,7 +3620,31 @@ EXP.CatalogData = [
       "#D8D8D8",
       "#A4E8D8",
       "#6ADEC9"
-    ]
+    ],
+    "definition": "Experiencing two genders, together or at different times.",
+    "category": "Gender identity",
+    "sources": [
+      "https://www.healthline.com/health/different-genders",
+      "https://en.wikipedia.org/wiki/Non-binary"
+    ],
+    "flag": {
+      "status": "legacy",
+      "note": "Named flag is catalogued in the public flag gallery; this establishes documentation, not exact colors.",
+      "sources": [
+        "https://lgbtqia.fandom.com/wiki/Pride_flag_gallery"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Variant attribution unresolved"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Non-binary"
+      ],
+      "evidence": "Bigender section defines two genders, simultaneous or changing."
+    }
   },
   {
     "id": "pangender",
@@ -2739,17 +3653,48 @@ EXP.CatalogData = [
       "pangender"
     ],
     "colors": [
-      "#fdf48d",
-      "#f3b79c",
-      "#fac3ef",
-      "#DDDDDD"
-    ]
+      "#FFF798",
+      "#FEDDCC",
+      "#FFEBFC",
+      "#FFFFFF",
+      "#FFEBFC",
+      "#FEDDCC",
+      "#FFF798"
+    ],
+    "definition": "Experiencing many or all genders within one’s cultural and personal experience.",
+    "category": "Gender identity",
+    "sources": [
+      "https://lgbtqia.fandom.com/wiki/Pangender",
+      "https://en.wikipedia.org/wiki/Non-binary"
+    ],
+    "flag": {
+      "status": "verified",
+      "note": "Exact fills and stripe dimensions read from 291-byte Commons SVG, revision 2020-06-29.",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Pangender_flag.svg"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Seven-stripe pangender flag, Nikki Commons SVG (2020)",
+      "source": "https://commons.wikimedia.org/wiki/File:Pangender_flag.svg"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Non-binary"
+      ],
+      "evidence": "Pangender section defines multiple or all genders."
+    }
   },
   {
     "id": "demigirl",
     "label": "Demigirl",
     "words": [
-      "demigirl"
+      "demigirl",
+      "demi-girl",
+      "demiwoman",
+      "demi-woman"
     ],
     "colors": [
       "#7F7F7F",
@@ -2759,13 +3704,41 @@ EXP.CatalogData = [
       "#FFAEC9",
       "#C4C4C4",
       "#7F7F7F"
-    ]
+    ],
+    "definition": "A partial connection to being a girl or woman.",
+    "category": "Gender identity",
+    "sources": [
+      "https://www.healthline.com/health/different-genders",
+      "https://en.wikipedia.org/wiki/Non-binary"
+    ],
+    "flag": {
+      "status": "legacy",
+      "note": "Named flag is catalogued in the public flag gallery; this establishes documentation, not exact colors.",
+      "sources": [
+        "https://lgbtqia.fandom.com/wiki/Pride_flag_gallery"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Variant attribution unresolved"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Non-binary"
+      ],
+      "evidence": "Demigender section explicitly defines partial female identification."
+    }
   },
   {
     "id": "demiboy",
     "label": "Demiboy",
     "words": [
-      "demiboy"
+      "demiboy",
+      "demiboi",
+      "demi-boy",
+      "demiman",
+      "demi-man"
     ],
     "colors": [
       "#7F7F7F",
@@ -2775,13 +3748,38 @@ EXP.CatalogData = [
       "#9AD9EB",
       "#C4C4C4",
       "#7F7F7F"
-    ]
+    ],
+    "definition": "A partial connection to being a boy or man.",
+    "category": "Gender identity",
+    "sources": [
+      "https://www.healthline.com/health/different-genders",
+      "https://en.wikipedia.org/wiki/Non-binary"
+    ],
+    "flag": {
+      "status": "legacy",
+      "note": "Named flag is catalogued in the public flag gallery; this establishes documentation, not exact colors.",
+      "sources": [
+        "https://lgbtqia.fandom.com/wiki/Pride_flag_gallery"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Variant attribution unresolved"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Non-binary"
+      ],
+      "evidence": "Demigender section explicitly defines partial male identification."
+    }
   },
   {
     "id": "demigender",
     "label": "Demigender",
     "words": [
-      "demigender"
+      "demigender",
+      "demi-gender"
     ],
     "colors": [
       "#7F7F7F",
@@ -2791,19 +3789,68 @@ EXP.CatalogData = [
       "#FBFF74",
       "#C4C4C4",
       "#7F7F7F"
-    ]
+    ],
+    "definition": "A partial connection to a gender.",
+    "category": "Gender identity",
+    "sources": [
+      "https://www.healthline.com/health/different-genders",
+      "https://en.wikipedia.org/wiki/Non-binary"
+    ],
+    "flag": {
+      "status": "legacy",
+      "note": "Named flag is catalogued in the public flag gallery; this establishes documentation, not exact colors.",
+      "sources": [
+        "https://lgbtqia.fandom.com/wiki/Pride_flag_gallery"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Variant attribution unresolved"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Non-binary"
+      ],
+      "evidence": "Demigender section defines partial gender connection."
+    }
   },
   {
     "id": "maverique",
     "label": "Maverique",
     "words": [
-      "maverique"
+      "maverique",
+      "maverick gender"
     ],
     "colors": [
       "#FFF344",
       "#FFFFFF",
       "#F49622"
-    ]
+    ],
+    "definition": "An autonomous gender outside male, female, and neutral categories; not an absence of gender.",
+    "category": "Gender identity",
+    "sources": [
+      "https://www.healthline.com/health/different-genders",
+      "https://en.wikipedia.org/wiki/List_of_gender_identities"
+    ],
+    "flag": {
+      "status": "legacy",
+      "note": "Community encyclopedia describes colors and Vesper H. identity origin.",
+      "sources": [
+        "https://nonbinary.wiki/wiki/Maverique"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Yellow-white-orange maverique flag"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/List_of_gender_identities"
+      ],
+      "evidence": "Identity name appears in the Wikipedia list; this supports listed status only, not the full catalog definition or scientific approval."
+    }
   },
   {
     "id": "androgyne",
@@ -2816,7 +3863,32 @@ EXP.CatalogData = [
       "#FE76A2",
       "#9832CC",
       "#00B8E7"
-    ]
+    ],
+    "definition": "A gender involving masculine and feminine aspects, or a position between them; appearance need not reflect identity.",
+    "category": "Gender identity",
+    "sources": [
+      "https://www.healthline.com/health/different-genders",
+      "https://en.wikipedia.org/wiki/Androgyny"
+    ],
+    "flag": {
+      "status": "legacy",
+      "note": "Named flag is catalogued in the public flag gallery; this establishes documentation, not exact colors.",
+      "sources": [
+        "https://lgbtqia.fandom.com/wiki/Pride_flag_gallery"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Variant attribution unresolved"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Androgyny"
+      ],
+      "evidence": "Gender identity section defines masculine and feminine aspects separately from appearance."
+    },
+    "recognitionNote": "Androgynous can describe expression as well as identity. Recognizing the word does not establish an androgyne identity."
   },
   {
     "id": "neutrois",
@@ -2826,11 +3898,34 @@ EXP.CatalogData = [
     ],
     "colors": [
       "#FFFFFF",
-      "#1F9E49",
-      "#000000",
-      "#1F9E49",
-      "#FFFFFF"
-    ]
+      "#008000",
+      "#000000"
+    ],
+    "definition": "A neutral gender identity; some people use the term for an absence of gender.",
+    "category": "Community term",
+    "sources": [
+      "https://nonbinary.wiki/wiki/Neutrois",
+      "https://en.wikipedia.org/wiki/Neutrois"
+    ],
+    "flag": {
+      "status": "verified",
+      "note": "SVG uses white, CSS green, and default black in three vertical bands; current 740-byte representation inspected 2026-09-26. This differs in orientation from the commonly documented horizontal tricolor.",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Neutrois_flag.svg"
+      ],
+      "reviewStatus": "documented",
+      "variant": "White-green-black vertical neutrois tricolor, Commons SVG",
+      "source": "https://commons.wikimedia.org/wiki/File:Neutrois_flag.svg"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Neutrois"
+      ],
+      "evidence": "Redirected Agender article, Neutrois section: neutral gender with overlap in agender usage."
+    }
   },
   {
     "id": "trigender",
@@ -2844,7 +3939,32 @@ EXP.CatalogData = [
       "#6DE08D",
       "#9588C8",
       "#FF95C5"
-    ]
+    ],
+    "definition": "Experiencing three genders, together or at different times.",
+    "category": "Community term",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Non-binary",
+      "https://es.wikipedia.org/wiki/Identidad_de_g%C3%A9nero"
+    ],
+    "flag": {
+      "status": "legacy",
+      "note": "Named flag is catalogued in the public flag gallery; this establishes documentation, not exact colors.",
+      "sources": [
+        "https://lgbtqia.fandom.com/wiki/Pride_flag_gallery"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Variant attribution unresolved"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Non-binary",
+        "https://es.wikipedia.org/wiki/Identidad_de_g%C3%A9nero"
+      ],
+      "evidence": "Bigender section defines shifting among three genders; simultaneous usage supported by Spanish gender-identity article."
+    }
   },
   {
     "id": "polygender",
@@ -2854,19 +3974,44 @@ EXP.CatalogData = [
     ],
     "colors": [
       "#000000",
-      "#B8B8B8",
-      "#ED698A",
-      "#F8E68F",
-      "#75D7EF",
-      "#698AEC"
-    ]
+      "#939393",
+      "#ED94C4",
+      "#F5ED81",
+      "#64BBE6"
+    ],
+    "definition": "Experiencing multiple genders.",
+    "category": "Gender identity",
+    "sources": [
+      "https://nonbinary.wiki/wiki/Polygender",
+      "https://en.wikipedia.org/wiki/Non-binary"
+    ],
+    "flag": {
+      "status": "verified",
+      "note": "Exact pixels sampled at the center of each of five stripes from original 1153x692 PNG (12348 bytes), Commons revision 2020-07-11. These values identify that asset, not an official creator specification.",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Polygender_Pride_Flag.png"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Five-stripe polygender flag, Commons raster representation (2020)",
+      "source": "https://commons.wikimedia.org/wiki/File:Polygender_Pride_Flag.png"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Non-binary"
+      ],
+      "evidence": "Polygender section defines multiple genders."
+    }
   },
   {
     "id": "genderfae",
     "label": "Genderfae",
     "words": [
       "genderfae",
-      "genderdoe"
+      "genderdoe",
+      "genderthil"
     ],
     "colors": [
       "#97C8A4",
@@ -2876,7 +4021,31 @@ EXP.CatalogData = [
       "#F9B8C5",
       "#D595E4",
       "#B18AE5"
-    ]
+    ],
+    "definition": "Gender fluidity that excludes masculine and man-aligned genders.",
+    "category": "Gender identity",
+    "sources": [
+      "https://lgbtqia.fandom.com/wiki/Genderfluid",
+      "https://en.wikipedia.org/wiki/List_of_gender_identities"
+    ],
+    "flag": {
+      "status": "legacy",
+      "note": "Public article describes this named flag; exact values not verified.",
+      "sources": [
+        "https://lgbtqia.fandom.com/wiki/Genderfluid"
+      ],
+      "reviewStatus": "documented",
+      "variant": "genderfae seven-stripe flag"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/List_of_gender_identities"
+      ],
+      "evidence": "Identity name appears in the Wikipedia list; this supports listed status only, not the full catalog definition or scientific approval."
+    }
   },
   {
     "id": "genderfaun",
@@ -2893,7 +4062,31 @@ EXP.CatalogData = [
       "#8BC8EF",
       "#9F9DE0",
       "#A07CC7"
-    ]
+    ],
+    "definition": "Gender fluidity that excludes feminine and woman-aligned genders.",
+    "category": "Gender identity",
+    "sources": [
+      "https://lgbtqia.fandom.com/wiki/Genderfluid",
+      "https://en.wikipedia.org/wiki/List_of_gender_identities"
+    ],
+    "flag": {
+      "status": "legacy",
+      "note": "Public article describes this named flag; exact values not verified.",
+      "sources": [
+        "https://lgbtqia.fandom.com/wiki/Genderfluid"
+      ],
+      "reviewStatus": "documented",
+      "variant": "genderfaun seven-stripe flag"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/List_of_gender_identities"
+      ],
+      "evidence": "Identity name appears in the Wikipedia list; this supports listed status only, not the full catalog definition or scientific approval."
+    }
   },
   {
     "id": "genderflor",
@@ -2909,7 +4102,28 @@ EXP.CatalogData = [
       "#F2C8F0",
       "#E0A8E8",
       "#C890D0"
-    ]
+    ],
+    "definition": "Gender fluidity that excludes masculine, feminine, man-aligned, and woman-aligned genders.",
+    "category": "Community term",
+    "sources": [
+      "https://lgbtqia.fandom.com/wiki/Genderfluid"
+    ],
+    "flag": {
+      "status": "legacy",
+      "note": "Public article describes this named flag; exact values not verified.",
+      "sources": [
+        "https://lgbtqia.fandom.com/wiki/Genderfluid"
+      ],
+      "reviewStatus": "documented",
+      "variant": "genderflor seven-stripe flag"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "unverified",
+      "sources": [],
+      "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+    }
   },
   {
     "id": "omnisexual",
@@ -2919,12 +4133,37 @@ EXP.CatalogData = [
       "omni"
     ],
     "colors": [
-      "#FF9A4D",
-      "#FF53BF",
-      "#DDDDDD",
-      "#625FFF",
-      "#1F9BFF"
-    ]
+      "#FC9CCC",
+      "#FC54BC",
+      "#240444",
+      "#645CFC",
+      "#8CA4FC"
+    ],
+    "definition": "Attraction to all genders, with gender playing a role in attraction.",
+    "category": "Community term",
+    "sources": [
+      "https://lgbtqia.fandom.com/wiki/Omnisexual",
+      "https://en.wikipedia.org/wiki/Omnisexuality"
+    ],
+    "flag": {
+      "status": "verified",
+      "note": "Article explicitly supplies top-to-bottom hex values, citing Pride Color Schemes.",
+      "sources": [
+        "https://lgbtqia.fandom.com/wiki/Omnisexual"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Pastelmemer five-stripe omnisexual flag (2015)",
+      "source": "https://lgbtqia.fandom.com/wiki/Omnisexual"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Omnisexuality"
+      ],
+      "evidence": "Lead defines attraction to all genders with gender contributing to attraction."
+    }
   },
   {
     "id": "polysexual",
@@ -2935,8 +4174,32 @@ EXP.CatalogData = [
     "colors": [
       "#F61CB9",
       "#07D569",
-      "#1C92F5"
-    ]
+      "#1C92F6"
+    ],
+    "definition": "Sexual attraction to multiple, but not necessarily all, genders.",
+    "category": "Community term",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Polysexuality"
+    ],
+    "flag": {
+      "status": "verified",
+      "note": "Exact ordered colors read from Commons inline SVG or explicit RGB table; asset revision 2018-04-06.",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Polysexuality_Pride_Flag.svg"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Samlin three-stripe design, Commons representation",
+      "source": "https://commons.wikimedia.org/wiki/File:Polysexuality_Pride_Flag.svg"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Polysexuality"
+      ],
+      "evidence": "Lead defines attraction to multiple genders, not necessarily all."
+    }
   },
   {
     "id": "polyamorous",
@@ -2950,7 +4213,30 @@ EXP.CatalogData = [
       "#009FE3",
       "#E50051",
       "#340C46"
-    ]
+    ],
+    "definition": "Having or being open to multiple loving relationships with everyone’s knowledge and consent.",
+    "category": "Community term",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Polyamory"
+    ],
+    "flag": {
+      "status": "legacy",
+      "note": "University guide documents design geometry; current three-color catalog omits emblem and chevron colors.",
+      "sources": [
+        "https://www.uwgb.edu/getmedia/16a85f6c-62ef-40f8-9c3e-df956da1adb5/What-in-the-Pride-Flag-does-this-mean.pdf"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Blue-magenta-purple tricolor with white chevron and yellow heart"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Polyamory"
+      ],
+      "evidence": "Lead defines multiple intimate relationships with informed consent of partners."
+    }
   },
   {
     "id": "heteroflexible",
@@ -2973,7 +4259,31 @@ EXP.CatalogData = [
       "#B0B1B0",
       "#DEDEDE",
       "#EEEEEE"
-    ]
+    ],
+    "definition": "Primarily attracted to a different gender, with occasional same-gender attraction.",
+    "category": "Community term",
+    "sources": [
+      "https://pflag.org/glossary/",
+      "https://en.wikipedia.org/wiki/Heteroflexibility"
+    ],
+    "flag": {
+      "status": "legacy",
+      "note": "Commons indexed description identifies flag; exact asset palette not inspected.",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Heteroflexible_flag.svg"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Heteroflexible flag represented on Commons"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Heteroflexibility"
+      ],
+      "evidence": "Lead defines predominantly heterosexual attraction with limited same-sex attraction."
+    }
   },
   {
     "id": "homoflexible",
@@ -2984,17 +4294,44 @@ EXP.CatalogData = [
       "homoflex"
     ],
     "colors": [
-      "#E40303",
-      "#FF8C00",
-      "#FFED00",
+      "#EE3124",
+      "#F57F29",
+      "#FFF000",
+      "#58B947",
+      "#0054A6",
+      "#9F248F",
       "#000000",
-      "#51504D",
-      "#B0B1B0",
-      "#EEEEEE",
-      "#008026",
-      "#004DFF",
-      "#750787"
-    ]
+      "#333333",
+      "#666666",
+      "#999999",
+      "#BBBBBB",
+      "#FFFFFF"
+    ],
+    "definition": "Mostly attracted to the same gender, with occasional attraction to other genders.",
+    "category": "Community term",
+    "sources": [
+      "https://bi.org/en/glossary/homoflexible/",
+      "https://en.wikipedia.org/wiki/Heteroflexibility"
+    ],
+    "flag": {
+      "status": "verified",
+      "note": "Original SVG read: outer rainbow stripes top to bottom, followed by the central inset grayscale segments top to bottom. Geometry is essential.",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Homoflexible_flag.svg"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Nikki Commons vector, March 2021",
+      "source": "https://commons.wikimedia.org/wiki/File:Homoflexible_flag.svg"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Heteroflexibility"
+      ],
+      "evidence": "Lead explicitly defines homoflexibility as the corresponding pattern where homosexual attraction predominates."
+    }
   },
   {
     "id": "bicurious",
@@ -3012,7 +4349,32 @@ EXP.CatalogData = [
       "#C6E0FD",
       "#76B5FA",
       "#2D8CF7"
-    ]
+    ],
+    "definition": "Exploring possible attraction to people of the same and different genders.",
+    "category": "Sexual orientation",
+    "sources": [
+      "https://www.healthline.com/health/different-types-of-sexuality",
+      "https://en.wikipedia.org/wiki/Bi-curious"
+    ],
+    "flag": {
+      "status": "verified",
+      "note": "Original SVG read; top-to-bottom order verified. White and outer bands have different heights.",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Bicurious_flag.svg"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Nikki Commons vector, restored August 2022",
+      "source": "https://commons.wikimedia.org/wiki/File:Bicurious_flag.svg"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Bi-curious"
+      ],
+      "evidence": "Article describes curiosity or experimentation concerning attraction outside the person’s usual orientation."
+    }
   },
   {
     "id": "abrosexual",
@@ -3027,7 +4389,31 @@ EXP.CatalogData = [
       "#FFFFFF",
       "#E796B7",
       "#D9446E"
-    ]
+    ],
+    "definition": "Experiencing changes in sexual orientation or attraction over time.",
+    "category": "Community term",
+    "sources": [
+      "https://www.dictionary.com/culture/gender-sexuality/abrosexual",
+      "https://en.wikipedia.org/wiki/Plurisexuality"
+    ],
+    "flag": {
+      "status": "legacy",
+      "note": "University of Colorado pride guide documents the green, light green, white, pink and dark pink flag.",
+      "sources": [
+        "https://www.colorado.edu/culturalconnections/media/1023"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Five-stripe green-to-pink flag"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Plurisexuality"
+      ],
+      "evidence": "Lead explicitly defines abrosexual through changes in attractions over time."
+    }
   },
   {
     "id": "multisexual",
@@ -3042,7 +4428,30 @@ EXP.CatalogData = [
       "#FFFFFF",
       "#7BB8FF",
       "#3B7BFF"
-    ]
+    ],
+    "definition": "An umbrella term for attraction to more than one gender.",
+    "category": "Community term",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Plurisexuality"
+    ],
+    "flag": {
+      "status": "legacy",
+      "note": "Public flag exhibition document identifies a multisexual flag with purple, white, blue and pink.",
+      "sources": [
+        "https://www.fugues.com/wp-content/uploads/2025/08/Fugues_EXPO-2025.pdf"
+      ],
+      "reviewStatus": "documented",
+      "variant": "2019 multisexual proposal"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Plurisexuality"
+      ],
+      "evidence": "Lead names multisexuality as an alternative term for attraction to multiple sexes or genders."
+    }
   },
   {
     "id": "intersex",
@@ -3052,9 +4461,33 @@ EXP.CatalogData = [
     ],
     "colors": [
       "#FFD800",
-      "#7902AA",
-      "#FFD800"
-    ]
+      "#7902AA"
+    ],
+    "definition": "Born with variations in sex characteristics outside typical male or female patterns.",
+    "category": "Sex characteristics",
+    "sources": [
+      "https://interactadvocates.org/faq/",
+      "https://en.wikipedia.org/wiki/Intersex"
+    ],
+    "flag": {
+      "status": "verified",
+      "reviewStatus": "documented",
+      "variant": "Morgan Carpenter 2013 intersex flag",
+      "source": "https://morgancarpenter.com/intersex-flag/",
+      "sources": [
+        "https://morgancarpenter.com/intersex-flag/"
+      ],
+      "note": "Creator-specified background and emblem colors. This highlight palette does not reproduce the ring geometry."
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Intersex"
+      ],
+      "evidence": "Lead describes congenital variations in sex characteristics outside typical male/female definitions."
+    }
   },
   {
     "id": "two-spirit",
@@ -3062,7 +4495,9 @@ EXP.CatalogData = [
     "words": [
       "two-spirit",
       "two spirit",
-      "twospirit"
+      "twospirit",
+      "2-spirit",
+      "2 spirit"
     ],
     "colors": [
       "#D62828",
@@ -3071,7 +4506,32 @@ EXP.CatalogData = [
       "#2A9D8F",
       "#277DA1",
       "#7B2CBF"
-    ]
+    ],
+    "definition": "A culturally specific term used by some Indigenous people for identities or roles involving gender, sexuality and spirituality.",
+    "category": "Cultural identity",
+    "sources": [
+      "https://www.onwa.ca/love",
+      "https://cejce.berkeley.edu/centers/gender-equity-resource-center/resources/educational-resources/terms-and-definitions",
+      "https://en.wikipedia.org/wiki/Two-spirit"
+    ],
+    "flag": {
+      "status": "legacy",
+      "note": "WPI documents the two-feather variant.",
+      "sources": [
+        "https://www.wpi.edu/offices/diversity/student-resources/lgbtqiap-student-support/lgbtqiap-flags-terms"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Rainbow field with two feathers and circle"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Two-spirit"
+      ],
+      "evidence": "Article describes an Indigenous North American umbrella term for culturally specific gender and social identities."
+    }
   },
   {
     "id": "sapphic",
@@ -3084,7 +4544,31 @@ EXP.CatalogData = [
       "#DDDDDD",
       "#D629A9",
       "#7B1FA2"
-    ]
+    ],
+    "definition": "A term for women and some woman-aligned nonbinary people attracted to women.",
+    "category": "Community term",
+    "sources": [
+      "https://pflag.org/glossary/",
+      "https://en.wikipedia.org/wiki/Sapphism"
+    ],
+    "flag": {
+      "status": "legacy",
+      "note": "Public article distinguishes the simplified violet from the earlier two-flower design.",
+      "sources": [
+        "https://www.lgbtqnation.com/2022/06/sapphic-pride-flag/"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Simplified violet emblem, 2017"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Sapphism"
+      ],
+      "evidence": "Terminology section includes women/woman-aligned individuals attracted to women and some nonbinary people."
+    }
   },
   {
     "id": "queerplatonic",
@@ -3100,7 +4584,31 @@ EXP.CatalogData = [
       "#FFFFFF",
       "#B0B0B0",
       "#000000"
-    ]
+    ],
+    "definition": "A committed nonromantic relationship understood by its participants as going beyond usual friendship expectations.",
+    "category": "Community term",
+    "sources": [
+      "https://www.aromanticism.org/en/faq",
+      "https://en.wikipedia.org/wiki/Queerplatonic_relationship"
+    ],
+    "flag": {
+      "status": "legacy",
+      "note": "Indexed wiki documents the five-stripe queerplatonic flag.",
+      "sources": [
+        "https://prideflag.fandom.com/wiki/Queerplatonic_Flag"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Yellow, pink, white, gray and black variant"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Queerplatonic_relationship"
+      ],
+      "evidence": "Article defines nonromantic close relationships and commitment beyond conventional friendship."
+    }
   },
   {
     "id": "butch",
@@ -3116,7 +4624,31 @@ EXP.CatalogData = [
       "#A7A3D0",
       "#736EB5",
       "#504C9A"
-    ]
+    ],
+    "definition": "A masculine-of-center identity or expression, often associated with lesbian and queer communities.",
+    "category": "Gender expression",
+    "sources": [
+      "https://pflag.org/glossary/",
+      "https://en.wikipedia.org/wiki/Butch_and_femme"
+    ],
+    "flag": {
+      "status": "legacy",
+      "note": "Commons documents the orange variant and links its creator post.",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Butch_Flag.png"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Butchspace / Mod Jim orange flag, 2017"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Butch_and_femme"
+      ],
+      "evidence": "Article defines butch through masculine identity/expression in lesbian and queer contexts."
+    }
   },
   {
     "id": "femme",
@@ -3132,7 +4664,31 @@ EXP.CatalogData = [
       "#C9A7E6",
       "#9B6BC7",
       "#7A3BA8"
-    ]
+    ],
+    "definition": "A feminine-of-center identity or expression used in LGBTQ communities.",
+    "category": "Gender expression",
+    "sources": [
+      "https://pflag.org/glossary/",
+      "https://en.wikipedia.org/wiki/Butch_and_femme"
+    ],
+    "flag": {
+      "status": "legacy",
+      "note": "Indexed flag wiki attributes the purple flag to Tumblr user noodle.",
+      "sources": [
+        "https://prideflag.fandom.com/wiki/Femme_Flag"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Noodle purple flag"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Butch_and_femme"
+      ],
+      "evidence": "Article defines femme through feminine identity/expression in lesbian and queer contexts."
+    }
   },
   {
     "id": "bear",
@@ -3148,7 +4704,32 @@ EXP.CatalogData = [
       "#FFFFFF",
       "#555555",
       "#000000"
-    ]
+    ],
+    "definition": "A community identity within gay and queer culture associated with a broad, often bearded or hairy masculine appearance.",
+    "category": "Community term",
+    "sources": [
+      "https://marybaldwin.edu/news/2024/06/03/hidden-history-how-mbu-helped-invent-an-international-gay-pride-flag/",
+      "https://en.wikipedia.org/wiki/Bear_(gay_culture)"
+    ],
+    "flag": {
+      "status": "legacy",
+      "note": "University interview documents Byrnes; flag description includes seven stripes and a paw emblem.",
+      "sources": [
+        "https://marybaldwin.edu/news/2024/06/03/hidden-history-how-mbu-helped-invent-an-international-gay-pride-flag/",
+        "https://en.wikipedia.org/wiki/Bear_flag_(gay_culture)"
+      ],
+      "reviewStatus": "documented",
+      "variant": "International Bear Brotherhood flag, 1995"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Bear_(gay_culture)"
+      ],
+      "evidence": "Article describes the gay subculture and masculine/hairy appearance associated with bear identification."
+    }
   },
   {
     "id": "leather",
@@ -3168,7 +4749,31 @@ EXP.CatalogData = [
       "#000000",
       "#18186B",
       "#000000"
-    ]
+    ],
+    "definition": "A community term for the leather subculture, with roots in LGBTQ history.",
+    "category": "Community term",
+    "sources": [
+      "https://www.schwulesmuseum.de/bibliothek-archiv/object-of-the-month-may-leather-pride-flag/?lang=en",
+      "https://en.wikipedia.org/wiki/Leather_subculture"
+    ],
+    "flag": {
+      "status": "legacy",
+      "note": "Museum documents nine alternating blue/black stripes with central white stripe and red heart. Creator did not prescribe color meanings.",
+      "sources": [
+        "https://www.schwulesmuseum.de/bibliothek-archiv/object-of-the-month-may-leather-pride-flag/?lang=en"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Tony DeBlase Leather Pride flag, 1989"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Leather_subculture"
+      ],
+      "evidence": "Article describes leather-related subculture and LGBTQ historical context."
+    }
   },
   {
     "id": "straight-ally",
@@ -3193,13 +4798,40 @@ EXP.CatalogData = [
       "#000000",
       "#FFFFFF",
       "#000000"
-    ]
+    ],
+    "definition": "A heterosexual person who actively supports LGBTQ equality.",
+    "category": "Community term",
+    "sources": [
+      "https://pflag.org/glossary/",
+      "https://www.bloomingtonpridemn.org/pride-flags",
+      "https://en.wikipedia.org/wiki/Straight_ally"
+    ],
+    "flag": {
+      "status": "legacy",
+      "note": "Pride organization documents this ally flag.",
+      "sources": [
+        "https://www.bloomingtonpridemn.org/pride-flags"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Black-and-white stripes with rainbow A"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Straight_ally"
+      ],
+      "evidence": "Article defines heterosexual/cisgender support for LGBTQ civil rights and equality."
+    },
+    "recognitionNote": "The retained recognition term ally can describe supporters of any orientation. The selected flag is specifically a straight-ally design."
   },
   {
     "id": "questioning",
     "label": "Questioning",
     "words": [
-      "questioning"
+      "questioning",
+      "unsure of gender"
     ],
     "colors": [
       "#FF75A2",
@@ -3207,7 +4839,2486 @@ EXP.CatalogData = [
       "#9C59D1",
       "#2C2C2C",
       "#5BCEFA"
-    ]
+    ],
+    "definition": "Exploring or reconsidering sexual orientation, gender identity or expression.",
+    "category": "Gender identity",
+    "sources": [
+      "https://pflag.org/glossary/",
+      "https://en.wikipedia.org/wiki/Questioning_(sexuality_and_gender)"
+    ],
+    "flag": {
+      "status": "legacy",
+      "note": "Indexed wiki distinguishes a general questioning proposal from gender-only questioning flags.",
+      "sources": [
+        "https://lgbtqidentity.wikitide.org/wiki/Questioning"
+      ],
+      "reviewStatus": "documented",
+      "variant": "ProtegoEtServio 2016 proposal"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Questioning_(sexuality_and_gender)"
+      ],
+      "evidence": "Lead defines exploring sexual orientation, sexual identity or gender while unsure about applying labels."
+    }
+  },
+  {
+    "id": "altersex",
+    "label": "Altersex",
+    "words": [
+      "altersex"
+    ],
+    "colors": [],
+    "category": "Sex characteristics",
+    "definition": "A term for having or wanting sex characteristics outside typical binary patterns, distinguished from being born intersex.",
+    "sources": [
+      "https://gender.fandom.com/wiki/Altersex"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "French community wiki documents mint, blue, white, purple and pink flag.",
+      "sources": [
+        "https://lgbtqia.fandom.com/fr/wiki/Altersexe"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Pastelmemer proposal, May 2017"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "unverified",
+      "sources": [],
+      "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+    }
+  },
+  {
+    "id": "androx",
+    "label": "Androx",
+    "words": [
+      "androx"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "A gender described as between male and androgyne.",
+    "sources": [
+      "https://queer-dictionary.crd.co/"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "An image is placed directly under the Androx entry.",
+      "sources": [
+        "https://queer-dictionary.crd.co/"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Community glossary illustration"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "unverified",
+      "sources": [],
+      "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+    }
+  },
+  {
+    "id": "anesigender",
+    "label": "Anesigender",
+    "words": [
+      "anesigender"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "Experiencing one gender while feeling comfortable identifying with another.",
+    "sources": [
+      "https://www.accessmhct.com/wp-content/uploads/sites/4/2021/09/ACCESS-MH-Peds-Gender-Talk-1022021-copy.pdf"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "No stable public creator or educational flag documentation located.",
+      "sources": [],
+      "reviewStatus": "unresolved"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "unverified",
+      "sources": [],
+      "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+    }
+  },
+  {
+    "id": "apagender",
+    "label": "Apagender",
+    "words": [
+      "apagender",
+      "gender apathetic"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "Having little concern about which gender others perceive or assign to you.",
+    "sources": [
+      "https://www.healthline.com/health/different-genders",
+      "https://queer-dictionary.crd.co/",
+      "https://en.wikipedia.org/wiki/Agender#Gender_apathetic"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Image directly accompanies the Apagender/Gender Apathetic entry.",
+      "sources": [
+        "https://queer-dictionary.crd.co/"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Community glossary illustration"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Agender#Gender_apathetic"
+      ],
+      "evidence": "Section explicitly equates apagender with gender apathy and explains indifference to gender identity and gendered comments."
+    }
+  },
+  {
+    "id": "boy",
+    "label": "Boy",
+    "words": [
+      "boy"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "A male child or young person; also used as a gender self-description.",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Boy",
+      "https://unece.org/sites/default/files/2025-04/B-1%20Sex%20and%20gender%20identity%20indicators%20in%20surveys%20%28Italy%29_1.pdf"
+    ],
+    "contextTerms": [
+      "boy"
+    ],
+    "flag": {
+      "status": "unverified",
+      "note": "No distinct broadly documented Boy flag verified.",
+      "sources": [],
+      "reviewStatus": "unresolved"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Boy"
+      ],
+      "evidence": "Article supports the ordinary male-child/young-person meaning; it does not establish a distinct pride identity or flag."
+    }
+  },
+  {
+    "id": "boyflux",
+    "label": "Boyflux",
+    "words": [
+      "boyflux"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "A gender whose masculine intensity varies over time.",
+    "sources": [
+      "https://lgbtqia.fandom.com/wiki/Genderflux"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Public media category lists several named Boyflux flag variants.",
+      "sources": [
+        "https://nonbinary.wiki/wiki/Category:Boyflux_pride_flags"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Multiple Boyflux proposals"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "unverified",
+      "sources": [],
+      "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+    }
+  },
+  {
+    "id": "cisgender",
+    "label": "Cisgender",
+    "words": [
+      "cisgender"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "Having a gender identity that aligns with sex assigned at birth.",
+    "sources": [
+      "https://pflag.org/glossary/",
+      "https://en.wikipedia.org/wiki/Cisgender"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Commons labels the file a cisgender flag, vector by Nikki in 2021.",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Cisgender_flag.svg"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Commons cisgender flag proposal"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Cisgender"
+      ],
+      "evidence": "Definition describes alignment between assigned sex/gender and personal gender identity."
+    }
+  },
+  {
+    "id": "cis-man",
+    "label": "Cis Man",
+    "words": [
+      "cis man",
+      "cisgender man",
+      "cis male",
+      "cisgender male"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "A man whose gender identity aligns with being assigned male at birth.",
+    "sources": [
+      "https://pflag.org/glossary/",
+      "https://en.wikipedia.org/wiki/Cisgender"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Indexed page labels a cis-man flag image.",
+      "sources": [
+        "https://queerdom.fandom.com/wiki/Cisgender"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Community wiki cis-man illustration"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Cisgender"
+      ],
+      "evidence": "Definitions section explicitly explains cis male and analogous cis man as male assigned male at birth."
+    }
+  },
+  {
+    "id": "cis-woman",
+    "label": "Cis Woman",
+    "words": [
+      "cis woman",
+      "cisgender woman",
+      "cis female",
+      "cisgender female"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "A woman whose gender identity aligns with being assigned female at birth.",
+    "sources": [
+      "https://pflag.org/glossary/",
+      "https://en.wikipedia.org/wiki/Cisgender"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Indexed page labels a cis-woman flag image.",
+      "sources": [
+        "https://queerdom.fandom.com/wiki/Cisgender"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Community wiki cis-woman illustration"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Cisgender"
+      ],
+      "evidence": "Definitions section explicitly explains cis female and analogous cis woman as female assigned female at birth."
+    }
+  },
+  {
+    "id": "crossdresser",
+    "label": "Crossdresser/Transvestite",
+    "words": [
+      "crossdresser",
+      "cross-dresser",
+      "transvestite"
+    ],
+    "colors": [],
+    "category": "Gender expression",
+    "definition": "Someone who wears clothing culturally associated with another gender.",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Cross-dressing"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Public CSD publication documents the crossdresser flag designed for Magdeburg remembrance.",
+      "sources": [
+        "https://csd-deutschland.de/wp-content/uploads/2022/03/WEB_Queerstimme-CSD-DE-2022.pdf"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Iryna Neklyudova / Magdeburg crossdresser flag, 2022"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Cross-dressing"
+      ],
+      "evidence": "Article defines wearing clothing associated with another gender and distinguishes expression from orientation."
+    }
+  },
+  {
+    "id": "demifemme",
+    "label": "DemiFemme",
+    "words": [
+      "demifemme",
+      "demifeminine"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "A partial connection to femininity alongside a gender experience outside the binary.",
+    "sources": [
+      "https://youthrex.com/wp-content/uploads/2020/10/Queer-Glossary_2022_Digital.pdf"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Demigirl flag pages mention demifemme, but a distinct demifemme flag was not independently verified.",
+      "sources": [],
+      "reviewStatus": "unresolved"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "unverified",
+      "sources": [],
+      "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+    }
+  },
+  {
+    "id": "demimasc",
+    "label": "Demimasc",
+    "words": [
+      "demimasc",
+      "demimasculine"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "A partial connection to masculinity alongside a gender experience outside the binary.",
+    "sources": [
+      "https://gender.fandom.com/wiki/Demimasc",
+      "https://youthrex.com/wp-content/uploads/2020/10/Queer-Glossary_2022_Digital.pdf"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Wiki documents the flag and links the original creator post, which was unavailable in this browser.",
+      "sources": [
+        "https://gender.fandom.com/wiki/Demimasc"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Shewhowalkswiththee proposal, October 2018"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "unverified",
+      "sources": [],
+      "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+    },
+    "recognitionNote": "Demimasc and demimasculine have differing definitions in some references. This recognition group retains both terms; their use is not always interchangeable."
+  },
+  {
+    "id": "eunuch",
+    "label": "Eunuch",
+    "words": [
+      "eunuch"
+    ],
+    "colors": [],
+    "category": "Sex characteristics",
+    "definition": "A historical and sometimes self-chosen term associated with castration and, in some cultures, a distinct social or gender role.",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Eunuch"
+    ],
+    "contextTerms": [
+      "eunuch"
+    ],
+    "flag": {
+      "status": "unverified",
+      "note": "A Sekhet-specific proposal was located, but not verified as a generic eunuch flag.",
+      "sources": [],
+      "reviewStatus": "unresolved"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Eunuch"
+      ],
+      "evidence": "Historical article supports castration-associated use and varied social roles, including non-castrated historical categories."
+    }
+  },
+  {
+    "id": "faunetflux",
+    "label": "Faunetflux",
+    "words": [
+      "faunetflux"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "A fluid and fluctuating gender experience that can include feminine genders without being fully a woman.",
+    "sources": [
+      "https://gender.fandom.com/f/t/Faunetflux"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Indexed topic identifies a corresponding flag, but the main article returned a fetch error.",
+      "sources": [
+        "https://gender.fandom.com/f/t/Faunetflux"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Community wiki Faunetflux illustration"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "unverified",
+      "sources": [],
+      "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+    }
+  },
+  {
+    "id": "female",
+    "label": "Female",
+    "words": [
+      "female"
+    ],
+    "colors": [],
+    "category": "Sex or gender term",
+    "definition": "A term used for sex classification and, in some contexts, a person’s gender self-description.",
+    "sources": [
+      "https://interactadvocates.org/faq/",
+      "https://en.wikipedia.org/wiki/Intersex"
+    ],
+    "contextTerms": [
+      "female"
+    ],
+    "flag": {
+      "status": "unverified",
+      "note": "No general Female flag independently verified.",
+      "sources": [],
+      "reviewStatus": "unresolved"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Intersex"
+      ],
+      "evidence": "Article distinguishes sex classification from gender identity and discusses female self-identification. Supports contextual use, not equating identity with anatomy."
+    }
+  },
+  {
+    "id": "femboy",
+    "label": "Femboy/femboi",
+    "words": [
+      "femboy",
+      "femboi"
+    ],
+    "colors": [],
+    "category": "Gender expression",
+    "definition": "A usually male-identified person with a feminine style or expression.",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Femboy"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Article describes a seven-stripe pink, pale-pink, white and blue flag.",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Femboy"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Seven-stripe femboy proposal"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Femboy"
+      ],
+      "evidence": "Lead and definitions describe feminine presentation among usually male individuals without specifying orientation."
+    }
+  },
+  {
+    "id": "futch",
+    "label": "Futch",
+    "words": [
+      "futch"
+    ],
+    "colors": [],
+    "category": "Gender expression",
+    "definition": "An identity or presentation combining aspects of butch and femme.",
+    "sources": [
+      "https://lgbt.fandom.com/es/wiki/Futch",
+      "https://en.wikipedia.org/wiki/Butch_and_femme"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Wiki attributes a combined butch/femme design to this creator.",
+      "sources": [
+        "https://lgbt.fandom.com/es/wiki/Futch"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Spencer Hastings / Wellick proposal, 2017"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Butch_and_femme"
+      ],
+      "evidence": "Terminology paragraph explicitly defines futch as combining butch and femme characteristics."
+    }
+  },
+  {
+    "id": "gender-anarchist",
+    "label": "Gender Anarchist",
+    "words": [
+      "gender anarchist"
+    ],
+    "colors": [],
+    "category": "Gender expression",
+    "definition": "A self-description associated with rejecting imposed gender rules and hierarchies.",
+    "sources": [
+      "https://c4ss.org/content/54814"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "No sufficiently documented corresponding flag located.",
+      "sources": [],
+      "reviewStatus": "unresolved"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "unverified",
+      "sources": [],
+      "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+    }
+  },
+  {
+    "id": "gender-neutral",
+    "label": "Gender Neutral",
+    "words": [
+      "gender neutral",
+      "gender-neutral"
+    ],
+    "colors": [],
+    "category": "Gender identity or expression",
+    "definition": "A neutral gender identity or expression; the term also describes language and spaces that do not specify gender.",
+    "sources": [
+      "https://nonbinary.wiki/wiki/Gender_Neutral"
+    ],
+    "contextTerms": [
+      "gender neutral",
+      "gender-neutral"
+    ],
+    "flag": {
+      "status": "unverified",
+      "note": "Page documents two 2016 enbygsrd proposals and another unattributed design.",
+      "sources": [
+        "https://nonbinary.wiki/wiki/Gender_Neutral"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Multiple gender-neutral proposals"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "unverified",
+      "sources": [],
+      "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+    }
+  },
+  {
+    "id": "gender-nonconforming",
+    "label": "Gender Non-Conforming",
+    "words": [
+      "gender nonconforming",
+      "gender non-conforming",
+      "gender-nonconforming"
+    ],
+    "colors": [
+      "#8B17B3",
+      "#FFFFFF",
+      "#8B17B3"
+    ],
+    "category": "Gender expression",
+    "definition": "Expressing gender outside a culture’s expected norms.",
+    "sources": [
+      "https://www.healthline.com/health/different-genders",
+      "https://en.wikipedia.org/wiki/Gender_nonconformity"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "verified",
+      "note": "Creator identifies the purpose; original Commons SVG read, with 200/100/200 band heights.",
+      "sources": [
+        "https://www.freedressing.org/pride_flag.html",
+        "https://commons.wikimedia.org/wiki/File:Gendercreative_pride_flag.svg"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Leslie Krause Gender Creative Pride flag, 2015",
+      "source": "https://www.freedressing.org/pride_flag.html"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Gender_nonconformity"
+      ],
+      "evidence": "Article explains expression and behavior differing from culturally expected gender norms."
+    }
+  },
+  {
+    "id": "gender-questioning",
+    "label": "Gender Questioning",
+    "words": [
+      "gender questioning"
+    ],
+    "colors": [],
+    "category": "Gender exploration",
+    "definition": "Exploring or reconsidering one’s gender identity or expression.",
+    "sources": [
+      "https://www.healthline.com/health/different-genders",
+      "https://en.wikipedia.org/wiki/Questioning_(sexuality_and_gender)"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Commons identifies the designer and gender-questioning flag.",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Gender_questioning_flag.png"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Enbygsrd proposal, September 2016"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Questioning_(sexuality_and_gender)"
+      ],
+      "evidence": "Lead explicitly includes exploration of gender, not only sexuality."
+    }
+  },
+  {
+    "id": "genderfuck",
+    "label": "Genderfuck",
+    "words": [
+      "genderfuck",
+      "gender-fuck"
+    ],
+    "colors": [],
+    "category": "Gender expression",
+    "definition": "Deliberately challenging or mixing conventional gender categories through identity or expression.",
+    "sources": [
+      "https://www.healthline.com/health/different-genders",
+      "https://en.wikipedia.org/wiki/Gender_bender"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Indexed community wiki documents a purple field with a skull motif.",
+      "sources": [
+        "https://lgbtqia.fandom.com/wiki/Genderfuck"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Jasper / yo-ho-sebastian proposal"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Gender_bender"
+      ],
+      "evidence": "Lead explicitly calls bending expected gender roles genderfuck and describes challenging restrictive norms."
+    }
+  },
+  {
+    "id": "genderless",
+    "label": "Genderless",
+    "words": [
+      "genderless"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "Experiencing no gender or a lack of gender.",
+    "sources": [
+      "https://queer-dictionary.crd.co/",
+      "https://nonbinary.wiki/wiki/Genderless",
+      "https://en.wikipedia.org/wiki/Agender"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Glossary explicitly includes a Genderless image separate from its Agender image.",
+      "sources": [
+        "https://queer-dictionary.crd.co/"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Community glossary genderless illustration"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Agender"
+      ],
+      "evidence": "Lead explicitly lists genderless as lack-of-gender terminology."
+    }
+  },
+  {
+    "id": "girl",
+    "label": "Girl",
+    "words": [
+      "girl"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "A female child or young person; also used as a gender self-description.",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Girl",
+      "https://unece.org/sites/default/files/2025-04/B-1%20Sex%20and%20gender%20identity%20indicators%20in%20surveys%20%28Italy%29_1.pdf"
+    ],
+    "contextTerms": [
+      "girl"
+    ],
+    "flag": {
+      "status": "unverified",
+      "note": "No distinct broadly documented Girl flag verified.",
+      "sources": [],
+      "reviewStatus": "unresolved"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Girl"
+      ],
+      "evidence": "Article supports the ordinary female-child/young-person meaning; it does not establish a distinct pride identity or flag."
+    }
+  },
+  {
+    "id": "girlflux",
+    "label": "Girlflux",
+    "words": [
+      "girlflux"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "A gender whose feminine intensity varies over time.",
+    "sources": [
+      "https://gender.fandom.com/wiki/Girlflux"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Wiki documents this flag and several alternatives.",
+      "sources": [
+        "https://gender.fandom.com/wiki/Girlflux"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Kitsuneshay proposal, August 2015"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "unverified",
+      "sources": [],
+      "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+    }
+  },
+  {
+    "id": "glitchgender",
+    "label": "Glitchgender",
+    "words": [
+      "glitchgender"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "A community term for a gender experienced as glitch-like or difficult to make sense of.",
+    "sources": [
+      "https://nonbinary.wiki/wiki/User:TheZoodles/Draft"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Search located mirrors and informal alternative proposals, without a sufficiently verified public original.",
+      "sources": [],
+      "reviewStatus": "unresolved"
+    },
+    "definitionStatus": "public-reference-pending",
+    "romantic": false,
+    "verification": {
+      "status": "unverified",
+      "sources": [],
+      "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+    }
+  },
+  {
+    "id": "graygender",
+    "label": "Graygender",
+    "words": [
+      "graygender",
+      "greygender"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "A weak or ambivalent connection to gender. ",
+    "sources": [
+      "https://www.healthline.com/health/different-genders"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Indexed article links a 2015 Pride-Flags upload; another wiki attributes design to Invernom.",
+      "sources": [
+        "https://lgbtqia.fandom.com/wiki/Graygender"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Common graygender community flag"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "unverified",
+      "sources": [],
+      "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+    }
+  },
+  {
+    "id": "gynx",
+    "label": "Gynx",
+    "words": [
+      "gynx"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "A gender described as between female and androgyne.",
+    "sources": [
+      "https://cupidpride.wordpress.com/2018/01/11/opalescentorbisian-gynx-a-gender-inbetween/",
+      "https://queer-dictionary.crd.co/"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Post shows two designs and identifies the first as the author’s main design.",
+      "sources": [
+        "https://cupidpride.wordpress.com/2018/01/11/opalescentorbisian-gynx-a-gender-inbetween/"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Opalescentorbisian designs, archived public reblog January 2018"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "unverified",
+      "sources": [],
+      "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+    }
+  },
+  {
+    "id": "hijra",
+    "label": "Hijra",
+    "words": [
+      "hijra"
+    ],
+    "colors": [
+      "#FFCCE6",
+      "#FFFFFF",
+      "#C10000",
+      "#FFFFFF",
+      "#B9E0FB"
+    ],
+    "category": "Cultural identity",
+    "definition": "A culturally specific South Asian identity and community with distinct gender and social traditions.",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Hijra_(South_Asia)"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "verified",
+      "note": "Original Commons SVG read; top-to-bottom bands verified.",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Hijra_flag.svg"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Samira / FloralFemmes proposed Hijra flag",
+      "source": "https://commons.wikimedia.org/wiki/File:Hijra_flag.svg"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Hijra_(South_Asia)"
+      ],
+      "evidence": "Article supports culturally specific South Asian gender/community identity. Article carries quality concerns; verification mark should indicate source coverage, not blanket reliability."
+    }
+  },
+  {
+    "id": "intersex-female",
+    "label": "Intersex Female",
+    "words": [
+      "intersex female",
+      "intersex woman"
+    ],
+    "colors": [],
+    "category": "Sex characteristics and gender",
+    "definition": "An intersex person who identifies as female.",
+    "sources": [
+      "https://interactadvocates.org/faq/",
+      "https://en.wikipedia.org/wiki/Intersex#Legal_recognition"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "No distinct intersex-female flag independently verified.",
+      "sources": [],
+      "reviewStatus": "unresolved"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Intersex#Legal_recognition"
+      ],
+      "evidence": "Section explicitly discusses intersex people who self-describe as female/women; supports the compositional definition."
+    }
+  },
+  {
+    "id": "intersex-male",
+    "label": "Intersex Male",
+    "words": [
+      "intersex male",
+      "intersex man"
+    ],
+    "colors": [],
+    "category": "Sex characteristics and gender",
+    "definition": "An intersex person who identifies as male.",
+    "sources": [
+      "https://interactadvocates.org/faq/",
+      "https://en.wikipedia.org/wiki/Intersex#Legal_recognition"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "No distinct intersex-male flag independently verified.",
+      "sources": [],
+      "reviewStatus": "unresolved"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Intersex#Legal_recognition"
+      ],
+      "evidence": "Section explicitly discusses intersex people who self-describe as male/men; supports the compositional definition."
+    }
+  },
+  {
+    "id": "male",
+    "label": "Male",
+    "words": [
+      "male"
+    ],
+    "colors": [],
+    "category": "Sex or gender term",
+    "definition": "A sex-category term; it is distinct from the gender identity man.",
+    "sources": [
+      "https://www.healthline.com/health/different-genders",
+      "https://en.wikipedia.org/wiki/Male"
+    ],
+    "contextTerms": [
+      "male"
+    ],
+    "flag": {
+      "status": "unverified",
+      "note": "Page credits creator and publication on 18 September 2020; not automatically a man flag.",
+      "sources": [
+        "https://new.lgbtqia.wiki/wiki/Male"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Queerflagswithbenton 2020 proposed male flag"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Male"
+      ],
+      "evidence": "Article distinguishes biological sex usage from gender-role/identity usage. Catalog term is identified, but categorical wording that male is always distinct from man is too absolute."
+    }
+  },
+  {
+    "id": "man",
+    "label": "Man",
+    "words": [
+      "man"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "A gender identity that includes cisgender and transgender men.",
+    "sources": [
+      "https://www.healthline.com/health/different-genders",
+      "https://en.wikipedia.org/wiki/Man"
+    ],
+    "contextTerms": [
+      "man"
+    ],
+    "flag": {
+      "status": "unverified",
+      "note": "No sufficiently supported flag specific to this exact catalog entry found in this review. Related identity or umbrella flags were not silently substituted.",
+      "sources": [],
+      "reviewStatus": "unresolved"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Man"
+      ],
+      "evidence": "Article covers men as a gender and explicitly includes transgender men."
+    }
+  },
+  {
+    "id": "masc",
+    "label": "Masc",
+    "words": [
+      "masc"
+    ],
+    "colors": [],
+    "category": "Gender expression",
+    "definition": "Short for masculine; used for masculine expression or identity.",
+    "sources": [
+      "https://en.wiktionary.org/wiki/masc"
+    ],
+    "contextTerms": [
+      "masc"
+    ],
+    "flag": {
+      "status": "unverified",
+      "note": "No sufficiently supported flag specific to this exact catalog entry found in this review. Related identity or umbrella flags were not silently substituted.",
+      "sources": [],
+      "reviewStatus": "unresolved"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "unverified",
+      "sources": [],
+      "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+    }
+  },
+  {
+    "id": "mullerian",
+    "label": "Müllerian",
+    "words": [
+      "müllerian",
+      "mullerian"
+    ],
+    "colors": [],
+    "category": "Sex characteristics",
+    "definition": "A community sex descriptor referring to development of the Müllerian ducts.",
+    "sources": [
+      "https://beyond-mogai-pride-flags.tumblr.com/post/737626793265217536/werwolffian-pride-flag"
+    ],
+    "contextTerms": [
+      "müllerian",
+      "mullerian"
+    ],
+    "flag": {
+      "status": "unverified",
+      "note": "Creator-linked Wolffian/Müllerian pair discovered through Wolffian source, but Müllerian design not independently inspected.",
+      "sources": [],
+      "reviewStatus": "unresolved"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "unverified",
+      "sources": [],
+      "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+    }
+  },
+  {
+    "id": "multigender",
+    "label": "Multigender",
+    "words": [
+      "multigender",
+      "multi-gender"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "An umbrella for experiencing more than one gender.",
+    "sources": [
+      "https://lgbtqia.fandom.com/wiki/Multigender",
+      "https://en.wikipedia.org/wiki/Non-binary#Polygender"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Wiki documents use by January 2016; creator and meanings unresolved.",
+      "sources": [
+        "https://lgbtqia.fandom.com/wiki/Multigender"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Five-stripe proposed multigender design"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Non-binary#Polygender"
+      ],
+      "evidence": "Polygender section identifies multigender as experiencing multiple genders."
+    }
+  },
+  {
+    "id": "musicgender",
+    "label": "Musicgender",
+    "words": [
+      "musicgender"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "Gender described through musical theory, rather than a particular music genre.",
+    "sources": [
+      "https://lgbt.fandom.com/es/wiki/Musicg%C3%A9nero"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Article displays main and alternate designs; original asset colors unverified.",
+      "sources": [
+        "https://lgbt.fandom.com/es/wiki/Musicg%C3%A9nero"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Musicgender flag and alternatives"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "unverified",
+      "sources": [],
+      "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+    }
+  },
+  {
+    "id": "neogender",
+    "label": "Neogender",
+    "words": [
+      "neogender"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "An umbrella for recently coined gender labels, often those coined since 2000.",
+    "sources": [
+      "https://gend3r.com/index.php/Neogender"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Page documents green and yellow versions; meanings unknown.",
+      "sources": [
+        "https://gend3r.com/index.php/Neogender"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Green neogender flag by rando-pride-flags"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "unverified",
+      "sources": [],
+      "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+    }
+  },
+  {
+    "id": "omnigender",
+    "label": "Omnigender",
+    "words": [
+      "omnigender"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "Experiencing many or all genders; distinctions from pangender vary.",
+    "sources": [
+      "https://lgbtqia.fandom.com/wiki/Pangender",
+      "https://en.wikipedia.org/wiki/List_of_gender_identities#O"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "University page displays an omnigender flag; distinguishes its account from pangender.",
+      "sources": [
+        "https://www.wpi.edu/offices/diversity/student-resources/lgbtqiap-student-support/lgbtqiap-flags-terms"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Omnigender design in WPI educational guide"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/List_of_gender_identities#O"
+      ],
+      "evidence": "Explicitly listed under O; this page does not establish the catalog definition or its relationship to pangender."
+    }
+  },
+  {
+    "id": "paraboy",
+    "label": "Paraboy",
+    "words": [
+      "paraboy"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "Identifying mostly, but not entirely, as a boy or man.",
+    "sources": [
+      "https://new.lgbtqia.wiki/wiki/Paraboy"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Page displays a flag under this term; provenance and exact palette unresolved.",
+      "sources": [
+        "https://lgbtqia.fandom.com/fr/wiki/Paraboy"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Paraboy flag in French wiki"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "unverified",
+      "sources": [],
+      "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+    }
+  },
+  {
+    "id": "paragirl",
+    "label": "Paragirl",
+    "words": [
+      "paragirl"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "Identifying mostly, but not entirely, as a girl or woman.",
+    "sources": [
+      "https://new.lgbtqia.wiki/wiki/Paragender"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Specific entry documents creator/date and gray/white/orange/pink-center design; cites exact pridearchive post 92689899026.",
+      "sources": [
+        "https://gender.fandom.com/wiki/Paragirl"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Pridearchive 2014 paragirl design"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "unverified",
+      "sources": [],
+      "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+    }
+  },
+  {
+    "id": "pivotgender",
+    "label": "Pivotgender",
+    "words": [
+      "pivotgender",
+      "expecgender",
+      "swivelgender"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "Gender that changes depending on the people present.",
+    "sources": [
+      "https://gender.fandom.com/wiki/Mirrorgender"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Page names aliases and gray/yellow/pink/blue meanings; original designer unknown.",
+      "sources": [
+        "https://prideflag.fandom.com/wiki/Pivotgender_Flag"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Pridearchive pivotgender design"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "unverified",
+      "sources": [],
+      "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+    }
+  },
+  {
+    "id": "pupgender",
+    "label": "Pupgender",
+    "words": [
+      "pupgender"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "A xenogender described through puppy-like qualities or connection to puppies.",
+    "sources": [
+      "https://nonbinary.wiki/wiki/Pupgender"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Both designs documented separately with creator reference links; emblem geometry matters.",
+      "sources": [
+        "https://queer-community.fandom.com/wiki/Pupgender"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Kandipaws design and viraldoll alternate"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "unverified",
+      "sources": [],
+      "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+    }
+  },
+  {
+    "id": "queer-femme",
+    "label": "Queer Femme",
+    "words": [
+      "queer femme"
+    ],
+    "colors": [],
+    "category": "Gender expression",
+    "definition": "A queer self-description connected to femme identity or expression.",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Femme"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "No sufficiently supported flag specific to this exact catalog entry found in this review. Related identity or umbrella flags were not silently substituted.",
+      "sources": [],
+      "reviewStatus": "unresolved"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Femme"
+      ],
+      "evidence": "Article explicitly discusses queer femme identity, including uses not dependent on feminine aesthetics."
+    }
+  },
+  {
+    "id": "salmacian",
+    "label": "Salmacian",
+    "words": [
+      "salmacian"
+    ],
+    "colors": [],
+    "category": "Embodiment identity",
+    "definition": "A self-description for people who desire mixed genital anatomy.",
+    "sources": [
+      "https://salmacian.org/"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Community homepage distinguishes blue/light-blue/purple/light-green/green design and Erikatharsis alternate.",
+      "sources": [
+        "https://salmacian.org/"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Anonymous 2016 five-stripe design; Sign of Salmacis alternate"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "unverified",
+      "sources": [],
+      "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+    }
+  },
+  {
+    "id": "tomboy",
+    "label": "Tomboy",
+    "words": [
+      "tomboy"
+    ],
+    "colors": [],
+    "category": "Gender expression",
+    "definition": "A girl or woman with expression or interests culturally associated with masculinity.",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Tomboy"
+    ],
+    "contextTerms": [
+      "tomboy"
+    ],
+    "flag": {
+      "status": "unverified",
+      "note": "Page documents blue/brown/white/pink stripes and a distinct mascgirl alternate.",
+      "sources": [
+        "https://neuroqueer.fandom.com/fr/wiki/Tomboy"
+      ],
+      "reviewStatus": "documented",
+      "variant": "2017 tomboy design"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Tomboy"
+      ],
+      "evidence": "Lead defines a girl or young woman with traits or behaviors culturally associated with boys and men."
+    }
+  },
+  {
+    "id": "trans-man",
+    "label": "Trans Man",
+    "words": [
+      "trans man",
+      "transgender man",
+      "trans men",
+      "transgender men"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "A man who is transgender.",
+    "sources": [
+      "https://pflag.org/glossary/",
+      "https://en.wikipedia.org/wiki/Trans_man"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Creator explicitly distinguishes proposal from transmasculine umbrella flag.",
+      "sources": [
+        "https://www.reddit.com/r/QueerVexillology/comments/v7scfp/ftmtrans_man_pride_flag_made_by_me/"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Creator-proposed 2022 trans-man flag"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Trans_man"
+      ],
+      "evidence": "Lead identifies a man assigned female at birth and describes male gender identity."
+    }
+  },
+  {
+    "id": "trans-non-binary",
+    "label": "Trans Non-Binary",
+    "words": [
+      "trans non-binary",
+      "trans nonbinary",
+      "transgender nonbinary",
+      "transgender non-binary"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "A person who identifies as both transgender and nonbinary.",
+    "sources": [
+      "https://lgbtqia.fandom.com/wiki/Transgender",
+      "https://en.wikipedia.org/wiki/Non-binary"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Article gallery explicitly identifies a trans nonbinary flag by unknown creator.",
+      "sources": [
+        "https://queerplus.wikioasis.org/wiki/Nonbinary"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Trans-nonbinary design, creator unknown"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Non-binary"
+      ],
+      "evidence": "Article documents overlapping transgender and nonbinary identities without requiring all nonbinary people to identify as transgender."
+    }
+  },
+  {
+    "id": "trans-woman",
+    "label": "Trans Woman",
+    "words": [
+      "trans woman",
+      "transgender woman",
+      "trans women",
+      "transgender women"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "A woman who is transgender.",
+    "sources": [
+      "https://gender.fandom.com/wiki/Trans_Woman",
+      "https://en.wikipedia.org/wiki/Trans_woman"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Main and alternate designs are identified in gallery.",
+      "sources": [
+        "https://gender.fandom.com/wiki/Trans_Woman"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Trans-woman flag attributed to Pride-Flags"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Trans_woman"
+      ],
+      "evidence": "Lead identifies a woman assigned male at birth."
+    }
+  },
+  {
+    "id": "transine",
+    "label": "Transine",
+    "words": [
+      "transine"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "A community term for a trans or nonbinary identity without desired medical transition; usage varies.",
+    "sources": [],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "No sufficiently supported flag specific to this exact catalog entry found in this review. Related identity or umbrella flags were not silently substituted.",
+      "sources": [],
+      "reviewStatus": "unresolved"
+    },
+    "definitionStatus": "public-reference-pending",
+    "romantic": false,
+    "verification": {
+      "status": "unverified",
+      "sources": [],
+      "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+    }
+  },
+  {
+    "id": "transsexual",
+    "label": "Transsexual",
+    "words": [
+      "transsexual",
+      "transsex"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "A historical self-description some people retain, often emphasizing sex or transition; not a label to impose.",
+    "sources": [
+      "https://www.healthline.com/health/different-genders",
+      "https://en.wikipedia.org/wiki/Transsexual#Terminology"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Flags of the World documents a design under Transsexual flag, but its historical correction explicitly says Johnathan Andrew intended it for transgender people generally. No exclusively transsexual design certified.",
+      "sources": [],
+      "reviewStatus": "unresolved"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Transsexual#Terminology"
+      ],
+      "evidence": "Terminology section documents historical use and people who retain this self-description while others reject it."
+    }
+  },
+  {
+    "id": "versandrogyne",
+    "label": "Versandrogyne",
+    "words": [
+      "versandrogyne"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "An androgyne whose balance of femininity and masculinity fluctuates.",
+    "sources": [
+      "https://beyond-mogai-pride-flags.tumblr.com/post/179943829185/versandrogynous-pride-flag"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Primary definition/flag post; exact asset palette not extracted.",
+      "sources": [
+        "https://beyond-mogai-pride-flags.tumblr.com/post/179943829185/versandrogynous-pride-flag"
+      ],
+      "reviewStatus": "documented",
+      "variant": "2018 Versandrogynous design"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "unverified",
+      "sources": [],
+      "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+    }
+  },
+  {
+    "id": "voidboy",
+    "label": "Voidboy",
+    "words": [
+      "voidboy"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "In one usage, gendervoid with a slight connection to boyhood.",
+    "sources": [
+      "https://www.reddit.com/r/XenogendersAndMore/comments/ypxbkp/"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Unresolved for the catalog definition. Gallery identifies both flags, but this applies to plurality meaning, not automatically the 2022 gendervoid interpretation.",
+      "sources": [],
+      "reviewStatus": "unresolved"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "unverified",
+      "sources": [],
+      "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+    }
+  },
+  {
+    "id": "voidgirl",
+    "label": "Voidgirl",
+    "words": [
+      "voidgirl"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "In one usage, gendervoid with a slight connection to girlhood.",
+    "sources": [
+      "https://www.reddit.com/r/XenogendersAndMore/comments/ypxbkp/"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Unresolved for the catalog definition. Gallery identifies both flags, but this applies to plurality meaning, not automatically the 2022 gendervoid interpretation.",
+      "sources": [],
+      "reviewStatus": "unresolved"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "unverified",
+      "sources": [],
+      "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+    }
+  },
+  {
+    "id": "wolffian",
+    "label": "Wolffian",
+    "words": [
+      "wolffian"
+    ],
+    "colors": [],
+    "category": "Sex characteristics",
+    "definition": "A community sex descriptor referring to development of the Wolffian ducts.",
+    "sources": [
+      "https://beyond-mogai-pride-flags.tumblr.com/post/737626793265217536/werwolffian-pride-flag"
+    ],
+    "contextTerms": [
+      "wolffian"
+    ],
+    "flag": {
+      "status": "unverified",
+      "note": "Page credits flag and symbol to 31 August 2021 and links original archived post.",
+      "sources": [
+        "https://queerdom.fandom.com/wiki/Wolffian"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Mourningmogaicrew 2021 design"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "unverified",
+      "sources": [],
+      "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+    }
+  },
+  {
+    "id": "woman",
+    "label": "Woman",
+    "words": [
+      "woman"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "A gender identity that includes cisgender and transgender women.",
+    "sources": [
+      "https://www.healthline.com/health/different-genders",
+      "https://en.wikipedia.org/wiki/Woman"
+    ],
+    "contextTerms": [
+      "woman"
+    ],
+    "flag": {
+      "status": "unverified",
+      "note": "No sufficiently supported flag specific to this exact catalog entry found in this review. Related identity or umbrella flags were not silently substituted.",
+      "sources": [],
+      "reviewStatus": "unresolved"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Woman"
+      ],
+      "evidence": "Article includes cisgender and transgender women and distinguishes assigned sex from affirmed gender."
+    }
+  },
+  {
+    "id": "xenogender",
+    "label": "Xenogender",
+    "words": [
+      "xenogender"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "Gender described using concepts beyond conventional male and female categories.",
+    "sources": [
+      "https://nonbinary.wiki/index.php?mobileaction=toggle_view_mobile&title=Catgender",
+      "https://en.wikipedia.org/wiki/Non-binary#Xenogender"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "File record links imoga-pride post and December 2020 upload.",
+      "sources": [
+        "https://nonbinary.wiki/index.php?title=File%3AXenogender_without_symbol.png"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Xenogender design without symbol"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Non-binary#Xenogender"
+      ],
+      "evidence": "Section describes gender through concepts outside conventional male/female categories, including nature and abstract concepts."
+    }
+  },
+  {
+    "id": "xxy",
+    "label": "XXY",
+    "words": [
+      "XXY"
+    ],
+    "colors": [],
+    "category": "Sex characteristics",
+    "definition": "A chromosome pattern with two X chromosomes and one Y chromosome.",
+    "sources": [
+      "https://medlineplus.gov/genetics/condition/klinefelter-syndrome/",
+      "https://en.wikipedia.org/wiki/XXY"
+    ],
+    "contextTerms": [
+      "XXY"
+    ],
+    "flag": {
+      "status": "unverified",
+      "note": "2024 creator-uploaded design combines three specific symbols; not a universal XXY flag.",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Trans_intersex_pride_flag_XXY.svg"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Trans/intersex/XXY combination proposal"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/XXY"
+      ],
+      "evidence": "Article defines two X chromosomes and one Y chromosome. This supports a chromosome descriptor, not a gender identity."
+    }
+  },
+  {
+    "id": "aliagender",
+    "label": "Aliagender",
+    "words": [
+      "aliagender"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "Gender outside existing categories.",
+    "sources": [
+      "https://www.healthline.com/health/different-genders"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Unresolved for the catalog definition. Secondary palette listing only; creator and variant provenance not established.",
+      "sources": [],
+      "reviewStatus": "unresolved"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "unverified",
+      "sources": [],
+      "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+    }
+  },
+  {
+    "id": "aporagender",
+    "label": "Aporagender",
+    "words": [
+      "aporagender"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "A distinct gender beyond male, female, or their combination.",
+    "sources": [
+      "https://www.healthline.com/health/different-genders",
+      "https://en.wikipedia.org/wiki/List_of_gender_identities#A"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Page names creator and explains blue/pink/purple/yellow meanings.",
+      "sources": [
+        "https://gend3r.com/index.php/Aporagender"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Hyaenahart aporagender design"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/List_of_gender_identities#A"
+      ],
+      "evidence": "Explicitly listed with citations under A; membership does not establish the entire definition."
+    }
+  },
+  {
+    "id": "gendervoid",
+    "label": "Gendervoid",
+    "words": [
+      "gendervoid"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "Gender experienced as absent or empty.",
+    "sources": [
+      "https://www.healthline.com/health/different-genders",
+      "https://en.wikipedia.org/wiki/Agender#Gendervoid"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Dictionary article displays flag with credit; does not establish exact palette or original designer.",
+      "sources": [
+        "https://www.dictionary.com/culture/gender-sexuality/gendervoid"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Gendervoid design attributed to Pride-Flags"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Agender#Gendervoid"
+      ],
+      "evidence": "Section describes an absence of gender experience or identity."
+    }
+  },
+  {
+    "id": "intergender",
+    "label": "Intergender",
+    "words": [
+      "intergender"
+    ],
+    "colors": [],
+    "category": "Gender identity",
+    "definition": "Gender between male and female; some use it specifically for gender shaped by being intersex.",
+    "sources": [
+      "https://nonbinary.wiki/wiki/Intergender",
+      "https://en.wikipedia.org/wiki/List_of_gender_identities#I"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Yellow/purple design with white circle, explicitly distinguished from older striped 2014 variants.",
+      "sources": [
+        "https://lgbtqia.fandom.com/wiki/Intergender"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Interpunked/cripdeaf 2020 design"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/List_of_gender_identities#I"
+      ],
+      "evidence": "List explicitly defines an identity between male and female. It does not support the additional intersex-specific usage in the catalog wording."
+    }
+  },
+  {
+    "id": "allosexual",
+    "label": "Allosexual",
+    "words": [
+      "allosexual"
+    ],
+    "colors": [
+      "#FFFFFF",
+      "#A9A9A9",
+      "#000000",
+      "#FFFFFF",
+      "#000000",
+      "#A9A9A9",
+      "#FFFFFF"
+    ],
+    "category": "Sexual orientation",
+    "definition": "Experiencing sexual attraction outside the asexual spectrum.",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Allosexuality"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "verified",
+      "note": "Raw SVG inspected: nested white/gray/black/white shapes produce seven horizontal stripes. Revision 20 June 2021 08:28; asset https://upload.wikimedia.org/wikipedia/commons/f/f5/Allosexual_flag.svg",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Allosexual_flag.svg"
+      ],
+      "reviewStatus": "documented",
+      "variant": "2021 Commons zedsexual/allosexual representation",
+      "source": "https://commons.wikimedia.org/wiki/File:Allosexual_flag.svg"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Allosexuality"
+      ],
+      "evidence": "Lead distinguishes typical sexual attraction from the asexual spectrum and notes that frequency is not specified."
+    }
+  },
+  {
+    "id": "androsexual",
+    "label": "Androsexual",
+    "words": [
+      "androsexual"
+    ],
+    "colors": [],
+    "category": "Sexual orientation",
+    "definition": "Attraction to men or masculinity.",
+    "sources": [
+      "https://www.healthline.com/health/different-types-of-sexuality",
+      "https://en.wikipedia.org/wiki/Androphilia_and_gynephilia"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "2020 upload references 2015 Tumblr documentation; not creator-certified colors.",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Androsexual_Pride_Flag.png"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Equality-universe-roy archived representation"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Androphilia_and_gynephilia"
+      ],
+      "evidence": "Lead defines attraction to men or masculinity; historical-use section explicitly identifies androsexual as a synonym."
+    }
+  },
+  {
+    "id": "autosexual",
+    "label": "Autosexual",
+    "words": [
+      "autosexual"
+    ],
+    "colors": [],
+    "category": "Sexual orientation",
+    "definition": "Sexual attraction directed toward oneself.",
+    "sources": [
+      "https://www.healthline.com/health/different-types-of-sexuality",
+      "https://en.wikipedia.org/wiki/Autosexuality"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "File has raster content rather than SVG fills; palette not extracted.",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Autosexual_pride_flag.svg"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Kautr 2021 raster-wrapped representation"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Autosexuality"
+      ],
+      "evidence": "Lead defines attraction primarily directed toward oneself."
+    }
+  },
+  {
+    "id": "autoromantic",
+    "label": "Autoromantic",
+    "words": [
+      "autoromantic"
+    ],
+    "colors": [],
+    "category": "Romantic orientation",
+    "definition": "Romantic attraction directed toward oneself.",
+    "sources": [
+      "https://www.healthline.com/health/different-types-of-sexuality",
+      "https://en.wikipedia.org/wiki/Autosexuality"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Describes blue/gray flag with green heart and black arrow outline; cannot be faithfully expressed as stripe palette alone.",
+      "sources": [
+        "https://queerdom.fandom.com/wiki/Autoromantic"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Pride-Flags 2017 representation"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": true,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Autosexuality"
+      ],
+      "evidence": "Lead explicitly identifies autoromanticism as the romantic equivalent."
+    }
+  },
+  {
+    "id": "biromantic",
+    "label": "Biromantic",
+    "words": [
+      "biromantic"
+    ],
+    "colors": [],
+    "category": "Romantic orientation",
+    "definition": "Romantic attraction to more than one gender.",
+    "sources": [
+      "https://lgbtqia.fandom.com/wiki/Biromantic",
+      "https://en.wikipedia.org/wiki/Romantic_orientation#Romantic_identities"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Pale background with bisexual-colored heart; page also warns article needs rewrite.",
+      "sources": [
+        "https://lgbtqia.fandom.com/wiki/Biromantic"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Pride-Flags 2016 heart design"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": true,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Romantic_orientation#Romantic_identities"
+      ],
+      "evidence": "Identity list describes romantic attraction to same and other genders, including two or more."
+    }
+  },
+  {
+    "id": "gynesexual",
+    "label": "Gynesexual",
+    "words": [
+      "gynesexual",
+      "gynosexual"
+    ],
+    "colors": [],
+    "category": "Sexual orientation",
+    "definition": "Attraction to women or femininity.",
+    "sources": [
+      "https://www.healthline.com/health/different-types-of-sexuality",
+      "https://en.wikipedia.org/wiki/Androphilia_and_gynephilia"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Creator and meanings unknown; Commons PNG has disputed-description notice, so no exact palette certification.",
+      "sources": [
+        "https://lgbtqia.fandom.com/wiki/Gynesexual"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Fem-/Gyne-/Gyno- design documented 2016"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Androphilia_and_gynephilia"
+      ],
+      "evidence": "Lead defines attraction to women or femininity; gynephilia section explicitly identifies gynesexual as a synonym."
+    }
+  },
+  {
+    "id": "heterosexual",
+    "label": "Heterosexual",
+    "words": [
+      "heterosexual",
+      "heterosexuality"
+    ],
+    "colors": [
+      "#000000",
+      "#FFFFFF",
+      "#000000",
+      "#FFFFFF",
+      "#000000",
+      "#FFFFFF"
+    ],
+    "category": "Sexual orientation",
+    "definition": "Attraction to a different gender.",
+    "sources": [
+      "https://www.healthline.com/health/different-types-of-sexuality",
+      "https://en.wikipedia.org/wiki/Heterosexuality"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "verified",
+      "note": "Raw SVG inspected: white base and black rectangles at y=0,2,4 give six alternating stripes. Asset https://upload.wikimedia.org/wikipedia/commons/6/6a/Heterosexual_flag_%28black-white_stripes%29.svg",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Heterosexual_flag_(black-white_stripes).svg"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Nikki 2020 black/white proposal",
+      "source": "https://commons.wikimedia.org/wiki/File:Heterosexual_flag_(black-white_stripes).svg"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Heterosexuality"
+      ],
+      "evidence": "Lead describes romantic or sexual attraction to a different/opposite sex or gender."
+    }
+  },
+  {
+    "id": "homosexual",
+    "label": "Homosexual",
+    "words": [
+      "homosexual",
+      "homosexuality"
+    ],
+    "colors": [],
+    "category": "Sexual orientation",
+    "definition": "Attraction to the same gender; terminology preferences vary.",
+    "sources": [
+      "https://www.healthline.com/health/different-types-of-sexuality",
+      "https://en.wikipedia.org/wiki/Homosexuality"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "No sufficiently supported flag specific to this exact catalog entry found in this review. Related identity or umbrella flags were not silently substituted.",
+      "sources": [],
+      "reviewStatus": "unresolved"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Homosexuality"
+      ],
+      "evidence": "Lead describes romantic or sexual attraction to the same sex or gender; article also discusses terminology."
+    }
+  },
+  {
+    "id": "monosexual",
+    "label": "Monosexual",
+    "words": [
+      "monosexual"
+    ],
+    "colors": [],
+    "category": "Sexual orientation",
+    "definition": "Attraction to one gender.",
+    "sources": [
+      "https://www.healthline.com/health/different-types-of-sexuality",
+      "https://en.wikipedia.org/wiki/Monosexuality"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Definition article explicitly displays a proposed monosexual flag.",
+      "sources": [
+        "https://lgbtqia.fandom.com/wiki/Monosexual"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Proposed monosexual design"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Monosexuality"
+      ],
+      "evidence": "Lead defines romantic or sexual attraction to one sex or gender."
+    }
+  },
+  {
+    "id": "panromantic",
+    "label": "Panromantic",
+    "words": [
+      "panromantic"
+    ],
+    "colors": [],
+    "category": "Romantic orientation",
+    "definition": "Romantic attraction regardless of gender.",
+    "sources": [
+      "https://www.healthline.com/health/different-types-of-sexuality",
+      "https://en.wikipedia.org/wiki/Romantic_orientation#Romantic_identities"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Article distinguishes several panromantic designs; exact one/geometry must be selected before palette extraction.",
+      "sources": [
+        "https://mogailabel.fandom.com/wiki/Panromantic"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Pansexual-derived heart designs"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": true,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Romantic_orientation#Romantic_identities"
+      ],
+      "evidence": "List defines romantic attraction regardless of gender."
+    }
+  },
+  {
+    "id": "polyromantic",
+    "label": "Polyromantic",
+    "words": [
+      "polyromantic"
+    ],
+    "colors": [],
+    "category": "Romantic orientation",
+    "definition": "Romantic attraction to multiple, not necessarily all, genders.",
+    "sources": [
+      "https://mogailabel.fandom.com/wiki/Panromantic",
+      "https://en.wikipedia.org/wiki/Romantic_orientation#Romantic_identities"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Unresolved for the catalog definition. Category contains a specifically named asset; only discovery evidence, no inspected variant or palette.",
+      "sources": [],
+      "reviewStatus": "unresolved"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": true,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Romantic_orientation#Romantic_identities"
+      ],
+      "evidence": "List defines romantic attraction to various but not all genders; catalog wording not necessarily all is broader. Use the narrower wording if claiming full Wikipedia definition support."
+    }
+  },
+  {
+    "id": "sapiosexual",
+    "label": "Sapiosexual",
+    "words": [
+      "sapiosexual"
+    ],
+    "colors": [],
+    "category": "Attraction descriptor",
+    "definition": "Attraction centered on perceived intelligence.",
+    "sources": [
+      "https://www.healthline.com/health/different-types-of-sexuality",
+      "https://en.wikipedia.org/wiki/Sexual_identity"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Reference shows three versions; none certified as universal.",
+      "sources": [
+        "https://lgbt.fandom.com/es/wiki/Sapiosexualidad"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Multiple proposed sapiosexual designs"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Sexual_identity"
+      ],
+      "evidence": "Article identifies attraction to intelligence and treats this as a descriptor rather than a sexual orientation."
+    }
+  },
+  {
+    "id": "skoliosexual",
+    "label": "Skoliosexual",
+    "words": [
+      "skoliosexual"
+    ],
+    "colors": [],
+    "category": "Attraction descriptor",
+    "definition": "A contested label for attraction to nonbinary or transgender people.",
+    "sources": [
+      "https://www.healthline.com/health/different-types-of-sexuality",
+      "https://es.wikipedia.org/wiki/Ceterosexualidad"
+    ],
+    "contextTerms": [],
+    "flag": {
+      "status": "unverified",
+      "note": "Unresolved for the catalog definition. Article treats skoliosexual as former ceterosexual name and displays a ceterosexual flag. Equivalence is contested; do not silently rename or assign.",
+      "sources": [],
+      "reviewStatus": "unresolved"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://es.wikipedia.org/wiki/Ceterosexualidad"
+      ],
+      "evidence": "Spanish article explicitly names skoliosexualidad as the former term and documents disputed definitions involving transgender and nonbinary people. Terminological equivalence is contested; this establishes recognition, not endorsement or a universal scope."
+    }
+  },
+  {
+    "id": "unlabeled",
+    "label": "Unlabeled",
+    "words": [
+      "unlabeled",
+      "unlabelled"
+    ],
+    "colors": [
+      "#E7F9E4",
+      "#FFFFFF",
+      "#DEF0F7",
+      "#FAE2C3"
+    ],
+    "category": "Identity description",
+    "definition": "Choosing not to label one’s orientation or gender.",
+    "sources": [
+      "https://commons.wikimedia.org/wiki/File:Unlabeled_Pride_Flag.svg",
+      "https://en.wikipedia.org/wiki/Sexual_identity#Unlabeled_sexuality"
+    ],
+    "contextTerms": [
+      "unlabeled",
+      "unlabelled"
+    ],
+    "flag": {
+      "status": "verified",
+      "note": "Raw SVG inspected: green white blue orange, RGB 231/249/228,255/255/255,222/240/247,250/226/195. Asset https://upload.wikimedia.org/wikipedia/commons/6/6c/Unlabeled_Pride_Flag.svg revision 10 May 2025 21:10.",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Unlabeled_Pride_Flag.svg"
+      ],
+      "reviewStatus": "documented",
+      "variant": "December 2020 pastel four-stripe representation",
+      "source": "https://commons.wikimedia.org/wiki/File:Unlabeled_Pride_Flag.svg"
+    },
+    "definitionStatus": "public-reference",
+    "romantic": false,
+    "verification": {
+      "status": "wikipedia",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Sexual_identity#Unlabeled_sexuality"
+      ],
+      "evidence": "Section documents choosing not to label sexual identity. It does not directly support the extra gender scope in the catalog definition."
+    }
   }
 ];
 
@@ -3226,7 +7337,8 @@ EXP.Catalog = (() => {
   const identities = EXP.CatalogData.map((source) => {
     const terms = source.words.map((text, index) => {
       const normalized = normalize(text);
-      const isAmbiguous = ambiguous.has(normalized);
+      const requiresIdentityContext = (source.contextTerms || []).some(value => normalize(value) === normalized);
+      const isAmbiguous = ambiguous.has(normalized) || requiresIdentityContext;
       return Object.freeze({
         id: `${source.id}:${slug(text) || index}`,
         text,
@@ -3235,11 +7347,12 @@ EXP.Catalog = (() => {
         casePolicy: acronym.has(normalized) ? 'acronym-preferred' : 'insensitive',
         contextRuleId: isAmbiguous ? `context:${normalized}` : 'context:none',
         decisionFloor: isAmbiguous ? 'supported' : 'explicit',
+        requiresIdentityContext,
         allowInclusive: inclusiveAllowed.has(normalized),
         negatives: Object.freeze(negativeByTerm[normalized] || [])
       });
     });
-    return Object.freeze({ id: source.id, label: source.label, colors: Object.freeze([...source.colors]), terms: Object.freeze(terms), defaultEnabled: true });
+    return Object.freeze({ id: source.id, label: source.label, colors: Object.freeze([...source.colors]), terms: Object.freeze(terms), definition: source.definition || '', definitionStatus: source.definitionStatus || 'pending', recognitionNote: source.recognitionNote || '', romantic: source.romantic === true, verification: Object.freeze({status: source.verification?.status || 'unverified', sources: Object.freeze([...(source.verification?.sources || [])])}), category: source.category || 'Community term', sources: Object.freeze([...(source.sources || [])]), flag: Object.freeze({ ...source.flag, sources: Object.freeze([...(source.flag?.sources || [])]) }), defaultEnabled: true });
   });
   const byId = new Map(identities.map((item) => [item.id, item]));
   const termMap = new Map();
@@ -3249,12 +7362,12 @@ EXP.Catalog = (() => {
   }
   const collisions = [...termMap].filter(([, records]) => new Set(records.map(({ identity }) => identity.id)).size > 1).map(([term, records]) => Object.freeze({ term, identities: Object.freeze(records.map(({ identity }) => identity.id)) }));
   const invalid = [];
-  if (identities.length !== 59) invalid.push('CATALOG_IDENTITY_COUNT');
-  if (identities.reduce((total, identity) => total + identity.terms.length, 0) !== 124) invalid.push('CATALOG_TERM_COUNT');
+  if (!identities.length || identities.some(identity => !identity.terms.length)) invalid.push('CATALOG_EMPTY');
   if (byId.size !== identities.length) invalid.push('CATALOG_DUPLICATE_ID');
-  if (identities.some((identity) => !/^[a-z][a-z0-9-]+$/.test(identity.id) || !identity.colors.length || identity.colors.some((color) => !/^#[0-9a-f]{6}$/i.test(color)))) invalid.push('CATALOG_SCHEMA');
+  if (identities.some((identity) => !/^[a-z][a-z0-9-]+$/.test(identity.id) || (!identity.colors.length && identity.flag.status !== 'unverified') || identity.colors.some((color) => !/^#[0-9a-f]{6}$/i.test(color)) || identity.sources.some(url => !/^https:\/\//.test(url)))) invalid.push('CATALOG_SCHEMA');
+  if (identities.some(identity => [...identity.flag.sources, identity.flag.source].filter(Boolean).some(url => !/^https:\/\//.test(url)) || (identity.flag.status === 'verified' && (!identity.flag.source || !identity.flag.variant)))) invalid.push('CATALOG_FLAG_REFERENCE');
   if (collisions.length) invalid.push('CATALOG_TERM_COLLISION');
-  const search = (query = '') => { const needle = normalize(query.trim()); return identities.filter((identity) => !needle || normalize(identity.label).includes(needle) || identity.terms.some((term) => term.normalized.includes(needle))); };
+  const search = (query = '') => { const needle = normalize(query.trim()); return identities.filter((identity) => !needle || normalize(identity.label).includes(needle) || normalize(identity.definition).includes(needle) || identity.terms.some((term) => term.normalized.includes(needle))); };
   const status = () => Object.freeze({ valid: invalid.length === 0, errors: Object.freeze([...invalid]), identities: identities.length, terms: [...termMap.values()].reduce((n, items) => n + items.length, 0), collisions: collisions.length });
   return Object.freeze({ identities: Object.freeze(identities), termMap, collisions: Object.freeze(collisions), positiveWords, normalize, has: (id) => byId.has(id), get: (id) => byId.get(id), search, status });
 })();
@@ -3269,10 +7382,12 @@ EXP.Settings = (() => {
     style: 'gradient',
     intensity: 'balanced',
     animation: false,
+    animationStyle: 'pulse',
     labels: false,
     matcherMode: 'balanced',
     ambiguityProtection: true,
     surroundingContext: true,
+    includeRomantic: false,
     disabledIdentities: [],
     reducedMotion: 'system',
     highContrast: false,
@@ -3324,8 +7439,9 @@ EXP.Settings = (() => {
     const next = structuredClone(defaults);
 	const themeAliases = { warm: 'ember', discord: 'glacier', pine: 'verdant', obsidian: 'contrast' };
 	const normalizedUiTheme = themeAliases[candidate.uiTheme] || candidate.uiTheme;
-    for (const name of ['enabled', 'animation', 'labels', 'ambiguityProtection', 'surroundingContext', 'highContrast', 'safeMode', 'updateNotifications', 'menuAutoClose', 'menuNotifications']) if (typeof candidate[name] === 'boolean') next[name] = candidate[name];
+    for (const name of ['enabled', 'animation', 'labels', 'ambiguityProtection', 'surroundingContext', 'includeRomantic', 'highContrast', 'safeMode', 'updateNotifications', 'menuAutoClose', 'menuNotifications']) if (typeof candidate[name] === 'boolean') next[name] = candidate[name];
     const enums = {
+      animationStyle: ['pulse', 'shimmer', 'glow'],
       style: ['gradient', 'underline', 'soft-fill'], intensity: ['subtle', 'balanced', 'vivid'], matcherMode: ['strict', 'balanced', 'inclusive'],
       reducedMotion: ['system', 'reduce', 'allow'], nonColorIndicator: ['underline', 'outline', 'off'],
       screenReaderBehavior: ['original-text', 'announce-on-focus'], launcherPosition: ['automatic-end-bottom', 'end-top', 'end-bottom', 'start-top', 'start-bottom'], menuWidth: ['full', 'compact', 'narrow'], uiTheme: ['ember', 'midnight', 'glacier', 'contrast', 'verdant', 'pride', 'crimson', 'prisma']
@@ -3408,7 +7524,9 @@ EXP.Matcher = (() => {
     const windowStart = Math.max(0, start - 96);
     const windowEnd = Math.min(sourceText.length, end + 96);
     const context = EXP.Catalog.normalize(`${sourceText.slice(windowStart, start)} ${sourceText.slice(end, windowEnd)}`);
-    const hasPositive = settings.surroundingContext && EXP.Catalog.positiveWords.some((word) => context.includes(word));
+    const hasPositive = settings.surroundingContext && (term.requiresIdentityContext
+      ? /\b(?:gender|orientation|sexuality|pride|lgbtq?(?:ia)?|identity label)\b/u.test(context)
+      : EXP.Catalog.positiveWords.some((word) => new RegExp(`\\b${escape(word)}\\b`, 'u').test(context)));
     const hasNegative = settings.ambiguityProtection && term.negatives.some((word) => context.includes(word));
     if (hasNegative) return { band: 'blocked-negative', rules: [term.contextRuleId, 'NEGATIVE_CONTEXT'] };
     if (hasPositive) return { band: 'eligible-supported', rules: [term.contextRuleId, 'POSITIVE_CONTEXT'] };
@@ -3427,6 +7545,7 @@ EXP.Matcher = (() => {
       if (!boundary(text, start, end)) continue;
       const records = lookup.get(EXP.Catalog.normalize(match[0])) || [];
       if (records.length !== 1) { decisions['blocked-negative'] += 1; continue; }
+      if (records[0].identity.romantic && settings.includeRomantic !== true) continue;
       const result = evaluate(records[0], text, start, end, settings);
       decisions[result.band] += 1;
       const allowed = result.band === 'eligible-explicit' || result.band === 'eligible-supported';
@@ -3453,9 +7572,13 @@ EXP.Renderer = (() => {
 .${HIT}[data-hidden="1"]{background:none!important;box-shadow:none!important;outline:0!important;color:inherit!important;-webkit-text-fill-color:currentColor!important;text-decoration:none!important}
 .${HIT}[data-contrast="1"]{outline:2px solid currentColor;outline-offset:1px;background:Canvas!important;color:CanvasText!important;-webkit-text-fill-color:CanvasText!important}
 .${HIT}[data-animate="1"]:not([data-hidden="1"]):not([data-contrast="1"]){animation:exp-prisma-pulse 5s ease-in-out infinite}
+.${HIT}[data-animate="1"][data-animation="shimmer"]:not([data-hidden="1"]):not([data-contrast="1"]){animation-name:exp-prisma-shimmer}
+.${HIT}[data-animate="1"][data-animation="glow"]:not([data-hidden="1"]):not([data-contrast="1"]){animation-name:exp-prisma-glow}
 @keyframes exp-prisma-pulse{0%,100%{opacity:1}50%{opacity:.65}}
+@keyframes exp-prisma-shimmer{0%,100%{filter:brightness(1)}50%{filter:brightness(1.45)}}
+@keyframes exp-prisma-glow{0%,100%{text-shadow:0 0 0 transparent}50%{text-shadow:0 0 5px var(--prisma-primary)}}
 @media(prefers-reduced-motion:reduce){.${HIT}[data-motion="system"]{animation:none!important}}
-@media(forced-colors:active){.${HIT}{background:none!important;color:CanvasText!important;-webkit-text-fill-color:CanvasText!important;outline:1px solid Highlight;text-decoration:underline}}
+@media(forced-colors:active){.${HIT}[data-style]{background:none!important;color:CanvasText!important;-webkit-text-fill-color:CanvasText!important;outline:1px solid Highlight;text-decoration:underline;animation:none!important}}
 `;
   function ensureStyle(root = document) {
     if (styles.has(root)) return;
@@ -3471,6 +7594,9 @@ EXP.Renderer = (() => {
   }
   function applyInlineVisual(span, style, primary, weight, softFill) {
     clearInlineVisual(span);
+    if (style === 'gradient') {
+      ExtraPotionsCore.applyTextGradient(span, 'linear-gradient(90deg,var(--prisma-colors))');
+    }
     if (style === 'underline' || style === 'soft-fill') {
       span.style.setProperty('background-clip', 'border-box', 'important');
       span.style.setProperty('-webkit-background-clip', 'border-box', 'important');
@@ -3497,12 +7623,16 @@ EXP.Renderer = (() => {
   }
   function applyVisual(span, record, settings) {
     currentSettings = settings;
-    const colors = record.identity.colors;
+    const hasPalette = record.identity.colors.length > 0;
+    const colors = hasPalette ? record.identity.colors : ['currentColor'];
+    const visualStyle = hasPalette ? settings.style : 'underline';
     const levels = { subtle: ['2px', '14%'], balanced: ['3px', '22%'], vivid: ['4px', '32%'] };
-    span.dataset.style = settings.style;
+    span.dataset.style = visualStyle;
+    span.dataset.palette = hasPalette ? record.identity.flag?.status || 'legacy' : 'neutral';
     span.dataset.indicator = settings.nonColorIndicator;
     span.dataset.contrast = settings.highContrast ? '1' : '0';
     span.dataset.animate = settings.animation && settings.reducedMotion !== 'reduce' ? '1' : '0';
+    span.dataset.animation = settings.animationStyle || 'pulse';
     span.dataset.motion = settings.reducedMotion;
     span.dataset.hidden = hidden ? '1' : '0';
     span.style.setProperty('--prisma-colors', colors.join(','));
@@ -3513,8 +7643,8 @@ EXP.Renderer = (() => {
     const alpha = ({ subtle: .14, balanced: .22, vivid: .32 })[settings.intensity] || .22;
     const softFill = hex ? `rgba(${parseInt(hex[1].slice(0,2),16)},${parseInt(hex[1].slice(2,4),16)},${parseInt(hex[1].slice(4,6),16)},${alpha})` : colors[0];
     span.style.setProperty('--prisma-soft-fill', softFill);
-    applyInlineVisual(span, hidden || settings.highContrast ? 'off' : settings.style, colors[0], levels[settings.intensity][0], softFill);
-    span.title = settings.labels ? record.identity.label : '';
+    applyInlineVisual(span, hidden || settings.highContrast ? 'off' : visualStyle, colors[0], levels[settings.intensity][0], softFill);
+    span.title = settings.labels ? [record.identity.label, record.identity.definition].filter(Boolean).join(': ') : '';
     if (settings.screenReaderBehavior === 'announce-on-focus') {
       span.tabIndex = -1;
       span.setAttribute('aria-label', `${span.textContent}, ${record.identity.label} identity-language match`);
@@ -3695,10 +7825,19 @@ EXP.Engine = (() => {
   return Object.freeze({ start, stop, cleanup, rebuild, navigation, processBatch, snapshot, navigateNext: () => navigate(1), navigatePrevious: () => navigate(-1), navigateTo, setTemporaryHidden, highlightAll: () => setTemporaryHidden(false), subscribe(listener) { listeners.add(listener); return () => listeners.delete(listener); } });
 })();
 
-EXP.VERSION = '3.0.32';
+EXP.VERSION = '3.1.0';
 
 EXP.ReleaseNotes = (() => {
   const notes = Object.freeze({
+    '3.1.0': Object.freeze([
+      'Adds Pulse, Shimmer, and Glow animation styles with saved preferences and reduced-motion support.',
+      'Keeps gradient-highlighted text visible when page dark-mode styles override element backgrounds, including Wikipedia portals.',
+      'Adds Wikipedia-listed check icons while keeping other definitions unverified without qualifying evidence.',
+      'Adds an optional Romantic identities switch; romantic and aroace definitions remain available in the database.',
+      'Adds an individual public definition and flag review for every catalog entry.',
+      'Documents 133 definitions and 112 flag designs; keeps unresolved evidence visible.',
+      'Verifies 30 palettes and separates definition sources from flag sources in Details.'
+    ]),
     '3.0.32': Object.freeze([
       'Uses the same menu-width notice surface for Current Version, Update Available, and Update Complete, matching Dropper.',
       'Forces a fresh update check for each newly installed PRISMA version instead of inheriting the previous version\'s 15-minute throttle or stale remote version.',
@@ -3771,9 +7910,6 @@ EXP.Updates = ExtraPotionsCore.createReleaseUpdateChecker({
   onError: error => EXP.Core.safeError(Object.assign(error, { code: 'UPDATE_CHECK' }), 'prisma'),
 });
 
-// Dropper 3.2.8 is the canonical shared UI; product-specific color stays declarative.
-EXP.MenuChrome = Object.freeze({ create: options => ExtraPotionsCore.create({ ...options, launcherSrc: 'https://raw.githubusercontent.com/ExtraPotions/PRISMA/main/assets/prisma-launcher.svg', productTheme: {"id":"prisma","name":"PRISMA gem","swatch":"linear-gradient(135deg,#ff9af0 0 34%,#8f61ff 34% 67%,#5fe9f4 67%)","bg":"#101116","panel":"#191b22","line":"#30333e","text":"#f4f2f7","muted":"#aeadb8","accent":"#d264df","accent2":"#49c7ef","skin":"linear-gradient(135deg,#ff9af0 0 34%,#8f61ff 34% 67%,#5fe9f4 67%)","skinVertical":"linear-gradient(180deg,#ff9af0 0 34%,#8f61ff 34% 67%,#5fe9f4 67%)"} }) });
-
 /* Diagnostics reports and controls follow Dropper's shared implementation. */
 EXP.Diagnostics = Object.freeze({
   createDiagnosticsReport: (product, details) => ExtraPotionsCore.createDiagnosticsReport(product, details),
@@ -3784,20 +7920,14 @@ EXP.Diagnostics = Object.freeze({
 EXP.UI = (() => {
   const ICON_URL = 'https://raw.githubusercontent.com/ExtraPotions/PRISMA/main/assets/prisma-launcher.svg';
   const routeNames = Object.freeze([['page', 'Highlights'], ['style', 'Highlight Style'], ['look', 'Appearance'], ['tools', 'Language'], ['sites', 'Sites'], ['system', 'System']]);
-  let host, shadow, launcher, panel, nav, workspace, live, toast, chrome, toastTimer, updateTimer, updateCard, currentRoute = '', lastRoute = '', open = false, engineState, importDraft = null, launcherCleanup, unsubscribe;
-  const UI_THEMES = ExtraPotionsCore.themes({"id":"prisma","name":"PRISMA gem","swatch":"linear-gradient(135deg,#100814 0 38%,#a843b6 38% 69%,#2e98a5 69% 100%)","canvas":"#100814","surface":"#211029","primary":"#a843b6","companion":"#6853c9","counterpoint":"#2e98a5","interactive":"#c05bca","bg":"#100814","panel":"#211029","line":"#4a2e55","text":"#eadcf0","muted":"#ad96b5","accent":"#a843b6","accent2":"#c05bca","skin":"linear-gradient(135deg,#a843b6 0%,#6853c9 52%,#2e98a5 100%)","skinVertical":"linear-gradient(180deg,#a843b6 0%,#6853c9 52%,#2e98a5 100%)"});
+  let host, shadow, launcher, panel, live, toast, product, noticeController, toastTimer, updateCard, engineState, importDraft = null, unsubscribe;
+  const PRODUCT_THEME = {"id":"prisma","name":"PRISMA gem","swatch":"linear-gradient(135deg,#100814 0 38%,#a843b6 38% 69%,#2e98a5 69% 100%)","canvas":"#100814","surface":"#211029","primary":"#a843b6","companion":"#6853c9","counterpoint":"#2e98a5","interactive":"#c05bca","bg":"#100814","panel":"#211029","line":"#4a2e55","text":"#eadcf0","muted":"#ad96b5","accent":"#a843b6","accent2":"#c05bca","skin":"linear-gradient(135deg,#a843b6 0%,#6853c9 52%,#2e98a5 100%)","skinVertical":"linear-gradient(180deg,#a843b6 0%,#6853c9 52%,#2e98a5 100%)"};
+  const UI_THEMES = ExtraPotionsCore.themes(PRODUCT_THEME);
   const el = (tag, attrs = {}, text) => { const node = document.createElement(tag); for (const [name, value] of Object.entries(attrs)) { if (name === 'class') node.className = value; else node.setAttribute(name, value); } if (text !== undefined) node.textContent = text; return node; };
-  function makeNotice() {
-    const notice=el('div',{class:'update-notice',hidden:true});
-    notice.innerHTML='<button type="button" class="update-dismiss" aria-label="Dismiss">×</button><div class="update-head"><div><div class="update-kicker"></div><div class="update-title"></div></div><div class="update-version"></div></div><div class="update-text"></div><ul class="update-list"></ul><div class="update-footer"><a class="update-release" href="https://github.com/ExtraPotions/PRISMA/releases" target="_blank" rel="noopener noreferrer">GitHub Release</a><a class="update-action" href="https://raw.githubusercontent.com/ExtraPotions/PRISMA/main/prisma.user.js" target="_blank" rel="noopener noreferrer">Install Update</a></div>';
-    notice.querySelector('.update-dismiss').addEventListener('click', hideUpdateCard);
-    return notice;
+  function showNotice(node, {kicker,title,version=EXP.VERSION,text='',details=[],available=false}) {
+    noticeController?.show({kicker,title,version,text,details,showAction:available,kind:available?'available':kicker==='Update Complete'?'complete':'current'});
   }
-  function showNotice(node,{kicker,title,version=EXP.VERSION,text='',details=[],available=false},auto=false){
-    node.querySelector('.update-kicker').textContent=kicker;node.querySelector('.update-title').textContent=title;node.querySelector('.update-version').textContent=`v${version}`;node.querySelector('.update-text').textContent=text;
-    const list=node.querySelector('.update-list');list.replaceChildren(...details.slice(0,4).map(x=>el('li',{},x)));list.hidden=!details.length;node.querySelector('.update-action').hidden=!available;node.dataset.noticeKind=available?'available':kicker==='Update Complete'?'complete':'current';node.dataset.placement='menu';node.hidden=false;chrome?.layout();if(auto){clearTimeout(updateTimer);updateTimer=setTimeout(hideUpdateCard,30000);}
-  }
-  function hideUpdateCard(){clearTimeout(updateTimer);updateTimer=null;if(updateCard)updateCard.hidden=true;chrome?.layout();}
+  function hideUpdateCard() { noticeController?.hide(); }
   function showUpdateCard(result={},complete=false,previous=''){const version=complete?EXP.VERSION:result.latest;if(!complete&&!EXP.Core.claimNotice('prisma',`available:${version}`))return;const fallback=['A newer PRISMA build is available.','Install the latest userscript for the newest fixes and improvements.'];const details=complete?EXP.ReleaseNotes.current():(Array.isArray(result.details)&&result.details.length?result.details:fallback);showNotice(updateCard,{kicker:complete?'Update Complete':'Update Available',title:complete?'PRISMA Updated':'New PRISMA Version Available',version,text:complete?`Updated from v${previous} to v${EXP.VERSION}.`:`v${result.latest} is ready to install.`,details,available:!complete},true);}
   const button = (label, action, className = 'action') => { const node = el('button', { type: 'button', class: className }, label); node.addEventListener('click', action); return node; };
   const announce = (message, kind = 'status') => { if (live) { live.textContent = message; live.dataset.kind = kind; } if (!toast || !EXP.Settings.snapshot().menuNotifications) return; toast.textContent=message;toast.hidden=false;toast.style.top=`${Math.max(8,(launcher?.getBoundingClientRect().top||60)-48)}px`;clearTimeout(toastTimer);toastTimer=setTimeout(()=>{if(toast)toast.hidden=true;},3000); };
@@ -3818,6 +7948,7 @@ EXP.UI = (() => {
     section.append(selectControl('Style', 'Uses the same eligible match set.', state.style, [['gradient', 'Gradient'], ['underline', 'Underline'], ['soft-fill', 'Soft Fill']], (style) => update({ style }, 'style')));
     section.append(selectControl('Intensity', 'Changes rendering only.', state.intensity, [['subtle', 'Subtle'], ['balanced', 'Balanced'], ['vivid', 'Vivid']], (intensity) => update({ intensity }, 'intensity')));
     section.append(switchControl('Animation', 'Disabled whenever reduced motion is active.', state.animation, (animation) => update({ animation }, 'animation')));
+    section.append(selectControl('Animation style', '', state.animationStyle, [['pulse', 'Pulse'], ['shimmer', 'Shimmer'], ['glow', 'Glow']], (animationStyle) => update({ animationStyle }, 'animation-style'), !state.animation));
     section.append(switchControl('Identity labels', 'Available by pointer and keyboard focus when enabled.', state.labels, (labels) => update({ labels }, 'labels')));
     return section;
   }
@@ -3833,14 +7964,51 @@ EXP.UI = (() => {
   }
   function identityRow(identity, state) {
     const enabled = !state.disabledIdentities.includes(identity.id); const item = el('div', { class: 'identity' }); const copy = el('div', { class: 'copy' }); copy.append(el('span', { class: 'label' }, identity.label), el('span', { class: 'help' }, `${identity.terms.length} recognition term${identity.terms.length === 1 ? '' : 's'}`)); item.append(copy);
-    const details = button('Details', () => { const terms = identity.terms.map((term) => term.text).join(', '); announce(`${identity.label}: ${terms}`); }, 'compact');
+    const detail = el('div', { class: 'catalog-detail', id: `prisma-detail-${identity.id}`, hidden: true });
+    if (identity.verification.status !== 'unverified') copy.querySelector('.label').append(el('span', { role: 'img', 'aria-label': 'Verified entry', title: identity.verification.status === 'wikipedia' ? 'Verified under the Wikipedia-listed rule' : 'Verified by a peer-reviewed source' }, ' ✓'));
+    detail.append(el('strong', {}, identity.category), el('p', {}, identity.definition || 'Definition review pending for this inherited entry.'), el('p', {}, `Recognizes: ${identity.terms.map(term => term.text).join(', ')}`));
+    if (identity.definitionStatus === 'public-reference-pending') detail.append(el('p', {}, 'Public reference review pending.'));
+    if (identity.recognitionNote) detail.append(el('p', {}, identity.recognitionNote));
+    const verified = identity.verification.status !== 'unverified';
+    detail.append(el('p', { class: 'definition-verification' }, verified ? `✓ Verified — ${identity.verification.status === 'wikipedia' ? 'Wikipedia-listed' : 'peer-reviewed source'}` : 'Unverified — no Wikipedia or peer-reviewed reference confirmed.'));
+    if (identity.romantic) detail.append(el('p', {}, state.includeRomantic ? 'Romantic identity recognition is on.' : 'Romantic identity recognition is off. Enable Romantic identities to highlight this entry.'));
+    if (identity.colors.length) {
+      const preview = el('div', { class: 'catalog-palette', role: 'img', 'aria-label': `${identity.label} highlight palette: ${identity.colors.join(', ')}` });
+      const stops = identity.colors.flatMap((color, index) => [`${color} ${index / identity.colors.length * 100}%`, `${color} ${(index + 1) / identity.colors.length * 100}%`]);
+      preview.style.backgroundImage = `linear-gradient(90deg,${stops.join(',')})`;
+      detail.append(preview, el('p', {}, `${identity.flag.status === 'verified' ? 'Verified palette' : 'Inherited palette'}: ${identity.colors.join(', ')}. Palette preview, not a complete flag drawing.`));
+    } else detail.append(el('p', {}, 'Flag colors await verification. This term uses a neutral underline.'));
+    if (identity.flag.variant) detail.append(el('p', {}, `Flag design: ${identity.flag.variant}`));
+    if (identity.flag.note) detail.append(el('p', {}, identity.flag.note));
+    if (identity.flag.reviewStatus === 'unresolved') detail.append(el('p', {}, 'A public flag reference has not been confirmed.'));
+    for (const url of [...new Set(identity.sources)]) detail.append(el('a', { href: url, target: '_blank', rel: 'noopener noreferrer' }, `Definition source: ${new URL(url).hostname}`));
+    for (const url of [...new Set([...(identity.flag.sources || []), identity.flag.source].filter(Boolean))]) detail.append(el('a', { href: url, target: '_blank', rel: 'noopener noreferrer' }, `Flag source: ${new URL(url).hostname}`));
+    const details = button('Details', () => { detail.hidden = !detail.hidden; details.setAttribute('aria-expanded', String(!detail.hidden)); product?.refresh(); }, 'compact');
+    details.setAttribute('aria-expanded', 'false'); details.setAttribute('aria-controls', detail.id);
     const control = el('button', { type: 'button', class: 'switch', role: 'switch', 'aria-checked': String(enabled), 'aria-label': `Enable ${identity.label}` }); control.append(el('span', { 'aria-hidden': 'true' })); control.addEventListener('click', () => { const disabled = new Set(EXP.Settings.snapshot().disabledIdentities); if (enabled) disabled.add(identity.id); else disabled.delete(identity.id); update({ disabledIdentities: [...disabled] }, 'identity-toggle'); });
-    const actions = el('div', { class: 'identity-actions' }); actions.style.cssText='display:flex;align-items:center;gap:6px'; actions.append(control, details); item.append(actions); return item;
+    const actions = el('div', { class: 'identity-actions' }); actions.style.cssText='display:flex;align-items:center;gap:6px'; actions.append(control, details); item.append(actions); const wrapper = el('div', { class: 'catalog-entry' }); wrapper.append(item, detail); return wrapper;
   }
   function renderIdentities() {
     const state = EXP.Settings.snapshot(); const section = group('Identity Catalog', `${EXP.Catalog.identities.length} reviewed source identities. Context rules remain active for ambiguous terms.`); const search = el('input', { type: 'search', class: 'search', placeholder: 'Search identities and aliases', 'aria-label': 'Search identity catalog' }); const list = el('div', { class: 'identity-list' });
-    const paint = () => { const query=search.value.trim(); const results=EXP.Catalog.search(query); list.replaceChildren(...results.slice(0,3).map((identity) => identityRow(identity, state))); if (!list.childElementCount) list.append(el('p', { class: 'empty' }, 'No identities match this search.')); };
-    search.addEventListener('input', paint); paint(); section.append(search, list);
+    let offset = 0;
+    const pagination = el('div', { class: 'button-grid' });
+    const count = el('p', { class: 'catalog-results', role: 'status' });
+    section.append(switchControl('Romantic identities', '', state.includeRomantic, (includeRomantic) => update({ includeRomantic }, 'romantic-identities')));
+    section.append(el('p', {}, 'Include romantic and combined aroace labels in page highlighting. Definitions stay available in this catalog.'));
+    section.append(el('p', {}, 'Check marks indicate Wikipedia or peer-reviewed source support.'));
+    const previous = button('Previous results', () => { offset = Math.max(0, offset - 3); paint(); });
+    const next = button('Next results', () => { offset += 3; paint(); });
+    pagination.append(previous, next);
+    const paint = () => {
+      const results = EXP.Catalog.search(search.value.trim());
+      offset = Math.min(offset, Math.max(0, Math.floor((results.length - 1) / 3) * 3));
+      list.replaceChildren(...results.slice(offset, offset + 3).map(identity => identityRow(identity, state)));
+      if (!list.childElementCount) list.append(el('p', { class: 'empty' }, 'No identities match this search.'));
+      count.textContent = results.length ? `${offset + 1}–${Math.min(offset + 3, results.length)} of ${results.length} entries` : '0 entries';
+      previous.disabled = offset === 0; next.disabled = offset + 3 >= results.length;
+      pagination.hidden = results.length <= 3; product?.refresh();
+    };
+    search.addEventListener('input', () => { offset = 0; paint(); }); paint(); section.append(search, list, count, pagination);
     section.append(actionRow('Restore catalog defaults', 'Enables all reviewed identities without changing context protection.', () => { update({ disabledIdentities: [] }, 'identity-defaults'); announce('Catalog defaults restored.'); }, 'Restore'));
     return section;
   }
@@ -3901,27 +8069,24 @@ EXP.UI = (() => {
   }
   const routeRenderers = { page: renderPage, style: renderHighlightStyle, look: renderLook, tools: renderTools, sites: renderSites, system: renderSettings };
   function render() {
-    if (!nav) return;
     engineState = EXP.Engine.snapshot({ includeMatchText: false });
-    for (const item of nav.querySelectorAll(':scope > .tool-panel > .route')) {
-      const active = item.dataset.route === currentRoute;
-      if (active) lastRoute = currentRoute;
-      item.classList.toggle('last-opened', item.dataset.route === lastRoute);
-      const body = item.parentElement.querySelector('.route-body');
-      item.setAttribute('aria-current', active ? 'page' : 'false');
-      item.setAttribute('aria-expanded', String(active));
-      body.hidden = !active;
-      if (active) { workspace = body; body.replaceChildren(routeRenderers[currentRoute]()); }
-    }
-    panel.dataset.route = currentRoute || 'collapsed'; chrome?.update();
+    product?.renderActive();
+    product?.refresh();
   }
-  function setOpen(value, focus = true) { open = Boolean(value); panel.hidden = !open; launcher.setAttribute('aria-expanded', String(open)); chrome?.state(open); if (open) { currentRoute='';render(); if (focus) EXP.Core.focusMenuSurface(panel); } else if (focus) launcher.focus(); }
   function bindKeys(event) {
-    if (EXP.Settings.snapshot().shortcut && event.altKey && `Alt+${event.key.toUpperCase()}` === EXP.Settings.snapshot().shortcut.toUpperCase()) { event.preventDefault(); setOpen(!open); }
-    if (!open) return;
-    if (event.key === 'Escape') { event.preventDefault(); if (importDraft) { importDraft = null; render(); announce('Import draft cancelled.'); } else setOpen(false); return; }
+    const shortcut = EXP.Settings.snapshot().shortcut;
+    const defaultShortcut = event.shiftKey && event.key.toLowerCase() === 'p';
+    const savedShortcut = shortcut && !event.shiftKey && `Alt+${event.key.toUpperCase()}` === shortcut.toUpperCase();
+    if (event.altKey && !event.repeat && !event.ctrlKey && !event.metaKey && (defaultShortcut || savedShortcut)) {
+      event.preventDefault(); product?.toggle();
+    }
+    if (!product?.isOpen) return;
+    if (event.key === 'Escape' && importDraft) {
+      event.preventDefault(); event.stopImmediatePropagation();
+      importDraft = null; render(); announce('Import draft cancelled.'); return;
+    }
     if (event.key === 'Tab') {
-      const focusable = [...panel.querySelectorAll('button:not(:disabled),select:not(:disabled),input:not(:disabled),summary,[tabindex]:not([tabindex="-1"])')].filter((node) => !node.hidden && node.getClientRects().length);
+      const focusable = [...panel.querySelectorAll('button:not(:disabled),select:not(:disabled),input:not(:disabled),summary,[tabindex]:not([tabindex="-1"])')].filter(node => !node.hidden && node.getClientRects().length);
       if (!focusable.length) return;
       const first = focusable[0], last = focusable.at(-1), active = shadow.activeElement;
       if (active === panel) { event.preventDefault(); (event.shiftKey ? last : first).focus(); }
@@ -3929,24 +8094,72 @@ EXP.UI = (() => {
       else if (!event.shiftKey && active === last) { event.preventDefault(); first.focus(); }
     }
   }
-  function outsidePointer(event) { if (open && !event.composedPath().includes(host) && !importDraft) setOpen(false); }
+  function outsidePointer(event) { if (product?.isOpen && !event.composedPath().includes(host) && !importDraft) product.close(); }
   function init() {
     if (window.top !== window.self || host) return;
-    host = el('div', { id: 'exp-prisma-root', 'data-exp-owned': '1' }); shadow = host.attachShadow({ mode: 'open' });
-    const styleCss = '';
-    launcher = el('button', { type: 'button', class: 'launcher', 'aria-label': 'Open PRISMA', 'aria-expanded': 'false', 'data-help': 'Drag To Move · Click To Open PRISMA' }); launcher.append(el('img',{class:'launcher-icon',src:ICON_URL,alt:''})); launcher.addEventListener('click', () => setOpen(!open));
-    panel = el('aside', { class: 'panel', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'PRISMA settings' }); panel.hidden = true;
-    const head = el('header', { class: 'head' }); const brand = el('div', { class: 'header-brand' }); brand.append(el('img', { class: 'header-badge', src: ICON_URL, alt: '' })); const copy = el('div', { class: 'header-copy' }); const title = el('div', { class: 'title-row' }); title.append(el('h2', {}, 'PRISMA'), button(`v${EXP.VERSION}`, () => { if(updateCard?.hidden !== false || updateCard.dataset.noticeKind!=='current') showNotice(updateCard,{kicker:'Current Version',title:'PRISMA Changelog',version:EXP.VERSION,text:`What's new in v${EXP.VERSION}.`,details:EXP.ReleaseNotes.current(),available:false},true); else hideUpdateCard(); }, 'version')); copy.append(title, el('div', { class: 'subtitle' }, 'Your self-identity. Recognized.')); brand.append(copy); head.append(brand, button('×', () => setOpen(false), 'close'));
-    live = el('p', { class: 'live', role: 'status', 'aria-live': 'polite' }); nav = el('nav', { class: 'nav', 'aria-label': 'PRISMA sections' });
-    for (const [id, name] of routeNames) { const section = el('section', { class: 'tool-panel' }); const item = button(name, () => { currentRoute = currentRoute===id?'':id; render(); }, 'route'); item.dataset.route = id; item.setAttribute('aria-controls', `exp-prisma-route-${id}`); const body = el('div', { class: 'route-body', id: `exp-prisma-route-${id}` }); body.hidden = true; section.append(item, body); nav.append(section); }
-    panel.append(head, el('div', { class: 'header-divider' }), live, nav);updateCard=makeNotice();toast=el('div',{class:'toast'});toast.hidden=true;EXP.Core.injectStyle(shadow,styleCss,{expPrismaUi:'1'});shadow.append(panel, updateCard, launcher,toast); (document.body || document.documentElement).append(host);
-    applyUiTheme(EXP.Settings.snapshot().uiTheme);launcherCleanup = EXP.Core.registerLauncher(host, { productId: 'prisma', priority: 40 });chrome=EXP.MenuChrome.create({id:'prisma',host,shadow,launcher,panel,getSettings:()=>EXP.Settings.snapshot(),setOpen,shortcutKey:'p'});const prev=EXP.Core.consumeVersionChange('prisma',EXP.VERSION,'exp:v3:prisma:last-version-v2');if(prev)showUpdateCard({},true,prev);if(EXP.Settings.snapshot().updateNotifications)EXP.Updates.check(false).then(r=>{if(r.available)showUpdateCard(r);}); unsubscribe = EXP.Engine.subscribe((value) => { engineState = value; if (open && ['page', 'tools', 'system'].includes(currentRoute)) render(); }); addEventListener('keydown', bindKeys); document.addEventListener('pointerdown', outsidePointer, true); render();
+    engineState = EXP.Engine.snapshot({ includeMatchText: false });
+    product = ExtraPotionsCore.createProduct({
+      id: 'prisma', name: 'PRISMA', version: EXP.VERSION,
+      subtitle: 'Your self-identity. Recognized.', artwork: ICON_URL,
+      theme: PRODUCT_THEME, priority: 40,
+      getSettings: () => EXP.Settings.snapshot(),
+      onSettings: (next, reason) => update(next, reason),
+      sections: routeNames.map(([id, label]) => ({ id, label, render: () => routeRenderers[id]() })),
+    });
+    ({ host, shadow, launcher, panel } = product);
+    EXP.Core.injectStyle(shadow, '.catalog-detail{padding:8px;margin:4px 0 8px;border:1px solid var(--theme-line);border-radius:7px;background:var(--theme-bg);font-size:10px;line-height:1.45;overflow-wrap:anywhere}.catalog-detail[hidden]{display:none!important}.catalog-detail p{margin:6px 0}.catalog-detail a{display:block;color:var(--theme-accent2);margin-top:5px}.catalog-palette{height:20px;border:1px solid var(--theme-line);border-radius:4px}', { expPrismaCatalog: '1' });
+    panel.classList.add('panel');
+    panel.setAttribute('aria-modal', 'true');
+    const nav = panel.querySelector('nav');
+    nav.classList.add('nav');
+    for (const item of nav.querySelectorAll('[data-section]')) {
+      item.classList.add('route');
+      const body = item.parentElement.querySelector('.route-body');
+      body.id = `exp-prisma-route-${item.dataset.section}`;
+      item.setAttribute('aria-controls', body.id);
+    }
+    const syncSectionState = () => {
+      for (const item of nav.querySelectorAll('[data-section]')) item.setAttribute('aria-current', item.getAttribute('aria-expanded') === 'true' ? 'page' : 'false');
+    };
+    nav.addEventListener('click', syncSectionState);
+    launcher.addEventListener('click', syncSectionState);
+    live = el('p', { class: 'live', role: 'status', 'aria-live': 'polite' });
+    panel.querySelector('nav').before(live);
+    toast = el('div', { class: 'toast', role: 'status', 'aria-live': 'polite', hidden: true });
+    (shadow.querySelector('.exp-core-theme') || shadow).append(toast);
+    noticeController = ExtraPotionsCore.createProductNotice({
+      host, shadow, panel, versionButton: product.versionButton,
+      releaseUrl: 'https://github.com/ExtraPotions/PRISMA/releases',
+      installUrl: 'https://github.com/ExtraPotions/PRISMA/releases/latest/download/prisma.user.js',
+      onVersion: () => {
+        if (updateCard?.hidden === false && updateCard.dataset.noticeKind === 'current') hideUpdateCard();
+        else showNotice(updateCard, { kicker:'Current Version', title:'PRISMA Changelog', version:EXP.VERSION, text:`What's new in v${EXP.VERSION}.`, details:EXP.ReleaseNotes.current(), available:false });
+      },
+    });
+    updateCard = noticeController.element;
+    applyUiTheme(EXP.Settings.snapshot().uiTheme);
+    const previous = EXP.Core.consumeVersionChange('prisma', EXP.VERSION, 'exp:v3:prisma:last-version-v2');
+    if (previous) showUpdateCard({}, true, previous);
+    if (EXP.Settings.snapshot().updateNotifications) EXP.Updates.check(false).then(result => { if (host && result.available) showUpdateCard(result); });
+    unsubscribe = EXP.Engine.subscribe(value => {
+      engineState = value;
+      if (product?.isOpen && panel.querySelector('[data-section="page"][aria-expanded="true"],[data-section="system"][aria-expanded="true"]')) render();
+    });
+    document.addEventListener('keydown', bindKeys, true);
+    document.addEventListener('pointerdown', outsidePointer, true);
+    render();
   }
-  function cleanup() { removeEventListener('keydown', bindKeys); document.removeEventListener('pointerdown', outsidePointer, true); unsubscribe?.(); launcherCleanup?.();chrome?.destroy();clearTimeout(toastTimer);clearTimeout(updateTimer); host?.remove(); host = shadow = launcher = panel = nav = workspace = live = toast = chrome = null; }
-  return Object.freeze({ init, cleanup, open: () => setOpen(true), refresh: render });
+  function cleanup() {
+    document.removeEventListener('keydown', bindKeys, true);
+    document.removeEventListener('pointerdown', outsidePointer, true);
+    unsubscribe?.(); clearTimeout(toastTimer); noticeController?.destroy(); product?.destroy();
+    host = shadow = launcher = panel = live = toast = product = noticeController = updateCard = null;
+    importDraft = null;
+  }
+  return Object.freeze({ init, cleanup, open: () => product?.open(), refresh: render });
 })();
 
-EXP.VERSION = '3.0.32';
+EXP.VERSION = '3.1.0';
 ExtraPotionsCore.registerDiagnosticsProduct('prisma', EXP.VERSION);
 EXP.App = (() => {
   let scheduler, navigationCleanup, settingsCleanup, lifecycle;
@@ -3967,7 +8180,7 @@ EXP.App = (() => {
   async function disable() { scheduler.stop(); EXP.Engine.stop(); }
   async function cleanup() { scheduler?.stop(); settingsCleanup?.(); navigationCleanup?.(); EXP.UI.cleanup(); EXP.Engine.cleanup(); }
   function start() {
-    lifecycle = EXP.Core.register({ id: 'prisma', version: EXP.VERSION, capabilities: ['lifecycle', 'settings', 'diagnostics', 'dom-scheduler', 'navigation', 'launcher', 'ui'] }, { initialize, enable, disable, cleanup });
+    lifecycle = EXP.Core.register({ id: 'prisma', version: EXP.VERSION, coreRange: '^3.3.4', capabilities: ['lifecycle', 'settings', 'diagnostics', 'dom-scheduler', 'navigation', 'launcher', 'ui'] }, { initialize, enable, disable, cleanup });
     lifecycle.initialize().then(() => lifecycle.enable()).catch((error) => EXP.Core.safeError(error, 'prisma'));
     return lifecycle;
   }

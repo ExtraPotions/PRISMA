@@ -1,3 +1,13 @@
+## 3.1.0 — 2026-09-26
+
+- Rebuilds on exp-core 3.3.4 with the shared Dropper-derived menu, launcher isolation, and update notices.
+- Expands the catalog to 135 entries and 257 recognition terms, with multiple public references and separate definition/flag evidence.
+- Adds Wikipedia-listed check marks and an optional Romantic identities switch; unresolved references remain explicit.
+- Documents 112 flag designs and verifies 30 palettes; preserves neutral rendering where colors are unverified.
+- Adds Pulse, Shimmer, and Glow animations with saved preferences and reduced-motion support.
+- Fixes invisible gradient text on Wikipedia dark-mode portals through the shared text-gradient helper.
+- Preserves existing saved IDs, preferences, context protection, and reversible highlighting.
+
 ## 3.0.32 - 2026-09-25
 
 - Uses the same menu-width notice surface for Current Version, Update Available, and Update Complete, matching Dropper.

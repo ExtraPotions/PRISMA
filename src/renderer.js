@@ -14,9 +14,13 @@ EXP.Renderer = (() => {
 .${HIT}[data-hidden="1"]{background:none!important;box-shadow:none!important;outline:0!important;color:inherit!important;-webkit-text-fill-color:currentColor!important;text-decoration:none!important}
 .${HIT}[data-contrast="1"]{outline:2px solid currentColor;outline-offset:1px;background:Canvas!important;color:CanvasText!important;-webkit-text-fill-color:CanvasText!important}
 .${HIT}[data-animate="1"]:not([data-hidden="1"]):not([data-contrast="1"]){animation:exp-prisma-pulse 5s ease-in-out infinite}
+.${HIT}[data-animate="1"][data-animation="shimmer"]:not([data-hidden="1"]):not([data-contrast="1"]){animation-name:exp-prisma-shimmer}
+.${HIT}[data-animate="1"][data-animation="glow"]:not([data-hidden="1"]):not([data-contrast="1"]){animation-name:exp-prisma-glow}
 @keyframes exp-prisma-pulse{0%,100%{opacity:1}50%{opacity:.65}}
+@keyframes exp-prisma-shimmer{0%,100%{filter:brightness(1)}50%{filter:brightness(1.45)}}
+@keyframes exp-prisma-glow{0%,100%{text-shadow:0 0 0 transparent}50%{text-shadow:0 0 5px var(--prisma-primary)}}
 @media(prefers-reduced-motion:reduce){.${HIT}[data-motion="system"]{animation:none!important}}
-@media(forced-colors:active){.${HIT}{background:none!important;color:CanvasText!important;-webkit-text-fill-color:CanvasText!important;outline:1px solid Highlight;text-decoration:underline}}
+@media(forced-colors:active){.${HIT}[data-style]{background:none!important;color:CanvasText!important;-webkit-text-fill-color:CanvasText!important;outline:1px solid Highlight;text-decoration:underline;animation:none!important}}
 `;
   function ensureStyle(root = document) {
     if (styles.has(root)) return;
@@ -32,6 +36,9 @@ EXP.Renderer = (() => {
   }
   function applyInlineVisual(span, style, primary, weight, softFill) {
     clearInlineVisual(span);
+    if (style === 'gradient') {
+      ExtraPotionsCore.applyTextGradient(span, 'linear-gradient(90deg,var(--prisma-colors))');
+    }
     if (style === 'underline' || style === 'soft-fill') {
       span.style.setProperty('background-clip', 'border-box', 'important');
       span.style.setProperty('-webkit-background-clip', 'border-box', 'important');
@@ -58,12 +65,16 @@ EXP.Renderer = (() => {
   }
   function applyVisual(span, record, settings) {
     currentSettings = settings;
-    const colors = record.identity.colors;
+    const hasPalette = record.identity.colors.length > 0;
+    const colors = hasPalette ? record.identity.colors : ['currentColor'];
+    const visualStyle = hasPalette ? settings.style : 'underline';
     const levels = { subtle: ['2px', '14%'], balanced: ['3px', '22%'], vivid: ['4px', '32%'] };
-    span.dataset.style = settings.style;
+    span.dataset.style = visualStyle;
+    span.dataset.palette = hasPalette ? record.identity.flag?.status || 'legacy' : 'neutral';
     span.dataset.indicator = settings.nonColorIndicator;
     span.dataset.contrast = settings.highContrast ? '1' : '0';
     span.dataset.animate = settings.animation && settings.reducedMotion !== 'reduce' ? '1' : '0';
+    span.dataset.animation = settings.animationStyle || 'pulse';
     span.dataset.motion = settings.reducedMotion;
     span.dataset.hidden = hidden ? '1' : '0';
     span.style.setProperty('--prisma-colors', colors.join(','));
@@ -74,8 +85,8 @@ EXP.Renderer = (() => {
     const alpha = ({ subtle: .14, balanced: .22, vivid: .32 })[settings.intensity] || .22;
     const softFill = hex ? `rgba(${parseInt(hex[1].slice(0,2),16)},${parseInt(hex[1].slice(2,4),16)},${parseInt(hex[1].slice(4,6),16)},${alpha})` : colors[0];
     span.style.setProperty('--prisma-soft-fill', softFill);
-    applyInlineVisual(span, hidden || settings.highContrast ? 'off' : settings.style, colors[0], levels[settings.intensity][0], softFill);
-    span.title = settings.labels ? record.identity.label : '';
+    applyInlineVisual(span, hidden || settings.highContrast ? 'off' : visualStyle, colors[0], levels[settings.intensity][0], softFill);
+    span.title = settings.labels ? [record.identity.label, record.identity.definition].filter(Boolean).join(': ') : '';
     if (settings.screenReaderBehavior === 'announce-on-focus') {
       span.tabIndex = -1;
       span.setAttribute('aria-label', `${span.textContent}, ${record.identity.label} identity-language match`);
