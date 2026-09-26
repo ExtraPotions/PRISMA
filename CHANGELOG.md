@@ -1,3 +1,8 @@
+## 3.1.1 — 2026-09-26
+
+- Restores Firefox startup on pages with restrictive security policies using content injection.
+- Keeps settings copies in the userscript realm and bundles exp-core 3.3.5 with idle menu fixes.
+
 ## 3.1.0 — 2026-09-26
 
 - Rebuilds on exp-core 3.3.4 with the shared Dropper-derived menu, launcher isolation, and update notices.

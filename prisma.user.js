@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PRISMA
 // @namespace    https://github.com/ExtraPotions
-// @version      3.1.0
+// @version      3.1.1
 // @description  Local LGBTQ+ identity-language recognition with context-aware highlighting.
 // @icon         https://raw.githubusercontent.com/ExtraPotions/PRISMA/main/assets/prisma-launcher.svg
 // @tag          LGBTQ+
@@ -16,7 +16,7 @@
 // @match        http://*/*
 // @match        https://*/*
 // @run-at       document-start
-// @inject-into  page
+// @inject-into  content
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @grant        GM_addStyle
@@ -33,7 +33,7 @@
 'use strict';
 const EXP = Object.create(null);
 
-// Generated from the approved Dropper v3.3.2 install artifact. Do not edit.
+// Generated from the approved Dropper v3.3.3 install artifact. Do not edit.
 const DropperReference = (() => {
 const LAUNCHER_ORDER_KEY = "exp:v3:launcher-order";
 const LAUNCHER_GRID_DELTA_KEY = "exp:v3:launcher-grid-delta";
@@ -1518,12 +1518,12 @@ function createProductLifecycle(shared) {
   });
 }
 
-// Product-neutral host for the code extracted from Dropper 3.3.2.
+// Product-neutral host for the code extracted from Dropper 3.3.3.
 // Product engines own their settings, content, and actions. Core owns shared UI.
 const ExtraPotionsCore = (() => {
   'use strict';
-  const version = '3.3.4';
-  const sourceVersion = '3.3.2';
+  const version = '3.3.5';
+  const sourceVersion = '3.3.3';
   const protocol = 'exp-core-coordination-v1';
   const gridProtocol = 'exp-launcher-grid-v3';
   const GRID_ORDER = 'exp:v3:launcher-order';
@@ -1535,6 +1535,9 @@ const ExtraPotionsCore = (() => {
   const controllers = new WeakMap();
   const tokenNames = ['bg', 'panel', 'line', 'text', 'muted', 'accent', 'accent2'];
   // Callers own foreground, accessibility fallbacks, and removing these inline properties.
+  // Settings use the persisted JSON schema. Parse in the caller's userscript realm
+  // instead of returning a native structuredClone page-realm Xray wrapper.
+  function cloneSettings(value) { return JSON.parse(JSON.stringify(value)); }
   function applyTextGradient(element, backgroundImage) {
     const properties = {'background-color':'transparent','background-image':backgroundImage,'background-clip':'text','-webkit-background-clip':'text','background-size':'auto','background-position':'0% 0%','background-repeat':'repeat'};
     for (const [property,value] of Object.entries(properties)) element.style.setProperty(property,value,'important');
@@ -2004,7 +2007,7 @@ const ExtraPotionsCore = (() => {
     panel.querySelectorAll('button.action,button.secondary,button.primary,button.compact,.diagnostics-controls button,.button-grid button,.menu-footer button').forEach(node => { if (!node.dataset.expPart) node.classList.add('life-btn'); });
     panel.querySelectorAll('.route-body').forEach(body => body.classList.toggle('fl-tool-hidden', body.hidden));
     const active = panel.querySelector('.fl-tool-header[aria-expanded="true"]');
-    panel.querySelectorAll('.fl-tool-header').forEach(header => { if (active) header.classList.toggle('last-opened', header === active); const chevron = header.querySelector('.fl-tool-chevron'); if (chevron) chevron.textContent = header.getAttribute('aria-expanded') === 'true' ? '▾' : '▸'; });
+    panel.querySelectorAll('.fl-tool-header').forEach(header => { if (active) header.classList.toggle('last-opened', header === active); const chevron = header.querySelector('.fl-tool-chevron'); if (chevron) { const text = header.getAttribute('aria-expanded') === 'true' ? '▾' : '▸'; if (chevron.textContent !== text) chevron.textContent = text; } });
   }
   function normalizeHeader(panel) {
     const head = panel.querySelector('.menu-head,header,.head,.ward-header'); if (!head) return;
@@ -2053,7 +2056,7 @@ const ExtraPotionsCore = (() => {
     const versionButton=panel.querySelector('.version,[data-exp-part="version"]');
     const menuNotices=[...themeRoot.querySelectorAll('.update-notice,.changelog')].map(notice=>createMenuNotice({host,shadow,panel,notice,versionButton:notice.classList.contains('changelog')?versionButton:null,manageVersion:false,durationMs:30000}));
     if (launcherSrc) panel.querySelectorAll('.header-icon img').forEach(image => image.src = launcherSrc);
-    host.dataset.coreVersion = version; host.dataset.coreSource = 'Dropper/3.3.2';
+    host.dataset.coreVersion = version; host.dataset.coreSource = 'Dropper/3.3.3';
     let choices = themes(productTheme), selected = choices.at(-1), open = false, destroyed = false, timer = 0, deadline = 0, frame = 0;
     const removers = [];
     const on = (node,type,fn,opts) => { node.addEventListener(type,fn,opts); removers.push(() => node.removeEventListener(type,fn,opts)); };
@@ -2453,7 +2456,7 @@ const ExtraPotionsCore = (() => {
   if(document.documentElement)startGrid();else addEventListener('DOMContentLoaded',startGrid,{once:true});
   document.addEventListener('exp-core:coordination',scheduleGrid);
   addEventListener('resize',scheduleGrid,{passive:true});
-  const api = Object.freeze({version,sourceVersion,protocol,gridProtocol,reference:DropperReference,css:canonicalCss,themes,create,createProduct,createSupportControl,createProductNotice,createLifecycle:()=>createProductLifecycle(api),registerLauncher,layout:layoutGrid,menuWidthForMode,applyTextGradient,injectStyle,applyTheme,applyMatteToggleChrome,applyTwoColumnSettingsGrid,applyContentDrivenMenuLayout,createThemeSwatches,createFloatingNotice,createMenuNotice,createReleaseUpdateChecker,registerFloatingNotice,layoutFloatingNotices,claimNotice,consumeVersionChange,focusMenuSurface,registerDiagnosticsProduct:ExtraPotionsDiagnostics.registerProduct,productCompatibility:ExtraPotionsDiagnostics.compatibility,createDiagnosticsReport,downloadDiagnostics,createDiagnosticsControls,compareVersions:DropperReference.compareVersions});
+  const api = Object.freeze({version,sourceVersion,protocol,gridProtocol,reference:DropperReference,css:canonicalCss,themes,create,createProduct,createSupportControl,createProductNotice,createLifecycle:()=>createProductLifecycle(api),registerLauncher,layout:layoutGrid,menuWidthForMode,cloneSettings,applyTextGradient,injectStyle,applyTheme,applyMatteToggleChrome,applyTwoColumnSettingsGrid,applyContentDrivenMenuLayout,createThemeSwatches,createFloatingNotice,createMenuNotice,createReleaseUpdateChecker,registerFloatingNotice,layoutFloatingNotices,claimNotice,consumeVersionChange,focusMenuSurface,registerDiagnosticsProduct:ExtraPotionsDiagnostics.registerProduct,productCompatibility:ExtraPotionsDiagnostics.compatibility,createDiagnosticsReport,downloadDiagnostics,createDiagnosticsControls,compareVersions:DropperReference.compareVersions});
   return api;
 })();
 
@@ -7436,7 +7439,7 @@ EXP.Settings = (() => {
   const uniqueStrings = (value, maximum = 500) => Array.isArray(value) ? [...new Set(value.filter((item) => typeof item === 'string'))].slice(0, maximum) : [];
   function validate(candidate) {
     if (!candidate || typeof candidate !== 'object' || Array.isArray(candidate)) throw Object.assign(new Error('Settings must be an object'), { code: 'SETTINGS_TYPE' });
-    const next = structuredClone(defaults);
+    const next = ExtraPotionsCore.cloneSettings(defaults);
 	const themeAliases = { warm: 'ember', discord: 'glacier', pine: 'verdant', obsidian: 'contrast' };
 	const normalizedUiTheme = themeAliases[candidate.uiTheme] || candidate.uiTheme;
     for (const name of ['enabled', 'animation', 'labels', 'ambiguityProtection', 'surroundingContext', 'includeRomantic', 'highContrast', 'safeMode', 'updateNotifications', 'menuAutoClose', 'menuNotifications']) if (typeof candidate[name] === 'boolean') next[name] = candidate[name];
@@ -7474,7 +7477,7 @@ EXP.Settings = (() => {
     rawWrite('settings', state);
     return snapshot();
   }
-  function snapshot() { return structuredClone(state || defaults); }
+  function snapshot() { return ExtraPotionsCore.cloneSettings(state || defaults); }
   function replace(value, reason = 'replace') { const next = validate(value); rawWrite('settings', next); state = next; for (const listener of listeners) listener(snapshot(), reason); return snapshot(); }
   function update(patch, reason = 'update') { return replace({ ...snapshot(), ...patch }, reason); }
   function subscribe(listener) { listeners.add(listener); return () => listeners.delete(listener); }
@@ -7825,10 +7828,11 @@ EXP.Engine = (() => {
   return Object.freeze({ start, stop, cleanup, rebuild, navigation, processBatch, snapshot, navigateNext: () => navigate(1), navigatePrevious: () => navigate(-1), navigateTo, setTemporaryHidden, highlightAll: () => setTemporaryHidden(false), subscribe(listener) { listeners.add(listener); return () => listeners.delete(listener); } });
 })();
 
-EXP.VERSION = '3.1.0';
+EXP.VERSION = '3.1.1';
 
 EXP.ReleaseNotes = (() => {
   const notes = Object.freeze({
+    '3.1.1': ["Restores Firefox startup on pages with restrictive security policies using content injection.","Keeps settings copies in the userscript realm and bundles exp-core 3.3.5 with idle menu fixes."],
     '3.1.0': Object.freeze([
       'Adds Pulse, Shimmer, and Glow animation styles with saved preferences and reduced-motion support.',
       'Keeps gradient-highlighted text visible when page dark-mode styles override element backgrounds, including Wikipedia portals.',
@@ -8159,7 +8163,7 @@ EXP.UI = (() => {
   return Object.freeze({ init, cleanup, open: () => product?.open(), refresh: render });
 })();
 
-EXP.VERSION = '3.1.0';
+EXP.VERSION = '3.1.1';
 ExtraPotionsCore.registerDiagnosticsProduct('prisma', EXP.VERSION);
 EXP.App = (() => {
   let scheduler, navigationCleanup, settingsCleanup, lifecycle;

@@ -19,6 +19,17 @@ async function fixture(t, prefix = '', exposeLifecycle = false) {
   return { page, errors };
 }
 
+test('startup and saved settings do not depend on native cross-realm cloning', async t => {
+  const { page, errors } = await fixture(t, "window.structuredClone=()=>{throw Error('Native clone returned a foreign realm');};", true);
+  await page.evaluate(() => window.testPrisma.Settings.update({ animation: true, animationStyle: 'glow', includeRomantic: true }));
+  const state = await page.evaluate(() => ({ settings: window.testPrisma.Settings.snapshot(), lifecycle: window.testPrisma.App.lifecycle.state }));
+  assert.equal(state.lifecycle, 'enabled');
+  assert.equal(state.settings.animationStyle, 'glow');
+  assert.equal(state.settings.includeRomantic, true);
+  assert.equal(await page.locator('#exp-prisma-root .launcher').isVisible(), true);
+  assert.deepEqual(errors, []);
+});
+
 test('document-start launcher cannot paint a hostile full-page backdrop', async t => {
   const { page, errors } = await fixture(t);
   const result = await page.locator('#exp-prisma-root').evaluate(host => {
@@ -54,7 +65,7 @@ test('schema-1 preferences survive the rebuild and lifecycle cleanup restores th
   }));
   for (const [key, value] of Object.entries(settings)) assert.deepEqual(state.settings[key], value);
   assert.equal(state.version, require('../package.json').version);
-  assert.equal(state.core, '3.3.4');
+  assert.equal(state.core, '3.3.5');
   assert.equal(state.lifecycle, 'enabled');
   assert.equal(state.style, 'soft-fill');
   await page.evaluate(async () => { await window.testPrisma.App.lifecycle.disable(); });
@@ -89,13 +100,13 @@ test('Escape cancels an import draft before closing the shared menu', async t =>
   assert.equal(await page.locator('#exp-prisma-root .panel').isVisible(), false);
 });
 
-test('bundled core is the verified 3.3.4 artifact derived from Dropper 3.3.2', () => {
+test('bundled core is the verified 3.3.5 artifact derived from Dropper 3.3.3', () => {
   const crypto = require('node:crypto');
   const bundle = fs.readFileSync(path.resolve(__dirname, '../vendor/exp-core/exp-core.js'));
   const manifest = require('../vendor/exp-core/manifest.json');
-  assert.equal(crypto.createHash('sha256').update(bundle).digest('hex'), '9f4f4e8769054b9c7f69e3cc5b8c0c2c5dcf44bee3135e51ec94ac4215119259');
-  assert.equal(manifest.coreVersion, '3.3.4');
-  assert.equal(manifest.source.sourceVersion, '3.3.2');
+  assert.equal(crypto.createHash('sha256').update(bundle).digest('hex'), 'df5a9ad21ddf5a3a07e984f54c6f224998310cd5b35329f48279b8c383c233f8');
+  assert.equal(manifest.coreVersion, '3.3.5');
+  assert.equal(manifest.source.sourceVersion, '3.3.3');
 });
 
 test('current changelog uses shared menu geometry at every width', async t => {

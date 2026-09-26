@@ -1,7 +1,8 @@
-EXP.VERSION = '3.1.0';
+EXP.VERSION = '3.1.1';
 
 EXP.ReleaseNotes = (() => {
   const notes = Object.freeze({
+    '3.1.1': ["Restores Firefox startup on pages with restrictive security policies using content injection.","Keeps settings copies in the userscript realm and bundles exp-core 3.3.5 with idle menu fixes."],
     '3.1.0': Object.freeze([
       'Adds Pulse, Shimmer, and Glow animation styles with saved preferences and reduced-motion support.',
       'Keeps gradient-highlighted text visible when page dark-mode styles override element backgrounds, including Wikipedia portals.',

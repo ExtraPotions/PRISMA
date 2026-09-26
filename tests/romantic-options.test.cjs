@@ -1,6 +1,6 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
-function load(){const context={EXP:{},structuredClone,location:{hostname:'test.example'}};for(const file of ['catalog-data.js','catalog.js','matcher.js','settings.js'])vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../src',file),'utf8'),context);return context.EXP;}
+function load(){const context={EXP:{},ExtraPotionsCore:{cloneSettings:value=>JSON.parse(JSON.stringify(value))},location:{hostname:'test.example'}};for(const file of ['catalog-data.js','catalog.js','matcher.js','settings.js'])vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../src',file),'utf8'),context);return context.EXP;}
 test('romantic recognition is opt-in, persists through export, and does not fall back inside combined labels',()=>{
  const exp=load();const defaults=exp.Settings.load();
  assert.equal(defaults.includeRomantic,false);

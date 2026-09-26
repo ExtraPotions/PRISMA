@@ -23,6 +23,7 @@ test('distribution metadata and privacy boundaries are present', () => {
   assert.doesNotMatch(source, /@resource\s+/);
   assert.doesNotMatch(source, /@grant\s+GM_getResourceText/);
   assert.match(source, /@grant\s+unsafeWindow/);
+  assert.match(source, /@inject-into\s+content/);
   assert.match(source, /createDiagnosticsReport\('PRISMA'/);
   assert.match(source, /adoptedStyleSheets/);
   assert.match(source, /EXP\.App\.start\(\)/);

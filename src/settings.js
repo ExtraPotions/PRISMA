@@ -62,7 +62,7 @@ EXP.Settings = (() => {
   const uniqueStrings = (value, maximum = 500) => Array.isArray(value) ? [...new Set(value.filter((item) => typeof item === 'string'))].slice(0, maximum) : [];
   function validate(candidate) {
     if (!candidate || typeof candidate !== 'object' || Array.isArray(candidate)) throw Object.assign(new Error('Settings must be an object'), { code: 'SETTINGS_TYPE' });
-    const next = structuredClone(defaults);
+    const next = ExtraPotionsCore.cloneSettings(defaults);
 	const themeAliases = { warm: 'ember', discord: 'glacier', pine: 'verdant', obsidian: 'contrast' };
 	const normalizedUiTheme = themeAliases[candidate.uiTheme] || candidate.uiTheme;
     for (const name of ['enabled', 'animation', 'labels', 'ambiguityProtection', 'surroundingContext', 'includeRomantic', 'highContrast', 'safeMode', 'updateNotifications', 'menuAutoClose', 'menuNotifications']) if (typeof candidate[name] === 'boolean') next[name] = candidate[name];
@@ -100,7 +100,7 @@ EXP.Settings = (() => {
     rawWrite('settings', state);
     return snapshot();
   }
-  function snapshot() { return structuredClone(state || defaults); }
+  function snapshot() { return ExtraPotionsCore.cloneSettings(state || defaults); }
   function replace(value, reason = 'replace') { const next = validate(value); rawWrite('settings', next); state = next; for (const listener of listeners) listener(snapshot(), reason); return snapshot(); }
   function update(patch, reason = 'update') { return replace({ ...snapshot(), ...patch }, reason); }
   function subscribe(listener) { listeners.add(listener); return () => listeners.delete(listener); }
