@@ -58,11 +58,11 @@ test('animation has a changing rendered effect for every style and respects moti
   await page.emulateMedia({reducedMotion:'reduce'});
   assert.equal(await page.locator('.exp-prisma-hit').evaluate(node=>getComputedStyle(node).animationName),'none');
   await page.locator('#exp-prisma-root [data-section="look"]').click();
-  await page.locator('#exp-prisma-root select[aria-label="Reduced motion"]').selectOption('allow');
+  await page.locator('#exp-prisma-root select[aria-label="Reduce motion"]').selectOption('allow');
   assert.notEqual(await page.locator('.exp-prisma-hit').evaluate(node=>getComputedStyle(node).animationName),'none');
-  await page.locator('#exp-prisma-root select[aria-label="Reduced motion"]').selectOption('reduce');
+  await page.locator('#exp-prisma-root select[aria-label="Reduce motion"]').selectOption('reduce');
   assert.equal(await page.locator('.exp-prisma-hit').evaluate(node=>getComputedStyle(node).animationName),'none');
-  await page.locator('#exp-prisma-root select[aria-label="Reduced motion"]').selectOption('allow');
+  await page.locator('#exp-prisma-root select[aria-label="Reduce motion"]').selectOption('allow');
   await page.locator('#exp-prisma-root [data-section="style"]').click();
   await page.locator('#exp-prisma-root [aria-label="Animation"]').click();
   assert.equal(await page.locator('.exp-prisma-hit').evaluate(node=>getComputedStyle(node).animationName),'none');

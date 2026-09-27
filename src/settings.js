@@ -99,18 +99,12 @@ EXP.Settings = (() => {
   }
   function load() {
     const stored = rawRead('settings');
-    if(stored && rawRead('settings-version')!==EXP.VERSION)recovery.capture(stored,'before-update');
-    rawWrite('settings-version',EXP.VERSION);
     state = validate(stored || defaults);
     rawWrite('settings', state);
     return snapshot();
   }
-  const recovery = ExtraPotionsCore.createSettingsRecovery({read:()=>rawRead('backups'),write:value=>rawWrite('backups',value),validate});
-  function backups(){return recovery.list();}
-  function backup(){return recovery.capture(snapshot(),'manual');}
-  function restoreBackup(id){return replace(recovery.restore(id),'rollback');}
   function snapshot() { return ExtraPotionsCore.cloneSettings(state || defaults); }
-  function replace(value, reason = 'replace') { const next = validate(value); if(state&&JSON.stringify(next)!==JSON.stringify(state))recovery.capture(state,reason); rawWrite('settings', next); state = next; for (const listener of listeners) listener(snapshot(), reason); return snapshot(); }
+  function replace(value, reason = 'replace') { const next = validate(value);  rawWrite('settings', next); state = next; for (const listener of listeners) listener(snapshot(), reason); return snapshot(); }
   function update(patch, reason = 'update') { return replace({ ...snapshot(), ...patch }, reason); }
   function subscribe(listener) { listeners.add(listener); return () => listeners.delete(listener); }
   function effective(host = location.hostname) {
@@ -125,5 +119,5 @@ EXP.Settings = (() => {
     if (!payload || payload.product !== 'prisma' || payload.generation !== 3 || payload.schema !== SCHEMA) throw Object.assign(new Error('This is not a supported PRISMA V3 export'), { code: 'IMPORT_SCHEMA' });
     return validate(payload.settings);
   }
-  return Object.freeze({backups,backup,restoreBackup, PREFIX, SCHEMA, defaults, validate, load, snapshot, replace, update, subscribe, effective, exportData, prepareImport, hasStored: () => rawRead('settings') !== undefined });
+  return Object.freeze({PREFIX, SCHEMA, defaults, validate, load, snapshot, replace, update, subscribe, effective, exportData, prepareImport, hasStored: () => rawRead('settings') !== undefined });
 })();

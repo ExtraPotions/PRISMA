@@ -1,7 +1,8 @@
-EXP.VERSION = '3.1.4';
+EXP.VERSION = '3.1.5';
 
 EXP.ReleaseNotes = (() => {
   const notes = Object.freeze({
+    '3.1.5': ["Compacts System menus and keeps menu width controls together on one row.","Groups existing menu preferences consistently while preserving saved settings.","Removes automatic Settings Backup and its restore controls.","Adds a Bitcoin donation option with address copying and wallet support."],
     '3.1.4': ["Bundles exp-core 3.3.8 with section arrangement and viewport-safe menus.","Preserves the current identity catalog, romantic options, and phrase corrections.","Refreshes the README and feature screenshots in a horizontal gallery."],
     '3.1.3': ["Adds site-specific phrase corrections that leave matching text nodes unchanged.","Separates definition, flag-design, and exact-palette evidence review filters.","Documents 113 flag designs while keeping two definition references and 22 flag references unresolved.","Adds settings backups, rollback, and compatibility details through exp-core 3.3.7."],
     '3.1.2': ["Restores the donation button through the shared core default.","Bundles exp-core 3.3.6 so opening one launcher menu closes other product menus."],

@@ -1,3 +1,10 @@
+## 3.1.5 — 2026-09-26
+
+- Compacts System menus and keeps menu width controls together on one row.
+- Groups existing menu preferences consistently while preserving saved settings.
+- Removes automatic Settings Backup and its restore controls.
+- Adds a Bitcoin donation option with address copying and wallet support.
+
 ## 3.1.4 — 2026-09-26
 
 - Bundles exp-core 3.3.8 with section arrangement and viewport-safe menus.

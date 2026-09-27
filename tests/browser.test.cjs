@@ -548,7 +548,7 @@ test('menu routes use accurate labels and scoped section contents', async (t) =>
   assert.deepEqual(facts.appearance, ['Appearance', 'Accessibility']);
   assert.deepEqual(facts.language, ['Identity Catalog', 'Context Engine']);
   assert.deepEqual(facts.sites, ['Current Site']);
-  assert.deepEqual(facts.settings, ['Diagnostics', 'Menu & Data']);
+  assert.deepEqual(facts.settings, []);
 });
 
 test('README screenshots exist at stable docs paths', () => {
