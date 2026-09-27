@@ -10,6 +10,14 @@ Recognize LGBTQ+ identity terms in context, see their colors, and explore recogn
 [![Code: PolyForm Noncommercial 1.0.0](docs/badges/code.svg)](LICENSE-CODE.md)
 [![Artwork and documentation: CC BY-NC-SA 4.0](docs/badges/assets.svg)](LICENSE-ASSETS.md)
 
+## Get started
+
+1. Install a userscript manager such as [Violentmonkey](https://violentmonkey.github.io/get-it/) or [Tampermonkey](https://www.tampermonkey.net/).
+2. [Install PRISMA](https://github.com/ExtraPotions/PRISMA/raw/refs/heads/main/prisma.user.js) and confirm in your userscript manager.
+3. Refresh a page you want to use and open the product launcher.
+
+Open Highlights to explore matches on the current page. Use Highlight Style for colors and animation, Language for the catalog, and Sites for website preferences.
+
 ## What you can do
 
 - **Context-aware highlights:** find recognized identity terms while reducing ambiguous matches.
@@ -24,18 +32,10 @@ Screenshots show the current product with sample content.
 
 <table>
   <tr>
-    <td width="50%" valign="top" align="center"><a href="docs/screenshots/highlights-demo.png"><img src="docs/screenshots/highlights-demo.png" width="440" alt="PRISMA: identity highlights in sample text"></a><br><strong>Identity highlights in sample text</strong></td>
-    <td width="50%" valign="top" align="center"><a href="docs/screenshots/language.png"><img src="docs/screenshots/language.png" width="440" alt="PRISMA: searchable identity catalog"></a><br><strong>Searchable identity catalog</strong></td>
+    <td width="50%" valign="top" align="center"><a href="docs/screenshots/highlights-demo.png"><img src="docs/screenshots/highlights-demo.png" width="220" alt="PRISMA: identity highlights in sample text"></a><br><strong>Identity highlights in sample text</strong></td>
+    <td width="50%" valign="top" align="center"><a href="docs/screenshots/language.png"><img src="docs/screenshots/language.png" width="220" alt="PRISMA: searchable identity catalog"></a><br><strong>Searchable identity catalog</strong></td>
   </tr>
 </table>
-
-## Get started
-
-1. Install a userscript manager such as [Violentmonkey](https://violentmonkey.github.io/get-it/) or [Tampermonkey](https://www.tampermonkey.net/).
-2. [Install PRISMA](https://github.com/ExtraPotions/PRISMA/raw/refs/heads/main/prisma.user.js) and confirm in your userscript manager.
-3. Refresh a page you want to use and open the product launcher.
-
-Open Highlights to explore matches on the current page. Use Highlight Style for colors and animation, Language for the catalog, and Sites for website preferences.
 
 ## Support
 
