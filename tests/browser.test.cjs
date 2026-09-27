@@ -553,13 +553,7 @@ test('menu routes use accurate labels and scoped section contents', async (t) =>
 
 test('README screenshots exist at stable docs paths', () => {
   const root = path.resolve(__dirname, '..');
-  const expected = [
-    'menu-overview.png',
-    'highlights-menu.png',
-    'appearance-menu.png',
-    'language-menu.png',
-    'settings-menu.png',
-  ];
+  const expected = ['highlights-demo.png', 'language.png'];
   for (const name of expected) {
     const file = path.join(root, 'docs', 'screenshots', name);
     assert.ok(fs.existsSync(file), `missing screenshot ${name}`);
@@ -567,7 +561,7 @@ test('README screenshots exist at stable docs paths', () => {
   }
   const readme = fs.readFileSync(path.join(root, 'README.md'), 'utf8');
   assert.doesNotMatch(readme, /^## Menu$/m);
-  assert.match(readme, /^## Screenshots$/m);
+  assert.match(readme, /^## See it in action$/m);
   for (const name of expected) assert.match(readme, new RegExp(`docs/screenshots/${name.replace('.', '\\.')}`));
 });
 

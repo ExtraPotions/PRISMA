@@ -1,3 +1,9 @@
+## 3.1.4 — 2026-09-26
+
+- Bundles exp-core 3.3.8 with section arrangement and viewport-safe menus.
+- Preserves the current identity catalog, romantic options, and phrase corrections.
+- Refreshes the README and feature screenshots in a horizontal gallery.
+
 ## 3.1.3 — 2026-09-26
 
 - Adds site-specific phrase corrections that leave matching text nodes unchanged.

@@ -1,92 +1,51 @@
-<p align="center">
-  <img src="assets/prisma-launcher.svg" width="128" height="128" alt="PRISMA icon">
-</p>
+<p align="center"><img src="assets/prisma-launcher.svg" width="128" height="128" alt="PRISMA icon"></p>
 
-<h1 align="center">PRISMA</h1>
+# PRISMA
 
-<p align="center"><strong>Context-Aware Identity Highlighting</strong></p>
+**Identity language, easier to explore**
 
-<p align="center">
-  A local identity-language companion for recognizing reviewed LGBTQ+ terms with context-aware, reversible highlighting.
-</p>
+Recognize LGBTQ+ identity terms in context, see their colors, and explore recognized terms while you read.
 
-<p align="center">
-  <img alt="Violentmonkey Supported" src="https://img.shields.io/badge/Violentmonkey-Supported-7C3AED?style=flat-square">
-  <img alt="Tampermonkey Supported" src="https://img.shields.io/badge/Tampermonkey-Supported-00A67E?style=flat-square">
-  <img alt="Chrome Supported" src="https://img.shields.io/badge/Chrome-Supported-F9AB00?style=flat-square&logo=googlechrome&logoColor=000000">
-  <img alt="Firefox Supported" src="https://img.shields.io/badge/Firefox-Supported-FF7139?style=flat-square&logo=firefoxbrowser&logoColor=white">
-  <img alt="PolyForm Noncommercial 1.0.0" src="https://img.shields.io/badge/Code-PolyForm%20NC%201.0.0-6B7280?style=flat-square">
-  <img alt="CC BY-NC-SA 4.0" src="https://img.shields.io/badge/Assets-CC%20BY--NC--SA%204.0-1769AA?style=flat-square">
-</p>
+[![Install PRISMA](docs/badges/install.svg)](https://github.com/ExtraPotions/PRISMA/raw/refs/heads/main/prisma.user.js)
+[![Code: PolyForm Noncommercial 1.0.0](docs/badges/code.svg)](LICENSE-CODE.md)
+[![Artwork and documentation: CC BY-NC-SA 4.0](docs/badges/assets.svg)](LICENSE-ASSETS.md)
 
-## Install
+## What you can do
 
-<p>
-  <a href="https://github.com/ExtraPotions/PRISMA/releases/latest/download/prisma.user.js">
-    <img alt="Install PRISMA" src="https://img.shields.io/badge/Install-PRISMA-7C3AED?style=flat-square">
-  </a>
-  <img alt="Version 3.1.3" src="https://img.shields.io/badge/version-3.1.3-22C55E?style=flat-square">
-  <a href="https://github.com/ExtraPotions/PRISMA/releases">
-    <img alt="GitHub Downloads" src="https://img.shields.io/github/downloads/ExtraPotions/PRISMA/total?style=flat-square&label=Downloads">
-  </a>
-</p>
+- **Context-aware highlights:** find recognized identity terms while reducing ambiguous matches.
+- **Choose the style:** gradients, underlines, soft fills, and optional animation with adjustable appearance.
+- **Explore language:** search the identity catalog and explore definitions, flag colors, and source information.
+- **Romantic identities:** choose whether to include romantic terms, and enable or disable individual identities.
+- **Page navigation:** move between current-page matches and choose where PRISMA runs.
 
-## What PRISMA Does
+## See it in action
 
-**PRISMA 3.1.3** is the stable rebuild with the shared exp-core foundation and expanded reference catalog.
-
-The rebuild pins the byte-verified **exp-core 3.3.7** bundle, derived from **Dropper 3.3.5**, and uses its product shell and menu notices. It includes the shared launcher-backdrop isolation fix verified during SHIFT development. PRISMA retains its JavaScript-only architecture, schema-1 settings, and expanded catalog of 135 entries and 257 terms. SHIFT's page recoloring and Dropper's Twitch automation remain product-specific.
-
-- Recognizes reviewed LGBTQ+ identity terms using local context and ambiguity rules.
-- Offers gradient, underline, and soft-fill highlighting with adjustable appearance.
-- Offers optional Pulse, Shimmer, and Glow animation styles with saved preferences and reduced-motion support.
-- Provides current-page match navigation and a searchable identity-language catalog.
-- Supports site controls and route-aware rescanning for dynamic pages.
-- Keeps recognition local and exposes privacy-safe diagnostics without collecting page text.
-- Includes shared launcher placement, coordinated themes, and concise update notices.
-
-## Catalog references
-
-All 135 entries and 257 recognition terms have individual definition and flag review records. 133 definitions have reviewed public references; 2 remain provisional. Under the requested evidence rule, 106 entries are Wikipedia-listed and receive a check icon; 29 remain unverified. Multiple references are retained. The 11 romantic and combined aroace entries stay in the database and are controlled by the Romantic identities toggle, off by default. Flag designs are documented for 113 entries; 22 remain unresolved. 30 highlight palettes have exact color evidence, 34 remain inherited, and 71 use neutral underlines. See [catalog sources and per-entry review](docs/catalog-sources.md).
-
-## Screenshots
-
-Screenshots show PRISMA 3.1.0.
+Screenshots show the current product with sample content.
 
 <table>
-  <tr><th width="20%">Overview</th><th width="20%">Highlights</th><th width="20%">Appearance</th><th width="20%">Language</th><th width="20%">Settings</th></tr>
-  <tr><td align="center"><img src="docs/screenshots/menu-overview.png" width="180" alt="PRISMA menu overview"></td><td align="center"><img src="docs/screenshots/highlights-menu.png" width="180" alt="PRISMA Highlights menu"></td><td align="center"><img src="docs/screenshots/appearance-menu.png" width="180" alt="PRISMA Appearance menu"></td><td align="center"><img src="docs/screenshots/language-menu.png" width="180" alt="PRISMA Language menu"></td><td align="center"><img src="docs/screenshots/settings-menu.png" width="180" alt="PRISMA Settings menu"></td></tr>
+  <tr>
+    <td width="50%" valign="top" align="center"><a href="docs/screenshots/highlights-demo.png"><img src="docs/screenshots/highlights-demo.png" width="440" alt="PRISMA: identity highlights in sample text"></a><br><strong>Identity highlights in sample text</strong></td>
+    <td width="50%" valign="top" align="center"><a href="docs/screenshots/language.png"><img src="docs/screenshots/language.png" width="440" alt="PRISMA: searchable identity catalog"></a><br><strong>Searchable identity catalog</strong></td>
+  </tr>
 </table>
 
-## Diagnostics and product compatibility
+## Get started
 
-Use **Show Diagnostics** / **Hide Diagnostics**, then **Copy Diagnostics** when troubleshooting. Reports include **Page**, **Technical**, **Console**, and **Plugin** sections, identify active ExtraPotions products and visible conflicts on the current page, and are never uploaded automatically.
+1. Install a userscript manager such as [Violentmonkey](https://violentmonkey.github.io/get-it/) or [Tampermonkey](https://www.tampermonkey.net/).
+2. [Install PRISMA](https://github.com/ExtraPotions/PRISMA/raw/refs/heads/main/prisma.user.js) and confirm in your userscript manager.
+3. Refresh a page you want to use and open the product launcher.
 
-## Local verification
+Open Highlights to explore matches on the current page. Use Highlight Style for colors and animation, Language for the catalog, and Sites for website preferences.
 
-Run `npm ci`, `npx playwright install chromium`, `npm test`, and `npm run release:check`. The checks cover matching, dynamic content, navigation, reversible rendering, settings recovery, keyboard access, shared notice geometry, and hostile page backdrop styles. The release check validates the local artifact without publishing it.
+## Support
+
+[Support development](https://ko-fi.com/expdare). Donations are optional. All features remain available without donating.
 
 ## License
 
 **Code:** [PolyForm Noncommercial License 1.0.0](LICENSE-CODE.md)<br>
 **Artwork and documentation:** [CC BY-NC-SA 4.0](LICENSE-ASSETS.md)
 
-See [NOTICE.md](NOTICE.md) for the split-license notice.
+## About
 
-## Disclaimer
-
-PRISMA is an independent project and is not affiliated with or endorsed by the websites it supports.
-
-## Firefox compatibility update
-
-Restores Firefox startup on pages with restrictive security policies using content injection. Keeps settings copies in the userscript realm and bundles exp-core 3.3.5 with idle menu fixes.
-
-## 3.1.3 update
-
-Restores the donation button through the shared core default. Bundles exp-core 3.3.7 so opening one launcher menu closes other product menus.
-
-## Recovery and inspection tools
-
-Adds local settings backups and rollback, current-page product compatibility, and local phrase/context corrections under Highlights. A correction preserves the entire matching text node on that site and can be removed. Language includes separate evidence filters for missing definition sources, missing flag references, and unverified exact palettes. Documents the Pride-Flags Polyromantic (1) design without upgrading the unverified palette or definition. Two definition references and 22 flag references remain unresolved; the review does not manufacture verification. The readable userscript size budget is now 448 KiB to accommodate the shared recovery controls.
-
-These features are included in version 3.1.3.
+PRISMA is an independent project and is not affiliated with or endorsed by the websites where it is used.
