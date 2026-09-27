@@ -25,7 +25,7 @@
   <a href="https://github.com/ExtraPotions/PRISMA/releases/latest/download/prisma.user.js">
     <img alt="Install PRISMA" src="https://img.shields.io/badge/Install-PRISMA-7C3AED?style=flat-square">
   </a>
-  <img alt="Version 3.1.1" src="https://img.shields.io/badge/version-3.1.1-22C55E?style=flat-square">
+  <img alt="Version 3.1.2" src="https://img.shields.io/badge/version-3.1.2-22C55E?style=flat-square">
   <a href="https://github.com/ExtraPotions/PRISMA/releases">
     <img alt="GitHub Downloads" src="https://img.shields.io/github/downloads/ExtraPotions/PRISMA/total?style=flat-square&label=Downloads">
   </a>
@@ -33,7 +33,7 @@
 
 ## What PRISMA Does
 
-**PRISMA 3.1.1** is the stable rebuild with the shared exp-core foundation and expanded reference catalog.
+**PRISMA 3.1.2** is the stable rebuild with the shared exp-core foundation and expanded reference catalog.
 
 The rebuild pins the byte-verified **exp-core 3.3.4** bundle, derived from **Dropper 3.3.3**, and uses its product shell and menu notices. It includes the shared launcher-backdrop isolation fix verified during SHIFT development. PRISMA retains its JavaScript-only architecture, schema-1 settings, and expanded catalog of 135 entries and 257 terms. SHIFT's page recoloring and Dropper's Twitch automation remain product-specific.
 
@@ -80,3 +80,7 @@ PRISMA is an independent project and is not affiliated with or endorsed by the w
 ## Firefox compatibility update
 
 Restores Firefox startup on pages with restrictive security policies using content injection. Keeps settings copies in the userscript realm and bundles exp-core 3.3.5 with idle menu fixes.
+
+## 3.1.2 update
+
+Restores the donation button through the shared core default. Bundles exp-core 3.3.6 so opening one launcher menu closes other product menus.

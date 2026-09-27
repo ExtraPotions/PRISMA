@@ -1,7 +1,8 @@
-EXP.VERSION = '3.1.1';
+EXP.VERSION = '3.1.2';
 
 EXP.ReleaseNotes = (() => {
   const notes = Object.freeze({
+    '3.1.2': ["Restores the donation button through the shared core default.","Bundles exp-core 3.3.6 so opening one launcher menu closes other product menus."],
     '3.1.1': ["Restores Firefox startup on pages with restrictive security policies using content injection.","Keeps settings copies in the userscript realm and bundles exp-core 3.3.5 with idle menu fixes."],
     '3.1.0': Object.freeze([
       'Adds Pulse, Shimmer, and Glow animation styles with saved preferences and reduced-motion support.',

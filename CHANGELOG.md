@@ -1,3 +1,8 @@
+## 3.1.2 — 2026-09-26
+
+- Restores the donation button through the shared core default.
+- Bundles exp-core 3.3.6 so opening one launcher menu closes other product menus.
+
 ## 3.1.1 — 2026-09-26
 
 - Restores Firefox startup on pages with restrictive security policies using content injection.
