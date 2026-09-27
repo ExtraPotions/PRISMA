@@ -1,3 +1,9 @@
+## 3.1.6 — 2026-09-27
+
+- Adds layered menu surfaces so cards, controls, and inputs remain visually distinct.
+- Uses accessible semantic colors for links, focus indicators, and accent text.
+- Bundles the verified exp-core 3.3.10 artifact without changing identity recognition or flag data.
+
 ## 3.1.5 — 2026-09-26
 
 - Compacts System menus and keeps menu width controls together on one row.

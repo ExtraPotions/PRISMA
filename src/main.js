@@ -1,4 +1,4 @@
-EXP.VERSION = '3.1.5';
+EXP.VERSION = '3.1.6';
 ExtraPotionsCore.registerDiagnosticsProduct('prisma', EXP.VERSION);
 EXP.App = (() => {
   let scheduler, navigationCleanup, settingsCleanup, lifecycle;
