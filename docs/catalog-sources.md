@@ -1,6 +1,6 @@
 # Catalog source review
 
-Reviewed 2026-09-26 for 3.1.0. All 135 entries and 257 recognition terms have individual definition and flag review records. 133 definitions have reviewed public references; 2 remain provisional. Under the requested evidence rule, 106 entries are Wikipedia-listed and receive a check icon; 29 remain unverified. Multiple references are retained. The 11 romantic and combined aroace entries stay in the database and are controlled by the Romantic identities toggle, off by default. Flag designs are documented for 112 entries; 23 remain unresolved. 30 highlight palettes have exact color evidence, 34 remain inherited, and 71 use neutral underlines.
+Reviewed 2026-09-26 for 3.1.0. All 135 entries and 257 recognition terms have individual definition and flag review records. 133 definitions have reviewed public references; 2 remain provisional. Under the requested evidence rule, 106 entries are Wikipedia-listed and receive a check icon; 29 remain unverified. Multiple references are retained. The 11 romantic and combined aroace entries stay in the database and are controlled by the Romantic identities toggle, off by default. Flag designs are documented for 113 entries; 22 remain unresolved. 30 highlight palettes have exact color evidence, 34 remain inherited, and 71 use neutral underlines.
 
 ## Interpretation
 
@@ -147,7 +147,7 @@ All original recognition terms and saved-setting IDs remain available. Gay retai
 | Homosexual | ✓ Wikipedia-listed; referenced | unresolved | unverified | [1](https://www.healthline.com/health/different-types-of-sexuality) [2](https://en.wikipedia.org/wiki/Homosexuality) |
 | Monosexual | ✓ Wikipedia-listed; referenced | documented | unverified | [1](https://www.healthline.com/health/different-types-of-sexuality) [2](https://en.wikipedia.org/wiki/Monosexuality) [3](https://lgbtqia.fandom.com/wiki/Monosexual) |
 | Panromantic (romantic) | ✓ Wikipedia-listed; referenced | documented | unverified | [1](https://www.healthline.com/health/different-types-of-sexuality) [2](https://en.wikipedia.org/wiki/Romantic_orientation#Romantic_identities) [3](https://mogailabel.fandom.com/wiki/Panromantic) |
-| Polyromantic (romantic) | ✓ Wikipedia-listed; referenced | unresolved | unverified | [1](https://mogailabel.fandom.com/wiki/Panromantic) [2](https://en.wikipedia.org/wiki/Romantic_orientation#Romantic_identities) |
+| Polyromantic (romantic) | ✓ Wikipedia-listed; referenced | documented | unverified | [1](https://mogailabel.fandom.com/wiki/Panromantic) [2](https://en.wikipedia.org/wiki/Romantic_orientation#Romantic_identities) |
 | Sapiosexual | ✓ Wikipedia-listed; referenced | documented | unverified | [1](https://www.healthline.com/health/different-types-of-sexuality) [2](https://en.wikipedia.org/wiki/Sexual_identity) [3](https://lgbt.fandom.com/es/wiki/Sapiosexualidad) |
 | Skoliosexual | ✓ Wikipedia-listed; referenced | unresolved | unverified | [1](https://www.healthline.com/health/different-types-of-sexuality) [2](https://es.wikipedia.org/wiki/Ceterosexualidad) |
 | Unlabeled | ✓ Wikipedia-listed; referenced | documented | verified | [1](https://commons.wikimedia.org/wiki/File:Unlabeled_Pride_Flag.svg) [2](https://en.wikipedia.org/wiki/Sexual_identity#Unlabeled_sexuality) |
@@ -175,7 +175,9 @@ All original recognition terms and saved-setting IDs remain available. Gay retai
 - **Woman:** flag evidence unresolved.
 - **Aliagender:** flag evidence unresolved.
 - **Homosexual:** flag evidence unresolved.
-- **Polyromantic:** flag evidence unresolved.
+
 - **Skoliosexual:** flag evidence unresolved.
 
 Evidence review covers every current entry; unresolved items are not represented as verified. Runtime operation remains local. Only explicit clicks open public source pages.
+
+Local follow-up: the [Polyromantic (1) design published by Pride-Flags](https://www.deviantart.com/pride-flags/art/Polyromantic-1-607943635) is now documented. Exact colors remain unverified.

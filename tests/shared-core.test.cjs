@@ -104,7 +104,7 @@ test('bundled core is the verified 3.3.6 artifact derived from Dropper 3.3.4', (
   const crypto = require('node:crypto');
   const bundle = fs.readFileSync(path.resolve(__dirname, '../vendor/exp-core/exp-core.js'));
   const manifest = require('../vendor/exp-core/manifest.json');
-  assert.equal(crypto.createHash('sha256').update(bundle).digest('hex'), '690aabb45905186397a271b14e52a80d93f815bd6932e1b840fd2a07792e645f');
+  assert.equal(crypto.createHash('sha256').update(bundle).digest('hex'), 'c60cf3b20a427d1fb866739b6d6ad348b3b0bd2fea75e713df415ac873c31412');
   assert.equal(manifest.coreVersion, '3.3.6');
   assert.equal(manifest.source.sourceVersion, '3.3.4');
 });

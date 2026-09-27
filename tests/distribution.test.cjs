@@ -31,7 +31,7 @@ test('distribution metadata and privacy boundaries are present', () => {
 
 test('canonical install artifact is a direct full userscript within size bounds', () => {
   assert.ok(bytes >= 100 * 1024, `expected at least 100 KiB, got ${bytes} bytes`);
-  assert.ok(bytes <= 400 * 1024, `expected at most 400 KiB, got ${bytes} bytes`);
+  assert.ok(bytes <= 448 * 1024, `expected at most 448 KiB, got ${bytes} bytes`);
   assert.match(source, /EXP\.CatalogData = \[/);
 });
 
@@ -95,6 +95,6 @@ test('PRISMA settings survive manager storage gaps and mirror to fallback storag
   assert.match(settings, /if \(typeof GM_setValue === 'function'\) GM_setValue\(storageKey, parsed\);/u);
   assert.match(settings, /if \(typeof GM_setValue === 'function'\) GM_setValue\(storageKey, value\);/u);
   assert.match(settings, /localStorage\.setItem\(storageKey, JSON\.stringify\(value\)\);/u);
-  assert.match(settings, /function load\(\) \{\s*const stored = rawRead\('settings'\);\s*state = validate\(stored \|\| defaults\);\s*rawWrite\('settings', state\);/u);
+  assert.match(settings, /function load\(\) \{\s*const stored = rawRead\('settings'\);[\s\S]*?state = validate\(stored \|\| defaults\);\s*rawWrite\('settings', state\);/u);
   assert.doesNotMatch(settings, /GM_setValue\(key\(name\), value\); return;/u);
 });

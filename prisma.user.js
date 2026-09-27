@@ -1518,6 +1518,41 @@ function createProductLifecycle(shared) {
   });
 }
 
+// Shared, local-only recovery and compatibility controls.
+const ExtraPotionsTools = (() => {
+  const clone = value => JSON.parse(JSON.stringify(value));
+  function createSettingsRecovery({read,write,validate,limit=5}) {
+    function list() { try { const values=read(); return Array.isArray(values)?values.filter(v=>v&&typeof v.id==='string'&&v.settings&&typeof v.settings==='object').slice(0,limit).map(clone):[]; } catch {return [];} }
+    function capture(settings,reason='change') {
+      const clean=validate(clone(settings)); const entries=list();
+      if(entries[0]&&JSON.stringify(entries[0].settings)===JSON.stringify(clean))return entries[0].id;
+      const entry={id:globalThis.crypto?.randomUUID?.()||`${Date.now()}-${Math.random()}`,at:Date.now(),reason:String(reason).slice(0,80),settings:clean};
+      write([entry,...entries].slice(0,limit));return entry.id;
+    }
+    function restore(id){const entry=list().find(v=>v.id===id);if(!entry)throw Error('This backup is no longer available.');return validate(clone(entry.settings));}
+    return Object.freeze({list,capture,restore});
+  }
+  function compatibilitySnapshot(){
+    const rows=[];const warnings=[];const versions=new Set();
+    for(const id of ['dropper','shift','prisma','ward']){
+      const markers=[...document.querySelectorAll('[data-exp-diagnostics-product]')].filter(n=>n.dataset.expDiagnosticsProduct===id);
+      if(!markers.length)continue;
+      const productVersions=[...new Set(markers.map(n=>n.dataset.expProductVersion||'unknown'))];
+      const host=document.getElementById(id==='dropper'?'tdh-root':`exp-${id}-root`);
+      const core=host?.dataset.coreVersion||null;if(core)versions.add(core);
+      rows.push({id,versions:productVersions,core,instances:markers.length});
+      if(markers.length>1)warnings.push(`More than one ${id.toUpperCase()} instance is active.`);
+    }
+    if(versions.size>1)warnings.push('Different core versions are active. Update the products and reload this page.');
+    return {products:rows,warnings};
+  }
+  const button=(label,fn)=>{const b=document.createElement('button');b.type='button';b.className='life-btn action';b.textContent=label;b.addEventListener('click',fn);return b;};
+  function card(title){const d=document.createElement('details');d.className='exp-tools-card';d.style.cssText='border:1px solid var(--theme-line,var(--line,#777));border-radius:7px;padding:7px;margin-top:8px';const s=document.createElement('summary');s.textContent=title;d.append(s);return d;}
+  function createCompatibilityControls(){const d=card('Product compatibility'),out=document.createElement('div');out.setAttribute('aria-live','polite');function refresh(){out.replaceChildren();const value=compatibilitySnapshot();for(const p of value.products){const line=document.createElement('p');line.textContent=`${p.id.toUpperCase()} ${p.versions.join(', ')} · ${p.core?'core '+p.core:'native product UI'}`;out.append(line);}const status=document.createElement('p');status.textContent=value.warnings.join(' ')||'No mixed core versions or duplicate instances detected on this page.';out.append(status);const note=document.createElement('small');note.textContent='Only products running on this page are visible. This is not an online update check.';out.append(note);}d.addEventListener('toggle',()=>{if(d.open)refresh();});d.append(out,button('Refresh compatibility',refresh));return d;}
+  function createRecoveryControls({list,capture,restore,notify=()=>{}}){const d=card('Settings backups'),select=document.createElement('select'),status=document.createElement('p');select.setAttribute('aria-label','Settings backup');status.setAttribute('role','status');function refresh(){select.replaceChildren();for(const e of list()){const o=document.createElement('option');o.value=e.id;o.textContent=`${new Date(e.at).toLocaleString()} · ${e.reason}`;select.append(o);}select.disabled=!select.options.length;rollback.disabled=select.disabled;}const backup=button('Back up settings',()=>{try{capture();refresh();status.textContent='Settings backed up locally.';}catch(e){status.textContent=e.message;}});const rollback=button('Restore selected backup',()=>{try{if(!select.value)return;restore(select.value);refresh();status.textContent='Settings restored. The previous state was also backed up.';notify(status.textContent);}catch(e){status.textContent=e.message;}});d.addEventListener('toggle',()=>{if(d.open)refresh();});d.append(select,backup,rollback,status);refresh();return d;}
+  return Object.freeze({createSettingsRecovery,compatibilitySnapshot,createCompatibilityControls,createRecoveryControls});
+})();
+
 // Product-neutral host for the code extracted from Dropper 3.3.4.
 // Product engines own their settings, content, and actions. Core owns shared UI.
 const ExtraPotionsCore = (() => {
@@ -2466,14 +2501,13 @@ const ExtraPotionsCore = (() => {
   if(document.documentElement)startGrid();else addEventListener('DOMContentLoaded',startGrid,{once:true});
   document.addEventListener('exp-core:coordination',scheduleGrid);
   addEventListener('resize',scheduleGrid,{passive:true});
-  const api = Object.freeze({version,sourceVersion,protocol,gridProtocol,reference:DropperReference,css:canonicalCss,themes,create,createProduct,createSupportControl,createProductNotice,createLifecycle:()=>createProductLifecycle(api),registerLauncher,layout:layoutGrid,menuWidthForMode,cloneSettings,applyTextGradient,injectStyle,applyTheme,applyMatteToggleChrome,applyTwoColumnSettingsGrid,applyContentDrivenMenuLayout,createThemeSwatches,createFloatingNotice,createMenuNotice,createReleaseUpdateChecker,registerFloatingNotice,layoutFloatingNotices,claimNotice,consumeVersionChange,focusMenuSurface,registerDiagnosticsProduct:ExtraPotionsDiagnostics.registerProduct,productCompatibility:ExtraPotionsDiagnostics.compatibility,createDiagnosticsReport,downloadDiagnostics,createDiagnosticsControls,compareVersions:DropperReference.compareVersions});
+  const api = Object.freeze({...ExtraPotionsTools,version,sourceVersion,protocol,gridProtocol,reference:DropperReference,css:canonicalCss,themes,create,createProduct,createSupportControl,createProductNotice,createLifecycle:()=>createProductLifecycle(api),registerLauncher,layout:layoutGrid,menuWidthForMode,cloneSettings,applyTextGradient,injectStyle,applyTheme,applyMatteToggleChrome,applyTwoColumnSettingsGrid,applyContentDrivenMenuLayout,createThemeSwatches,createFloatingNotice,createMenuNotice,createReleaseUpdateChecker,registerFloatingNotice,layoutFloatingNotices,claimNotice,consumeVersionChange,focusMenuSurface,registerDiagnosticsProduct:ExtraPotionsDiagnostics.registerProduct,productCompatibility:ExtraPotionsDiagnostics.compatibility,createDiagnosticsReport,downloadDiagnostics,createDiagnosticsControls,compareVersions:DropperReference.compareVersions});
   return api;
 })();
 
 // The verified, bundled Core owns lifecycle and shared services.
 EXP.Core = ExtraPotionsCore.createLifecycle();
 
-/* Identity-language catalog with public references only. See docs/catalog-sources.md. */
 EXP.CatalogData = [
   {
     "id": "rainbow",
@@ -7213,9 +7247,12 @@ EXP.CatalogData = [
     "contextTerms": [],
     "flag": {
       "status": "unverified",
-      "note": "Unresolved for the catalog definition. Category contains a specifically named asset; only discovery evidence, no inspected variant or palette.",
-      "sources": [],
-      "reviewStatus": "unresolved"
+      "note": "A public design reference is documented. The exact palette has not been verified; a neutral underline remains in use.",
+      "sources": [
+        "https://www.deviantart.com/pride-flags/art/Polyromantic-1-607943635"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Polyromantic (1), published by Pride-Flags in 2016"
     },
     "definitionStatus": "public-reference",
     "romantic": true,
@@ -7381,8 +7418,10 @@ EXP.Catalog = (() => {
   if (identities.some(identity => [...identity.flag.sources, identity.flag.source].filter(Boolean).some(url => !/^https:\/\//.test(url)) || (identity.flag.status === 'verified' && (!identity.flag.source || !identity.flag.variant)))) invalid.push('CATALOG_FLAG_REFERENCE');
   if (collisions.length) invalid.push('CATALOG_TERM_COLLISION');
   const search = (query = '') => { const needle = normalize(query.trim()); return identities.filter((identity) => !needle || normalize(identity.label).includes(needle) || normalize(identity.definition).includes(needle) || identity.terms.some((term) => term.normalized.includes(needle))); };
+  const evidenceGaps = identity => ({definition:identity.definitionStatus!=='public-reference',flag:identity.flag.reviewStatus!=='documented',palette:identity.flag.status!=='verified'});
+  const review = (kind='any') => identities.filter(identity=>{const gaps=evidenceGaps(identity);return kind==='any'?Object.values(gaps).some(Boolean):Boolean(gaps[kind]);});
   const status = () => Object.freeze({ valid: invalid.length === 0, errors: Object.freeze([...invalid]), identities: identities.length, terms: [...termMap.values()].reduce((n, items) => n + items.length, 0), collisions: collisions.length });
-  return Object.freeze({ identities: Object.freeze(identities), termMap, collisions: Object.freeze(collisions), positiveWords, normalize, has: (id) => byId.has(id), get: (id) => byId.get(id), search, status });
+  return Object.freeze({ identities: Object.freeze(identities), evidenceGaps, review, termMap, collisions: Object.freeze(collisions), positiveWords, normalize, has: (id) => byId.has(id), get: (id) => byId.get(id), search, status });
 })();
 
 EXP.Settings = (() => {
@@ -7415,6 +7454,7 @@ EXP.Settings = (() => {
     menuNotifications: true,
     updateNotifications: false,
     siteOverrides: {},
+    ignoredPhrases: [],
     exclusions: []
   });
   let state;
@@ -7464,12 +7504,14 @@ EXP.Settings = (() => {
 	  if (values.includes(value)) next[name] = value;
 	}
     next.disabledIdentities = uniqueStrings(candidate.disabledIdentities).filter((id) => EXP.Catalog?.has(id) ?? /^[a-z][a-z0-9-]+$/.test(id));
+    next.ignoredPhrases=uniqueStrings(candidate.ignoredPhrases,200).filter(v=>v.trim()&&v.length<=200).map(v=>v.trim());
     next.exclusions = uniqueStrings(candidate.exclusions).filter(isHost);
     if (typeof candidate.shortcut === 'string' && candidate.shortcut.length <= 40) next.shortcut = candidate.shortcut;
     if (candidate.siteOverrides && typeof candidate.siteOverrides === 'object' && !Array.isArray(candidate.siteOverrides)) {
       for (const [host, value] of Object.entries(candidate.siteOverrides)) {
         if (!isHost(host) || !value || typeof value !== 'object' || Array.isArray(value)) continue;
         const site = {};
+        site.ignoredPhrases=uniqueStrings(value.ignoredPhrases,200).filter(v=>v.trim()&&v.length<=200).map(v=>v.trim());
         if (['strict', 'balanced', 'inclusive'].includes(value.matcherMode)) site.matcherMode = value.matcherMode;
         if (typeof value.ambiguityProtection === 'boolean') site.ambiguityProtection = value.ambiguityProtection;
         if (typeof value.surroundingContext === 'boolean') site.surroundingContext = value.surroundingContext;
@@ -7483,12 +7525,18 @@ EXP.Settings = (() => {
   }
   function load() {
     const stored = rawRead('settings');
+    if(stored && rawRead('settings-version')!==EXP.VERSION)recovery.capture(stored,'before-update');
+    rawWrite('settings-version',EXP.VERSION);
     state = validate(stored || defaults);
     rawWrite('settings', state);
     return snapshot();
   }
+  const recovery = ExtraPotionsCore.createSettingsRecovery({read:()=>rawRead('backups'),write:value=>rawWrite('backups',value),validate});
+  function backups(){return recovery.list();}
+  function backup(){return recovery.capture(snapshot(),'manual');}
+  function restoreBackup(id){return replace(recovery.restore(id),'rollback');}
   function snapshot() { return ExtraPotionsCore.cloneSettings(state || defaults); }
-  function replace(value, reason = 'replace') { const next = validate(value); rawWrite('settings', next); state = next; for (const listener of listeners) listener(snapshot(), reason); return snapshot(); }
+  function replace(value, reason = 'replace') { const next = validate(value); if(state&&JSON.stringify(next)!==JSON.stringify(state))recovery.capture(state,reason); rawWrite('settings', next); state = next; for (const listener of listeners) listener(snapshot(), reason); return snapshot(); }
   function update(patch, reason = 'update') { return replace({ ...snapshot(), ...patch }, reason); }
   function subscribe(listener) { listeners.add(listener); return () => listeners.delete(listener); }
   function effective(host = location.hostname) {
@@ -7496,14 +7544,14 @@ EXP.Settings = (() => {
     const site = current.siteOverrides[host] || {};
     const disabled = new Set(current.disabledIdentities);
     for (const [id, mode] of Object.entries(site.identityOverrides || {})) { if (mode === 'off') disabled.add(id); else disabled.delete(id); }
-    return { ...current, ...site, disabledIdentities: [...disabled], excluded: current.exclusions.includes(host) };
+    return { ...current, ...site, ignoredPhrases:[...current.ignoredPhrases,...(site.ignoredPhrases||[])], disabledIdentities: [...disabled], excluded: current.exclusions.includes(host) };
   }
   function exportData() { return { product: 'prisma', generation: 3, schema: SCHEMA, settings: snapshot() }; }
   function prepareImport(payload) {
     if (!payload || payload.product !== 'prisma' || payload.generation !== 3 || payload.schema !== SCHEMA) throw Object.assign(new Error('This is not a supported PRISMA V3 export'), { code: 'IMPORT_SCHEMA' });
     return validate(payload.settings);
   }
-  return Object.freeze({ PREFIX, SCHEMA, defaults, validate, load, snapshot, replace, update, subscribe, effective, exportData, prepareImport, hasStored: () => rawRead('settings') !== undefined });
+  return Object.freeze({backups,backup,restoreBackup, PREFIX, SCHEMA, defaults, validate, load, snapshot, replace, update, subscribe, effective, exportData, prepareImport, hasStored: () => rawRead('settings') !== undefined });
 })();
 
 EXP.Matcher = (() => {
@@ -7550,6 +7598,9 @@ EXP.Matcher = (() => {
     compile(settings);
     const decisions = counts();
     if (!expression || !text) return { eligible: [], decisions };
+    const ignored=(settings.ignoredPhrases||[]).map(EXP.Catalog.normalize);
+    const normalizedText=EXP.Catalog.normalize(text);
+    if(ignored.some(phrase=>normalizedText.includes(phrase))){decisions['blocked-negative']+=1;return {eligible:[],decisions};}
     expression.lastIndex = 0;
     const eligible = [];
     for (const match of text.matchAll(expression)) {
@@ -8006,16 +8057,20 @@ EXP.UI = (() => {
   function renderIdentities() {
     const state = EXP.Settings.snapshot(); const section = group('Identity Catalog', `${EXP.Catalog.identities.length} reviewed source identities. Context rules remain active for ambiguous terms.`); const search = el('input', { type: 'search', class: 'search', placeholder: 'Search identities and aliases', 'aria-label': 'Search identity catalog' }); const list = el('div', { class: 'identity-list' });
     let offset = 0;
+    let reviewFilter = 'all';
     const pagination = el('div', { class: 'button-grid' });
     const count = el('p', { class: 'catalog-results', role: 'status' });
     section.append(switchControl('Romantic identities', '', state.includeRomantic, (includeRomantic) => update({ includeRomantic }, 'romantic-identities')));
     section.append(el('p', {}, 'Include romantic and combined aroace labels in page highlighting. Definitions stay available in this catalog.'));
     section.append(el('p', {}, 'Check marks indicate Wikipedia or peer-reviewed source support.'));
+    const reviewSummary=EXP.Catalog.review;
+    section.append(el('p',{},reviewSummary('definition').length+' definitions, '+reviewSummary('flag').length+' flag references, and '+reviewSummary('palette').length+' exact palettes still need evidence. These counts overlap.'));
+    section.append(selectControl('Evidence review','',reviewFilter,[['all','All entries'],['definition','Definition reference needed'],['flag','Flag reference needed'],['palette','Exact palette not verified']],value=>{reviewFilter=value;offset=0;paint();}));
     const previous = button('Previous results', () => { offset = Math.max(0, offset - 3); paint(); });
     const next = button('Next results', () => { offset += 3; paint(); });
     pagination.append(previous, next);
     const paint = () => {
-      const results = EXP.Catalog.search(search.value.trim());
+      const results = EXP.Catalog.search(search.value.trim()).filter(identity=>reviewFilter==='all'||EXP.Catalog.evidenceGaps(identity)[reviewFilter]);
       offset = Math.min(offset, Math.max(0, Math.floor((results.length - 1) / 3) * 3));
       list.replaceChildren(...results.slice(offset, offset + 3).map(identity => identityRow(identity, state)));
       if (!list.childElementCount) list.append(el('p', { class: 'empty' }, 'No identities match this search.'));
@@ -8045,6 +8100,12 @@ EXP.UI = (() => {
     section.append(statusRow('Current-page status', `Route epoch ${engineState.routeEpoch}`, engineState.status));
     section.append(statusRow('Match count', 'Eligible current-page records.', String(engineState.total)));
     const controls = el('div', { class: 'button-grid' }); controls.append(button('Previous Match', () => { const result = EXP.Engine.navigatePrevious(); announce(result ? `Match ${result.position} of ${result.total}.` : 'No match to navigate.'); }), button('Next Match', () => { const result = EXP.Engine.navigateNext(); announce(result ? `Match ${result.position} of ${result.total}.` : 'No match to navigate.'); }), button('Highlight All', () => { EXP.Engine.highlightAll(); announce('All eligible highlights are visible.'); })); section.append(controls);
+    const corrections=el('details',{class:'local-correction-card'});corrections.append(el('summary',{},'Correct an unwanted match'));
+    const phrase=el('input',{'aria-label':'Phrase to leave unchanged',maxlength:'200',placeholder:'Exact phrase or short context'});
+    corrections.append(phrase,button('Ignore phrase on this site',()=>{const text=phrase.value.trim();if(!text)return;const state=EXP.Settings.snapshot(),site={...(state.siteOverrides[location.hostname]||{})};site.ignoredPhrases=[...new Set([...(site.ignoredPhrases||[]),text])];update({siteOverrides:{...state.siteOverrides,[location.hostname]:site}},'local-correction');announce('Text containing this phrase will be left unchanged on this site.');}));
+    for(const text of state.ignoredPhrases||[])corrections.append(button('Remove global exception: '+text,()=>update({ignoredPhrases:state.ignoredPhrases.filter(v=>v!==text)},'remove-correction')));
+    for(const text of state.siteOverrides[location.hostname]?.ignoredPhrases||[])corrections.append(button('Remove site exception: '+text,()=>{const site={...state.siteOverrides[location.hostname]};site.ignoredPhrases=site.ignoredPhrases.filter(v=>v!==text);update({siteOverrides:{...state.siteOverrides,[location.hostname]:site}},'remove-correction');}));
+    corrections.append(el('p',{},'Corrections stay on this device. Matching text nodes are left unchanged; nothing is submitted to a server.'));section.append(corrections);
     section.append(switchControl('Temporarily Hide Highlights', 'Session-only; matching and counts remain active.', engineState.temporarilyHidden, (value) => EXP.Engine.setTemporaryHidden(value)));
     return section;
   }
@@ -8065,7 +8126,7 @@ EXP.UI = (() => {
   function diagnosticReport() { const core = EXP.Core.diagnosticSnapshot(); return EXP.Diagnostics.createDiagnosticsReport('PRISMA', { host, settings: EXP.Settings.exportData(), updates: EXP.Updates.status(), product: { id: 'prisma', version: EXP.VERSION }, lifecycle: engineState.status, routeEpoch: engineState.routeEpoch, catalog: EXP.Catalog.status(), matches: { total: engineState.total, byIdentityId: engineState.summary, decisionBands: engineState.decisions }, processing: engineState.metrics, safeMode: EXP.Settings.snapshot().safeMode, core }); }
   function renderAdvanced() {
     const state = EXP.Settings.snapshot(); const catalog = EXP.Catalog.status(); const section = group('Diagnostics', 'Page, technical, console, and plugin details; captured locally.');
-    section.append(EXP.Diagnostics.createDiagnosticsControls(diagnosticReport, announce));
+    section.append(EXP.Diagnostics.createDiagnosticsControls(diagnosticReport, announce), ExtraPotionsCore.createCompatibilityControls(), ExtraPotionsCore.createRecoveryControls({list:EXP.Settings.backups,capture:EXP.Settings.backup,restore:id=>{EXP.Settings.restoreBackup(id);render();},notify:announce}));
     section.append(switchControl('Safe Mode', 'Immediately restores the page and keeps this recovery menu available.', state.safeMode, (safeMode) => update({ safeMode }, 'safe-mode')));
     section.append(actionRow('Rescan page', 'Rebuilds one clean route-scoped match set.', () => { EXP.Engine.rebuild('manual-rescan'); announce('Page rescanned.'); }, 'Rescan'));
     return section;

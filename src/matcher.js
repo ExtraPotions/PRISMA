@@ -42,6 +42,9 @@ EXP.Matcher = (() => {
     compile(settings);
     const decisions = counts();
     if (!expression || !text) return { eligible: [], decisions };
+    const ignored=(settings.ignoredPhrases||[]).map(EXP.Catalog.normalize);
+    const normalizedText=EXP.Catalog.normalize(text);
+    if(ignored.some(phrase=>normalizedText.includes(phrase))){decisions['blocked-negative']+=1;return {eligible:[],decisions};}
     expression.lastIndex = 0;
     const eligible = [];
     for (const match of text.matchAll(expression)) {

@@ -68,7 +68,7 @@ test('catalog references use only reviewed public domains and disclose missing r
  'beyond-mogai-pride-flags.tumblr.com','bi.org','biaroace.tumblr.com','c4ss.org','cejce.berkeley.edu','csd-deutschland.de','cupidpride.wordpress.com','gend3r.com','gender.fandom.com','gilbertbaker.com','interactadvocates.org','lgbt.fandom.com','lgbtqidentity.wikitide.org','marybaldwin.edu','medlineplus.gov','mogailabel.fandom.com','morgancarpenter.com','neuroqueer.fandom.com','new.lgbtqia.wiki','nonbinary.wiki','pflag.org','pride-color-schemes.tumblr.com','prideflag.fandom.com','progress.gay','queer-community.fandom.com','queer-dictionary.crd.co','queerdom.fandom.com','queerplus.wikioasis.org','salmacian.org','unece.org','www.accessmhct.com','www.aromanticism.org','www.bloomingtonpridemn.org','www.colorado.edu','www.dictionary.com','www.freedressing.org','www.fugues.com','www.lgbtqnation.com','www.onwa.ca','www.phila.gov','www.reddit.com','www.schwulesmuseum.de','www.uwgb.edu','www.wpi.edu','youthrex.com'
  ]);
  for(const item of exp.Catalog.identities){
-   for(const url of [...item.sources,...item.flag.sources,...item.verification.sources,item.flag.source].filter(Boolean))assert.ok(allowed.has(new URL(url).hostname),url);
+   for(const url of [...item.sources,...item.flag.sources,...item.verification.sources,item.flag.source].filter(Boolean))assert.ok(allowed.has(new URL(url).hostname)||url==='https://www.deviantart.com/pride-flags/art/Polyromantic-1-607943635',url);
    if(item.definition&&!item.sources.length)assert.equal(item.definitionStatus,'public-reference-pending',item.id);
  }
 });

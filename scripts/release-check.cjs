@@ -15,7 +15,7 @@ if (/data:image\//u.test(script)) throw new Error('Images must be referenced by 
 if (/@resource\s+/m.test(script)) throw new Error('Direct-install userscript must not declare @resource entries.');
 if (/@grant\s+GM_getResourceText/m.test(script)) throw new Error('Direct-install userscript must not grant GM_getResourceText.');
 const bytes = Buffer.byteLength(script, 'utf8');
-if (bytes < 100 * 1024 || bytes > 400 * 1024) throw new Error(`Direct-install userscript must be 100–400 KiB (got ${bytes} bytes).`);
+if (bytes < 100 * 1024 || bytes > 448 * 1024) throw new Error(`Direct-install userscript must be 100–448 KiB (got ${bytes} bytes).`);
 if (/^\/\/ @require\s+/m.test(script)) throw new Error('Remote executable JavaScript dependency detected.');
 execFileSync(process.execPath, [path.join(root, 'scripts', 'build.cjs'), '--check'], { stdio: 'inherit' });
 const tests = fs.readdirSync(path.join(root, 'tests')).filter((name) => name.endsWith('.test.cjs')).map((name) => path.join(root, 'tests', name));

@@ -72,16 +72,20 @@ EXP.UI = (() => {
   function renderIdentities() {
     const state = EXP.Settings.snapshot(); const section = group('Identity Catalog', `${EXP.Catalog.identities.length} reviewed source identities. Context rules remain active for ambiguous terms.`); const search = el('input', { type: 'search', class: 'search', placeholder: 'Search identities and aliases', 'aria-label': 'Search identity catalog' }); const list = el('div', { class: 'identity-list' });
     let offset = 0;
+    let reviewFilter = 'all';
     const pagination = el('div', { class: 'button-grid' });
     const count = el('p', { class: 'catalog-results', role: 'status' });
     section.append(switchControl('Romantic identities', '', state.includeRomantic, (includeRomantic) => update({ includeRomantic }, 'romantic-identities')));
     section.append(el('p', {}, 'Include romantic and combined aroace labels in page highlighting. Definitions stay available in this catalog.'));
     section.append(el('p', {}, 'Check marks indicate Wikipedia or peer-reviewed source support.'));
+    const reviewSummary=EXP.Catalog.review;
+    section.append(el('p',{},reviewSummary('definition').length+' definitions, '+reviewSummary('flag').length+' flag references, and '+reviewSummary('palette').length+' exact palettes still need evidence. These counts overlap.'));
+    section.append(selectControl('Evidence review','',reviewFilter,[['all','All entries'],['definition','Definition reference needed'],['flag','Flag reference needed'],['palette','Exact palette not verified']],value=>{reviewFilter=value;offset=0;paint();}));
     const previous = button('Previous results', () => { offset = Math.max(0, offset - 3); paint(); });
     const next = button('Next results', () => { offset += 3; paint(); });
     pagination.append(previous, next);
     const paint = () => {
-      const results = EXP.Catalog.search(search.value.trim());
+      const results = EXP.Catalog.search(search.value.trim()).filter(identity=>reviewFilter==='all'||EXP.Catalog.evidenceGaps(identity)[reviewFilter]);
       offset = Math.min(offset, Math.max(0, Math.floor((results.length - 1) / 3) * 3));
       list.replaceChildren(...results.slice(offset, offset + 3).map(identity => identityRow(identity, state)));
       if (!list.childElementCount) list.append(el('p', { class: 'empty' }, 'No identities match this search.'));
@@ -111,6 +115,12 @@ EXP.UI = (() => {
     section.append(statusRow('Current-page status', `Route epoch ${engineState.routeEpoch}`, engineState.status));
     section.append(statusRow('Match count', 'Eligible current-page records.', String(engineState.total)));
     const controls = el('div', { class: 'button-grid' }); controls.append(button('Previous Match', () => { const result = EXP.Engine.navigatePrevious(); announce(result ? `Match ${result.position} of ${result.total}.` : 'No match to navigate.'); }), button('Next Match', () => { const result = EXP.Engine.navigateNext(); announce(result ? `Match ${result.position} of ${result.total}.` : 'No match to navigate.'); }), button('Highlight All', () => { EXP.Engine.highlightAll(); announce('All eligible highlights are visible.'); })); section.append(controls);
+    const corrections=el('details',{class:'local-correction-card'});corrections.append(el('summary',{},'Correct an unwanted match'));
+    const phrase=el('input',{'aria-label':'Phrase to leave unchanged',maxlength:'200',placeholder:'Exact phrase or short context'});
+    corrections.append(phrase,button('Ignore phrase on this site',()=>{const text=phrase.value.trim();if(!text)return;const state=EXP.Settings.snapshot(),site={...(state.siteOverrides[location.hostname]||{})};site.ignoredPhrases=[...new Set([...(site.ignoredPhrases||[]),text])];update({siteOverrides:{...state.siteOverrides,[location.hostname]:site}},'local-correction');announce('Text containing this phrase will be left unchanged on this site.');}));
+    for(const text of state.ignoredPhrases||[])corrections.append(button('Remove global exception: '+text,()=>update({ignoredPhrases:state.ignoredPhrases.filter(v=>v!==text)},'remove-correction')));
+    for(const text of state.siteOverrides[location.hostname]?.ignoredPhrases||[])corrections.append(button('Remove site exception: '+text,()=>{const site={...state.siteOverrides[location.hostname]};site.ignoredPhrases=site.ignoredPhrases.filter(v=>v!==text);update({siteOverrides:{...state.siteOverrides,[location.hostname]:site}},'remove-correction');}));
+    corrections.append(el('p',{},'Corrections stay on this device. Matching text nodes are left unchanged; nothing is submitted to a server.'));section.append(corrections);
     section.append(switchControl('Temporarily Hide Highlights', 'Session-only; matching and counts remain active.', engineState.temporarilyHidden, (value) => EXP.Engine.setTemporaryHidden(value)));
     return section;
   }
@@ -131,7 +141,7 @@ EXP.UI = (() => {
   function diagnosticReport() { const core = EXP.Core.diagnosticSnapshot(); return EXP.Diagnostics.createDiagnosticsReport('PRISMA', { host, settings: EXP.Settings.exportData(), updates: EXP.Updates.status(), product: { id: 'prisma', version: EXP.VERSION }, lifecycle: engineState.status, routeEpoch: engineState.routeEpoch, catalog: EXP.Catalog.status(), matches: { total: engineState.total, byIdentityId: engineState.summary, decisionBands: engineState.decisions }, processing: engineState.metrics, safeMode: EXP.Settings.snapshot().safeMode, core }); }
   function renderAdvanced() {
     const state = EXP.Settings.snapshot(); const catalog = EXP.Catalog.status(); const section = group('Diagnostics', 'Page, technical, console, and plugin details; captured locally.');
-    section.append(EXP.Diagnostics.createDiagnosticsControls(diagnosticReport, announce));
+    section.append(EXP.Diagnostics.createDiagnosticsControls(diagnosticReport, announce), ExtraPotionsCore.createCompatibilityControls(), ExtraPotionsCore.createRecoveryControls({list:EXP.Settings.backups,capture:EXP.Settings.backup,restore:id=>{EXP.Settings.restoreBackup(id);render();},notify:announce}));
     section.append(switchControl('Safe Mode', 'Immediately restores the page and keeps this recovery menu available.', state.safeMode, (safeMode) => update({ safeMode }, 'safe-mode')));
     section.append(actionRow('Rescan page', 'Rebuilds one clean route-scoped match set.', () => { EXP.Engine.rebuild('manual-rescan'); announce('Page rescanned.'); }, 'Rescan'));
     return section;

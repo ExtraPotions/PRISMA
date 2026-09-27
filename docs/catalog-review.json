@@ -3266,11 +3266,13 @@
         "https://mogailabel.fandom.com/wiki/Panromantic"
       ],
       "definitionEvidence": "Polyromantic comparison subsection states multiple but not necessarily all genders.",
-      "flagSources": [],
-      "flagVariant": "",
+      "flagSources": [
+        "https://www.deviantart.com/pride-flags/art/Polyromantic-1-607943635"
+      ],
+      "flagVariant": "Polyromantic (1), published by Pride-Flags in 2016",
       "colors": [],
-      "flagEvidence": "Unresolved for the catalog definition. Category contains a specifically named asset; only discovery evidence, no inspected variant or palette.",
-      "status": "definition-sourced",
+      "flagEvidence": "Publicly titled Polyromantic (1) by Pride-Flags, published May 10, 2016. Exact palette values not verified; no upgrade to color or definition verification.",
+      "status": "definition-sourced; flag-documented",
       "limitations": "Exact palette not verified.",
       "flagCandidates": [
         "https://lgbtqia.fandom.com/wiki/Category%3AFlags"

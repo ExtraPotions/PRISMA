@@ -44,6 +44,8 @@ EXP.Catalog = (() => {
   if (identities.some(identity => [...identity.flag.sources, identity.flag.source].filter(Boolean).some(url => !/^https:\/\//.test(url)) || (identity.flag.status === 'verified' && (!identity.flag.source || !identity.flag.variant)))) invalid.push('CATALOG_FLAG_REFERENCE');
   if (collisions.length) invalid.push('CATALOG_TERM_COLLISION');
   const search = (query = '') => { const needle = normalize(query.trim()); return identities.filter((identity) => !needle || normalize(identity.label).includes(needle) || normalize(identity.definition).includes(needle) || identity.terms.some((term) => term.normalized.includes(needle))); };
+  const evidenceGaps = identity => ({definition:identity.definitionStatus!=='public-reference',flag:identity.flag.reviewStatus!=='documented',palette:identity.flag.status!=='verified'});
+  const review = (kind='any') => identities.filter(identity=>{const gaps=evidenceGaps(identity);return kind==='any'?Object.values(gaps).some(Boolean):Boolean(gaps[kind]);});
   const status = () => Object.freeze({ valid: invalid.length === 0, errors: Object.freeze([...invalid]), identities: identities.length, terms: [...termMap.values()].reduce((n, items) => n + items.length, 0), collisions: collisions.length });
-  return Object.freeze({ identities: Object.freeze(identities), termMap, collisions: Object.freeze(collisions), positiveWords, normalize, has: (id) => byId.has(id), get: (id) => byId.get(id), search, status });
+  return Object.freeze({ identities: Object.freeze(identities), evidenceGaps, review, termMap, collisions: Object.freeze(collisions), positiveWords, normalize, has: (id) => byId.has(id), get: (id) => byId.get(id), search, status });
 })();

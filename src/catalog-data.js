@@ -1,4 +1,3 @@
-/* Identity-language catalog with public references only. See docs/catalog-sources.md. */
 EXP.CatalogData = [
   {
     "id": "rainbow",
@@ -4738,9 +4737,12 @@ EXP.CatalogData = [
     "contextTerms": [],
     "flag": {
       "status": "unverified",
-      "note": "Unresolved for the catalog definition. Category contains a specifically named asset; only discovery evidence, no inspected variant or palette.",
-      "sources": [],
-      "reviewStatus": "unresolved"
+      "note": "A public design reference is documented. The exact palette has not been verified; a neutral underline remains in use.",
+      "sources": [
+        "https://www.deviantart.com/pride-flags/art/Polyromantic-1-607943635"
+      ],
+      "reviewStatus": "documented",
+      "variant": "Polyromantic (1), published by Pride-Flags in 2016"
     },
     "definitionStatus": "public-reference",
     "romantic": true,

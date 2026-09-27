@@ -47,7 +47,7 @@ The rebuild pins the byte-verified **exp-core 3.3.4** bundle, derived from **Dro
 
 ## Catalog references
 
-All 135 entries and 257 recognition terms have individual definition and flag review records. 133 definitions have reviewed public references; 2 remain provisional. Under the requested evidence rule, 106 entries are Wikipedia-listed and receive a check icon; 29 remain unverified. Multiple references are retained. The 11 romantic and combined aroace entries stay in the database and are controlled by the Romantic identities toggle, off by default. Flag designs are documented for 112 entries; 23 remain unresolved. 30 highlight palettes have exact color evidence, 34 remain inherited, and 71 use neutral underlines. See [catalog sources and per-entry review](docs/catalog-sources.md).
+All 135 entries and 257 recognition terms have individual definition and flag review records. 133 definitions have reviewed public references; 2 remain provisional. Under the requested evidence rule, 106 entries are Wikipedia-listed and receive a check icon; 29 remain unverified. Multiple references are retained. The 11 romantic and combined aroace entries stay in the database and are controlled by the Romantic identities toggle, off by default. Flag designs are documented for 113 entries; 22 remain unresolved. 30 highlight palettes have exact color evidence, 34 remain inherited, and 71 use neutral underlines. See [catalog sources and per-entry review](docs/catalog-sources.md).
 
 ## Screenshots
 
@@ -84,3 +84,9 @@ Restores Firefox startup on pages with restrictive security policies using conte
 ## 3.1.2 update
 
 Restores the donation button through the shared core default. Bundles exp-core 3.3.6 so opening one launcher menu closes other product menus.
+
+## Local development changes (unreleased)
+
+Adds local settings backups and rollback, current-page product compatibility, and local phrase/context corrections under Highlights. A correction preserves the entire matching text node on that site and can be removed. Language includes separate evidence filters for missing definition sources, missing flag references, and unverified exact palettes. Documents the Pride-Flags Polyromantic (1) design without upgrading the unverified palette or definition. Two definition references and 22 flag references remain unresolved; the review does not manufacture verification. The readable userscript size budget is now 448 KiB to accommodate the shared recovery controls.
+
+These changes are prepared locally. The stable installation links above still serve the published release.
