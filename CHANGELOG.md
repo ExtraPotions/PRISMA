@@ -1,6 +1,9 @@
-## Unreleased
+## 3.1.3 — 2026-09-26
 
-- Adds local settings backups and rollback, current-page product compatibility, and local phrase/context corrections under Highlights. A correction preserves the entire matching text node on that site and can be removed. Language includes separate evidence filters for missing definition sources, missing flag references, and unverified exact palettes. Documents the Pride-Flags Polyromantic (1) design without upgrading the unverified palette or definition. Two definition references and 22 flag references remain unresolved; the review does not manufacture verification. The readable userscript size budget is now 448 KiB to accommodate the shared recovery controls.
+- Adds site-specific phrase corrections that leave matching text nodes unchanged.
+- Separates definition, flag-design, and exact-palette evidence review filters.
+- Documents 113 flag designs while keeping two definition references and 22 flag references unresolved.
+- Adds settings backups, rollback, and compatibility details through exp-core 3.3.7.
 
 ## 3.1.2 — 2026-09-26
 

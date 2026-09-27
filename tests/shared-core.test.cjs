@@ -65,7 +65,7 @@ test('schema-1 preferences survive the rebuild and lifecycle cleanup restores th
   }));
   for (const [key, value] of Object.entries(settings)) assert.deepEqual(state.settings[key], value);
   assert.equal(state.version, require('../package.json').version);
-  assert.equal(state.core, '3.3.6');
+  assert.equal(state.core, '3.3.7');
   assert.equal(state.lifecycle, 'enabled');
   assert.equal(state.style, 'soft-fill');
   await page.evaluate(async () => { await window.testPrisma.App.lifecycle.disable(); });
@@ -100,13 +100,13 @@ test('Escape cancels an import draft before closing the shared menu', async t =>
   assert.equal(await page.locator('#exp-prisma-root .panel').isVisible(), false);
 });
 
-test('bundled core is the verified 3.3.6 artifact derived from Dropper 3.3.4', () => {
+test('bundled core is the verified 3.3.7 artifact derived from Dropper 3.3.5', () => {
   const crypto = require('node:crypto');
   const bundle = fs.readFileSync(path.resolve(__dirname, '../vendor/exp-core/exp-core.js'));
   const manifest = require('../vendor/exp-core/manifest.json');
-  assert.equal(crypto.createHash('sha256').update(bundle).digest('hex'), 'c60cf3b20a427d1fb866739b6d6ad348b3b0bd2fea75e713df415ac873c31412');
-  assert.equal(manifest.coreVersion, '3.3.6');
-  assert.equal(manifest.source.sourceVersion, '3.3.4');
+  assert.equal(crypto.createHash('sha256').update(bundle).digest('hex'), '24979bddd00e064082e5240b69026842d309c88966e943068019cbeb724e58d6');
+  assert.equal(manifest.coreVersion, '3.3.7');
+  assert.equal(manifest.source.sourceVersion, '3.3.5');
 });
 
 test('current changelog uses shared menu geometry at every width', async t => {

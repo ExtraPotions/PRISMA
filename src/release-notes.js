@@ -1,7 +1,8 @@
-EXP.VERSION = '3.1.2';
+EXP.VERSION = '3.1.3';
 
 EXP.ReleaseNotes = (() => {
   const notes = Object.freeze({
+    '3.1.3': ["Adds site-specific phrase corrections that leave matching text nodes unchanged.","Separates definition, flag-design, and exact-palette evidence review filters.","Documents 113 flag designs while keeping two definition references and 22 flag references unresolved.","Adds settings backups, rollback, and compatibility details through exp-core 3.3.7."],
     '3.1.2': ["Restores the donation button through the shared core default.","Bundles exp-core 3.3.6 so opening one launcher menu closes other product menus."],
     '3.1.1': ["Restores Firefox startup on pages with restrictive security policies using content injection.","Keeps settings copies in the userscript realm and bundles exp-core 3.3.5 with idle menu fixes."],
     '3.1.0': Object.freeze([
