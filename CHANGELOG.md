@@ -1,3 +1,9 @@
+## 3.1.7 — 2026-09-27
+
+- Lets every launcher move left, right, up, or down within the shared grid.
+- Persists launcher order and supports Alt+Arrow keyboard reordering.
+- Bundles exp-core 3.3.11 without changing identity recognition or flag data.
+
 ## 3.1.6 — 2026-09-27
 
 - Adds layered menu surfaces so cards, controls, and inputs remain visually distinct.
