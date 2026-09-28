@@ -1,4 +1,9 @@
 EXP.VERSION = '3.1.11';
+ExtraPotionsCore.registerSuiteProduct?.({
+  productId: 'prisma',
+  productVersion: EXP.VERSION,
+  capabilities: ['text.identity-detection', 'text.identity-highlighting', 'identity.catalog'],
+});
 ExtraPotionsCore.registerDiagnosticsProduct('prisma', EXP.VERSION);
 EXP.App = (() => {
   let scheduler, navigationCleanup, settingsCleanup, lifecycle;
