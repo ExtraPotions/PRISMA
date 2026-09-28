@@ -1,7 +1,8 @@
-EXP.VERSION = '3.1.8';
+EXP.VERSION = '3.1.9';
 
 EXP.ReleaseNotes = (() => {
   const notes = Object.freeze({
+    '3.1.9': ['Updates the shared foundation to exp-core 3.3.13.','Rebuilds shared UI, launcher, diagnostics, notices, and coordination from the pinned Core release.','Leaves PRISMA product-specific engine behavior unchanged.'],
     '3.1.8': ["Adds the shared themed outer menu border across the ExtraPotions suite.","Bundles exp-core 3.3.12 pinned to the verified Dropper 3.3.15 baseline.","Preserves PRISMA identity recognition, catalog data, and flag rendering behavior."],
     '3.1.7': ['Lets every launcher move left, right, up, or down within the shared grid.','Persists launcher order and supports Alt+Arrow keyboard reordering.','Bundles exp-core 3.3.11 without changing identity recognition or flag data.'],
     '3.1.6': ['Adds layered menu surfaces so cards, controls, and inputs remain visually distinct.','Uses accessible semantic colors for links, focus indicators, and accent text.','Bundles the verified exp-core 3.3.10 artifact without changing identity recognition or flag data.'],
