@@ -31,5 +31,5 @@ test('PRISMA declares its presentation interoperability phase', () => {
 
 test('PRISMA uses the shared presentation contract at its existing engine gate', () => {
   const engine = read('src/engine.js');
-  assert.ok(engine.includes("isPresentationSuppressed?.(node?.parentElement)"));
+  assert.ok(engine.includes("globalThis.ExtraPotionsCore?.isPresentationSuppressed?.(node?.parentElement)"));
 });
