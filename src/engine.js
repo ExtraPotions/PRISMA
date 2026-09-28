@@ -14,7 +14,7 @@ EXP.Engine = (() => {
   const notify = () => { const value = snapshot(); for (const listener of listeners) listener(value); };
   const isIgnored = (node) => Boolean(
     node?.parentElement?.closest(ignoredSelector) ||
-    ExtraPotionsCore.isPresentationSuppressed?.(node?.parentElement)
+    globalThis.ExtraPotionsCore?.isPresentationSuppressed?.(node?.parentElement)
   );
   function resetDecisionCounts() { for (const key of Object.keys(decisions)) decisions[key] = 0; }
   function addDecisions(value) { for (const [key, count] of Object.entries(value)) decisions[key] += count; }
