@@ -9,6 +9,8 @@ jobs:
         with:
           node-version: 22
       - run: npm ci
+      - name: Check Core rollout preparer
+        run: node --check scripts/prepare-core-release.cjs
       - run: npx playwright install --with-deps chromium
       - run: npm test
       - name: Verify pinned exp-core
