@@ -16,7 +16,9 @@ test('distribution metadata and privacy boundaries are present', () => {
   assert.match(source, /@homepageURL\s+https:\/\/github\.com\/ExtraPotions\/PRISMA/);
   assert.match(source, /@supportURL\s+https:\/\/github\.com\/ExtraPotions\/PRISMA\/issues/);
   assert.match(source, /@updateURL\s+https:\/\/github\.com\/ExtraPotions\/PRISMA\/releases\/latest\/download\/prisma\.user\.js/);
-  assert.match(source, /api\.github\.com\/repos\/ExtraPotions\/PRISMA\/releases\/latest/);
+  assert.match(source, /repository:\s*'ExtraPotions\/PRISMA'/);
+  const core = fs.readFileSync(path.join(root, 'vendor', 'exp-core', 'exp-core.js'), 'utf8');
+  assert.match(core, /const ENDPOINT = String\(options\.endpoint \|\| \('https:\/\/api\.github\.com\/repos\/' \+ repository \+ '\/releases\/latest'\)\);/);
   assert.doesNotMatch(source, /vivid-prism-heron/);
   assert.match(source, /exp:v3:prisma/);
   assert.doesNotMatch(source, /@require\s+/);
