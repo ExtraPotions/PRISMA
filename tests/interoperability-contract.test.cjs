@@ -21,3 +21,11 @@ test('generated PRISMA userscript carries the same suite declaration', () => {
   assert.match(built, /productId:\s*'prisma'/u);
   assert.match(built, /text\.identity-highlighting/u);
 });
+
+
+test('PRISMA declares its presentation interoperability phase', () => {
+  const source = read('src/main.js');
+  assert.match(source, /registerPresentationProvider\\?\\./u);
+  assert.match(source, /productId:\\s*'prisma'/u);
+  assert.match(source, /'annotate'/u);
+});
