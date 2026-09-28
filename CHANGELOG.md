@@ -1,3 +1,9 @@
+## 3.1.8 — 2026-09-27
+
+- Adds the shared themed outer menu border across the ExtraPotions suite.
+- Bundles exp-core 3.3.12 pinned to the verified Dropper 3.3.15 baseline.
+- Preserves PRISMA identity recognition, catalog data, and flag rendering behavior.
+
 ## 3.1.7 — 2026-09-27
 
 - Lets every launcher move left, right, up, or down within the shared grid.
