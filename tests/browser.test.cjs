@@ -540,7 +540,7 @@ test('menu routes use simplified labels with scoped secondary disclosures', asyn
   });
   assert.deepEqual(facts.labels, ['Highlights', 'Appearance', 'Advanced', 'System']);
   assert.equal(facts.subtitle, 'Your self-identity. Recognized.');
-  assert.deepEqual(facts.appearance, ['Appearance', 'Accessibility']);
+  assert.deepEqual(facts.appearance, ['Appearance', 'Accessibility', 'Highlight style']);
   assert.equal(facts.styleCollapsed, true);
   assert.ok(facts.advancedDisclosures.includes('Language'));
   assert.ok(facts.advancedDisclosures.includes('Sites'));
