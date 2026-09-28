@@ -26,7 +26,7 @@ test('PRISMA declares its presentation interoperability phase', () => {
   const source = read('src/main.js');
   assert.ok(source.includes('registerPresentationProvider?.({'));
   assert.ok(source.includes("productId: 'prisma'"));
-  assert.ok(source.includes("'annotate'"));
+  assert.ok(source.includes('"annotate"'));
 });
 
 test('PRISMA uses the shared presentation contract at its existing engine gate', () => {
