@@ -81,7 +81,7 @@ test('menu palette recolors the shell and narrow rows do not create nested scrol
   const facts = await root.evaluate((node) => {
     const shadow = node.shadowRoot;
     shadow.querySelector('.launcher').click();
-    shadow.querySelector('[data-section="look"]').click();
+    shadow.querySelector('[data-section="appearance"]').click();
     const panel = shadow.querySelector('.panel');
     const before = getComputedStyle(panel).backgroundColor;
     shadow.querySelector('.exp-theme-swatch[aria-label="Midnight"]').click();
@@ -442,7 +442,7 @@ test('reference-led compact dock keeps one expandable section open', async () =>
       };
     });
     assert.equal(initial.width, 260);
-    assert.deepEqual(initial, { ...initial, sections: 6, visibleBodies: 0, openRoute: undefined, headerBadge: 38 });
+    assert.deepEqual(initial, { ...initial, sections: 4, visibleBodies: 0, openRoute: undefined, headerBadge: 38 });
     const changed = await page.locator('#exp-prisma-root').evaluate((host) => {
       const root = host.shadowRoot;
       root.querySelector('[data-section="page"]').click();
@@ -517,38 +517,34 @@ test('PRISMA paints launcher chrome when the page forbids inline style tags', as
   assert.equal(painted.position, 'fixed');
 });
 
-test('menu routes use accurate labels and scoped section contents', async (t) => {
-  const { browser, page } = await fixture('<main>bisexual pansexual</main>');
+test('menu routes use simplified labels with scoped secondary disclosures', async (t) => {
+  const { browser, page } = await fixture('<main>The LGBTQ community celebrates bisexual pride.</main>');
   t.after(() => browser.close());
   const facts = await page.locator('#exp-prisma-root').evaluate((host) => {
     const root = host.shadowRoot;
     root.querySelector('.launcher').click();
-    const labels = [...root.querySelectorAll('.nav button.route')].map((button) => button.querySelector('.fl-tool-title')?.textContent);
+    const labels = [...root.querySelectorAll('.nav button.route .fl-tool-title')].map((node) => node.textContent.trim());
     const subtitle = root.querySelector('[data-exp-part="subtitle"]')?.textContent || '';
     const openRoute = (label) => {
-      [...root.querySelectorAll('.nav button.route')].find((button) => button.querySelector('.fl-tool-title')?.textContent === label).click();
-      const body = root.querySelector('.route-body:not([hidden])');
-      return [...body.querySelectorAll('h3')].map((heading) => heading.textContent.trim());
+      [...root.querySelectorAll('.nav button.route')].find((button) => button.querySelector('.fl-tool-title')?.textContent === label)?.click();
     };
-    return {
-      labels,
-      subtitle,
-      highlights: openRoute('Highlights'),
-      style: openRoute('Highlight Style'),
-      appearance: openRoute('Appearance'),
-      language: openRoute('Language'),
-      sites: openRoute('Sites'),
-      settings: openRoute('System'),
-    };
+    openRoute('Appearance');
+    const appearance = [...root.querySelectorAll('.route-body:not([hidden]) h3')].map((heading) => heading.textContent.trim());
+    const styleDisclosure = [...root.querySelectorAll('.route-body:not([hidden]) details')].find((item) => item.querySelector(':scope > summary')?.textContent.includes('Highlight style'));
+    const styleCollapsed = Boolean(styleDisclosure && !styleDisclosure.open);
+    openRoute('Advanced');
+    const advancedDisclosures = [...root.querySelectorAll('.route-body:not([hidden]) details > summary')].map((item) => item.textContent.trim());
+    openRoute('System');
+    const systemVisible = Boolean(root.querySelector('.route-body:not([hidden])'));
+    return { labels, subtitle, appearance, styleCollapsed, advancedDisclosures, systemVisible };
   });
-  assert.deepEqual(facts.labels, ['Highlights', 'Highlight Style', 'Appearance', 'Language', 'Sites', 'System']);
+  assert.deepEqual(facts.labels, ['Highlights', 'Appearance', 'Advanced', 'System']);
   assert.equal(facts.subtitle, 'Your self-identity. Recognized.');
-  assert.deepEqual(facts.highlights, ['Highlights']);
-  assert.deepEqual(facts.style, ['Highlight style']);
   assert.deepEqual(facts.appearance, ['Appearance', 'Accessibility']);
-  assert.deepEqual(facts.language, ['Identity Catalog', 'Context Engine']);
-  assert.deepEqual(facts.sites, ['Current Site']);
-  assert.deepEqual(facts.settings, []);
+  assert.equal(facts.styleCollapsed, true);
+  assert.ok(facts.advancedDisclosures.includes('Language'));
+  assert.ok(facts.advancedDisclosures.includes('Sites'));
+  assert.equal(facts.systemVisible, true);
 });
 
 test('README screenshots exist at stable docs paths', () => {
