@@ -8,25 +8,30 @@ const path = require('node:path');
 const root = path.resolve(__dirname, '..');
 const read = relative => fs.readFileSync(path.join(root, relative), 'utf8');
 
-test('PRISMA declares its suite interoperability capabilities', () => {
+test('PRISMA delegates its suite interoperability metadata to Core', () => {
   const source = read('src/main.js');
-  assert.ok(source.includes('registerSuiteProduct?.({'));
-  assert.ok(source.includes('text.identity-detection'));
-  assert.ok(source.includes('text.identity-highlighting'));
-  assert.ok(source.includes('identity.catalog'));
+  const suiteStart = source.indexOf('registerSuiteProduct?.({');
+  const presentationStart = source.indexOf('registerPresentationProvider?.({');
+  const diagnosticsStart = source.indexOf('registerDiagnosticsProduct');
+  assert.ok(suiteStart >= 0);
+  assert.ok(presentationStart > suiteStart);
+  assert.ok(diagnosticsStart > presentationStart);
+  const suiteBlock = source.slice(suiteStart, presentationStart);
+  const presentationBlock = source.slice(presentationStart, diagnosticsStart);
+  assert.ok(suiteBlock.includes("productId: 'prisma'"));
+  assert.ok(suiteBlock.includes('productVersion: EXP.VERSION'));
+  assert.doesNotMatch(suiteBlock, /capabilities\s*:/u);
+  assert.ok(presentationBlock.includes("productId: 'prisma'"));
+  assert.doesNotMatch(presentationBlock, /phases\s*:/u);
 });
 
-test('generated PRISMA userscript carries the same suite declaration', () => {
+test('generated PRISMA userscript carries the delegated interoperability registration', () => {
   const built = read('prisma.user.js');
-  assert.ok(built.includes("productId: 'prisma'"));
-  assert.ok(built.includes('text.identity-detection'));
-});
-
-test('PRISMA declares its presentation interoperability phase', () => {
-  const source = read('src/main.js');
-  assert.ok(source.includes('registerPresentationProvider?.({'));
-  assert.ok(source.includes("productId: 'prisma'"));
-  assert.ok(source.includes('"annotate"'));
+  const suiteStart = built.indexOf('registerSuiteProduct?.({');
+  const presentationStart = built.indexOf('registerPresentationProvider?.({');
+  assert.ok(suiteStart >= 0);
+  assert.ok(presentationStart > suiteStart);
+  assert.ok(built.slice(suiteStart, presentationStart).includes("productId: 'prisma'"));
 });
 
 test('PRISMA uses the shared presentation contract at its existing engine gate', () => {
