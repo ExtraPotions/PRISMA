@@ -2,11 +2,9 @@ EXP.VERSION = '3.1.11';
 ExtraPotionsCore.registerSuiteProduct?.({
   productId: 'prisma',
   productVersion: EXP.VERSION,
-  capabilities: ['text.identity-detection', 'text.identity-highlighting', 'identity.catalog'],
 });
 ExtraPotionsCore.registerPresentationProvider?.({
   productId: 'prisma',
-  phases: ["annotate"],
 });
 ExtraPotionsCore.registerDiagnosticsProduct('prisma', EXP.VERSION);
 EXP.App = (() => {
