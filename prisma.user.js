@@ -8629,13 +8629,6 @@ EXP.UI = (() => {
 })();
 
 EXP.VERSION = '3.1.11';
-ExtraPotionsCore.registerSuiteProduct?.({
-  productId: 'prisma',
-  productVersion: EXP.VERSION,
-});
-ExtraPotionsCore.registerPresentationProvider?.({
-  productId: 'prisma',
-});
 ExtraPotionsCore.registerDiagnosticsProduct('prisma', EXP.VERSION);
 EXP.App = (() => {
   let scheduler, navigationCleanup, settingsCleanup, lifecycle;
