@@ -100,13 +100,13 @@ test('Escape cancels an import draft before closing the shared menu', async t =>
   assert.equal(await page.locator('#exp-prisma-root .panel').isVisible(), false);
 });
 
-test('bundled core is the verified 3.3.12 artifact derived from Dropper', () => {
+test('bundled core is the verified 3.3.12 artifact derived from Dropper 3.3.15', () => {
   const crypto = require('node:crypto');
   const bundle = fs.readFileSync(path.resolve(__dirname, '../vendor/exp-core/exp-core.js'));
   const manifest = require('../vendor/exp-core/manifest.json');
   assert.equal(crypto.createHash('sha256').update(bundle).digest('hex'), manifest.bundleSha256);
   assert.equal(manifest.coreVersion, '3.3.12');
-  assert.equal(manifest.source.sourceVersion, '3.3.5');
+  assert.equal(manifest.source.sourceVersion, '3.3.15');
 });
 
 test('current changelog uses shared menu geometry at every width', async t => {
