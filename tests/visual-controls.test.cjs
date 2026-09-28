@@ -63,7 +63,7 @@ test('animation has a changing rendered effect for every style and respects moti
   await page.locator('#exp-prisma-root select[aria-label="Reduce motion"]').selectOption('reduce');
   assert.equal(await page.locator('.exp-prisma-hit').evaluate(node=>getComputedStyle(node).animationName),'none');
   await page.locator('#exp-prisma-root select[aria-label="Reduce motion"]').selectOption('allow');
-  const styleDetails = page.locator('#exp-prisma-root details').filter({hasText:'Highlight style'}); if (!(await styleDetails.getAttribute('open'))) await styleDetails.locator('summary').click();
+  const styleDetails = page.locator('#exp-prisma-root details').filter({hasText:'Highlight style'}); if (!(await styleDetails.evaluate((node) => node.open))) await styleDetails.locator('summary').click();
   await page.locator('#exp-prisma-root [aria-label="Animation"]').click();
   assert.equal(await page.locator('.exp-prisma-hit').evaluate(node=>getComputedStyle(node).animationName),'none');
 });
