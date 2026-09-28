@@ -16,7 +16,7 @@ test('PRISMA uses the shared version-scoped updater and concise release parsing'
   assert.match(services, /ExtraPotionsCore\.(?:createReleaseUpdateChecker|createProductServices)/);
   assert.match(services, /productId:\s*'prisma'/);
   assert.match(services, /repository:\s*'ExtraPotions\/PRISMA'/);
-  assert.match(services, /currentVersion:\s*EXP\.VERSION/);
+  assert.match(services, /currentVersion:\s*(?:\(\)\s*=>\s*)?EXP\.VERSION/);
 
   assert.match(core, /function releaseDetails\(body\)/);
   assert.match(core, /checkedForCurrentVersion = state\.checkedForVersion === currentVersion/);
