@@ -13,7 +13,8 @@ async function fixture(t, css = '') {
   await page.addInitScript({content:script}); await page.goto('https://fixture.test/page');
   await page.waitForSelector('.exp-prisma-hit');
   await page.locator('#exp-prisma-root .launcher').click();
-  await page.locator('#exp-prisma-root [data-section="style"]').click();
+  await page.locator('#exp-prisma-root [data-section="appearance"]').click();
+  await page.locator('#exp-prisma-root details').filter({hasText:'Highlight style'}).locator('summary').click();
   return page;
 }
 async function style(page, value) {
@@ -57,13 +58,14 @@ test('animation has a changing rendered effect for every style and respects moti
   }
   await page.emulateMedia({reducedMotion:'reduce'});
   assert.equal(await page.locator('.exp-prisma-hit').evaluate(node=>getComputedStyle(node).animationName),'none');
-  await page.locator('#exp-prisma-root [data-section="look"]').click();
+  await page.locator('#exp-prisma-root [data-section="appearance"]').click();
   await page.locator('#exp-prisma-root select[aria-label="Reduce motion"]').selectOption('allow');
   assert.notEqual(await page.locator('.exp-prisma-hit').evaluate(node=>getComputedStyle(node).animationName),'none');
   await page.locator('#exp-prisma-root select[aria-label="Reduce motion"]').selectOption('reduce');
   assert.equal(await page.locator('.exp-prisma-hit').evaluate(node=>getComputedStyle(node).animationName),'none');
   await page.locator('#exp-prisma-root select[aria-label="Reduce motion"]').selectOption('allow');
-  await page.locator('#exp-prisma-root [data-section="style"]').click();
+  await page.locator('#exp-prisma-root [data-section="appearance"]').click();
+  const styleDetails = page.locator('#exp-prisma-root details').filter({hasText:'Highlight style'}); if (!(await styleDetails.getAttribute('open'))) await styleDetails.locator('summary').click();
   await page.locator('#exp-prisma-root [aria-label="Animation"]').click();
   assert.equal(await page.locator('.exp-prisma-hit').evaluate(node=>getComputedStyle(node).animationName),'none');
 });
