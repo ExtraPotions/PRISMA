@@ -27,11 +27,11 @@ test('Romantic identities switch updates current-page matches, survives reload, 
  await page.route('https://romantic.test/**',route=>route.fulfill({contentType:'text/html; charset=utf-8',body:'<!doctype html><p>Biromantic orientation and bisexual pride.</p>'}));
  await page.goto('https://romantic.test/');await page.waitForSelector('[data-identity="bisexual"]');
  assert.equal(await page.locator('[data-identity="biromantic"]').count(),0);
- const root=page.locator('#exp-prisma-root');await root.locator('.launcher').click();await root.locator('[data-section="tools"]').click();
+ const root=page.locator('#exp-prisma-root');await root.locator('.launcher').click();await root.locator('[data-section="advanced"]').click();await root.locator('details').filter({hasText:'Language'}).locator('summary').click();
  const toggle=root.getByRole('switch',{name:'Romantic identities',exact:true});
  assert.equal(await toggle.getAttribute('aria-checked'),'false');await toggle.click();await page.waitForSelector('[data-identity="biromantic"]');
  await page.reload();await page.waitForSelector('[data-identity="biromantic"]');
- await root.locator('.launcher').click();await root.locator('[data-section="tools"]').click();await toggle.click();
+ await root.locator('.launcher').click();await root.locator('[data-section="advanced"]').click();await root.locator('details').filter({hasText:'Language'}).locator('summary').click();await toggle.click();
  await page.waitForFunction(()=>!document.querySelector('[data-identity="biromantic"]'));
  await root.getByLabel('Search identity catalog').fill('biromantic');await root.getByRole('button',{name:'Details',exact:true}).click();
  assert.match(await root.locator('.catalog-detail:not([hidden])').textContent(),/Romantic attraction/);
