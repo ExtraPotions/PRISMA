@@ -1,6 +1,6 @@
 EXP.UI = (() => {
   const ICON_URL = 'https://raw.githubusercontent.com/ExtraPotions/PRISMA/main/assets/prisma-launcher.svg';
-  const routeNames = Object.freeze([['page', 'Highlights'], ['style', 'Highlight Style'], ['look', 'Appearance'], ['tools', 'Language'], ['sites', 'Sites'], ['system', 'System']]);
+  const routeNames = Object.freeze([['page', 'Highlights'], ['appearance', 'Appearance'], ['advanced', 'Advanced'], ['system', 'System']]);
   let host, shadow, launcher, panel, live, toast, product, noticeController, toastTimer, updateCard, engineState, importDraft = null, unsubscribe;
   const PRODUCT_THEME = {"id":"prisma","name":"PRISMA gem","swatch":"linear-gradient(135deg,#100814 0 38%,#a843b6 38% 69%,#2e98a5 69% 100%)","canvas":"#100814","surface":"#211029","primary":"#a843b6","companion":"#6853c9","counterpoint":"#2e98a5","interactive":"#c05bca","bg":"#100814","panel":"#211029","line":"#4a2e55","text":"#eadcf0","muted":"#ad96b5","accent":"#a843b6","accent2":"#c05bca","skin":"linear-gradient(135deg,#a843b6 0%,#6853c9 52%,#2e98a5 100%)","skinVertical":"linear-gradient(180deg,#a843b6 0%,#6853c9 52%,#2e98a5 100%)"};
   const UI_THEMES = ExtraPotionsCore.themes(PRODUCT_THEME);
@@ -138,6 +138,19 @@ EXP.UI = (() => {
     return section;
   }
   function renderTools() { const fragment = document.createDocumentFragment(); fragment.append(renderIdentities(), renderContext()); return fragment; }
+  function renderAppearanceMenu() {
+    const fragment = document.createDocumentFragment();
+    fragment.append(renderLook(), ExtraPotionsCore.createDisclosure('Highlight style', renderHighlightStyle()));
+    return fragment;
+  }
+  function renderAdvancedMenu() {
+    const fragment = document.createDocumentFragment();
+    fragment.append(
+      ExtraPotionsCore.createDisclosure('Language', renderTools()),
+      ExtraPotionsCore.createDisclosure('Sites', renderSites())
+    );
+    return fragment;
+  }
   function diagnosticReport() { const core = EXP.Core.diagnosticSnapshot(); return EXP.Diagnostics.createDiagnosticsReport('PRISMA', { host, settings: EXP.Settings.exportData(), updates: EXP.Updates.status(), product: { id: 'prisma', version: EXP.VERSION }, lifecycle: engineState.status, routeEpoch: engineState.routeEpoch, catalog: EXP.Catalog.status(), matches: { total: engineState.total, byIdentityId: engineState.summary, decisionBands: engineState.decisions }, processing: engineState.metrics, safeMode: EXP.Settings.snapshot().safeMode, core }); }
   function renderAdvanced() {
     const state = EXP.Settings.snapshot(); const catalog = EXP.Catalog.status(); const section = group();
@@ -162,7 +175,7 @@ EXP.UI = (() => {
     data.append(actionRow('Reset PRISMA', 'Resets PRISMA V3 only. Other products are untouched.', () => { if (!confirm('Reset all PRISMA V3 settings?')) return; EXP.Settings.replace(EXP.Settings.defaults, 'product-reset'); render(); announce('PRISMA reset complete.'); }, 'Reset'));
     const fragment = document.createDocumentFragment(); fragment.append(section, renderAdvanced(), ExtraPotionsCore.createSystemGrid(preferences, data, ExtraPotionsCore.createCompatibilityControls())); return fragment;
   }
-  const routeRenderers = { page: renderPage, style: renderHighlightStyle, look: renderLook, tools: renderTools, sites: renderSites, system: renderSettings };
+  const routeRenderers = { page: renderPage, appearance: renderAppearanceMenu, advanced: renderAdvancedMenu, system: renderSettings };
   function render() {
     engineState = EXP.Engine.snapshot({ includeMatchText: false });
     product?.renderActive();
