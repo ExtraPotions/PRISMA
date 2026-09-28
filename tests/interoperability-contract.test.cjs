@@ -29,3 +29,9 @@ test('PRISMA declares its presentation interoperability phase', () => {
   assert.match(source, /productId:\\s*'prisma'/u);
   assert.match(source, /'annotate'/u);
 });
+
+
+test('PRISMA honors shared presentation suppression before matching text', () => {
+  const source = read('src/engine.js');
+  assert.match(source, /isPresentationSuppressed\\?\\.\\(node\\?\\.parentElement\\)/u);
+});
