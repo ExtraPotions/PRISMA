@@ -8,33 +8,21 @@ const path = require('node:path');
 const root = path.resolve(__dirname, '..');
 const read = relative => fs.readFileSync(path.join(root, relative), 'utf8');
 
-test('PRISMA delegates its suite interoperability metadata to Core', () => {
+test('PRISMA delegates suite and presentation metadata to Core diagnostics bootstrap', () => {
   const source = read('src/main.js');
-  const suiteStart = source.indexOf('registerSuiteProduct?.({');
-  const presentationStart = source.indexOf('registerPresentationProvider?.({');
-  const diagnosticsStart = source.indexOf('registerDiagnosticsProduct');
-  assert.ok(suiteStart >= 0);
-  assert.ok(presentationStart > suiteStart);
-  assert.ok(diagnosticsStart > presentationStart);
-  const suiteBlock = source.slice(suiteStart, presentationStart);
-  const presentationBlock = source.slice(presentationStart, diagnosticsStart);
-  assert.ok(suiteBlock.includes("productId: 'prisma'"));
-  assert.ok(suiteBlock.includes('productVersion: EXP.VERSION'));
-  assert.doesNotMatch(suiteBlock, /capabilities\s*:/u);
-  assert.ok(presentationBlock.includes("productId: 'prisma'"));
-  assert.doesNotMatch(presentationBlock, /phases\s*:/u);
+  assert.match(source, /registerDiagnosticsProduct\('prisma'/);
+  assert.doesNotMatch(source, /registerSuiteProduct\?\./u);
+  assert.doesNotMatch(source, /registerPresentationProvider\?\./u);
 });
 
-test('generated PRISMA userscript carries the delegated interoperability registration', () => {
+test('generated PRISMA userscript keeps the same Core-owned interoperability bootstrap', () => {
   const built = read('prisma.user.js');
-  const suiteStart = built.indexOf('registerSuiteProduct?.({');
-  const presentationStart = built.indexOf('registerPresentationProvider?.({');
-  assert.ok(suiteStart >= 0);
-  assert.ok(presentationStart > suiteStart);
-  assert.ok(built.slice(suiteStart, presentationStart).includes("productId: 'prisma'"));
+  assert.match(built, /registerDiagnosticsProduct\('prisma'/);
+  assert.doesNotMatch(built, /registerSuiteProduct\?\./u);
+  assert.doesNotMatch(built, /registerPresentationProvider\?\./u);
 });
 
-test('PRISMA uses the shared presentation contract at its existing engine gate', () => {
+test('PRISMA honors shared presentation suppression before matching text', () => {
   const engine = read('src/engine.js');
   assert.ok(engine.includes("globalThis.ExtraPotionsCore?.isPresentationSuppressed?.(node?.parentElement)"));
 });
