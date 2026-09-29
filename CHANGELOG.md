@@ -1,3 +1,9 @@
+## 3.1.17 — 2026-09-29
+
+- Updates the shared foundation to exp-core 3.4.4.
+- Rebuilds shared UI, launcher, diagnostics, notices, and coordination from the pinned Core release.
+- Leaves PRISMA product-specific engine behavior unchanged.
+
 ## 3.1.16 — 2026-09-29
 
 - Updates the shared foundation to exp-core 3.4.3.
