@@ -1,7 +1,8 @@
-EXP.VERSION = '3.1.14';
+EXP.VERSION = '3.1.15';
 
 EXP.ReleaseNotes = (() => {
   const notes = Object.freeze({
+    '3.1.15': ["Adds a Check for updates button that works without turning on update notifications.","Checks GitHub release information only when you press it and never installs anything.","Reports whether an update is available, the script is current, or the check failed.","Leaves everything else in the product unchanged."],
     '3.1.14': ['Updates the shared foundation to exp-core 3.4.2.','Rebuilds shared UI, launcher, diagnostics, notices, and coordination from the pinned Core release.','Leaves PRISMA product-specific engine behavior unchanged.'],
     '3.1.13': ['Updates the shared foundation to exp-core 3.4.1.','Rebuilds shared UI, launcher, diagnostics, notices, and coordination from the pinned Core release.','Leaves PRISMA product-specific engine behavior unchanged.'],
     '3.1.12': ['Updates the shared foundation to exp-core 3.4.0.','Rebuilds shared UI, launcher, diagnostics, notices, and coordination from the pinned Core release.','Leaves PRISMA product-specific engine behavior unchanged.'],

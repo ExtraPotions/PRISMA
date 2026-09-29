@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PRISMA
 // @namespace    https://github.com/ExtraPotions
-// @version      3.1.14
+// @version      3.1.15
 // @description  Local LGBTQ+ identity-language recognition with context-aware highlighting.
 // @icon         https://raw.githubusercontent.com/ExtraPotions/PRISMA/main/assets/prisma-launcher.svg
 // @tag          LGBTQ+
@@ -8859,10 +8859,11 @@ EXP.Engine = (() => {
   return Object.freeze({ start, stop, cleanup, rebuild, navigation, processBatch, snapshot, navigateNext: () => navigate(1), navigatePrevious: () => navigate(-1), navigateTo, setTemporaryHidden, highlightAll: () => setTemporaryHidden(false), subscribe(listener) { listeners.add(listener); return () => listeners.delete(listener); } });
 })();
 
-EXP.VERSION = '3.1.14';
+EXP.VERSION = '3.1.15';
 
 EXP.ReleaseNotes = (() => {
   const notes = Object.freeze({
+    '3.1.15': ["Adds a Check for updates button that works without turning on update notifications.","Checks GitHub release information only when you press it and never installs anything.","Reports whether an update is available, the script is current, or the check failed.","Leaves everything else in the product unchanged."],
     '3.1.14': ['Updates the shared foundation to exp-core 3.4.2.','Rebuilds shared UI, launcher, diagnostics, notices, and coordination from the pinned Core release.','Leaves PRISMA product-specific engine behavior unchanged.'],
     '3.1.13': ['Updates the shared foundation to exp-core 3.4.1.','Rebuilds shared UI, launcher, diagnostics, notices, and coordination from the pinned Core release.','Leaves PRISMA product-specific engine behavior unchanged.'],
     '3.1.12': ['Updates the shared foundation to exp-core 3.4.0.','Rebuilds shared UI, launcher, diagnostics, notices, and coordination from the pinned Core release.','Leaves PRISMA product-specific engine behavior unchanged.'],
@@ -9113,6 +9114,7 @@ EXP.UI = (() => {
     const preferences = ExtraPotionsCore.createDisclosure('Menu preferences');
     const data = ExtraPotionsCore.createDisclosure('Settings');
     data.open = Boolean(importDraft);
+    data.append(actionRow('Check for updates now', 'Fetches release metadata only; never executable code.', () => EXP.Updates.check(true).then((result) => announce(result.available ? `PRISMA ${result.latest} is available.` : result.state === 'failed' ? 'Update check failed quietly.' : 'PRISMA is up to date.')), 'Check now'));
     data.append(actionRow('Rescan page', 'Rebuilds one clean route-scoped match set.', () => { EXP.Engine.rebuild('manual-rescan'); announce('Page rescanned.'); }, 'Rescan'));
     preferences.append(switchControl('Auto-close menu', 'Closes after 15 seconds without interaction.', state.menuAutoClose, (menuAutoClose) => update({ menuAutoClose }, 'menu-auto-close')));
     preferences.append(switchControl('Update notifications', 'Off by default. Opt-in checks request release metadata only.', state.updateNotifications, (updateNotifications) => { update({ updateNotifications }, 'update-notifications'); if (updateNotifications) EXP.Updates.check(true).then((result) => announce(result.available ? `Version ${result.latest} is available.` : result.state === 'failed' ? 'Update check failed quietly.' : 'PRISMA is up to date.')); }));
@@ -9214,7 +9216,7 @@ EXP.UI = (() => {
   return Object.freeze({ init, cleanup, open: () => product?.open(), refresh: render });
 })();
 
-EXP.VERSION = '3.1.14';
+EXP.VERSION = '3.1.15';
 ExtraPotionsCore.registerDiagnosticsProduct('prisma', EXP.VERSION);
 EXP.App = (() => {
   let scheduler, navigationCleanup, settingsCleanup, presentationCleanup, lifecycle;
