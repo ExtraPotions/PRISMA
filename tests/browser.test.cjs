@@ -74,39 +74,6 @@ async function fixture(html) {
 }
 const hitData = (page) => page.locator('.exp-prisma-hit').evaluateAll((nodes) => nodes.map((node) => ({ text: node.textContent, identity: node.dataset.identity, style: node.dataset.style })));
 
-test('menu palette recolors the shell and narrow rows do not create nested scrollers', async (t) => {
-  const { browser, page } = await fixture('<main>The LGBTQ community celebrates bisexual pride.</main>');
-  t.after(() => browser.close());
-  const root = page.locator('#exp-prisma-root');
-  const facts = await root.evaluate((node) => {
-    const shadow = node.shadowRoot;
-    shadow.querySelector('.launcher').click();
-    shadow.querySelector('[data-section="appearance"]').click();
-    const panel = shadow.querySelector('.panel');
-    const before = getComputedStyle(panel).backgroundColor;
-    shadow.querySelector('.exp-theme-swatch[aria-label="Midnight"]').click();
-    const body = shadow.querySelector('.fl-tool-body:not([hidden])');
-    const rows = [...body.querySelectorAll('.row')];
-    return {
-      before,
-      after: getComputedStyle(panel).backgroundColor,
-      border: getComputedStyle(panel).borderTopWidth,
-      overflow: getComputedStyle(body).overflow,
-      maxHeight: getComputedStyle(body).maxHeight,
-      minLabelWidth: Math.min(...rows.map((row) => row.firstElementChild.getBoundingClientRect().width)),
-      groupColumns: [...body.querySelectorAll('.group')].map((group) => getComputedStyle(group).gridTemplateColumns),
-      swatches: [...shadow.querySelectorAll('.exp-theme-swatch')].map((item) => item.getAttribute('aria-label')),
-    };
-  });
-  assert.notEqual(facts.after, facts.before);
-  assert.equal(facts.border, '1px');
-  assert.equal(facts.overflow, 'visible');
-  assert.equal(facts.maxHeight, 'none');
-  assert.ok(facts.minLabelWidth >= 76, JSON.stringify(facts));
-  assert.ok(facts.groupColumns.every((value) => value.trim().split(/\s+/).length === 1), JSON.stringify(facts));
-  assert.deepEqual(facts.swatches, ['Ember', 'Midnight', 'Glacier', 'High contrast', 'Verdant', 'Pride', 'Crimson', 'PRISMA gem']);
-});
-
 test('version action reuses the update-complete card for the current changelog', async (t) => {
   const browser = await chromium.launch({ headless: true });
   t.after(() => browser.close());
@@ -134,58 +101,6 @@ test('version action reuses the update-complete card for the current changelog',
   assert.equal(facts.current.version,'v' + require('../package.json').version);
   assert.equal(facts.current.visible,true);
   assert.deepEqual(facts.current.bullets,facts.completed.bullets);
-});
-
-test('Pride theme applies a distinct palette, muted rainbow accents, and persists', async (t) => {
-  const { browser, page } = await fixture('<main>The LGBTQ community celebrates bisexual pride.</main>');
-  t.after(() => browser.close());
-  const pride = await page.locator('#exp-prisma-root').evaluate((host) => {
-    const root = host.shadowRoot;
-    root.querySelector('.launcher').click();
-    root.querySelector('[data-section="appearance"]').click();
-    const panel = root.querySelector('.panel');
-    const before = {
-      bg: getComputedStyle(panel).backgroundColor,
-      accent: getComputedStyle(host).getPropertyValue('--accent').trim(),
-      uiTheme: host.dataset.uiTheme,
-    };
-    root.querySelector('.exp-theme-swatch[aria-label="Pride"]').click();
-    const divider = root.querySelector('.header-divider');
-    const activeRoute = root.querySelector('.route[aria-current="page"]');
-    const checkedSwitch = root.querySelector('.switch[aria-checked="true"]');
-    const after = {
-      bg: getComputedStyle(panel).backgroundColor,
-      panel: getComputedStyle(root.querySelector('.tool-panel')).backgroundColor,
-      accent: getComputedStyle(host).getPropertyValue('--accent').trim(),
-      uiTheme: host.dataset.uiTheme,
-      swatchOn: root.querySelector('.exp-theme-swatch.is-on')?.getAttribute('aria-label'),
-      divider: getComputedStyle(divider).backgroundImage,
-      activeRoute: activeRoute ? getComputedStyle(activeRoute).backgroundImage : 'none',
-      checkedSwitch: checkedSwitch ? getComputedStyle(checkedSwitch).backgroundImage : 'none',
-    };
-    return { before, after };
-  });
-  assert.equal(pride.after.uiTheme, 'pride');
-  assert.equal(pride.after.swatchOn, 'Pride');
-  assert.equal(pride.after.accent, '#c34f7d');
-  assert.notEqual(pride.after.bg, pride.before.bg);
-  assert.notEqual(pride.after.bg, 'rgb(16, 8, 20)');
-  assert.equal(pride.after.bg, 'rgb(16, 10, 18)');
-  assert.equal(pride.after.panel, 'rgb(29, 18, 34)');
-  const rainbowTargets = [pride.after.divider, pride.after.activeRoute];
-  assert.ok(rainbowTargets.some((value) => /linear-gradient/.test(value)), JSON.stringify(pride.after));
-  assert.doesNotMatch(pride.after.checkedSwitch, /linear-gradient/);
-  assert.match(pride.after.divider, /rgb\(200,\s*78,\s*102\)|#c84e66/i);
-  await page.reload({ waitUntil: 'domcontentloaded' });
-  await page.waitForSelector('.exp-prisma-hit');
-  const persisted = await page.locator('#exp-prisma-root').evaluate((host) => ({
-    uiTheme: host.dataset.uiTheme,
-    accent: getComputedStyle(host).getPropertyValue('--accent').trim(),
-    bg: getComputedStyle(host.shadowRoot.querySelector('.panel')).backgroundColor,
-  }));
-  assert.equal(persisted.uiTheme, 'pride');
-  assert.equal(persisted.accent, '#c34f7d');
-  assert.equal(persisted.bg, 'rgb(16, 10, 18)');
 });
 
 test('explicit terms and supported aliases match while negative ambiguity is blocked', async () => {
@@ -540,7 +455,7 @@ test('menu routes use simplified labels with scoped secondary disclosures', asyn
   });
   assert.deepEqual(facts.labels, ['Highlights', 'Appearance', 'Advanced', 'System']);
   assert.equal(facts.subtitle, 'Your self-identity. Recognized.');
-  assert.deepEqual(facts.appearance, ['Appearance', 'Accessibility', 'Highlight style']);
+  assert.deepEqual(facts.appearance, ['Accessibility', 'Highlight style']);
   assert.equal(facts.styleCollapsed, true);
   assert.ok(facts.advancedDisclosures.includes('Language'));
   assert.ok(facts.advancedDisclosures.includes('Sites'));

@@ -9064,7 +9064,7 @@ EXP.UI = (() => {
   function hideUpdateCard() { noticeController?.hide(); }
   function showUpdateCard(result={},complete=false,previous=''){const version=complete?EXP.VERSION:result.latest;if(!complete&&!EXP.Core.claimNotice('prisma',`available:${version}`))return;const fallback=['A newer PRISMA build is available.','Install the latest userscript for the newest fixes and improvements.'];const details=complete?EXP.ReleaseNotes.current():(Array.isArray(result.details)&&result.details.length?result.details:fallback);showNotice(updateCard,{kicker:complete?'Update Complete':'Update Available',title:complete?'PRISMA Updated':'New PRISMA Version Available',version,text:complete?`Updated from v${previous} to v${EXP.VERSION}.`:`v${result.latest} is ready to install.`,details,available:!complete},true);}
   const button = (label, action, className = 'action') => { const node = el('button', { type: 'button', class: className }, label); node.addEventListener('click', action); return node; };
-  const announce = (message, kind = 'status') => { if (live) { live.textContent = message; live.dataset.kind = kind; } if (!toast || !EXP.Settings.snapshot().menuNotifications) return; toast.textContent=message;toast.hidden=false;toast.style.top=`${Math.max(8,(launcher?.getBoundingClientRect().top||60)-48)}px`;clearTimeout(toastTimer);toastTimer=setTimeout(()=>{if(toast)toast.hidden=true;},3000); };
+  const announce = (message, kind = 'status') => { if (live) { live.textContent = message; live.dataset.kind = kind; } if (!toast) return; toast.textContent=message;toast.hidden=false;toast.style.top=`${Math.max(8,(launcher?.getBoundingClientRect().top||60)-48)}px`;clearTimeout(toastTimer);toastTimer=setTimeout(()=>{if(toast)toast.hidden=true;},3000); };
   function group(title) { const node = el('section', { class: 'group' }); if (title) node.append(el('h3', {}, title)); return node; }
   function row(label, help = '') { const node = el('div', { class: 'row' }); const copy = el('div', { class: 'copy' }); copy.append(el('span', { class: 'label' }, label)); node.append(copy); return node; }
   function switchControl(label, help, value, change, disabled = false) { const node = row(label, help); const control = el('button', { type: 'button', class: 'switch', role: 'switch', 'aria-checked': String(Boolean(value)), 'aria-label': label }); control.disabled = disabled; control.append(el('span', { 'aria-hidden': 'true' })); control.addEventListener('click', () => { const next = control.getAttribute('aria-checked') !== 'true'; control.setAttribute('aria-checked', String(next)); change(next); }); node.append(control); return node; }
@@ -9073,7 +9073,6 @@ EXP.UI = (() => {
   function statusRow(label, help, value = '') { const node = row(label, help); if (value) node.append(el('output', { class: 'status-value' }, value)); return node; }
   const PRIDE_RAINBOW = 'linear-gradient(90deg,#c97b83,#d29a70,#d0c07d,#70a886,#7091b6,#a27ba9)';
   function applyUiTheme(id) { ExtraPotionsCore.applyTheme(host, id, UI_THEMES); }
-  function themeSwatches(value, change) { const wrap=el('div',{class:'theme-row'});wrap.append(el('span',{class:'label'},'Menu theme'));const dots=el('div');const core=ExtraPotionsCore;const mount=core?.createThemeSwatches||((options)=>{dots.className='exp-theme-swatches';dots.setAttribute('role','radiogroup');for(const theme of options.themes){const dot=el('button',{type:'button',class:`exp-theme-swatch${theme.id===options.value?' is-on':''}`,'aria-label':theme.name,'aria-pressed':String(theme.id===options.value),title:theme.name});dot.style.background=theme.swatch;dot.addEventListener('click',()=>options.onChange(theme.id));dots.append(dot);}return{setValue(){},destroy(){}};});mount({container:dots,themes:UI_THEMES,value,onChange:change});wrap.append(dots);return wrap; }
   function update(patch, reason) { const next = EXP.Settings.update(patch, reason); render(); return next; }
   function download(name, text) { const url = URL.createObjectURL(new Blob([text], { type: 'application/json' })); const link = el('a', { href: url, download: name }); link.click(); setTimeout(() => URL.revokeObjectURL(url), 0); }
 
@@ -9087,14 +9086,13 @@ EXP.UI = (() => {
     return section;
   }
   function renderLook() {
-    const state = EXP.Settings.snapshot(); const section = group('Appearance', 'Menu palette and accessibility stay separate from identity colors.');
-    section.append(themeSwatches(state.uiTheme, (uiTheme) => { applyUiTheme(uiTheme); update({ uiTheme }, 'ui-theme'); }));
+    const state = EXP.Settings.snapshot();
     const a11y = group('Accessibility', 'Non-color and spoken behavior remain independent from identity colors.');
     a11y.append(selectControl('Reduce motion', 'Follow system, always reduce, or allow configured animation.', state.reducedMotion, [['system', 'Follow system'], ['reduce', 'Reduce'], ['allow', 'Allow']], (reducedMotion) => update({ reducedMotion }, 'reduced-motion')));
     a11y.append(switchControl('High contrast', 'Uses a strong local outline and system colors where required.', state.highContrast, (highContrast) => update({ highContrast }, 'high-contrast')));
     a11y.append(selectControl('Non-color indicator', 'Visible even when hue differences are unavailable.', state.nonColorIndicator, [['underline', 'Underline'], ['outline', 'Outline'], ['off', 'Off']], (nonColorIndicator) => update({ nonColorIndicator }, 'non-color-indicator')));
     a11y.append(selectControl('Screen-reader behavior', 'Original text is the quiet default; announcements occur only on explicit navigation.', state.screenReaderBehavior, [['original-text', 'Original text'], ['announce-on-focus', 'Announce on focus']], (screenReaderBehavior) => update({ screenReaderBehavior }, 'screen-reader-behavior')));
-    const fragment = document.createDocumentFragment(); fragment.append(section, a11y); return fragment;
+    const fragment = document.createDocumentFragment(); fragment.append(a11y); return fragment;
   }
   function identityRow(identity, state) {
     const enabled = !state.disabledIdentities.includes(identity.id); const item = el('div', { class: 'identity' }); const copy = el('div', { class: 'copy' }); copy.append(el('span', { class: 'label' }, identity.label), el('span', { class: 'help' }, `${identity.terms.length} recognition term${identity.terms.length === 1 ? '' : 's'}`)); item.append(copy);
@@ -9218,9 +9216,7 @@ EXP.UI = (() => {
     const data = ExtraPotionsCore.createDisclosure('Settings');
     data.open = Boolean(importDraft);
     data.append(actionRow('Rescan page', 'Rebuilds one clean route-scoped match set.', () => { EXP.Engine.rebuild('manual-rescan'); announce('Page rescanned.'); }, 'Rescan'));
-    section.append(selectControl('Menu width', '', state.menuWidth, [['full','Full'],['compact','Compact'],['narrow','Narrow']], (menuWidth) => update({ menuWidth }, 'menu-width')));
     preferences.append(switchControl('Auto-close menu', 'Closes after 15 seconds without interaction.', state.menuAutoClose, (menuAutoClose) => update({ menuAutoClose }, 'menu-auto-close')));
-    preferences.append(switchControl('Menu notifications', 'Shows short local status toasts.', state.menuNotifications, (menuNotifications) => update({ menuNotifications }, 'menu-notifications')));
     preferences.append(switchControl('Update notifications', 'Off by default. Opt-in checks request release metadata only.', state.updateNotifications, (updateNotifications) => { update({ updateNotifications }, 'update-notifications'); if (updateNotifications) EXP.Updates.check(true).then((result) => announce(result.available ? `Version ${result.latest} is available.` : result.state === 'failed' ? 'Update check failed quietly.' : 'PRISMA is up to date.')); }));
     const transfer = el('div', { class: 'button-grid' }); transfer.append(button('Export settings', () => download('prisma-v3-settings.json', JSON.stringify(EXP.Settings.exportData(), null, 2))));
     const importRow = row('Import PRISMA settings', 'Validation creates a draft. Apply commits atomically; Cancel changes nothing.'); const file = el('input', { type: 'file', accept: 'application/json,.json', 'aria-label': 'Import PRISMA settings' }); file.addEventListener('change', async () => { try { importDraft = EXP.Settings.prepareImport(JSON.parse(await file.files[0].text())); render(); announce('Import validated. Review and apply or cancel.'); } catch (error) { importDraft = null; announce(error.message, 'error'); } }); file.hidden = true; transfer.append(button('Import settings', () => file.click()), file); data.append(transfer);
@@ -9298,7 +9294,7 @@ EXP.UI = (() => {
       },
     });
     updateCard = noticeController.element;
-    applyUiTheme(EXP.Settings.snapshot().uiTheme);
+    applyUiTheme('prisma');
     const previous = EXP.Core.consumeVersionChange('prisma', EXP.VERSION, 'exp:v3:prisma:last-version-v2');
     if (previous) showUpdateCard({}, true, previous);
     if (EXP.Settings.snapshot().updateNotifications) EXP.Updates.check(false).then(result => { if (host && result.available) showUpdateCard(result); });

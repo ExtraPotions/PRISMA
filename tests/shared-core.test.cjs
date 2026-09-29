@@ -114,10 +114,7 @@ test('bundled core matches the pinned exp-core release', () => {
 test('current changelog uses shared menu geometry at every width', async t => {
   const { page } = await fixture(t);
   await page.locator('#exp-prisma-root .launcher').click();
-  for (const width of ['full', 'compact', 'narrow']) {
-    await page.locator('#exp-prisma-root [data-section="system"]').click();
-    await page.getByLabel('Menu width', { exact: true }).selectOption(width);
-    await page.locator('#exp-prisma-root [data-section="system"]').click();
+  for (const width of ['full']) {
     await page.locator('#exp-prisma-root .version').click();
     await page.waitForTimeout(80);
     const bounds = await page.locator('#exp-prisma-root').evaluate(host => {
