@@ -8152,7 +8152,15 @@ EXP.Engine = (() => {
   let active = false;
   let currentHref = location.href;
   const ignoredSelector = ['script', 'style', 'noscript', 'template', 'textarea', 'input', 'select', 'option', 'button', 'pre', 'code', '[contenteditable]', '[inert]', '[hidden]', '[aria-hidden="true"]', '[data-exp-owned="1"]'].join(',');
-  const notify = () => { const value = snapshot(); for (const listener of listeners) listener(value); };
+  const notify = () => {
+    const value = snapshot();
+    globalThis.ExtraPotionsCore?.publishSuiteState?.('prisma', 'prisma.state-changed', {
+      status: value.status,
+      total: value.total,
+      temporarilyHidden: Boolean(value.temporarilyHidden),
+    });
+    for (const listener of listeners) listener(value);
+  };
   const isIgnored = (node) => Boolean(
     node?.parentElement?.closest(ignoredSelector) ||
     globalThis.ExtraPotionsCore?.isPresentationSuppressed?.(node?.parentElement)
