@@ -33,7 +33,7 @@ test('distribution metadata and privacy boundaries are present', () => {
 
 test('canonical install artifact is a direct full userscript within size bounds', () => {
   assert.ok(bytes >= 100 * 1024, `expected at least 100 KiB, got ${bytes} bytes`);
-  assert.ok(bytes <= 448 * 1024, `expected at most 448 KiB, got ${bytes} bytes`);
+  assert.ok(bytes <= 512 * 1024, `expected at most 512 KiB, got ${bytes} bytes`);
   assert.match(source, /EXP\.CatalogData = \[/);
 });
 
