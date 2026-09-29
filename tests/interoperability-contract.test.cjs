@@ -26,3 +26,14 @@ test('PRISMA honors shared presentation suppression before matching text', () =>
   const engine = read('src/engine.js');
   assert.ok(engine.includes("globalThis.ExtraPotionsCore?.isPresentationSuppressed?.(node?.parentElement)"));
 });
+
+
+test('PRISMA publishes compact non-identifying suite state', () => {
+  const engine = read('src/engine.js');
+  assert.match(engine, /publishSuiteState\?\.\('prisma', 'prisma\.state-changed'/u);
+  assert.match(engine, /status:\s*value\.status/u);
+  assert.match(engine, /total:\s*value\.total/u);
+  assert.match(engine, /temporarilyHidden/u);
+  const block = engine.slice(engine.indexOf("publishSuiteState?.('prisma'"), engine.indexOf('});', engine.indexOf("publishSuiteState?.('prisma'")) + 3);
+  assert.doesNotMatch(block, /identityId|termId|matches|text|summary/u);
+});
