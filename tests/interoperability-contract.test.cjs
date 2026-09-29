@@ -37,3 +37,13 @@ test('PRISMA publishes compact non-identifying suite state', () => {
   const block = engine.slice(engine.indexOf("publishSuiteState?.('prisma'"), engine.indexOf('});', engine.indexOf("publishSuiteState?.('prisma'")) + 3);
   assert.doesNotMatch(block, /identityId|termId|matches|text|summary/u);
 });
+
+
+test('PRISMA rescans out-of-band WARD presentation changes without duplicating phased batches', () => {
+  const source = read('src/main.js');
+  assert.ok(source.includes('observePresentationState?.((event, root) =>'));
+  assert.ok(source.includes("event.source !== 'ward' || event.phase"));
+  assert.ok(source.includes('scheduler.schedule(root)'));
+  assert.ok(source.includes("{ source: 'ward' }"));
+  assert.ok(source.includes('presentationCleanup?.()'));
+});
