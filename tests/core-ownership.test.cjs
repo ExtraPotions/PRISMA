@@ -25,6 +25,7 @@ test('PRISMA does not redefine Core-owned shared infrastructure', () => {
   ]) {
     assert.doesNotMatch(source, pattern);
   }
+  assert.doesNotMatch(source, /\bpriority:\s*40\b/u);
 });
 
 test('PRISMA consumes the public ExtraPotionsCore boundary', () => {

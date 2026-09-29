@@ -209,7 +209,7 @@ EXP.UI = (() => {
     product = ExtraPotionsCore.createProduct({
       id: 'prisma', name: 'PRISMA', version: EXP.VERSION,
       subtitle: 'Your self-identity. Recognized.', artwork: ICON_URL,
-      theme: PRODUCT_THEME, priority: 40,
+      theme: PRODUCT_THEME,
       getSettings: () => EXP.Settings.snapshot(),
       onSettings: (next, reason) => update(next, reason),
       sections: routeNames.map(([id, label]) => ({ id, label, render: () => routeRenderers[id]() })),
