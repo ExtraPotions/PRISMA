@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PRISMA
 // @namespace    https://github.com/ExtraPotions
-// @version      3.1.21
+// @version      3.1.22
 // @description  Local LGBTQ+ identity-language recognition with context-aware highlighting.
 // @icon         https://raw.githubusercontent.com/ExtraPotions/PRISMA/main/assets/prisma-launcher.svg
 // @tag          LGBTQ+
@@ -1514,7 +1514,7 @@ const ExpMenuArrangement = (() => {
 // exp-core owns shared UI, launcher, diagnostics, update, and coordination behavior.
 const ExtraPotionsCore = (() => {
   'use strict';
-  const version = '3.4.8';
+  const version = '3.4.9';
   const sourceVersion = version; // Backward-compatible alias for Core's own foundation version.
   const SUPPORT_URL = 'https://ko-fi.com/expdare';
   const protocol = 'exp-core-coordination-v1';
@@ -3145,6 +3145,16 @@ const ExtraPotionsCore = (() => {
     on(window,'resize',queueLayout);on(document,'exp-core:coordination',queueLayout);
     on(document,'exp-core:coordination',syncThemeOwner);
     on(document,'exp-core:menu-open',()=>{if(open && document.documentElement.getAttribute('data-exp-open-menu')!==id)setOpen(false,false);});
+    // Every product menu closes on a press outside it. A focused select keeps it
+    // open because native option lists render outside the page; keepOpen lets a
+    // product hold the menu open for its own reasons, such as an unsaved import.
+    const keepOpen = typeof options.keepOpen === 'function' ? options.keepOpen : () => false;
+    if (options.closeOnOutsidePointer !== false) on(document,'pointerdown',event=>{
+      if (!open || !event.isTrusted || event.composedPath().includes(host)) return;
+      if (shadow.activeElement instanceof HTMLSelectElement) return;
+      try { if (keepOpen(event)) return; } catch {}
+      setOpen(false,false);
+    },true);
     const resize = new ResizeObserver(queueLayout); resize.observe(panel);
     const mutation = new MutationObserver(records=>{if(records.some(r=>r.type==='childList'||r.attributeName==='hidden'))queueLayout();}); mutation.observe(panel,{childList:true,subtree:true,attributes:true,attributeFilter:['hidden']});
     const controller = {
@@ -3173,6 +3183,10 @@ const ExtraPotionsCore = (() => {
     }
 
     const ENDPOINT = String(options.endpoint || ('https://api.github.com/repos/' + repository + '/releases/latest'));
+    // Installs and updates come only from published releases, never from the
+    // branch: GitHub serves the newest release's asset at this address.
+    const RELEASE_URL = 'https://github.com/' + repository + '/releases';
+    const INSTALL_URL = RELEASE_URL + '/latest/download/' + String(options.scriptAsset || (productId + '.user.js'));
     const CACHE_KEY = 'exp:v3:' + productId + ':update-cache';
     const CHECK_INTERVAL = 15 * 60 * 1000;
     const CHECK_LEASE = 30 * 1000;
@@ -3232,6 +3246,8 @@ const ExtraPotionsCore = (() => {
         lastRemoteVersion: latest || null,
         lastHttpStatus: Number(next.lastHttpStatus || 0),
         lastError: String(next.lastError || ''),
+        installUrl: INSTALL_URL,
+        releaseUrl: RELEASE_URL,
       };
     }
     function request() {
@@ -3321,6 +3337,8 @@ const ExtraPotionsCore = (() => {
     return Object.freeze({
       get CURRENT_VERSION() { return getCurrentVersion(); },
       ENDPOINT,
+      INSTALL_URL,
+      RELEASE_URL,
       CHECK_INTERVAL,
       check,
       status,
@@ -3328,7 +3346,7 @@ const ExtraPotionsCore = (() => {
     });
   }
 
-  function createSupportControl({ url, label = 'Support' } = {}) {
+  function createSupportControl({ url = SUPPORT_URL, label = 'Support' } = {}) {
     if (!url) return null;
     const wrapper = document.createElement('div');
     wrapper.className = 'support-wrap';
@@ -3543,7 +3561,7 @@ const ExtraPotionsCore = (() => {
     const area=document.createElement('textarea');area.value=text;area.style.cssText='position:fixed;left:-9999px';document.documentElement.append(area);area.select();const success=document.execCommand('copy');area.remove();if(!success)throw new Error('Clipboard unavailable');
   }
   function createDiagnosticsControls(getReport, notify = () => {}) { return ExtraPotionsDiagnostics.createControls(getReport, notify); }
-  function createProduct({id,name,version:productVersion,subtitle='',artwork,theme,sections=[],getSettings,onSettings=()=>{},priority,supportUrl=SUPPORT_URL}) {
+  function createProduct({id,name,version:productVersion,subtitle='',artwork,theme,sections=[],getSettings,onSettings=()=>{},priority,supportUrl=SUPPORT_URL,keepOpen}) {
     const host=document.createElement('div');host.id='exp-'+id+'-root';host.dataset.expOwned='1';const shadow=host.attachShadow({mode:'open'});const panel=document.createElement('aside');panel.hidden=true;panel.setAttribute('role','dialog');panel.setAttribute('aria-label',name+' settings');
     const header=document.createElement('header');header.className='menu-head';const brand=document.createElement('div');brand.className='header-brand';const image=document.createElement('img');image.src=artwork;image.alt='';const copy=document.createElement('div');const titleRow=document.createElement('div');const title=document.createElement('strong');title.textContent=name;const v=document.createElement('button');v.type='button';v.className='version';v.textContent='v'+productVersion;titleRow.append(title,v);const sub=document.createElement('small');sub.textContent=subtitle;copy.append(titleRow,sub);brand.append(image,copy);const close=document.createElement('button');close.className='close';close.textContent='×';close.setAttribute('aria-label','Close '+name);const actions=document.createElement('div');actions.className='header-actions';const support=createSupportControl({url:supportUrl,label:'Support '+name});if(support)actions.append(support.element);actions.append(close);header.append(brand,actions);const divider=document.createElement('div');divider.className='header-divider';const nav=document.createElement('nav');
     let isOpen=false, activeId='';let chrome;
@@ -3552,7 +3570,7 @@ const ExtraPotionsCore = (() => {
     function renderActive(){if(!activeId)return false;const entry=sectionMap.get(activeId);if(!entry||entry.body.hidden)return false;renderSection(entry.section,entry.body);return true;}
     function setOpen(value,focus=true){isOpen=Boolean(value);panel.hidden=!isOpen;launcher.setAttribute('aria-expanded',String(isOpen));if(isOpen){activeId='';nav.querySelectorAll('.route-body').forEach(n=>n.hidden=true);nav.querySelectorAll('button[data-section]').forEach(n=>n.setAttribute('aria-expanded','false'));}chrome.state(isOpen);if(focus)(isOpen?focusMenuSurface(panel):launcher.focus());}
     for(const section of sections){const group=document.createElement('section');group.className='tool-panel';const button=document.createElement('button');button.type='button';button.textContent=section.label;button.dataset.section=section.id;const body=document.createElement('div');body.className='route-body';body.hidden=true;sectionMap.set(section.id,{section,body,button});button.addEventListener('click',()=>{const opening=body.hidden;nav.querySelectorAll('.route-body').forEach(n=>n.hidden=true);nav.querySelectorAll('button[data-section]').forEach(n=>{n.classList.toggle('last-opened',n===button);n.setAttribute('aria-expanded',String(opening&&n===button));});body.hidden=!opening;activeId=opening?section.id:'';if(opening)renderSection(section,body);chrome.update();});group.append(button,body);nav.append(group);}
-    const launcher=document.createElement('button');launcher.className='launcher';launcher.type='button';launcher.setAttribute('aria-label','Open '+name);const mark=image.cloneNode(true);launcher.append(mark);launcher.addEventListener('click',()=>setOpen(!isOpen));close.addEventListener('click',()=>setOpen(false));panel.append(header,divider,nav);shadow.append(panel,launcher);document.documentElement.append(host);chrome=create({id,host,shadow,panel,launcher,getSettings,setOpen,productTheme:theme,supportUrl});const unregister=registerLauncher(host,{productId:id,priority});
+    const launcher=document.createElement('button');launcher.className='launcher';launcher.type='button';launcher.setAttribute('aria-label','Open '+name);const mark=image.cloneNode(true);launcher.append(mark);launcher.addEventListener('click',()=>setOpen(!isOpen));close.addEventListener('click',()=>setOpen(false));panel.append(header,divider,nav);shadow.append(panel,launcher);document.documentElement.append(host);chrome=create({id,host,shadow,panel,launcher,getSettings,setOpen,productTheme:theme,supportUrl,keepOpen});const unregister=registerLauncher(host,{productId:id,priority});
     const key=e=>{if(e.key==='Escape'&&isOpen)setOpen(false);};document.addEventListener('keydown',key);
     return {host,shadow,panel,launcher,versionButton:v,open:()=>setOpen(true),close:()=>setOpen(false),toggle:()=>setOpen(!isOpen),refresh:()=>chrome.update(),renderActive,get isOpen(){return isOpen;},destroy(){document.removeEventListener('keydown',key);support?.destroy();chrome.destroy();unregister();host.remove();}};
   }
@@ -3583,6 +3601,7 @@ const ExtraPotionsCore = (() => {
       repository,
       currentVersion,
       endpoint: options.endpoint,
+      scriptAsset: options.scriptAsset,
       enabled: options.enabled,
       onError: options.onError,
     });
@@ -8990,10 +9009,11 @@ EXP.Engine = (() => {
   return Object.freeze({ start, stop, cleanup, rebuild, navigation, processBatch, snapshot, navigateNext: () => navigate(1), navigatePrevious: () => navigate(-1), navigateTo, setTemporaryHidden, highlightAll: () => setTemporaryHidden(false), subscribe(listener) { listeners.add(listener); return () => listeners.delete(listener); } });
 })();
 
-EXP.VERSION = '3.1.21';
+EXP.VERSION = '3.1.22';
 
 EXP.ReleaseNotes = (() => {
   const notes = Object.freeze({
+    '3.1.22': ["Updates to exp-core 3.4.9.","Install links now come from the exp-core update checker, which only points at published releases.","Closing the menu on outside clicks now comes from exp-core; an unfinished import still keeps the menu open."],
     '3.1.21': ['Updates the shared foundation to exp-core 3.4.8.','Rebuilds shared UI, launcher, diagnostics, notices, and coordination from the pinned Core release.','Leaves PRISMA product-specific engine behavior unchanged.'],
     '3.1.20': ['Updates the shared foundation to exp-core 3.4.7.','Rebuilds shared UI, launcher, diagnostics, notices, and coordination from the pinned Core release.','Leaves PRISMA product-specific engine behavior unchanged.'],
     '3.1.19': ['Updates the shared foundation to exp-core 3.4.6.','Rebuilds shared UI, launcher, diagnostics, notices, and coordination from the pinned Core release.','Leaves PRISMA product-specific engine behavior unchanged.'],
@@ -9288,7 +9308,6 @@ EXP.UI = (() => {
       else if (!event.shiftKey && active === last) { event.preventDefault(); first.focus(); }
     }
   }
-  function outsidePointer(event) { if (product?.isOpen && !event.composedPath().includes(host) && !importDraft) product.close(); }
   function init() {
     if (window.top !== window.self || host) return;
     engineState = EXP.Engine.snapshot({ includeMatchText: false });
@@ -9299,6 +9318,8 @@ EXP.UI = (() => {
       getSettings: () => EXP.Settings.snapshot(),
       onSettings: (next, reason) => update(next, reason),
       sections: routeNames.map(([id, label]) => ({ id, label, render: () => routeRenderers[id]() })),
+      // An unfinished import stays open when the viewer clicks elsewhere.
+      keepOpen: () => Boolean(importDraft),
     });
     ({ host, shadow, launcher, panel } = product);
     EXP.Core.injectStyle(shadow, '.catalog-detail{padding:8px;margin:4px 0 8px;border:1px solid var(--theme-line);border-radius:7px;background:var(--theme-bg);font-size:10px;line-height:1.45;overflow-wrap:anywhere}.catalog-detail[hidden]{display:none!important}.catalog-detail p{margin:6px 0}.catalog-detail a{display:block;color:var(--theme-accent2);margin-top:5px}.catalog-palette{height:20px;border:1px solid var(--theme-line);border-radius:4px}', { expPrismaCatalog: '1' });
@@ -9323,8 +9344,8 @@ EXP.UI = (() => {
     (shadow.querySelector('.exp-core-theme') || shadow).append(toast);
     noticeController = ExtraPotionsCore.createProductNotice({
       host, shadow, panel, versionButton: product.versionButton,
-      releaseUrl: 'https://github.com/ExtraPotions/PRISMA/releases',
-      installUrl: 'https://github.com/ExtraPotions/PRISMA/releases/latest/download/prisma.user.js',
+      releaseUrl: EXP.Updates.RELEASE_URL,
+      installUrl: EXP.Updates.INSTALL_URL,
       onVersion: () => {
         if (updateCard?.hidden === false && updateCard.dataset.noticeKind === 'current') hideUpdateCard();
         else showNotice(updateCard, { kicker:'Current Version', title:'PRISMA Changelog', version:EXP.VERSION, text:`What's new in v${EXP.VERSION}.`, details:EXP.ReleaseNotes.current(), available:false });
@@ -9340,12 +9361,10 @@ EXP.UI = (() => {
       if (product?.isOpen && panel.querySelector('[data-section="page"][aria-expanded="true"],[data-section="system"][aria-expanded="true"]')) render();
     });
     document.addEventListener('keydown', bindKeys, true);
-    document.addEventListener('pointerdown', outsidePointer, true);
     render();
   }
   function cleanup() {
     document.removeEventListener('keydown', bindKeys, true);
-    document.removeEventListener('pointerdown', outsidePointer, true);
     unsubscribe?.(); clearTimeout(toastTimer); noticeController?.destroy(); product?.destroy();
     host = shadow = launcher = panel = live = toast = product = noticeController = updateCard = null;
     importDraft = null;
@@ -9353,7 +9372,7 @@ EXP.UI = (() => {
   return Object.freeze({ init, cleanup, open: () => product?.open(), refresh: render });
 })();
 
-EXP.VERSION = '3.1.21';
+EXP.VERSION = '3.1.22';
 ExtraPotionsCore.registerDiagnosticsProduct('prisma', EXP.VERSION);
 EXP.App = (() => {
   let scheduler, navigationCleanup, settingsCleanup, presentationCleanup, lifecycle;

@@ -1,3 +1,9 @@
+## 3.1.22 — 2026-10-01
+
+- Updates to exp-core 3.4.9.
+- Install links now come from the exp-core update checker, which only points at published releases.
+- Closing the menu on outside clicks now comes from exp-core; an unfinished import still keeps the menu open.
+
 ## 3.1.21 — 2026-10-01
 
 - Updates the shared foundation to exp-core 3.4.8.
