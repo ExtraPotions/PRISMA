@@ -22,7 +22,6 @@ EXP.Settings = (() => {
     safeMode: false,
     shortcut: '',
     launcherPosition: 'automatic-end-bottom',
-    menuWidth: 'compact',
     uiTheme: 'prisma',
     menuAutoClose: true,
     menuNotifications: true,
@@ -71,7 +70,7 @@ EXP.Settings = (() => {
       animationStyle: ['pulse', 'shimmer', 'glow'],
       style: ['gradient', 'underline', 'soft-fill'], intensity: ['subtle', 'balanced', 'vivid'], matcherMode: ['strict', 'balanced', 'inclusive'],
       reducedMotion: ['system', 'reduce', 'allow'], nonColorIndicator: ['underline', 'outline', 'off'],
-      screenReaderBehavior: ['original-text', 'announce-on-focus'], launcherPosition: ['automatic-end-bottom', 'end-top', 'end-bottom', 'start-top', 'start-bottom'], menuWidth: ['full', 'compact', 'narrow'], uiTheme: ['ember', 'midnight', 'glacier', 'contrast', 'verdant', 'pride', 'crimson', 'prisma']
+      screenReaderBehavior: ['original-text', 'announce-on-focus'], launcherPosition: ['automatic-end-bottom', 'end-top', 'end-bottom', 'start-top', 'start-bottom'], uiTheme: ['ember', 'midnight', 'glacier', 'contrast', 'verdant', 'pride', 'crimson', 'prisma']
     };
     for (const [name, values] of Object.entries(enums)) {
 	  const value = name === 'uiTheme' ? normalizedUiTheme : candidate[name];

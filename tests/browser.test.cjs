@@ -68,6 +68,7 @@ async function fixture(html) {
   await page.addInitScript(() => { const key = 'exp:v3:prisma:settings'; if (!localStorage.getItem(key)) localStorage.setItem(key, JSON.stringify({ includeRomantic: true })); });
   await page.addInitScript({ content: script });
   await page.route('https://fixture.test/**', (route) => route.fulfill({ status: 200, contentType: 'text/html; charset=utf-8', body: html }));
+  await page.route('https://raw.githubusercontent.com/ExtraPotions/PRISMA/main/assets/prisma-launcher.svg', route => route.fulfill({ contentType: 'image/svg+xml', body: fs.readFileSync(path.resolve(__dirname, '../assets/prisma-launcher.svg'), 'utf8') }));
   await page.goto('https://fixture.test/page');
   await page.waitForSelector('.exp-prisma-hit');
   return { browser, page };
@@ -297,6 +298,7 @@ test('SPA navigation replaces the route-scoped match set', async () => {
 test('launcher uses the borderless PRISMA artwork URL', async () => {
   const { browser, page } = await fixture('<main>bisexual</main>');
   try {
+    await page.waitForFunction(() => document.getElementById('exp-prisma-root')?.shadowRoot.querySelector('.launcher img')?.naturalWidth > 0);
     const badge = await page.locator('#exp-prisma-root').evaluate((host) => { const launcher = host.shadowRoot.querySelector('.launcher'); const image = launcher.querySelector('img'); const rect = launcher.getBoundingClientRect(); return { width: rect.width, height: rect.height, src: image.src, naturalWidth: image.naturalWidth, naturalHeight: image.naturalHeight, radius: getComputedStyle(launcher).borderRadius }; });
     assert.deepEqual({ width: badge.width, height: badge.height, naturalWidth: badge.naturalWidth, naturalHeight: badge.naturalHeight }, { width: 48, height: 48, naturalWidth: 1024, naturalHeight: 1024 });
     assert.equal(badge.src, 'https://raw.githubusercontent.com/ExtraPotions/PRISMA/main/assets/prisma-launcher.svg');

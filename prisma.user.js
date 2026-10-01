@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PRISMA
 // @namespace    https://github.com/ExtraPotions
-// @version      3.1.24
+// @version      3.1.25
 // @description  Local LGBTQ+ identity-language recognition with context-aware highlighting.
 // @icon         https://raw.githubusercontent.com/ExtraPotions/PRISMA/main/assets/prisma-launcher.svg
 // @tag          LGBTQ+
@@ -8646,7 +8646,6 @@ EXP.Settings = (() => {
     safeMode: false,
     shortcut: '',
     launcherPosition: 'automatic-end-bottom',
-    menuWidth: 'compact',
     uiTheme: 'prisma',
     menuAutoClose: true,
     menuNotifications: true,
@@ -8695,7 +8694,7 @@ EXP.Settings = (() => {
       animationStyle: ['pulse', 'shimmer', 'glow'],
       style: ['gradient', 'underline', 'soft-fill'], intensity: ['subtle', 'balanced', 'vivid'], matcherMode: ['strict', 'balanced', 'inclusive'],
       reducedMotion: ['system', 'reduce', 'allow'], nonColorIndicator: ['underline', 'outline', 'off'],
-      screenReaderBehavior: ['original-text', 'announce-on-focus'], launcherPosition: ['automatic-end-bottom', 'end-top', 'end-bottom', 'start-top', 'start-bottom'], menuWidth: ['full', 'compact', 'narrow'], uiTheme: ['ember', 'midnight', 'glacier', 'contrast', 'verdant', 'pride', 'crimson', 'prisma']
+      screenReaderBehavior: ['original-text', 'announce-on-focus'], launcherPosition: ['automatic-end-bottom', 'end-top', 'end-bottom', 'start-top', 'start-bottom'], uiTheme: ['ember', 'midnight', 'glacier', 'contrast', 'verdant', 'pride', 'crimson', 'prisma']
     };
     for (const [name, values] of Object.entries(enums)) {
 	  const value = name === 'uiTheme' ? normalizedUiTheme : candidate[name];
@@ -9092,10 +9091,11 @@ EXP.Engine = (() => {
   return Object.freeze({ start, stop, cleanup, rebuild, navigation, processBatch, snapshot, navigateNext: () => navigate(1), navigatePrevious: () => navigate(-1), navigateTo, setTemporaryHidden, highlightAll: () => setTemporaryHidden(false), subscribe(listener) { listeners.add(listener); return () => listeners.delete(listener); } });
 })();
 
-EXP.VERSION = '3.1.24';
+EXP.VERSION = '3.1.25';
 
 EXP.ReleaseNotes = (() => {
   const notes = Object.freeze({
+    '3.1.25': ["Removes retired menu-width preferences from stored settings without resetting other preferences.","Keeps the existing shared menu size and tests rendered layout instead of obsolete width-mode labels.","Makes artwork tests use the checked-in SVG rather than depending on a live CDN."],
     '3.1.24': ['Updates the shared foundation to exp-core 3.4.11.','Rebuilds shared UI, launcher, diagnostics, notices, and coordination from the pinned Core release.','Leaves PRISMA product-specific engine behavior unchanged.'],
     '3.1.23': ['Updates the shared foundation to exp-core 3.4.10.','Rebuilds shared UI, launcher, diagnostics, notices, and coordination from the pinned Core release.','Leaves PRISMA product-specific engine behavior unchanged.'],
     '3.1.22': ["Updates to exp-core 3.4.9.","Install links now come from the exp-core update checker, which only points at published releases.","Closing the menu on outside clicks now comes from exp-core; an unfinished import still keeps the menu open."],
@@ -9457,7 +9457,7 @@ EXP.UI = (() => {
   return Object.freeze({ init, cleanup, open: () => product?.open(), refresh: render });
 })();
 
-EXP.VERSION = '3.1.24';
+EXP.VERSION = '3.1.25';
 ExtraPotionsCore.registerDiagnosticsProduct('prisma', EXP.VERSION);
 EXP.App = (() => {
   let scheduler, navigationCleanup, settingsCleanup, presentationCleanup, lifecycle;

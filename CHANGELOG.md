@@ -1,3 +1,9 @@
+## 3.1.25 — 2026-10-01
+
+- Removes retired menu-width preferences from stored settings without resetting other preferences.
+- Keeps the existing shared menu size and tests rendered layout instead of obsolete width-mode labels.
+- Makes artwork tests use the checked-in SVG rather than depending on a live CDN.
+
 ## 3.1.24 — 2026-10-01
 
 - Updates the shared foundation to exp-core 3.4.11.

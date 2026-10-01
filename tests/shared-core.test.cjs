@@ -63,7 +63,8 @@ test('schema-1 preferences survive the rebuild and lifecycle cleanup restores th
     lifecycle: window.testPrisma.App.lifecycle.state,
     style: document.querySelector('.exp-prisma-hit').dataset.style,
   }));
-  for (const [key, value] of Object.entries(settings)) assert.deepEqual(state.settings[key], value);
+  for (const [key, value] of Object.entries(settings)) if (key !== 'menuWidth') assert.deepEqual(state.settings[key], value);
+  assert.equal(Object.hasOwn(state.settings, 'menuWidth'), false, 'obsolete width preference is removed without resetting other settings');
   assert.equal(state.version, require('../package.json').version);
   const pinnedCore = fs.readFileSync(path.resolve(__dirname, '../vendor/exp-core/PIN'), 'utf8').trim().replace(/^v/, '');
   assert.equal(state.core, pinnedCore);
