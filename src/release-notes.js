@@ -1,7 +1,8 @@
-EXP.VERSION = '3.1.23';
+EXP.VERSION = '3.1.24';
 
 EXP.ReleaseNotes = (() => {
   const notes = Object.freeze({
+    '3.1.24': ['Updates the shared foundation to exp-core 3.4.11.','Rebuilds shared UI, launcher, diagnostics, notices, and coordination from the pinned Core release.','Leaves PRISMA product-specific engine behavior unchanged.'],
     '3.1.23': ['Updates the shared foundation to exp-core 3.4.10.','Rebuilds shared UI, launcher, diagnostics, notices, and coordination from the pinned Core release.','Leaves PRISMA product-specific engine behavior unchanged.'],
     '3.1.22': ["Updates to exp-core 3.4.9.","Install links now come from the exp-core update checker, which only points at published releases.","Closing the menu on outside clicks now comes from exp-core; an unfinished import still keeps the menu open."],
     '3.1.21': ['Updates the shared foundation to exp-core 3.4.8.','Rebuilds shared UI, launcher, diagnostics, notices, and coordination from the pinned Core release.','Leaves PRISMA product-specific engine behavior unchanged.'],
