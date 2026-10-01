@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
-          fetch-depth: 2
+          fetch-depth: 3
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
           node-version: 22
@@ -27,8 +27,8 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p evidence
-          gh api 'repos/ExtraPotions/exp-core/contents/.maintenance/prepare-consumer-sizing.cjs?ref=03d7037b512a4700205ec325d855837c01c57c01' --jq .content | base64 --decode > /tmp/prepare-consumer-sizing.cjs
-          node /tmp/prepare-consumer-sizing.cjs
+          gh api 'repos/ExtraPotions/exp-core/contents/.maintenance/prepare-consumer-sizing.cjs?ref=d25a563a999c826f2328deefcb76bec7d8b44910' --jq .content | base64 --decode > /tmp/prepare-consumer-sizing.cjs
+          node /tmp/prepare-consumer-sizing.cjs 2>&1 | tee evidence/migration.txt
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - name: Verify pin, complete regressions and deterministic rebuild
