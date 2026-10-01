@@ -199,7 +199,6 @@ EXP.UI = (() => {
       else if (!event.shiftKey && active === last) { event.preventDefault(); first.focus(); }
     }
   }
-  function outsidePointer(event) { if (product?.isOpen && !event.composedPath().includes(host) && !importDraft) product.close(); }
   function init() {
     if (window.top !== window.self || host) return;
     engineState = EXP.Engine.snapshot({ includeMatchText: false });
@@ -210,6 +209,8 @@ EXP.UI = (() => {
       getSettings: () => EXP.Settings.snapshot(),
       onSettings: (next, reason) => update(next, reason),
       sections: routeNames.map(([id, label]) => ({ id, label, render: () => routeRenderers[id]() })),
+      // An unfinished import stays open when the viewer clicks elsewhere.
+      keepOpen: () => Boolean(importDraft),
     });
     ({ host, shadow, launcher, panel } = product);
     EXP.Core.injectStyle(shadow, '.catalog-detail{padding:8px;margin:4px 0 8px;border:1px solid var(--theme-line);border-radius:7px;background:var(--theme-bg);font-size:10px;line-height:1.45;overflow-wrap:anywhere}.catalog-detail[hidden]{display:none!important}.catalog-detail p{margin:6px 0}.catalog-detail a{display:block;color:var(--theme-accent2);margin-top:5px}.catalog-palette{height:20px;border:1px solid var(--theme-line);border-radius:4px}', { expPrismaCatalog: '1' });
@@ -234,8 +235,8 @@ EXP.UI = (() => {
     (shadow.querySelector('.exp-core-theme') || shadow).append(toast);
     noticeController = ExtraPotionsCore.createProductNotice({
       host, shadow, panel, versionButton: product.versionButton,
-      releaseUrl: 'https://github.com/ExtraPotions/PRISMA/releases',
-      installUrl: 'https://github.com/ExtraPotions/PRISMA/releases/latest/download/prisma.user.js',
+      releaseUrl: EXP.Updates.RELEASE_URL,
+      installUrl: EXP.Updates.INSTALL_URL,
       onVersion: () => {
         if (updateCard?.hidden === false && updateCard.dataset.noticeKind === 'current') hideUpdateCard();
         else showNotice(updateCard, { kicker:'Current Version', title:'PRISMA Changelog', version:EXP.VERSION, text:`What's new in v${EXP.VERSION}.`, details:EXP.ReleaseNotes.current(), available:false });
@@ -251,12 +252,10 @@ EXP.UI = (() => {
       if (product?.isOpen && panel.querySelector('[data-section="page"][aria-expanded="true"],[data-section="system"][aria-expanded="true"]')) render();
     });
     document.addEventListener('keydown', bindKeys, true);
-    document.addEventListener('pointerdown', outsidePointer, true);
     render();
   }
   function cleanup() {
     document.removeEventListener('keydown', bindKeys, true);
-    document.removeEventListener('pointerdown', outsidePointer, true);
     unsubscribe?.(); clearTimeout(toastTimer); noticeController?.destroy(); product?.destroy();
     host = shadow = launcher = panel = live = toast = product = noticeController = updateCard = null;
     importDraft = null;
