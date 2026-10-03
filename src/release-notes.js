@@ -1,0 +1,105 @@
+EXP.VERSION = '3.2.2';
+
+EXP.ReleaseNotes = (() => {
+  const notes = Object.freeze({
+    '3.2.2': ["Use product names without the retired V3 integration label in settings prompts and import messages.","Keep existing saved settings and settings exports compatible."],
+    '3.2.1': ["Make small menu text easier to read, including captions, version badges, notices, and diagnostic details.","Use consistent sizes for labels and controls across the menu."],
+    '3.2.0': ["Open a highlight explanation to see its meaning, recognition rules, and source references.","Ignore an explained phrase on the current site while preserving ordinary links and controls.","Pause ExtraPotions page features together from System > Site control."],
+    '3.1.27': ['Updates the shared foundation to exp-core 3.4.13.','Rebuilds shared UI, launcher, diagnostics, notices, and coordination from the pinned Core release.','Leaves PRISMA product-specific engine behavior unchanged.'],
+    '3.1.26': ['Updates the shared foundation to exp-core 3.4.12.','Rebuilds shared UI, launcher, diagnostics, notices, and coordination from the pinned Core release.','Leaves PRISMA product-specific engine behavior unchanged.'],
+    '3.1.25': ["Removes retired menu-width preferences from stored settings without resetting other preferences.","Keeps the existing shared menu size and tests rendered layout instead of obsolete width-mode labels.","Makes artwork tests use the checked-in SVG rather than depending on a live CDN."],
+    '3.1.24': ['Updates the shared foundation to exp-core 3.4.11.','Rebuilds shared UI, launcher, diagnostics, notices, and coordination from the pinned Core release.','Leaves PRISMA product-specific engine behavior unchanged.'],
+    '3.1.23': ['Updates the shared foundation to exp-core 3.4.10.','Rebuilds shared UI, launcher, diagnostics, notices, and coordination from the pinned Core release.','Leaves PRISMA product-specific engine behavior unchanged.'],
+    '3.1.22': ["Updates to exp-core 3.4.9.","Install links now come from the exp-core update checker, which only points at published releases.","Closing the menu on outside clicks now comes from exp-core; an unfinished import still keeps the menu open."],
+    '3.1.21': ['Updates the shared foundation to exp-core 3.4.8.','Rebuilds shared UI, launcher, diagnostics, notices, and coordination from the pinned Core release.','Leaves PRISMA product-specific engine behavior unchanged.'],
+    '3.1.20': ['Updates the shared foundation to exp-core 3.4.7.','Rebuilds shared UI, launcher, diagnostics, notices, and coordination from the pinned Core release.','Leaves PRISMA product-specific engine behavior unchanged.'],
+    '3.1.19': ['Updates the shared foundation to exp-core 3.4.6.','Rebuilds shared UI, launcher, diagnostics, notices, and coordination from the pinned Core release.','Leaves PRISMA product-specific engine behavior unchanged.'],
+    '3.1.18': ['Updates the shared foundation to exp-core 3.4.5.','Rebuilds shared UI, launcher, diagnostics, notices, and coordination from the pinned Core release.','Leaves PRISMA product-specific engine behavior unchanged.'],
+    '3.1.17': ['Updates the shared foundation to exp-core 3.4.4.','Rebuilds shared UI, launcher, diagnostics, notices, and coordination from the pinned Core release.','Leaves PRISMA product-specific engine behavior unchanged.'],
+    '3.1.16': ['Updates the shared foundation to exp-core 3.4.3.','Rebuilds shared UI, launcher, diagnostics, notices, and coordination from the pinned Core release.','Leaves PRISMA product-specific engine behavior unchanged.'],
+    '3.1.15': ["Adds a Check for updates button that works without turning on update notifications.","Checks GitHub release information only when you press it and never installs anything.","Reports whether an update is available, the script is current, or the check failed.","Leaves everything else in the product unchanged."],
+    '3.1.14': ['Updates the shared foundation to exp-core 3.4.2.','Rebuilds shared UI, launcher, diagnostics, notices, and coordination from the pinned Core release.','Leaves PRISMA product-specific engine behavior unchanged.'],
+    '3.1.13': ['Updates the shared foundation to exp-core 3.4.1.','Rebuilds shared UI, launcher, diagnostics, notices, and coordination from the pinned Core release.','Leaves PRISMA product-specific engine behavior unchanged.'],
+    '3.1.12': ['Updates the shared foundation to exp-core 3.4.0.','Rebuilds shared UI, launcher, diagnostics, notices, and coordination from the pinned Core release.','Leaves PRISMA product-specific engine behavior unchanged.'],
+    '3.1.11': ['Updates the shared foundation to exp-core 3.3.17.','Rebuilds shared UI, launcher, diagnostics, notices, and coordination from the pinned Core release.','Leaves PRISMA product-specific engine behavior unchanged.'],
+    '3.1.10': ['Updates the shared foundation to exp-core 3.3.15.','Rebuilds shared UI, launcher, diagnostics, notices, and coordination from the pinned Core release.','Leaves PRISMA product-specific engine behavior unchanged.'],
+    '3.1.9': ['Updates the shared foundation to exp-core 3.3.13.','Rebuilds shared UI, launcher, diagnostics, notices, and coordination from the pinned Core release.','Leaves PRISMA product-specific engine behavior unchanged.'],
+    '3.1.8': ["Adds the shared themed outer menu border across the ExtraPotions suite.","Bundles exp-core 3.3.12 pinned to the verified Dropper 3.3.15 baseline.","Preserves PRISMA identity recognition, catalog data, and flag rendering behavior."],
+    '3.1.7': ['Lets every launcher move left, right, up, or down within the shared grid.','Persists launcher order and supports Alt+Arrow keyboard reordering.','Bundles exp-core 3.3.11 without changing identity recognition or flag data.'],
+    '3.1.6': ['Adds layered menu surfaces so cards, controls, and inputs remain visually distinct.','Uses accessible semantic colors for links, focus indicators, and accent text.','Bundles the verified exp-core 3.3.10 artifact without changing identity recognition or flag data.'],
+    '3.1.5': ["Compacts System menus and keeps menu width controls together on one row.","Groups existing menu preferences consistently while preserving saved settings.","Removes automatic Settings Backup and its restore controls.","Adds a Bitcoin donation option with address copying and wallet support."],
+    '3.1.4': ["Bundles exp-core 3.3.8 with section arrangement and viewport-safe menus.","Preserves the current identity catalog, romantic options, and phrase corrections.","Refreshes the README and feature screenshots in a horizontal gallery."],
+    '3.1.3': ["Adds site-specific phrase corrections that leave matching text nodes unchanged.","Separates definition, flag-design, and exact-palette evidence review filters.","Documents 113 flag designs while keeping two definition references and 22 flag references unresolved.","Adds settings backups, rollback, and compatibility details through exp-core 3.3.7."],
+    '3.1.2': ["Restores the donation button through the shared core default.","Bundles exp-core 3.3.6 so opening one launcher menu closes other product menus."],
+    '3.1.1': ["Restores Firefox startup on pages with restrictive security policies using content injection.","Keeps settings copies in the userscript realm and bundles exp-core 3.3.5 with idle menu fixes."],
+    '3.1.0': Object.freeze([
+      'Adds Pulse, Shimmer, and Glow animation styles with saved preferences and reduced-motion support.',
+      'Keeps gradient-highlighted text visible when page dark-mode styles override element backgrounds, including Wikipedia portals.',
+      'Adds Wikipedia-listed check icons while keeping other definitions unverified without qualifying evidence.',
+      'Adds an optional Romantic identities switch; romantic and aroace definitions remain available in the database.',
+      'Adds an individual public definition and flag review for every catalog entry.',
+      'Documents 133 definitions and 112 flag designs; keeps unresolved evidence visible.',
+      'Verifies 30 palettes and separates definition sources from flag sources in Details.'
+    ]),
+    '3.0.32': Object.freeze([
+      'Uses the same menu-width notice surface for Current Version, Update Available, and Update Complete, matching Dropper.',
+      'Forces a fresh update check for each newly installed PRISMA version instead of inheriting the previous version\'s 15-minute throttle or stale remote version.',
+      'Reports separate progress-card, launcher, launcher-row, menu, and notice geometry, and limits resource-error details to ownership plus asset hostname.'
+    ]),
+    '3.0.31': Object.freeze([
+      'Preserves PRISMA settings across userscript updates by recovering from browser-local backup storage when manager storage is missing.',
+      'Mirrors validated settings to both manager storage and the local fallback so future updates can self-heal without resetting preferences.'
+    ]),
+    '3.0.30': Object.freeze([
+      'Shows each automatic update notice once for that version instead of on every page load.',
+      'Stacks simultaneous notices beside the complete launcher grid.',
+      'Moves diagnostics and data actions under the final System menu.'
+    ]),
+    '3.0.29': Object.freeze([
+      'Keeps every launcher clickable when multiple ExtraPotions products share the page.',
+      'Prevents transparent launcher containers from intercepting pointer input.'
+    ]),
+    '3.0.28': Object.freeze([
+      'Uses the borderless PRISMA launcher artwork everywhere an icon is shown.',
+      'References the SVG by URL instead of embedding image bytes in the userscript.',
+      'Removes the superseded bordered SVG and raster badge files.'
+    ]),
+    '3.0.27': Object.freeze([
+      'Makes Underline and Soft Fill resilient to hostile page styles.',
+      'Makes the Animation switch visibly affect every highlight style while respecting reduced motion.',
+      'Adds standardized Page, Technical, Console, and Plugin diagnostics with peer conflict reporting.',
+      'Embeds the canonical PRISMA badge for userscript managers.'
+    ]),
+    '3.0.26': Object.freeze([
+      'Removes the decorative progress ring from the PRISMA launcher.',
+      'Keeps the launcher at 48 px with 40 px artwork and the menu badge at 38 px.',
+      'Uses the canonical PRISMA SVG as the userscript-manager icon.'
+    ]),
+    '3.0.25': Object.freeze([
+      'Uses 48 px launcher buttons with 40 px artwork and an 8 px gap between launchers.',
+      'Expands menu-header badge artwork to 38 px.',
+      'Adds a dedicated 128 px raster badge derivative without changing either SVG source.'
+    ]),
+    '3.0.24': Object.freeze([
+      'Restores visible Underline highlights when site styles override PRISMA.',
+      'Restores Soft Fill highlights with their identity color and spacing.',
+      'Keeps both styles visible if the managed page stylesheet cannot paint.'
+    ]),
+    '3.0.23': Object.freeze([
+      'Shows concrete current-release changes when the PRISMA version control is opened.',
+      'Includes the same concise changelog after PRISMA finishes updating.',
+      'Uses the latest release summary in update-available notices when GitHub provides it.'
+    ]),
+    '3.0.22': Object.freeze([
+      'Limits shared launcher and theme coordination to active ExtraPotions products.',
+      'Stops shared audits from tracking archived products.',
+      'Pins PRISMA to the verified Dropper 3.2.13 Core reference.'
+    ]),
+    '3.0.21': Object.freeze([
+      'Packs installed product launchers into Dropper\'s compact progress rail.',
+      'Restores the normal launcher grid when the progress obstacle closes.'
+    ])
+  });
+  function current() { return notes[EXP.VERSION] || Object.freeze(['Current PRISMA improvements and fixes.']); }
+  return Object.freeze({ current });
+})();

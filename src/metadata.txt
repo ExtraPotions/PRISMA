@@ -1,0 +1,30 @@
+// ==UserScript==
+// @name         PRISMA
+// @namespace    https://github.com/ExtraPotions
+// @version      3.2.2
+// @description  Local LGBTQ+ identity-language recognition with context-aware highlighting.
+// @icon         https://raw.githubusercontent.com/ExtraPotions/PRISMA/main/assets/prisma-launcher.svg
+// @tag          LGBTQ+
+// @tag          highlighting
+// @tag          accessibility
+// @author       expDARE
+// @license      PolyForm-Noncommercial-1.0.0
+// @homepageURL  https://github.com/ExtraPotions/PRISMA
+// @supportURL   https://github.com/ExtraPotions/PRISMA/issues
+// @updateURL    https://github.com/ExtraPotions/PRISMA/releases/latest/download/prisma.user.js
+// @downloadURL  https://github.com/ExtraPotions/PRISMA/releases/latest/download/prisma.user.js
+// @match        http://*/*
+// @match        https://*/*
+// @run-at       document-start
+// @inject-into  content
+// @grant        GM_getValue
+// @grant        GM_setValue
+// @grant        GM_addStyle
+// @grant        GM_addElement
+// @grant        GM_xmlhttpRequest
+// @grant        unsafeWindow
+// @connect      api.github.com
+// ==/UserScript==
+// PRISMA Manager Metadata
+// Description: Local LGBTQ+ identity-language recognition with context-aware highlighting.
+// Tags: LGBTQ+, highlighting, accessibility
