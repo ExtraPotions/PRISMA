@@ -1,7 +1,8 @@
-EXP.VERSION = '3.2.2';
+EXP.VERSION = '3.2.3';
 
 EXP.ReleaseNotes = (() => {
   const notes = Object.freeze({
+    '3.2.3': ["Show a clear System status with safe retry for a suspended scan.","Choose Standard, Large, or Extra Large menus on each site.","Preview the actual highlight style and animation on light and dark surfaces."],
     '3.2.2': ["Use product names without the retired V3 integration label in settings prompts and import messages.","Keep existing saved settings and settings exports compatible."],
     '3.2.1': ["Make small menu text easier to read, including captions, version badges, notices, and diagnostic details.","Use consistent sizes for labels and controls across the menu."],
     '3.2.0': ["Open a highlight explanation to see its meaning, recognition rules, and source references.","Ignore an explained phrase on the current site while preserving ordinary links and controls.","Pause ExtraPotions page features together from System > Site control."],

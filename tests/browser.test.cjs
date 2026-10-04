@@ -73,7 +73,7 @@ async function fixture(html) {
   await page.waitForSelector('.exp-prisma-hit');
   return { browser, page };
 }
-const hitData = (page) => page.locator('.exp-prisma-hit').evaluateAll((nodes) => nodes.map((node) => ({ text: node.textContent, identity: node.dataset.identity, style: node.dataset.style })));
+const hitData = (page) => page.locator('.exp-prisma-hit[data-match-id]').evaluateAll((nodes) => nodes.map((node) => ({ text: node.textContent, identity: node.dataset.identity, style: node.dataset.style })));
 
 test('version action reuses the update-complete card for the current changelog', async (t) => {
   const browser = await chromium.launch({ headless: true });
@@ -153,11 +153,11 @@ test('character-data edits are observed without duplicating existing matches', a
 test('renderer controls change style without changing the match count', async () => {
   const { browser, page } = await fixture('<main>bisexual and pansexual</main>');
   try {
-    const before = await page.locator('.exp-prisma-hit').count();
+    const before = await page.locator('main .exp-prisma-hit').count();
     await page.locator('#exp-prisma-root').evaluate((host) => { const root=host.shadowRoot;root.querySelector('.launcher').click();root.querySelector('[data-section="appearance"]').click(); [...root.querySelectorAll('details > summary')].find((item) => item.textContent.includes('Highlight style'))?.click(); });
     await page.locator('#exp-prisma-root').evaluate((host) => { const select = host.shadowRoot.querySelector('select[aria-label="Style"]'); select.value = 'underline'; select.dispatchEvent(new Event('change', { bubbles: true })); });
     await page.waitForFunction(() => [...document.querySelectorAll('.exp-prisma-hit')].every((node) => node.dataset.style === 'underline'));
-    const underline = await page.locator('.exp-prisma-hit').first().evaluate((node) => {
+    const underline = await page.locator('.exp-prisma-hit[data-match-id]').first().evaluate((node) => {
       const style = getComputedStyle(node);
       return { backgroundImage: style.backgroundImage, backgroundSize: style.backgroundSize, decoration: style.textDecorationLine };
     });
@@ -166,14 +166,14 @@ test('renderer controls change style without changing the match count', async ()
     assert.match(underline.decoration, /underline/);
     await page.locator('#exp-prisma-root').evaluate((host) => { const select = host.shadowRoot.querySelector('select[aria-label="Style"]'); select.value = 'soft-fill'; select.dispatchEvent(new Event('change', { bubbles: true })); });
     await page.waitForFunction(() => [...document.querySelectorAll('.exp-prisma-hit')].every((node) => node.dataset.style === 'soft-fill'));
-    const fill = await page.locator('.exp-prisma-hit').first().evaluate((node) => {
+    const fill = await page.locator('.exp-prisma-hit[data-match-id]').first().evaluate((node) => {
       const style = getComputedStyle(node);
       return { backgroundColor: style.backgroundColor, paddingInlineStart: style.paddingInlineStart };
     });
     assert.match(fill.backgroundColor, /^rgba?\(/);
     assert.notEqual(fill.backgroundColor, 'rgba(0, 0, 0, 0)');
     assert.notEqual(fill.paddingInlineStart, '0px');
-    assert.equal(await page.locator('.exp-prisma-hit').count(), before);
+    assert.equal(await page.locator('main .exp-prisma-hit').count(), before);
   } finally { await browser.close(); }
 });
 
@@ -193,7 +193,7 @@ test('underline and soft fill resist hostile site CSS', async () => {
         select.dispatchEvent(new Event('change', { bubbles: true }));
       }, value);
       await page.waitForFunction((next) => [...document.querySelectorAll('.exp-prisma-hit')].every((node) => node.dataset.style === next), value);
-      return page.locator('.exp-prisma-hit').first().evaluate((node) => {
+      return page.locator('.exp-prisma-hit[data-match-id]').first().evaluate((node) => {
         const style = getComputedStyle(node);
         return {
           backgroundColor: style.backgroundColor,
@@ -236,7 +236,7 @@ test('underline and soft fill retain target-level rendering without the managed 
         select.dispatchEvent(new Event('change', { bubbles: true }));
       }, value);
       await page.waitForFunction((next) => [...document.querySelectorAll('.exp-prisma-hit')].every((node) => node.dataset.style === next), value);
-      return page.locator('.exp-prisma-hit').first().evaluate((node) => {
+      return page.locator('.exp-prisma-hit[data-match-id]').first().evaluate((node) => {
         const style = getComputedStyle(node);
         return {
           backgroundColor: style.backgroundColor,

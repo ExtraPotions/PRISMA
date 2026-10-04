@@ -1,4 +1,4 @@
-EXP.VERSION = '3.2.2';
+EXP.VERSION = '3.2.3';
 ExtraPotionsCore.registerDiagnosticsProduct('prisma', EXP.VERSION);
 EXP.App = (() => {
   let scheduler, navigationCleanup, settingsCleanup, presentationCleanup, lifecycle;
@@ -23,7 +23,7 @@ EXP.App = (() => {
   async function disable() { scheduler.stop(); EXP.Engine.stop(); }
   async function cleanup() { scheduler?.stop(); presentationCleanup?.(); settingsCleanup?.(); navigationCleanup?.(); EXP.UI.cleanup(); EXP.Engine.cleanup(); }
   function start() {
-    lifecycle = EXP.Core.register({ id: 'prisma', version: EXP.VERSION, coreRange: '^3.3.4', capabilities: ['lifecycle', 'settings', 'diagnostics', 'dom-scheduler', 'navigation', 'launcher', 'ui'] }, { initialize, enable, disable, cleanup });
+    lifecycle = EXP.Core.register({ id: 'prisma', version: EXP.VERSION, coreRange: '^3.6.0', capabilities: ['lifecycle', 'settings', 'diagnostics', 'dom-scheduler', 'navigation', 'launcher', 'ui'] }, { initialize, enable, disable, cleanup });
     lifecycle.initialize().then(() => lifecycle.enable()).catch((error) => EXP.Core.safeError(error, 'prisma'));
     return lifecycle;
   }

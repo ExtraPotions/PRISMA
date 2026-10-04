@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PRISMA
 // @namespace    https://github.com/ExtraPotions
-// @version      3.2.2
+// @version      3.2.3
 // @description  Local LGBTQ+ identity-language recognition with context-aware highlighting.
 // @icon         https://raw.githubusercontent.com/ExtraPotions/PRISMA/main/assets/prisma-launcher.svg
 // @tag          LGBTQ+
@@ -1544,11 +1544,98 @@ const ExpMenuArrangement = (() => {
   });
 })();
 
+/* Plain health facts and safe, product-owned actions. */
+const ExpHealthSummary = (() => {
+  const labels = Object.freeze({working:'Working',waiting:'Waiting',paused:'Paused',attention:'Needs attention'});
+  function normalizeHealth(value) {
+    const valid = value && Object.hasOwn(labels, value.state);
+    const state = valid ? value.state : 'waiting';
+    const checkedAt = Number(value?.checkedAt);
+    return {state,label:labels[state],reason:valid && typeof value.reason === 'string' ? value.reason.slice(0,500) : 'Status information is not available yet.',
+      checkedAt:Number.isFinite(checkedAt) && checkedAt > 0 ? checkedAt : null,
+      action:valid && typeof value.action?.label === 'string' && typeof value.action.run === 'function' ? {label:value.action.label.slice(0,80),run:value.action.run} : null};
+  }
+  function createHealthControls(getHealth, notify = () => {}) {
+    const element=document.createElement('section');element.className='exp-health';element.dataset.expHealth='1';
+    element.style.cssText='margin:0 0 10px;padding:8px;border:1px solid var(--theme-line);border-radius:7px;background:var(--theme-inset);min-width:0;overflow-wrap:anywhere';
+    const state=document.createElement('strong'),reason=document.createElement('p'),checked=document.createElement('small'),action=document.createElement('button');
+    state.dataset.expHealthState='1';reason.dataset.expHealthReason='1';reason.style.cssText='margin:5px 0;line-height:1.4';checked.style.cssText='display:block;margin-bottom:4px';
+    action.type='button';action.className='life-btn action';action.hidden=true;
+    element.append(state,reason,checked,action);
+    let generation=0,disposed=false,pending=false,current=null;
+    function render(value) {current=normalizeHealth(value);state.textContent=current.label;reason.textContent=current.reason;checked.textContent=current.checkedAt?`Checked ${new Date(current.checkedAt).toLocaleTimeString()}`:'Not checked yet';action.textContent=current.action?.label||'';action.hidden=!current.action;action.disabled=pending;}
+    async function refresh() {
+      if(disposed)return;const ticket=++generation;
+      try {const value=await getHealth();if(!disposed&&ticket===generation)render(value);}
+      catch {if(!disposed&&ticket===generation)render(null);}
+    }
+    const click=async()=>{
+      if(disposed||pending||!current?.action)return;
+      const run=current.action.run;pending=true;action.disabled=true;
+      try {await run();}catch {if(!disposed)notify('The recovery action did not complete. Open diagnostics for details.');}
+      finally {pending=false;if(!disposed){action.disabled=false;await refresh();}}
+    };
+    element.refreshHealth=refresh;state.setAttribute('role','status');
+    action.addEventListener('click',click);render(null);refresh();
+    return {element,refresh,dispose(){disposed=true;++generation;action.removeEventListener('click',click);}};
+  }
+  return Object.freeze({normalizeHealth,createHealthControls});
+})();
+
+/* Feature/context isolation and bounded single-flight recovery. */
+const ExpRecoveryControl = (() => {
+  function createRecoveryGuard({limit=3,windowMs=120000,now=Date.now}={}) {
+    const contexts=new Map();let disposed=false;
+    const record=(feature,context)=>{let features=contexts.get(context);if(!features){features=new Map();contexts.set(context,features);}let value=features.get(feature);if(!value){value={times:[],suspended:false,retryPending:false,lastFailureAt:null};features.set(feature,value);}return value;};
+    const view=value=>({suspended:value.suspended,consecutiveFailures:value.times.length,retryPending:value.retryPending,lastFailureAt:value.lastFailureAt});
+    function failed(feature,context){const value=record(feature,context),time=now();value.times=value.times.filter(at=>time-at<=windowMs);value.times.push(time);value.times=value.times.slice(-limit);value.lastFailureAt=time;if(value.times.length>=limit)value.suspended=true;return view(value);}
+    function succeeded(feature,context){const value=record(feature,context);value.times=[];value.suspended=false;return view(value);}
+    async function retry(feature,context,run){
+      if(disposed||typeof run!=='function')return false;const value=record(feature,context);if(value.retryPending)return false;value.retryPending=true;
+      const isCurrent=()=>!disposed&&contexts.get(context)?.get(feature)===value;
+      try {const result=await run();if(!isCurrent()||result===false)return false;succeeded(feature,context);return true;}
+      catch(error){if(isCurrent())failed(feature,context);throw error;}
+      finally {value.retryPending=false;}
+    }
+    return Object.freeze({failed,succeeded,snapshot:(feature,context)=>view(record(feature,context)),retry,clearContext:context=>contexts.delete(context),dispose(){disposed=true;contexts.clear();}});
+  }
+  return Object.freeze({createRecoveryGuard});
+})();
+
+/* Same-origin preferences for product-owned menu surfaces only. */
+const ExpMenuPreferences = (() => {
+  const key='exp:suite:menu-size',eventName='exp-core:menu-size';
+  const sizes=Object.freeze({standard:{body:13,small:11,width:260},large:{body:15,small:13,width:300},'extra-large':{body:17,small:15,width:340}});
+  let memory='standard';
+  const valid=value=>Object.hasOwn(sizes,value)?value:'standard';
+  function menuSizePreference(){try {const stored=localStorage.getItem(key);memory=valid(stored);}catch {}return memory;}
+  function setMenuSizePreference(size){memory=valid(size);try{localStorage.setItem(key,memory);}catch{}document.dispatchEvent(new CustomEvent(eventName,{detail:memory}));return memory;}
+  function bindMenuSize({host,shadow,panel,onLayout=()=>{}}){
+    function apply(size){
+      memory=valid(size);const value=sizes[memory];host.dataset.expMenuSize=memory;
+      host.style.setProperty('--exp-font-size-body',value.body+'px');host.style.setProperty('--exp-font-size-small',value.small+'px');host.style.setProperty('--exp-menu-width',value.width+'px');
+      for(const select of shadow.querySelectorAll('[data-exp-menu-size-select]'))select.value=memory;
+      onLayout();
+    }
+    const changed=event=>apply(event.detail),storage=event=>{if(event.key===key||event.key===null)apply(menuSizePreference());};
+    document.addEventListener(eventName,changed);addEventListener('storage',storage);apply(menuSizePreference());
+    return ()=>{document.removeEventListener(eventName,changed);removeEventListener('storage',storage);};
+  }
+  function createMenuSizeControls(){
+    const row=document.createElement('label');row.className='row exp-menu-size';const copy=document.createElement('span');copy.className='copy';
+    const title=document.createElement('strong');title.textContent='Menu size';const help=document.createElement('small');help.className='help';help.textContent='Text and controls for ExtraPotions menus on this site.';copy.append(title,help);
+    const select=document.createElement('select');select.setAttribute('aria-label','Menu size');select.dataset.expMenuSizeSelect='1';
+    for(const [value,label] of [['standard','Standard'],['large','Large'],['extra-large','Extra Large']]){const option=document.createElement('option');option.value=value;option.textContent=label;select.append(option);}
+    select.value=menuSizePreference();select.addEventListener('change',()=>setMenuSizePreference(select.value));row.append(copy,select);return row;
+  }
+  return Object.freeze({menuSizePreference,setMenuSizePreference,bindMenuSize,createMenuSizeControls,menuSizeTokens:()=>sizes[menuSizePreference()]});
+})();
+
 // Product-neutral shared runtime. Product engines own their settings, content, and actions.
 // exp-core owns shared UI, launcher, diagnostics, update, and coordination behavior.
 const ExtraPotionsCore = (() => {
   'use strict';
-  const version = '3.5.1';
+  const version = '3.6.0';
   const sourceVersion = version; // Backward-compatible alias for Core's own foundation version.
   const SUPPORT_URL = 'https://ko-fi.com/expdare';
   const protocol = 'exp-core-coordination-v1';
@@ -1673,7 +1760,7 @@ const ExtraPotionsCore = (() => {
     grid.append(...contents); return grid;
   }
   // One suite size. Placement clamps this preferred width to the viewport.
-  function menuWidth() { return 260; }
+  function menuWidth() { return ExpMenuPreferences.menuSizeTokens().width; }
   const canonicalCss = CoreFoundation.css();
   const compositionCss = `
     [data-exp-part="dock"]{box-sizing:border-box;overflow-x:hidden;overscroll-behavior:contain}
@@ -3195,6 +3282,7 @@ const ExtraPotionsCore = (() => {
         menuControllers.delete(host);
       },
     });
+    removers.push(ExpMenuPreferences.bindMenuSize({host,shadow,panel,onLayout:options.onLayout}));
     menuControllers.set(host, controller);
     return controller;
   }
@@ -3254,6 +3342,7 @@ const ExtraPotionsCore = (() => {
       if (destroyed || !launcher.isConnected) return;
       const state = getSettings();
       themeRoot.style.setProperty('--exp-menu-width', menuWidth() + 'px');
+      const fontTokens=ExpMenuPreferences.menuSizeTokens();themeRoot.style.setProperty('--exp-font-size-body',fontTokens.body+'px');themeRoot.style.setProperty('--exp-font-size-small',fontTokens.small+'px');
       themeRoot.classList.toggle('reduce-motion', state.reduceMotion === true || state.reduceMotion === 'on' || state.reducedMotion === 'reduce' || (state.reduceMotion === 'system' || state.reducedMotion === 'system') && matchMedia('(prefers-reduced-motion:reduce)').matches);
       const opacityValue = Number(state.opacityPercent);
       const opacity = state.customOpacity ? (Number.isFinite(opacityValue) ? Math.max(40, Math.min(100, Math.round(opacityValue / 5) * 5)) : 85)/100 : 1;
@@ -3268,7 +3357,7 @@ const ExtraPotionsCore = (() => {
     const arrangement = ExpMenuArrangement.mount({ panel, id, onChange: queueLayout, resetLaunchers() { resetLauncherGrid(id); queueLayout(); } });
     function queueLayout() { if (!frame && !destroyed) frame = requestAnimationFrame(() => { frame = 0; normalizeControls(panel); arrangement.update(); layout(); }); }
     removers.push(bindLauncherDrag(launcher, id, { layout }));
-    const menuController = createMenuController({ ...options, id, host, shadow, panel, getSettings, setOpen });
+    const menuController = createMenuController({ ...options, id, host, shadow, panel, getSettings, setOpen, onLayout:queueLayout });
     on(window,'keydown',e=>{if(shortcutKey&&e.altKey&&e.shiftKey&&e.key.toLowerCase()===shortcutKey.toLowerCase()&&!e.repeat){e.preventDefault();setOpen(!open,true);} });
     on(window,'resize',queueLayout);on(document,'exp-core:coordination',queueLayout);
     on(document,'exp-core:coordination',syncThemeOwner);
@@ -3276,8 +3365,8 @@ const ExtraPotionsCore = (() => {
     const mutation = new MutationObserver(records=>{if(records.some(r=>r.type==='childList'||r.attributeName==='hidden'))queueLayout();}); mutation.observe(panel,{childList:true,subtree:true,attributes:true,attributeFilter:['hidden']});
     const controller = {
       layout, setTheme,
-      state(value) {open=Boolean(value);menuController.state(open);menuNotices.forEach(notice=>notice.setMenuOpen(open));queueLayout();},
-      update(){normalizeControls(panel);queueLayout();},
+      state(value) {open=Boolean(value);menuController.state(open);menuNotices.forEach(notice=>notice.setMenuOpen(open));if(open)panel.querySelectorAll('[data-exp-health]').forEach(node=>node.refreshHealth?.());queueLayout();},
+      update(){normalizeControls(panel);if(open)panel.querySelectorAll('[data-exp-health]').forEach(node=>node.refreshHealth?.());queueLayout();},
       get dismissAt(){return menuController.dismissAt;},
       destroy(){destroyed=true;arrangement.destroy();defaultSupport?.destroy();menuController.destroy();cancelAnimationFrame(frame);resize.disconnect();mutation.disconnect();menuNotices.forEach(notice=>notice.destroy());removers.forEach(f=>f());styles.dispose();controllers.delete(host);}
     };
@@ -3682,6 +3771,8 @@ const ExtraPotionsCore = (() => {
     const area=document.createElement('textarea');area.value=text;area.style.cssText='position:fixed;left:-9999px';document.documentElement.append(area);area.select();const success=document.execCommand('copy');area.remove();if(!success)throw new Error('Clipboard unavailable');
   }
   function createDiagnosticsControls(getReport, notify = () => {}) { return ExtraPotionsDiagnostics.createControls(getReport, notify); }
+  const { normalizeHealth, createHealthControls } = ExpHealthSummary;
+  const { createRecoveryGuard } = ExpRecoveryControl;
   function createProduct({id,name,version:productVersion,subtitle='',artwork,theme,sections=[],getSettings,onSettings=()=>{},priority,supportUrl=SUPPORT_URL,keepOpen}) {
     const host=document.createElement('div');host.id='exp-'+id+'-root';host.dataset.expOwned='1';const shadow=host.attachShadow({mode:'open'});const panel=document.createElement('aside');panel.hidden=true;panel.setAttribute('role','dialog');panel.setAttribute('aria-label',name+' settings');
     const header=document.createElement('header');header.className='menu-head';const brand=document.createElement('div');brand.className='header-brand';const image=document.createElement('img');image.src=artwork;image.alt='';const copy=document.createElement('div');const titleRow=document.createElement('div');const title=document.createElement('strong');title.textContent=name;const v=document.createElement('button');v.type='button';v.className='version';v.textContent='v'+productVersion;titleRow.append(title,v);const sub=document.createElement('small');sub.textContent=subtitle;copy.append(titleRow,sub);brand.append(image,copy);const close=document.createElement('button');close.className='close';close.textContent='×';close.setAttribute('aria-label','Close '+name);const actions=document.createElement('div');actions.className='header-actions';const support=createSupportControl({url:supportUrl,label:'Support '+name});if(support)actions.append(support.element);actions.append(close);header.append(brand,actions);const divider=document.createElement('div');divider.className='header-divider';const nav=document.createElement('nav');
@@ -3729,7 +3820,7 @@ const ExtraPotionsCore = (() => {
     return Object.freeze({ lifecycle, diagnostics, updates });
   }
 
-  const api = Object.freeze({...ExtraPotionsTools,version,sourceVersion,protocol,gridProtocol,reference:CoreFoundation,css:canonicalCss,themes,create,createMenuController,createProduct,createSupportControl,createProductNotice,createLifecycle:()=>createProductLifecycle(api),createProductServices,registerLauncher,bindLauncherDrag,launcherPlacement,placeMenu,placeNotice,resetLauncherGrid,layout:layoutGrid,replaceMenuContent,createDisclosure,createSystemGrid,isOwnedSheet,menuWidth,cloneSettings,applyTextGradient,injectStyle,applyTheme,applyMatteToggleChrome,applyTwoColumnSettingsGrid,applyContentDrivenMenuLayout,createThemeSwatches,publishMenuPalette,createFloatingNotice,createMenuNotice,createReleaseUpdateChecker,registerFloatingNotice,layoutFloatingNotices,claimNotice,consumeVersionChange,focusMenuSurface,registerDiagnosticsProduct,registerSuiteProduct,suiteContract,suiteSnapshot,hasProductCapability,capabilityProviders,emitSuiteEvent,publishSuiteState,suiteStateSnapshot,latestSuiteState,subscribeSuiteState,onSuiteEvent,suiteSitePaused,setSuiteSitePaused,pageContext,observeNavigation,navigationObserverState,suiteTrust:SUITE_TRUST,registerPresentationProvider,presentationProviders,suiteHealth,readPresentationState,setPresentationState,clearPresentationState,presentationStateChain,isPresentationSuppressed,presentationPhases:PRESENTATION_PHASES,presentationChannels:PRESENTATION_CHANNELS,observePresentationState,observePage,observePageBatch,pageObserverState,suiteProducts:SUITE_PRODUCTS,suitePriority:SUITE_PRIORITY,productCompatibility:productCompatibilityReport,createCompatibilityControls:createSuiteCompatibilityControls,bindDiagnosticsControls:ExtraPotionsDiagnostics.bindControls,createDiagnosticsReport,downloadDiagnostics,createDiagnosticsControls,mountMenuArrangement:ExpMenuArrangement.mount,menuCategories:ExpMenuArrangement.categories,categorizeMenuSections:ExpMenuArrangement.describe,createMenuCategoryDisclosure:(label,category,...contents)=>ExpMenuArrangement.createDisclosure({document,label,category,contents}),collapseMenuSubmenus:ExpMenuArrangement.collapseSubmenus,compareVersions:CoreFoundation.compareVersions});
+  const api = Object.freeze({...ExtraPotionsTools,...ExpMenuPreferences,normalizeHealth,createHealthControls,createRecoveryGuard,version,sourceVersion,protocol,gridProtocol,reference:CoreFoundation,css:canonicalCss,themes,create,createMenuController,createProduct,createSupportControl,createProductNotice,createLifecycle:()=>createProductLifecycle(api),createProductServices,registerLauncher,bindLauncherDrag,launcherPlacement,placeMenu,placeNotice,resetLauncherGrid,layout:layoutGrid,replaceMenuContent,createDisclosure,createSystemGrid,isOwnedSheet,menuWidth,cloneSettings,applyTextGradient,injectStyle,applyTheme,applyMatteToggleChrome,applyTwoColumnSettingsGrid,applyContentDrivenMenuLayout,createThemeSwatches,publishMenuPalette,createFloatingNotice,createMenuNotice,createReleaseUpdateChecker,registerFloatingNotice,layoutFloatingNotices,claimNotice,consumeVersionChange,focusMenuSurface,registerDiagnosticsProduct,registerSuiteProduct,suiteContract,suiteSnapshot,hasProductCapability,capabilityProviders,emitSuiteEvent,publishSuiteState,suiteStateSnapshot,latestSuiteState,subscribeSuiteState,onSuiteEvent,suiteSitePaused,setSuiteSitePaused,pageContext,observeNavigation,navigationObserverState,suiteTrust:SUITE_TRUST,registerPresentationProvider,presentationProviders,suiteHealth,readPresentationState,setPresentationState,clearPresentationState,presentationStateChain,isPresentationSuppressed,presentationPhases:PRESENTATION_PHASES,presentationChannels:PRESENTATION_CHANNELS,observePresentationState,observePage,observePageBatch,pageObserverState,suiteProducts:SUITE_PRODUCTS,suitePriority:SUITE_PRIORITY,productCompatibility:productCompatibilityReport,createCompatibilityControls:createSuiteCompatibilityControls,bindDiagnosticsControls:ExtraPotionsDiagnostics.bindControls,createDiagnosticsReport,downloadDiagnostics,createDiagnosticsControls,mountMenuArrangement:ExpMenuArrangement.mount,menuCategories:ExpMenuArrangement.categories,categorizeMenuSections:ExpMenuArrangement.describe,createMenuCategoryDisclosure:(label,category,...contents)=>ExpMenuArrangement.createDisclosure({document,label,category,contents}),collapseMenuSubmenus:ExpMenuArrangement.collapseSubmenus,compareVersions:CoreFoundation.compareVersions});
   return api;
 })();
 
@@ -8915,7 +9006,6 @@ EXP.Renderer = (() => {
     }
   }
   function applyVisual(span, record, settings) {
-    currentSettings = settings;
     const hasPalette = record.identity.colors.length > 0;
     const colors = hasPalette ? record.identity.colors : ['currentColor'];
     const visualStyle = hasPalette ? settings.style : 'underline';
@@ -8947,6 +9037,7 @@ EXP.Renderer = (() => {
     }
   }
   function wrap(node, candidates, settings, createRecord) {
+    currentSettings=settings;
     if (!node.parentNode || !candidates.length) return [];
     ensureStyle(node.getRootNode());
     const fragment = document.createDocumentFragment();
@@ -8986,11 +9077,24 @@ EXP.Renderer = (() => {
     }
     for (const parent of parents) parent.normalize?.();
   }
-  function refresh(settings) { for (const span of [...wrappers]) { if (!span.isConnected) { wrappers.delete(span); continue; } const identity = EXP.Catalog.get(span.dataset.identity); if (identity) applyVisual(span, { identity }, settings); } }
+  function refresh(settings) { currentSettings=settings;for (const span of [...wrappers]) { if (!span.isConnected) { wrappers.delete(span); continue; } const identity = EXP.Catalog.get(span.dataset.identity); if (identity) applyVisual(span, { identity }, settings); } }
+  function createPreview(settings, identity) {
+    const element=document.createElement('section');element.dataset.prismaPreview='1';element.dataset.expOwned='1';
+    const shadow=element.attachShadow({mode:'open'});ensureStyle(shadow);
+    const samples=[];
+    for(const [name,bg,fg] of [['Light','#ffffff','#16161c'],['Dark','#18181d','#f4f4f6']]){
+      const card=document.createElement('div');card.style.cssText=`background:${bg};color:${fg};border:1px solid #777;border-radius:7px;padding:10px;margin-top:6px;line-height:1.5;font:var(--exp-font-size-body,13px)/1.5 system-ui`;
+      const label=document.createElement('small');label.textContent=name+' preview';label.style.cssText='display:block;font-size:var(--exp-font-size-small,11px)';
+      const sample=document.createElement('span');card.append(label,sample);shadow.append(card);samples.push(sample);
+    }
+    function refreshPreview(value,selected){for(const sample of samples){sample.removeAttribute('style');sample.removeAttribute('class');sample.textContent=selected?.label||'Identity language';if(selected&&!(value.disabledIdentities||[]).includes(selected.id)){sample.className=HIT;applyVisual(sample,{identity:selected},value);}else sample.textContent+=' (disabled)';}}
+    refreshPreview(settings,identity);
+    return {element,refresh:refreshPreview,dispose(){styles.get(shadow)?.dispose?.();styles.delete(shadow);element.remove();}};
+  }
   function setHidden(value) { hidden = Boolean(value); if (currentSettings) refresh(currentSettings); }
   function focus(record) { if (!record?.element?.isConnected) return false; record.element.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'auto' }); record.element.focus({ preventScroll: true }); record.element.dataset.current = '1'; setTimeout(() => { if (record.element) delete record.element.dataset.current; }, 1200); return true; }
   function cleanup() { clear(); for (const style of styles.values()) style.remove(); styles.clear(); hidden = false; }
-  return Object.freeze({ HIT, ensureStyle, wrap, clear, refresh, setHidden, focus, cleanup, wrapperCount: () => [...wrappers].filter((node) => node.isConnected).length });
+  return Object.freeze({ HIT, createPreview, ensureStyle, wrap, clear, refresh, setHidden, focus, cleanup, wrapperCount: () => [...wrappers].filter((node) => node.isConnected).length });
 })();
 
 EXP.Engine = (() => {
@@ -9005,6 +9109,16 @@ EXP.Engine = (() => {
   let settings = null;
   let active = false;
   let currentHref = location.href;
+  const recovery=ExtraPotionsCore.createRecoveryGuard();
+  function guardedScan(run,force=false) {
+    if(ExtraPotionsCore.suiteSitePaused())return false;
+    const effective=EXP.Settings.effective();
+    if(!active||!effective.enabled||effective.safeMode||effective.excluded)return run();
+    if(!force&&recovery.snapshot('scan',currentHref).suspended)return false;
+    try {const result=run();recovery.succeeded('scan',currentHref);return result;}
+    catch(error){if(force)throw error;recovery.failed('scan',currentHref);EXP.Core.safeError(error,'prisma.scan');notify();return false;}
+  }
+  function retry(){return recovery.retry('scan',currentHref,()=>{const value=EXP.Settings.effective();if(!active||!value.enabled||value.safeMode||value.excluded||ExtraPotionsCore.suiteSitePaused())return false;return guardedScan(()=>rebuildUnprotected('retry'),true);});}
   const ignoredSelector = ['script', 'style', 'noscript', 'template', 'textarea', 'input', 'select', 'option', 'button', 'pre', 'code', '[contenteditable]', '[inert]', '[hidden]', '[aria-hidden="true"]', '[data-exp-owned="1"]'].join(',');
   const notify = () => {
     const value = snapshot();
@@ -9070,8 +9184,9 @@ EXP.Engine = (() => {
     if (currentIndex >= matches.size) currentIndex = matches.size - 1;
   }
   function canRun(value = settings) { return active && value?.enabled && !value.safeMode && !value.excluded && EXP.Catalog.status().valid; }
-  function processBatch(roots) {
-    if (location.href !== currentHref) { currentHref = location.href; navigation(); return; }
+  function processBatch(roots) {return guardedScan(()=>processBatchUnprotected(roots));}
+  function processBatchUnprotected(roots) {
+    if (location.href !== currentHref) { navigation(); return; }
     const started = performance.now();
     metrics.batches += 1;
     prune();
@@ -9080,7 +9195,8 @@ EXP.Engine = (() => {
     metrics.lastDurationMs = Math.round((performance.now() - started) * 10) / 10;
     notify();
   }
-  function rebuild(reason = 'rebuild') {
+  function rebuild(reason = 'rebuild') {return guardedScan(()=>rebuildUnprotected(reason));}
+  function rebuildUnprotected(reason = 'rebuild') {
     const started = performance.now();
     EXP.Renderer.clear();
     matches.clear();
@@ -9097,7 +9213,7 @@ EXP.Engine = (() => {
     notify();
     return reason;
   }
-  function navigation() { currentHref = location.href; routeEpoch += 1; temporarilyHidden = false; rebuild('navigation'); }
+  function navigation() { recovery.clearContext(currentHref);currentHref = location.href; routeEpoch += 1; temporarilyHidden = false; rebuild('navigation'); }
   function ordered() { prune(); return [...matches.values()].sort((left, right) => { if (left.element === right.element) return 0; return left.element.compareDocumentPosition(right.element) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1; }); }
   function navigate(delta) {
     const list = ordered();
@@ -9131,7 +9247,7 @@ EXP.Engine = (() => {
     const state = settings || EXP.Settings.effective();
     return Object.freeze({
       status: !EXP.Catalog.status().valid ? 'catalog-invalid' : state.safeMode ? 'safe-mode' : state.excluded ? 'excluded' : !state.enabled ? 'disabled' : active ? 'ready' : 'stopped',
-      routeEpoch, total: matches.size, summary: summary(), decisions: { ...decisions }, metrics: { ...metrics }, currentIndex,
+      recovery:recovery.snapshot('scan',currentHref),routeEpoch, total: matches.size, summary: summary(), decisions: { ...decisions }, metrics: { ...metrics }, currentIndex,
       temporarilyHidden, matches: ordered().map((record) => ({ matchId: record.matchId, identityId: record.identityId, ...(options.includeMatchText ? { text: record.element.textContent || '' } : {}) }))
     });
   }
@@ -9139,13 +9255,14 @@ EXP.Engine = (() => {
   function start() { active = true; settings = EXP.Settings.effective(); rebuild('start'); }
   function stop() { active = false; EXP.Renderer.clear(); matches.clear(); notify(); }
   function cleanup() { stop(); EXP.Renderer.cleanup(); listeners.clear(); }
-  return Object.freeze({ start, stop, cleanup, rebuild, navigation, processBatch, snapshot, explain, navigateNext: () => navigate(1), navigatePrevious: () => navigate(-1), navigateTo, setTemporaryHidden, highlightAll: () => setTemporaryHidden(false), subscribe(listener) { listeners.add(listener); return () => listeners.delete(listener); } });
+  return Object.freeze({ retry, start, stop, cleanup, rebuild, navigation, processBatch, snapshot, explain, navigateNext: () => navigate(1), navigatePrevious: () => navigate(-1), navigateTo, setTemporaryHidden, highlightAll: () => setTemporaryHidden(false), subscribe(listener) { listeners.add(listener); return () => listeners.delete(listener); } });
 })();
 
-EXP.VERSION = '3.2.2';
+EXP.VERSION = '3.2.3';
 
 EXP.ReleaseNotes = (() => {
   const notes = Object.freeze({
+    '3.2.3': ["Show a clear System status with safe retry for a suspended scan.","Choose Standard, Large, or Extra Large menus on each site.","Preview the actual highlight style and animation on light and dark surfaces."],
     '3.2.2': ["Use product names without the retired V3 integration label in settings prompts and import messages.","Keep existing saved settings and settings exports compatible."],
     '3.2.1': ["Make small menu text easier to read, including captions, version badges, notices, and diagnostic details.","Use consistent sizes for labels and controls across the menu."],
     '3.2.0': ["Open a highlight explanation to see its meaning, recognition rules, and source references.","Ignore an explained phrase on the current site while preserving ordinary links and controls.","Pause ExtraPotions page features together from System > Site control."],
@@ -9249,6 +9366,15 @@ EXP.ReleaseNotes = (() => {
 })();
 
 EXP.UI = (() => {
+  let healthControl;
+  let stylePreview;
+  function systemHealthSnapshot() {
+    const settings=EXP.Settings.snapshot(),data=EXP.Engine.snapshot({includeMatchText:false}),checkedAt=Date.now();
+    if(settings.safeMode||ExtraPotionsCore.suiteSitePaused()||data.status==='disabled')return {state:'paused',reason:'Highlighting is paused. Saved preferences are preserved.',checkedAt};
+    if(data.status==='catalog-invalid'||data.recovery?.suspended)return {state:'attention',reason:data.status==='catalog-invalid'?'The identity catalog could not be validated.':'Highlight scanning stopped after repeated failures.',checkedAt,action:data.recovery?.suspended?{label:'Retry',run:()=>{if(!EXP.Settings.snapshot().safeMode&&!ExtraPotionsCore.suiteSitePaused())return EXP.Engine.retry();}}:null};
+    if(data.status==='excluded'||data.status==='stopped')return {state:'waiting',reason:'Highlighting is inactive on this page.',checkedAt};
+    return {state:'working',reason:data.total?`${data.total} identity-language matches are available.`:'Scanning is active. No identity-language matches are currently available.',checkedAt};
+  }
   const ICON_URL = 'https://raw.githubusercontent.com/ExtraPotions/PRISMA/main/assets/prisma-launcher.svg';
   const routeNames = Object.freeze([['page', 'Highlights'], ['appearance', 'Appearance'], ['advanced', 'Advanced'], ['system', 'System']]);
   let host, shadow, launcher, panel, live, toast, product, noticeController, toastTimer, updateCard, engineState, importDraft = null, unsubscribe, explainedMatchId = '';
@@ -9275,6 +9401,7 @@ EXP.UI = (() => {
 
   function renderHighlightStyle() {
     const state = EXP.Settings.snapshot(); const section = group('Highlight style', 'Visual controls change the renderer without widening the matcher.');
+    stylePreview?.dispose();stylePreview=EXP.Renderer.createPreview(state,EXP.Catalog.get('bisexual')||EXP.Catalog.identities[0]);section.append(stylePreview.element);
     section.append(selectControl('Style', 'Uses the same eligible match set.', state.style, [['gradient', 'Gradient'], ['underline', 'Underline'], ['soft-fill', 'Soft Fill']], (style) => update({ style }, 'style')));
     section.append(selectControl('Intensity', 'Changes rendering only.', state.intensity, [['subtle', 'Subtle'], ['balanced', 'Balanced'], ['vivid', 'Vivid']], (intensity) => update({ intensity }, 'intensity')));
     section.append(switchControl('Animation', 'Disabled whenever reduced motion is active.', state.animation, (animation) => update({ animation }, 'animation')));
@@ -9403,8 +9530,9 @@ EXP.UI = (() => {
   }
   function diagnosticReport() { const core = EXP.Core.diagnosticSnapshot(); return EXP.Diagnostics.createDiagnosticsReport('PRISMA', { host, settings: EXP.Settings.exportData(), updates: EXP.Updates.status(), product: { id: 'prisma', version: EXP.VERSION }, lifecycle: engineState.status, routeEpoch: engineState.routeEpoch, catalog: EXP.Catalog.status(), matches: { total: engineState.total, byIdentityId: engineState.summary, decisionBands: engineState.decisions }, processing: engineState.metrics, safeMode: EXP.Settings.snapshot().safeMode, core }); }
   function renderAdvanced() {
-    const state = EXP.Settings.snapshot(); const catalog = EXP.Catalog.status(); const section = group();
-    section.append(EXP.Diagnostics.createDiagnosticsControls(diagnosticReport, announce));
+    const state = EXP.Settings.snapshot(); const section = group();
+    healthControl?.dispose();healthControl=ExtraPotionsCore.createHealthControls(systemHealthSnapshot,announce);
+    section.append(healthControl.element,EXP.Diagnostics.createDiagnosticsControls(diagnosticReport, announce));
     section.append(switchControl('Safe Mode', 'Immediately restores the page and keeps this recovery menu available.', state.safeMode, (safeMode) => update({ safeMode }, 'safe-mode')));
 
     return section;
@@ -9412,6 +9540,7 @@ EXP.UI = (() => {
   function renderSettings() {
     const state = EXP.Settings.snapshot(); const section = group();
     const preferences = ExtraPotionsCore.createDisclosure('Menu preferences');
+    preferences.append(ExtraPotionsCore.createMenuSizeControls());
     const data = ExtraPotionsCore.createDisclosure('Settings');
     data.open = Boolean(importDraft);
     data.append(actionRow('Check for updates now', 'Fetches release metadata only; never executable code.', () => EXP.Updates.check(true).then((result) => announce(result.available ? `PRISMA ${result.latest} is available.` : result.state === 'failed' ? 'Update check failed quietly.' : 'PRISMA is up to date.')), 'Check now'));
@@ -9510,7 +9639,7 @@ EXP.UI = (() => {
   function cleanup() {
     document.removeEventListener('keydown', bindKeys, true);
     document.removeEventListener('exp-prisma:explain', explainEvent, true);
-    unsubscribe?.(); clearTimeout(toastTimer); noticeController?.destroy(); product?.destroy();
+    stylePreview?.dispose();healthControl?.dispose();unsubscribe?.(); clearTimeout(toastTimer); noticeController?.destroy(); product?.destroy();
     host = shadow = launcher = panel = live = toast = product = noticeController = updateCard = null;
     importDraft = null; explainedMatchId = '';
   }
@@ -9518,7 +9647,7 @@ EXP.UI = (() => {
   return Object.freeze({ init, cleanup, open: () => product?.open(), refresh: render });
 })();
 
-EXP.VERSION = '3.2.2';
+EXP.VERSION = '3.2.3';
 ExtraPotionsCore.registerDiagnosticsProduct('prisma', EXP.VERSION);
 EXP.App = (() => {
   let scheduler, navigationCleanup, settingsCleanup, presentationCleanup, lifecycle;
@@ -9543,7 +9672,7 @@ EXP.App = (() => {
   async function disable() { scheduler.stop(); EXP.Engine.stop(); }
   async function cleanup() { scheduler?.stop(); presentationCleanup?.(); settingsCleanup?.(); navigationCleanup?.(); EXP.UI.cleanup(); EXP.Engine.cleanup(); }
   function start() {
-    lifecycle = EXP.Core.register({ id: 'prisma', version: EXP.VERSION, coreRange: '^3.3.4', capabilities: ['lifecycle', 'settings', 'diagnostics', 'dom-scheduler', 'navigation', 'launcher', 'ui'] }, { initialize, enable, disable, cleanup });
+    lifecycle = EXP.Core.register({ id: 'prisma', version: EXP.VERSION, coreRange: '^3.6.0', capabilities: ['lifecycle', 'settings', 'diagnostics', 'dom-scheduler', 'navigation', 'launcher', 'ui'] }, { initialize, enable, disable, cleanup });
     lifecycle.initialize().then(() => lifecycle.enable()).catch((error) => EXP.Core.safeError(error, 'prisma'));
     return lifecycle;
   }

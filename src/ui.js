@@ -1,4 +1,13 @@
 EXP.UI = (() => {
+  let healthControl;
+  let stylePreview;
+  function systemHealthSnapshot() {
+    const settings=EXP.Settings.snapshot(),data=EXP.Engine.snapshot({includeMatchText:false}),checkedAt=Date.now();
+    if(settings.safeMode||ExtraPotionsCore.suiteSitePaused()||data.status==='disabled')return {state:'paused',reason:'Highlighting is paused. Saved preferences are preserved.',checkedAt};
+    if(data.status==='catalog-invalid'||data.recovery?.suspended)return {state:'attention',reason:data.status==='catalog-invalid'?'The identity catalog could not be validated.':'Highlight scanning stopped after repeated failures.',checkedAt,action:data.recovery?.suspended?{label:'Retry',run:()=>{if(!EXP.Settings.snapshot().safeMode&&!ExtraPotionsCore.suiteSitePaused())return EXP.Engine.retry();}}:null};
+    if(data.status==='excluded'||data.status==='stopped')return {state:'waiting',reason:'Highlighting is inactive on this page.',checkedAt};
+    return {state:'working',reason:data.total?`${data.total} identity-language matches are available.`:'Scanning is active. No identity-language matches are currently available.',checkedAt};
+  }
   const ICON_URL = 'https://raw.githubusercontent.com/ExtraPotions/PRISMA/main/assets/prisma-launcher.svg';
   const routeNames = Object.freeze([['page', 'Highlights'], ['appearance', 'Appearance'], ['advanced', 'Advanced'], ['system', 'System']]);
   let host, shadow, launcher, panel, live, toast, product, noticeController, toastTimer, updateCard, engineState, importDraft = null, unsubscribe, explainedMatchId = '';
@@ -25,6 +34,7 @@ EXP.UI = (() => {
 
   function renderHighlightStyle() {
     const state = EXP.Settings.snapshot(); const section = group('Highlight style', 'Visual controls change the renderer without widening the matcher.');
+    stylePreview?.dispose();stylePreview=EXP.Renderer.createPreview(state,EXP.Catalog.get('bisexual')||EXP.Catalog.identities[0]);section.append(stylePreview.element);
     section.append(selectControl('Style', 'Uses the same eligible match set.', state.style, [['gradient', 'Gradient'], ['underline', 'Underline'], ['soft-fill', 'Soft Fill']], (style) => update({ style }, 'style')));
     section.append(selectControl('Intensity', 'Changes rendering only.', state.intensity, [['subtle', 'Subtle'], ['balanced', 'Balanced'], ['vivid', 'Vivid']], (intensity) => update({ intensity }, 'intensity')));
     section.append(switchControl('Animation', 'Disabled whenever reduced motion is active.', state.animation, (animation) => update({ animation }, 'animation')));
@@ -153,8 +163,9 @@ EXP.UI = (() => {
   }
   function diagnosticReport() { const core = EXP.Core.diagnosticSnapshot(); return EXP.Diagnostics.createDiagnosticsReport('PRISMA', { host, settings: EXP.Settings.exportData(), updates: EXP.Updates.status(), product: { id: 'prisma', version: EXP.VERSION }, lifecycle: engineState.status, routeEpoch: engineState.routeEpoch, catalog: EXP.Catalog.status(), matches: { total: engineState.total, byIdentityId: engineState.summary, decisionBands: engineState.decisions }, processing: engineState.metrics, safeMode: EXP.Settings.snapshot().safeMode, core }); }
   function renderAdvanced() {
-    const state = EXP.Settings.snapshot(); const catalog = EXP.Catalog.status(); const section = group();
-    section.append(EXP.Diagnostics.createDiagnosticsControls(diagnosticReport, announce));
+    const state = EXP.Settings.snapshot(); const section = group();
+    healthControl?.dispose();healthControl=ExtraPotionsCore.createHealthControls(systemHealthSnapshot,announce);
+    section.append(healthControl.element,EXP.Diagnostics.createDiagnosticsControls(diagnosticReport, announce));
     section.append(switchControl('Safe Mode', 'Immediately restores the page and keeps this recovery menu available.', state.safeMode, (safeMode) => update({ safeMode }, 'safe-mode')));
 
     return section;
@@ -162,6 +173,7 @@ EXP.UI = (() => {
   function renderSettings() {
     const state = EXP.Settings.snapshot(); const section = group();
     const preferences = ExtraPotionsCore.createDisclosure('Menu preferences');
+    preferences.append(ExtraPotionsCore.createMenuSizeControls());
     const data = ExtraPotionsCore.createDisclosure('Settings');
     data.open = Boolean(importDraft);
     data.append(actionRow('Check for updates now', 'Fetches release metadata only; never executable code.', () => EXP.Updates.check(true).then((result) => announce(result.available ? `PRISMA ${result.latest} is available.` : result.state === 'failed' ? 'Update check failed quietly.' : 'PRISMA is up to date.')), 'Check now'));
@@ -260,7 +272,7 @@ EXP.UI = (() => {
   function cleanup() {
     document.removeEventListener('keydown', bindKeys, true);
     document.removeEventListener('exp-prisma:explain', explainEvent, true);
-    unsubscribe?.(); clearTimeout(toastTimer); noticeController?.destroy(); product?.destroy();
+    stylePreview?.dispose();healthControl?.dispose();unsubscribe?.(); clearTimeout(toastTimer); noticeController?.destroy(); product?.destroy();
     host = shadow = launcher = panel = live = toast = product = noticeController = updateCard = null;
     importDraft = null; explainedMatchId = '';
   }

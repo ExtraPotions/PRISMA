@@ -10,6 +10,16 @@ EXP.Engine = (() => {
   let settings = null;
   let active = false;
   let currentHref = location.href;
+  const recovery=ExtraPotionsCore.createRecoveryGuard();
+  function guardedScan(run,force=false) {
+    if(ExtraPotionsCore.suiteSitePaused())return false;
+    const effective=EXP.Settings.effective();
+    if(!active||!effective.enabled||effective.safeMode||effective.excluded)return run();
+    if(!force&&recovery.snapshot('scan',currentHref).suspended)return false;
+    try {const result=run();recovery.succeeded('scan',currentHref);return result;}
+    catch(error){if(force)throw error;recovery.failed('scan',currentHref);EXP.Core.safeError(error,'prisma.scan');notify();return false;}
+  }
+  function retry(){return recovery.retry('scan',currentHref,()=>{const value=EXP.Settings.effective();if(!active||!value.enabled||value.safeMode||value.excluded||ExtraPotionsCore.suiteSitePaused())return false;return guardedScan(()=>rebuildUnprotected('retry'),true);});}
   const ignoredSelector = ['script', 'style', 'noscript', 'template', 'textarea', 'input', 'select', 'option', 'button', 'pre', 'code', '[contenteditable]', '[inert]', '[hidden]', '[aria-hidden="true"]', '[data-exp-owned="1"]'].join(',');
   const notify = () => {
     const value = snapshot();
@@ -75,8 +85,9 @@ EXP.Engine = (() => {
     if (currentIndex >= matches.size) currentIndex = matches.size - 1;
   }
   function canRun(value = settings) { return active && value?.enabled && !value.safeMode && !value.excluded && EXP.Catalog.status().valid; }
-  function processBatch(roots) {
-    if (location.href !== currentHref) { currentHref = location.href; navigation(); return; }
+  function processBatch(roots) {return guardedScan(()=>processBatchUnprotected(roots));}
+  function processBatchUnprotected(roots) {
+    if (location.href !== currentHref) { navigation(); return; }
     const started = performance.now();
     metrics.batches += 1;
     prune();
@@ -85,7 +96,8 @@ EXP.Engine = (() => {
     metrics.lastDurationMs = Math.round((performance.now() - started) * 10) / 10;
     notify();
   }
-  function rebuild(reason = 'rebuild') {
+  function rebuild(reason = 'rebuild') {return guardedScan(()=>rebuildUnprotected(reason));}
+  function rebuildUnprotected(reason = 'rebuild') {
     const started = performance.now();
     EXP.Renderer.clear();
     matches.clear();
@@ -102,7 +114,7 @@ EXP.Engine = (() => {
     notify();
     return reason;
   }
-  function navigation() { currentHref = location.href; routeEpoch += 1; temporarilyHidden = false; rebuild('navigation'); }
+  function navigation() { recovery.clearContext(currentHref);currentHref = location.href; routeEpoch += 1; temporarilyHidden = false; rebuild('navigation'); }
   function ordered() { prune(); return [...matches.values()].sort((left, right) => { if (left.element === right.element) return 0; return left.element.compareDocumentPosition(right.element) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1; }); }
   function navigate(delta) {
     const list = ordered();
@@ -136,7 +148,7 @@ EXP.Engine = (() => {
     const state = settings || EXP.Settings.effective();
     return Object.freeze({
       status: !EXP.Catalog.status().valid ? 'catalog-invalid' : state.safeMode ? 'safe-mode' : state.excluded ? 'excluded' : !state.enabled ? 'disabled' : active ? 'ready' : 'stopped',
-      routeEpoch, total: matches.size, summary: summary(), decisions: { ...decisions }, metrics: { ...metrics }, currentIndex,
+      recovery:recovery.snapshot('scan',currentHref),routeEpoch, total: matches.size, summary: summary(), decisions: { ...decisions }, metrics: { ...metrics }, currentIndex,
       temporarilyHidden, matches: ordered().map((record) => ({ matchId: record.matchId, identityId: record.identityId, ...(options.includeMatchText ? { text: record.element.textContent || '' } : {}) }))
     });
   }
@@ -144,5 +156,5 @@ EXP.Engine = (() => {
   function start() { active = true; settings = EXP.Settings.effective(); rebuild('start'); }
   function stop() { active = false; EXP.Renderer.clear(); matches.clear(); notify(); }
   function cleanup() { stop(); EXP.Renderer.cleanup(); listeners.clear(); }
-  return Object.freeze({ start, stop, cleanup, rebuild, navigation, processBatch, snapshot, explain, navigateNext: () => navigate(1), navigatePrevious: () => navigate(-1), navigateTo, setTemporaryHidden, highlightAll: () => setTemporaryHidden(false), subscribe(listener) { listeners.add(listener); return () => listeners.delete(listener); } });
+  return Object.freeze({ retry, start, stop, cleanup, rebuild, navigation, processBatch, snapshot, explain, navigateNext: () => navigate(1), navigatePrevious: () => navigate(-1), navigateTo, setTemporaryHidden, highlightAll: () => setTemporaryHidden(false), subscribe(listener) { listeners.add(listener); return () => listeners.delete(listener); } });
 })();

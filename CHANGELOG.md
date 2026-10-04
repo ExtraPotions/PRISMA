@@ -1,3 +1,9 @@
+## 3.2.3 — 2026-10-03
+
+- Show a clear System status with safe retry for a suspended scan.
+- Choose Standard, Large, or Extra Large menus on each site.
+- Preview the actual highlight style and animation on light and dark surfaces.
+
 ## 3.2.2 — 2026-10-02
 
 - Use product names without the retired V3 integration label in settings prompts and import messages.

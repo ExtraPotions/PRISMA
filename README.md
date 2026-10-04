@@ -20,9 +20,12 @@ Open Highlights to explore matches on the current page. Use Highlight Style for 
 
 ## What you can do
 
+- **System status:** see Working, Waiting, Paused, or Needs attention, with a reason and a safe recovery action when available.
+- **Live style preview:** compare the actual highlight and animation on light and dark surfaces while adjusting Appearance.
+
 - **Keep your settings:** saved preferences and existing settings exports remain supported as product naming is simplified.
 
-- **Readable menus:** labels and controls use 13px text, with an 11px minimum for small captions, notices, and supporting details.
+- **Readable menus:** choose Standard, Large, or Extra Large from System > Menu preferences. The choice applies to ExtraPotions menus on this site.
 
 - **Match explanations:** activate a highlight or choose Explain Next Match to see its meaning and sources. Ignore a phrase on the current site directly from its explanation.
 - **Site control:** pause page features across active ExtraPotions products from System, temporarily or until you resume.

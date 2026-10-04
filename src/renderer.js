@@ -64,7 +64,6 @@ EXP.Renderer = (() => {
     }
   }
   function applyVisual(span, record, settings) {
-    currentSettings = settings;
     const hasPalette = record.identity.colors.length > 0;
     const colors = hasPalette ? record.identity.colors : ['currentColor'];
     const visualStyle = hasPalette ? settings.style : 'underline';
@@ -96,6 +95,7 @@ EXP.Renderer = (() => {
     }
   }
   function wrap(node, candidates, settings, createRecord) {
+    currentSettings=settings;
     if (!node.parentNode || !candidates.length) return [];
     ensureStyle(node.getRootNode());
     const fragment = document.createDocumentFragment();
@@ -135,9 +135,22 @@ EXP.Renderer = (() => {
     }
     for (const parent of parents) parent.normalize?.();
   }
-  function refresh(settings) { for (const span of [...wrappers]) { if (!span.isConnected) { wrappers.delete(span); continue; } const identity = EXP.Catalog.get(span.dataset.identity); if (identity) applyVisual(span, { identity }, settings); } }
+  function refresh(settings) { currentSettings=settings;for (const span of [...wrappers]) { if (!span.isConnected) { wrappers.delete(span); continue; } const identity = EXP.Catalog.get(span.dataset.identity); if (identity) applyVisual(span, { identity }, settings); } }
+  function createPreview(settings, identity) {
+    const element=document.createElement('section');element.dataset.prismaPreview='1';element.dataset.expOwned='1';
+    const shadow=element.attachShadow({mode:'open'});ensureStyle(shadow);
+    const samples=[];
+    for(const [name,bg,fg] of [['Light','#ffffff','#16161c'],['Dark','#18181d','#f4f4f6']]){
+      const card=document.createElement('div');card.style.cssText=`background:${bg};color:${fg};border:1px solid #777;border-radius:7px;padding:10px;margin-top:6px;line-height:1.5;font:var(--exp-font-size-body,13px)/1.5 system-ui`;
+      const label=document.createElement('small');label.textContent=name+' preview';label.style.cssText='display:block;font-size:var(--exp-font-size-small,11px)';
+      const sample=document.createElement('span');card.append(label,sample);shadow.append(card);samples.push(sample);
+    }
+    function refreshPreview(value,selected){for(const sample of samples){sample.removeAttribute('style');sample.removeAttribute('class');sample.textContent=selected?.label||'Identity language';if(selected&&!(value.disabledIdentities||[]).includes(selected.id)){sample.className=HIT;applyVisual(sample,{identity:selected},value);}else sample.textContent+=' (disabled)';}}
+    refreshPreview(settings,identity);
+    return {element,refresh:refreshPreview,dispose(){styles.get(shadow)?.dispose?.();styles.delete(shadow);element.remove();}};
+  }
   function setHidden(value) { hidden = Boolean(value); if (currentSettings) refresh(currentSettings); }
   function focus(record) { if (!record?.element?.isConnected) return false; record.element.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'auto' }); record.element.focus({ preventScroll: true }); record.element.dataset.current = '1'; setTimeout(() => { if (record.element) delete record.element.dataset.current; }, 1200); return true; }
   function cleanup() { clear(); for (const style of styles.values()) style.remove(); styles.clear(); hidden = false; }
-  return Object.freeze({ HIT, ensureStyle, wrap, clear, refresh, setHidden, focus, cleanup, wrapperCount: () => [...wrappers].filter((node) => node.isConnected).length });
+  return Object.freeze({ HIT, createPreview, ensureStyle, wrap, clear, refresh, setHidden, focus, cleanup, wrapperCount: () => [...wrappers].filter((node) => node.isConnected).length });
 })();
