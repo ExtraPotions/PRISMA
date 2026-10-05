@@ -20,6 +20,8 @@ Open Highlights to explore matches on the current page. Use Highlight Style for 
 
 ## What you can do
 
+- **Simple System menu:** open Product Timeline, show or copy diagnostics, create a GitHub issue, adjust menu preferences, or reset this product after two confirmations.
+
 - **Distinct menu colors:** PRISMA keeps its signature appearance alongside other ExtraPotions products.
 - **System status:** see Working, Waiting, Paused, or Needs attention, with a reason and a safe recovery action when available.
 - **Live style preview:** compare the actual highlight and animation on light and dark surfaces while adjusting Appearance.
@@ -29,7 +31,6 @@ Open Highlights to explore matches on the current page. Use Highlight Style for 
 - **Readable menus:** choose Standard, Large, or Extra Large from System > Menu preferences. The choice applies to ExtraPotions menus on this site.
 
 - **Match explanations:** activate a highlight or choose Explain Next Match to see its meaning and sources. Ignore a phrase on the current site directly from its explanation.
-- **Site control:** pause page features across active ExtraPotions products from System, temporarily or until you resume.
 - **Context-aware highlights:** find recognized identity terms while reducing ambiguous matches.
 - **Choose the style:** gradients, underlines, soft fills, and optional animation with adjustable appearance.
 - **Explore language:** search the identity catalog and explore definitions, flag colors, and source information.

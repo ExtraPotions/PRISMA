@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PRISMA
 // @namespace    https://github.com/ExtraPotions
-// @version      3.2.3
+// @version      3.2.4
 // @description  Local LGBTQ+ identity-language recognition with context-aware highlighting.
 // @icon         https://raw.githubusercontent.com/ExtraPotions/PRISMA/main/assets/prisma-launcher.svg
 // @tag          LGBTQ+
@@ -19,6 +19,8 @@
 // @inject-into  content
 // @grant        GM_getValue
 // @grant        GM_setValue
+// @grant        GM_listValues
+// @grant        GM_deleteValue
 // @grant        GM_addStyle
 // @grant        GM_addElement
 // @grant        GM_xmlhttpRequest
@@ -1402,7 +1404,70 @@ const ExtraPotionsTools = (() => {
     const duration=document.createElement('select');duration.setAttribute('aria-label','Temporary suite pause duration');for(const [value,label] of [['15','15 minutes'],['60','1 hour'],['240','4 hours']]){const option=document.createElement('option');option.value=value;option.textContent=label;duration.append(option);}const temporary=button('Pause temporarily',()=>{ExtraPotionsCore.setSuiteSitePaused(true,location.hostname,Number(duration.value));refresh();});
     d.addEventListener('toggle',()=>{if(d.open)refresh();});d.append(row,duration,temporary,out);refresh();return d;
   }
-  return Object.freeze({placeDonationPanel,createBitcoinDonation,compatibilitySnapshot,createCompatibilityControls,createSuiteSiteControls});
+  const productRepositories = Object.freeze({dropper:'Dropper',shift:'SHIFT',prisma:'PRISMA',ward:'WARD'});
+  function productIssueUrl(id, version) {
+    if (!Object.hasOwn(productRepositories,id)) throw new Error('Unknown product');
+    const product=productRepositories[id];
+    const safeVersion=/^\d+\.\d+\.\d+(?:[-+][a-zA-Z0-9.-]+)?$/.test(String(version))?String(version):'unknown';
+    // Exclude diagnostics, page URLs, account names, and free-form data.
+    const body=`Product: ${product} v${safeVersion}\n\nWhat happened?\n\nSteps to reproduce\n1. \n\nExpected behavior\n\nActual behavior\n\nBrowser and userscript manager\n\nDiagnostics (optional)\nReview Show Diagnostics and remove private information before attaching.\n`;
+    return 'https://github.com/ExtraPotions/'+product+'/issues/new?title='+encodeURIComponent('['+product+' '+safeVersion+'] Issue')+'&body='+encodeURIComponent(body);
+  }
+  const productTimelines=new Map(),resettingProducts=new Set();
+  const productDataResetting=id=>resettingProducts.has(id);
+  function clearProductData(id, {legacyKeys=[]} = {}) {
+    if (!Object.hasOwn(productRepositories,id)) throw new Error('Unknown product');
+    resettingProducts.add(id);
+    try {
+    const owns=key=>key.startsWith(`exp:v3:${id}:`)||legacyKeys.some(base=>key===base||key.startsWith(base+':account:'));
+    const known=new Set([`exp:v3:${id}:settings`,`exp:v3:${id}:update-cache`,`exp:v3:${id}:installed-version`,`exp:v3:${id}:last-version-v2`,...legacyKeys]);
+    for(const storageName of ['localStorage','sessionStorage']) {
+      let storage;try{storage=globalThis[storageName];}catch{throw new Error('Could not access product storage.');}if(!storage)continue;
+      for(let i=0;i<storage.length;i++){const key=storage.key(i);if(key&&owns(key))known.add(key);}
+      for(const key of known) { try{storage.removeItem(key);}catch{throw new Error('Could not clear '+id+' data. Check browser storage permissions.');} }
+    }
+    try{if(typeof GM_listValues==='function')for(const key of GM_listValues())if(owns(key))known.add(key);}catch{throw new Error('Could not list product storage.');}
+    for(const key of known){if(typeof GM_deleteValue==='function')GM_deleteValue(key);else if(typeof GM_setValue==='function')GM_setValue(key,undefined);}
+    productTimelines.delete(id);
+    return [...known];
+    } catch(error){resettingProducts.delete(id);throw error;}
+  }
+  function createProductTimeline(id,getHealth,notify=()=>{}) {
+    if(!Object.hasOwn(productRepositories,id))throw new Error('Unknown product');
+    const rows=document.createElement('div');rows.dataset.expProductTimeline='1';
+    let disposed=false;
+    function render(){rows.replaceChildren();for(const entry of (productTimelines.get(id)||[]).slice().reverse()){
+      const line=document.createElement('p');line.textContent=new Date(entry.at).toLocaleTimeString()+' · '+entry.state+' · '+entry.reason;
+      line.style.cssText='margin:6px 0;overflow-wrap:anywhere';rows.append(line);
+    }}
+    async function observedHealth(){const value=await getHealth();if(!disposed){
+      const history=productTimelines.get(id)||[];
+      const state=String(value?.state||'waiting').slice(0,30),reason=String(value?.reason||'Status unavailable.').replace(/https?:\/\/\S+/gi,'[page]').slice(0,500),last=history.at(-1);
+      if(!last||last.state!==state||last.reason!==reason){history.push({at:Date.now(),state,reason});if(history.length>30)history.shift();productTimelines.set(id,history);}
+      render();
+    }return value;}
+    const health=ExtraPotionsCore.createHealthControls(observedHealth,notify);
+    const timeline=ExtraPotionsCore.createDisclosure(id==='dropper'?'Dropper Status':'Product Timeline',health.element,rows);
+    timeline.addEventListener('toggle',()=>{if(timeline.open)health.refresh();});
+    return {element:timeline,dispose(){disposed=true;health.dispose();},refresh:health.refresh};
+  }
+  function createProductSystem({id,version,timeline,diagnostics,preferences,onReset,notify=()=>{}}) {
+    if(!Object.hasOwn(productRepositories,id))throw new Error('Unknown product');
+    const system=document.createElement('div');system.dataset.expProductSystem=id;
+    system.style.cssText='display:grid;grid-template-columns:minmax(0,1fr);gap:8px;min-width:0;max-width:100%;overflow-wrap:anywhere';
+    const issue=button('Create GitHub Issue',()=>{const link=document.createElement('a');link.href=productIssueUrl(id,version);link.target='_blank';link.rel='noopener noreferrer';link.click();});
+    issue.style.cssText='width:100%;min-width:0;white-space:normal;border-radius:7px';
+    const reset=button('Reset All Settings',async()=>{
+      if(!confirm(`Reset all ${productRepositories[id]} settings and stored product data?`))return;
+      if(!confirm(`Confirm permanent reset of ${productRepositories[id]} data. This cannot be undone.`))return;
+      reset.disabled=true;
+      try{await onReset();notify(productRepositories[id]+' reset complete.');}catch{notify('Reset did not complete. Check storage permissions and try again.');}finally{reset.disabled=false;}
+    });
+    reset.style.cssText='width:100%;min-width:0;white-space:normal;border:1px solid #ff2438;border-radius:7px;background:#e11428;color:#fff;font-weight:700';
+    for(const [key,node] of [['timeline',timeline],['diagnostics',diagnostics],['issue',issue],['preferences',preferences],['reset',reset]]){node.dataset.expSystemItem=key;node.style.minWidth='0';node.style.maxWidth='100%';const summary=node.tagName==='DETAILS'?node.querySelector(':scope > summary'):null;if(summary)summary.style.cssText+=';min-height:28px;padding:4px 0;box-sizing:border-box;cursor:pointer';system.append(node);}
+    return system;
+  }
+  return Object.freeze({productIssueUrl,productDataResetting,clearProductData,createProductTimeline,createProductSystem,placeDonationPanel,createBitcoinDonation,compatibilitySnapshot,createCompatibilityControls,createSuiteSiteControls});
 })();
 
 // Shared ExtraPotions menu categories, submenu behavior, reordering, and visibility.
@@ -1635,7 +1700,7 @@ const ExpMenuPreferences = (() => {
 // exp-core owns shared UI, launcher, diagnostics, update, and coordination behavior.
 const ExtraPotionsCore = (() => {
   'use strict';
-  const version = '3.6.0';
+  const version = '3.6.1';
   const sourceVersion = version; // Backward-compatible alias for Core's own foundation version.
   const SUPPORT_URL = 'https://ko-fi.com/expdare';
   const protocol = 'exp-core-coordination-v1';
@@ -3411,6 +3476,7 @@ const ExtraPotionsCore = (() => {
       return { ...memory };
     }
     function writeState(value) {
+      if(ExtraPotionsTools.productDataResetting(productId))return;
       memory = { ...(value || {}) };
       try { if (typeof GM_setValue === 'function') GM_setValue(CACHE_KEY, memory); } catch {}
       try { localStorage.setItem(CACHE_KEY, JSON.stringify(memory)); } catch {}
@@ -8786,6 +8852,7 @@ EXP.Settings = (() => {
   const listeners = new Set();
   const key = (name) => `${PREFIX}:${name}`;
   function rawRead(name) {
+    if(ExtraPotionsCore.productDataResetting?.('prisma'))return undefined;
     const storageKey = key(name);
     try {
       if (typeof GM_getValue === 'function') {
@@ -8805,6 +8872,7 @@ EXP.Settings = (() => {
     return memory.get(storageKey);
   }
   function rawWrite(name, value) {
+    if(ExtraPotionsCore.productDataResetting?.('prisma'))return;
     const storageKey = key(name);
     memory.set(storageKey, value);
     try { if (typeof GM_setValue === 'function') GM_setValue(storageKey, value); } catch {}
@@ -8855,7 +8923,7 @@ EXP.Settings = (() => {
     return snapshot();
   }
   function snapshot() { return ExtraPotionsCore.cloneSettings(state || defaults); }
-  function replace(value, reason = 'replace') { const next = validate(value);  rawWrite('settings', next); state = next; for (const listener of listeners) listener(snapshot(), reason); return snapshot(); }
+  function replace(value, reason = 'replace') { if(ExtraPotionsCore.productDataResetting?.('prisma'))return snapshot(); const next = validate(value);  rawWrite('settings', next); state = next; for (const listener of listeners) listener(snapshot(), reason); return snapshot(); }
   function update(patch, reason = 'update') { return replace({ ...snapshot(), ...patch }, reason); }
   function subscribe(listener) { listeners.add(listener); return () => listeners.delete(listener); }
   function effective(host = location.hostname) {
@@ -8870,7 +8938,13 @@ EXP.Settings = (() => {
     if (!payload || payload.product !== 'prisma' || payload.generation !== 3 || payload.schema !== SCHEMA) throw Object.assign(new Error('This is not a supported PRISMA export'), { code: 'IMPORT_SCHEMA' });
     return validate(payload.settings);
   }
-  return Object.freeze({PREFIX, SCHEMA, defaults, validate, load, snapshot, replace, update, subscribe, effective, exportData, prepareImport, hasStored: () => rawRead('settings') !== undefined });
+  function resetAll() {
+    ExtraPotionsCore.clearProductData('prisma');
+    memory.clear();state = ExtraPotionsCore.cloneSettings(defaults);
+    for (const listener of listeners) listener(snapshot(), 'product-reset');
+    return snapshot();
+  }
+  return Object.freeze({resetAll, PREFIX, SCHEMA, defaults, validate, load, snapshot, replace, update, subscribe, effective, exportData, prepareImport, hasStored: () => rawRead('settings') !== undefined });
 })();
 
 EXP.Matcher = (() => {
@@ -9257,10 +9331,11 @@ EXP.Engine = (() => {
   return Object.freeze({ retry, start, stop, cleanup, rebuild, navigation, processBatch, snapshot, explain, navigateNext: () => navigate(1), navigatePrevious: () => navigate(-1), navigateTo, setTemporaryHidden, highlightAll: () => setTemporaryHidden(false), subscribe(listener) { listeners.add(listener); return () => listeners.delete(listener); } });
 })();
 
-EXP.VERSION = '3.2.3';
+EXP.VERSION = '3.2.4';
 
 EXP.ReleaseNotes = (() => {
   const notes = Object.freeze({
+    '3.2.4': ["Simplify System to Product Timeline, Show and Copy Diagnostics, issue reporting, Menu Preferences, and Reset All Settings.","Open GitHub Issues with a prefilled product and version template.","Require two confirmations before clearing this product settings and stored data."],
     '3.2.3': ["Keep PRISMA's signature menu colors alongside other ExtraPotions products.","Show a clear System status with safe retry for a suspended scan.","Choose Standard, Large, or Extra Large menus on each site.","Preview the actual highlight style and animation on light and dark surfaces."],
     '3.2.2': ["Use product names without the retired V3 integration label in settings prompts and import messages.","Keep existing saved settings and settings exports compatible."],
     '3.2.1': ["Make small menu text easier to read, including captions, version badges, notices, and diagnostic details.","Use consistent sizes for labels and controls across the menu."],
@@ -9523,34 +9598,36 @@ EXP.UI = (() => {
     const fragment = document.createDocumentFragment();
     fragment.append(
       ExtraPotionsCore.createDisclosure('Language', renderTools()),
-      ExtraPotionsCore.createDisclosure('Sites', renderSites())
+      ExtraPotionsCore.createDisclosure('Sites', renderSites()),
+      renderSettingsTransfer(),
+      ExtraPotionsCore.createDisclosure('Page tools',renderAdvanced())
     );
     return fragment;
   }
   function diagnosticReport() { const core = EXP.Core.diagnosticSnapshot(); return EXP.Diagnostics.createDiagnosticsReport('PRISMA', { host, settings: EXP.Settings.exportData(), updates: EXP.Updates.status(), product: { id: 'prisma', version: EXP.VERSION }, lifecycle: engineState.status, routeEpoch: engineState.routeEpoch, catalog: EXP.Catalog.status(), matches: { total: engineState.total, byIdentityId: engineState.summary, decisionBands: engineState.decisions }, processing: engineState.metrics, safeMode: EXP.Settings.snapshot().safeMode, core }); }
   function renderAdvanced() {
     const state = EXP.Settings.snapshot(); const section = group();
-    healthControl?.dispose();healthControl=ExtraPotionsCore.createHealthControls(systemHealthSnapshot,announce);
-    section.append(healthControl.element,EXP.Diagnostics.createDiagnosticsControls(diagnosticReport, announce));
     section.append(switchControl('Safe Mode', 'Immediately restores the page and keeps this recovery menu available.', state.safeMode, (safeMode) => update({ safeMode }, 'safe-mode')));
 
     return section;
   }
-  function renderSettings() {
-    const state = EXP.Settings.snapshot(); const section = group();
-    const preferences = ExtraPotionsCore.createDisclosure('Menu preferences');
-    preferences.append(ExtraPotionsCore.createMenuSizeControls());
-    const data = ExtraPotionsCore.createDisclosure('Settings');
-    data.open = Boolean(importDraft);
-    data.append(actionRow('Check for updates now', 'Fetches release metadata only; never executable code.', () => EXP.Updates.check(true).then((result) => announce(result.available ? `PRISMA ${result.latest} is available.` : result.state === 'failed' ? 'Update check failed quietly.' : 'PRISMA is up to date.')), 'Check now'));
-    data.append(actionRow('Rescan page', 'Rebuilds one clean route-scoped match set.', () => { EXP.Engine.rebuild('manual-rescan'); announce('Page rescanned.'); }, 'Rescan'));
-    preferences.append(switchControl('Auto-close menu', 'Closes after 15 seconds without interaction.', state.menuAutoClose, (menuAutoClose) => update({ menuAutoClose }, 'menu-auto-close')));
-    preferences.append(switchControl('Update notifications', 'Off by default. Opt-in checks request release metadata only.', state.updateNotifications, (updateNotifications) => { update({ updateNotifications }, 'update-notifications'); if (updateNotifications) EXP.Updates.check(true).then((result) => announce(result.available ? `Version ${result.latest} is available.` : result.state === 'failed' ? 'Update check failed quietly.' : 'PRISMA is up to date.')); }));
+  function renderSettingsTransfer() {
+    const data=ExtraPotionsCore.createDisclosure('Settings transfer');data.open=Boolean(importDraft);
     const transfer = el('div', { class: 'button-grid' }); transfer.append(button('Export settings', () => download('prisma-settings.json', JSON.stringify(EXP.Settings.exportData(), null, 2))));
     const importRow = row('Import PRISMA settings', 'Validation creates a draft. Apply commits atomically; Cancel changes nothing.'); const file = el('input', { type: 'file', accept: 'application/json,.json', 'aria-label': 'Import PRISMA settings' }); file.addEventListener('change', async () => { try { importDraft = EXP.Settings.prepareImport(JSON.parse(await file.files[0].text())); render(); announce('Import validated. Review and apply or cancel.'); } catch (error) { importDraft = null; announce(error.message, 'error'); } }); file.hidden = true; transfer.append(button('Import settings', () => file.click()), file); data.append(transfer);
     if (importDraft) { const actions = el('div', { class: 'button-grid' }); actions.append(button('Cancel import', () => { importDraft = null; render(); announce('Import cancelled.'); }, 'secondary'), button('Apply import', () => { EXP.Settings.replace(importDraft, 'import'); importDraft = null; render(); announce('Imported settings applied.'); }, 'primary')); data.append(actions); }
-    data.append(actionRow('Reset PRISMA', 'Resets PRISMA only. Other products are untouched.', () => { if (!confirm('Reset all PRISMA settings?')) return; EXP.Settings.replace(EXP.Settings.defaults, 'product-reset'); render(); announce('PRISMA reset complete.'); }, 'Reset'));
-    const fragment = document.createDocumentFragment(); fragment.append(section, renderAdvanced(), ExtraPotionsCore.createSystemGrid(preferences, data, ExtraPotionsCore.createSuiteSiteControls(), ExtraPotionsCore.createCompatibilityControls())); return fragment;
+    return data;
+  }
+  function renderSettings() {
+    const state=EXP.Settings.snapshot();
+    const preferences=ExtraPotionsCore.createDisclosure('Menu Preferences',ExtraPotionsCore.createMenuSizeControls());
+    preferences.append(switchControl('Auto-close menu', 'Closes after 15 seconds without interaction.', state.menuAutoClose, (menuAutoClose) => update({ menuAutoClose }, 'menu-auto-close')));
+    preferences.append(switchControl('Update notifications', 'Off by default. Opt-in checks request release metadata only.', state.updateNotifications, (updateNotifications) => { update({ updateNotifications }, 'update-notifications'); if (updateNotifications) EXP.Updates.check(true).then((result) => announce(result.available ? `Version ${result.latest} is available.` : result.state === 'failed' ? 'Update check failed quietly.' : 'PRISMA is up to date.')); }));
+    healthControl?.dispose();healthControl=ExtraPotionsCore.createProductTimeline('prisma',systemHealthSnapshot,announce);
+    return ExtraPotionsCore.createProductSystem({id:'prisma',version:EXP.VERSION,timeline:healthControl.element,
+      diagnostics:EXP.Diagnostics.createDiagnosticsControls(diagnosticReport,announce),preferences,
+      onReset:()=>{importDraft=null;EXP.Settings.resetAll();render();location.reload();},notify:announce
+    });
   }
   const routeRenderers = { page: renderPage, appearance: renderAppearanceMenu, advanced: renderAdvancedMenu, system: renderSettings };
   function render() {
@@ -9646,7 +9723,7 @@ EXP.UI = (() => {
   return Object.freeze({ init, cleanup, open: () => product?.open(), refresh: render });
 })();
 
-EXP.VERSION = '3.2.3';
+EXP.VERSION = '3.2.4';
 ExtraPotionsCore.registerDiagnosticsProduct('prisma', EXP.VERSION);
 EXP.App = (() => {
   let scheduler, navigationCleanup, settingsCleanup, presentationCleanup, lifecycle;

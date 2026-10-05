@@ -34,6 +34,7 @@ EXP.Settings = (() => {
   const listeners = new Set();
   const key = (name) => `${PREFIX}:${name}`;
   function rawRead(name) {
+    if(ExtraPotionsCore.productDataResetting?.('prisma'))return undefined;
     const storageKey = key(name);
     try {
       if (typeof GM_getValue === 'function') {
@@ -53,6 +54,7 @@ EXP.Settings = (() => {
     return memory.get(storageKey);
   }
   function rawWrite(name, value) {
+    if(ExtraPotionsCore.productDataResetting?.('prisma'))return;
     const storageKey = key(name);
     memory.set(storageKey, value);
     try { if (typeof GM_setValue === 'function') GM_setValue(storageKey, value); } catch {}
@@ -103,7 +105,7 @@ EXP.Settings = (() => {
     return snapshot();
   }
   function snapshot() { return ExtraPotionsCore.cloneSettings(state || defaults); }
-  function replace(value, reason = 'replace') { const next = validate(value);  rawWrite('settings', next); state = next; for (const listener of listeners) listener(snapshot(), reason); return snapshot(); }
+  function replace(value, reason = 'replace') { if(ExtraPotionsCore.productDataResetting?.('prisma'))return snapshot(); const next = validate(value);  rawWrite('settings', next); state = next; for (const listener of listeners) listener(snapshot(), reason); return snapshot(); }
   function update(patch, reason = 'update') { return replace({ ...snapshot(), ...patch }, reason); }
   function subscribe(listener) { listeners.add(listener); return () => listeners.delete(listener); }
   function effective(host = location.hostname) {
@@ -118,5 +120,11 @@ EXP.Settings = (() => {
     if (!payload || payload.product !== 'prisma' || payload.generation !== 3 || payload.schema !== SCHEMA) throw Object.assign(new Error('This is not a supported PRISMA export'), { code: 'IMPORT_SCHEMA' });
     return validate(payload.settings);
   }
-  return Object.freeze({PREFIX, SCHEMA, defaults, validate, load, snapshot, replace, update, subscribe, effective, exportData, prepareImport, hasStored: () => rawRead('settings') !== undefined });
+  function resetAll() {
+    ExtraPotionsCore.clearProductData('prisma');
+    memory.clear();state = ExtraPotionsCore.cloneSettings(defaults);
+    for (const listener of listeners) listener(snapshot(), 'product-reset');
+    return snapshot();
+  }
+  return Object.freeze({resetAll, PREFIX, SCHEMA, defaults, validate, load, snapshot, replace, update, subscribe, effective, exportData, prepareImport, hasStored: () => rawRead('settings') !== undefined });
 })();

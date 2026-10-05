@@ -1,7 +1,8 @@
-EXP.VERSION = '3.2.3';
+EXP.VERSION = '3.2.4';
 
 EXP.ReleaseNotes = (() => {
   const notes = Object.freeze({
+    '3.2.4': ["Simplify System to Product Timeline, Show and Copy Diagnostics, issue reporting, Menu Preferences, and Reset All Settings.","Open GitHub Issues with a prefilled product and version template.","Require two confirmations before clearing this product settings and stored data."],
     '3.2.3': ["Keep PRISMA's signature menu colors alongside other ExtraPotions products.","Show a clear System status with safe retry for a suspended scan.","Choose Standard, Large, or Extra Large menus on each site.","Preview the actual highlight style and animation on light and dark surfaces."],
     '3.2.2': ["Use product names without the retired V3 integration label in settings prompts and import messages.","Keep existing saved settings and settings exports compatible."],
     '3.2.1': ["Make small menu text easier to read, including captions, version badges, notices, and diagnostic details.","Use consistent sizes for labels and controls across the menu."],

@@ -88,7 +88,8 @@ test('Escape cancels an import draft before closing the shared menu', async t =>
   const { page } = await fixture(t);
   await page.keyboard.press('Alt+Shift+P');
   assert.equal(await page.locator('#exp-prisma-root .panel').isVisible(), true);
-  await page.locator('#exp-prisma-root [data-section="system"]').click();
+  await page.locator('#exp-prisma-root [data-section="advanced"]').click();
+  await page.locator('#exp-prisma-root').getByText('Settings transfer',{exact:true}).click();
   await page.getByLabel('Import PRISMA settings', { exact: true }).setInputFiles({
     name: 'settings.json', mimeType: 'application/json',
     buffer: Buffer.from(JSON.stringify({ product: 'prisma', generation: 3, schema: 1, settings: { style: 'underline' } })),

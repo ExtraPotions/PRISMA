@@ -157,34 +157,36 @@ EXP.UI = (() => {
     const fragment = document.createDocumentFragment();
     fragment.append(
       ExtraPotionsCore.createDisclosure('Language', renderTools()),
-      ExtraPotionsCore.createDisclosure('Sites', renderSites())
+      ExtraPotionsCore.createDisclosure('Sites', renderSites()),
+      renderSettingsTransfer(),
+      ExtraPotionsCore.createDisclosure('Page tools',renderAdvanced())
     );
     return fragment;
   }
   function diagnosticReport() { const core = EXP.Core.diagnosticSnapshot(); return EXP.Diagnostics.createDiagnosticsReport('PRISMA', { host, settings: EXP.Settings.exportData(), updates: EXP.Updates.status(), product: { id: 'prisma', version: EXP.VERSION }, lifecycle: engineState.status, routeEpoch: engineState.routeEpoch, catalog: EXP.Catalog.status(), matches: { total: engineState.total, byIdentityId: engineState.summary, decisionBands: engineState.decisions }, processing: engineState.metrics, safeMode: EXP.Settings.snapshot().safeMode, core }); }
   function renderAdvanced() {
     const state = EXP.Settings.snapshot(); const section = group();
-    healthControl?.dispose();healthControl=ExtraPotionsCore.createHealthControls(systemHealthSnapshot,announce);
-    section.append(healthControl.element,EXP.Diagnostics.createDiagnosticsControls(diagnosticReport, announce));
     section.append(switchControl('Safe Mode', 'Immediately restores the page and keeps this recovery menu available.', state.safeMode, (safeMode) => update({ safeMode }, 'safe-mode')));
 
     return section;
   }
-  function renderSettings() {
-    const state = EXP.Settings.snapshot(); const section = group();
-    const preferences = ExtraPotionsCore.createDisclosure('Menu preferences');
-    preferences.append(ExtraPotionsCore.createMenuSizeControls());
-    const data = ExtraPotionsCore.createDisclosure('Settings');
-    data.open = Boolean(importDraft);
-    data.append(actionRow('Check for updates now', 'Fetches release metadata only; never executable code.', () => EXP.Updates.check(true).then((result) => announce(result.available ? `PRISMA ${result.latest} is available.` : result.state === 'failed' ? 'Update check failed quietly.' : 'PRISMA is up to date.')), 'Check now'));
-    data.append(actionRow('Rescan page', 'Rebuilds one clean route-scoped match set.', () => { EXP.Engine.rebuild('manual-rescan'); announce('Page rescanned.'); }, 'Rescan'));
-    preferences.append(switchControl('Auto-close menu', 'Closes after 15 seconds without interaction.', state.menuAutoClose, (menuAutoClose) => update({ menuAutoClose }, 'menu-auto-close')));
-    preferences.append(switchControl('Update notifications', 'Off by default. Opt-in checks request release metadata only.', state.updateNotifications, (updateNotifications) => { update({ updateNotifications }, 'update-notifications'); if (updateNotifications) EXP.Updates.check(true).then((result) => announce(result.available ? `Version ${result.latest} is available.` : result.state === 'failed' ? 'Update check failed quietly.' : 'PRISMA is up to date.')); }));
+  function renderSettingsTransfer() {
+    const data=ExtraPotionsCore.createDisclosure('Settings transfer');data.open=Boolean(importDraft);
     const transfer = el('div', { class: 'button-grid' }); transfer.append(button('Export settings', () => download('prisma-settings.json', JSON.stringify(EXP.Settings.exportData(), null, 2))));
     const importRow = row('Import PRISMA settings', 'Validation creates a draft. Apply commits atomically; Cancel changes nothing.'); const file = el('input', { type: 'file', accept: 'application/json,.json', 'aria-label': 'Import PRISMA settings' }); file.addEventListener('change', async () => { try { importDraft = EXP.Settings.prepareImport(JSON.parse(await file.files[0].text())); render(); announce('Import validated. Review and apply or cancel.'); } catch (error) { importDraft = null; announce(error.message, 'error'); } }); file.hidden = true; transfer.append(button('Import settings', () => file.click()), file); data.append(transfer);
     if (importDraft) { const actions = el('div', { class: 'button-grid' }); actions.append(button('Cancel import', () => { importDraft = null; render(); announce('Import cancelled.'); }, 'secondary'), button('Apply import', () => { EXP.Settings.replace(importDraft, 'import'); importDraft = null; render(); announce('Imported settings applied.'); }, 'primary')); data.append(actions); }
-    data.append(actionRow('Reset PRISMA', 'Resets PRISMA only. Other products are untouched.', () => { if (!confirm('Reset all PRISMA settings?')) return; EXP.Settings.replace(EXP.Settings.defaults, 'product-reset'); render(); announce('PRISMA reset complete.'); }, 'Reset'));
-    const fragment = document.createDocumentFragment(); fragment.append(section, renderAdvanced(), ExtraPotionsCore.createSystemGrid(preferences, data, ExtraPotionsCore.createSuiteSiteControls(), ExtraPotionsCore.createCompatibilityControls())); return fragment;
+    return data;
+  }
+  function renderSettings() {
+    const state=EXP.Settings.snapshot();
+    const preferences=ExtraPotionsCore.createDisclosure('Menu Preferences',ExtraPotionsCore.createMenuSizeControls());
+    preferences.append(switchControl('Auto-close menu', 'Closes after 15 seconds without interaction.', state.menuAutoClose, (menuAutoClose) => update({ menuAutoClose }, 'menu-auto-close')));
+    preferences.append(switchControl('Update notifications', 'Off by default. Opt-in checks request release metadata only.', state.updateNotifications, (updateNotifications) => { update({ updateNotifications }, 'update-notifications'); if (updateNotifications) EXP.Updates.check(true).then((result) => announce(result.available ? `Version ${result.latest} is available.` : result.state === 'failed' ? 'Update check failed quietly.' : 'PRISMA is up to date.')); }));
+    healthControl?.dispose();healthControl=ExtraPotionsCore.createProductTimeline('prisma',systemHealthSnapshot,announce);
+    return ExtraPotionsCore.createProductSystem({id:'prisma',version:EXP.VERSION,timeline:healthControl.element,
+      diagnostics:EXP.Diagnostics.createDiagnosticsControls(diagnosticReport,announce),preferences,
+      onReset:()=>{importDraft=null;EXP.Settings.resetAll();render();location.reload();},notify:announce
+    });
   }
   const routeRenderers = { page: renderPage, appearance: renderAppearanceMenu, advanced: renderAdvancedMenu, system: renderSettings };
   function render() {

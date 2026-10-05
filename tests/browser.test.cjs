@@ -279,9 +279,10 @@ test('global and site identity switches affect the same matcher', async () => {
 test('Safe Mode restores the page and can recover through the menu', async () => {
   const { browser, page } = await fixture('<main>bisexual</main>');
   try {
-    await page.locator('#exp-prisma-root').evaluate((host) => { host.shadowRoot.querySelector('.launcher').click(); host.shadowRoot.querySelector('[data-section="system"]').click(); host.shadowRoot.querySelector('button[role="switch"][aria-label="Safe Mode"]').click(); });
+    await page.locator('#exp-prisma-root').evaluate((host) => { host.shadowRoot.querySelector('.launcher').click(); host.shadowRoot.querySelector('[data-section="advanced"]').click(); [...host.shadowRoot.querySelectorAll('summary')].find(n=>n.textContent==='Page tools').click(); host.shadowRoot.querySelector('button[role="switch"][aria-label="Safe Mode"]').click(); });
     await page.waitForFunction(() => document.querySelectorAll('.exp-prisma-hit').length === 0);
-    await page.locator('#exp-prisma-root').evaluate((host) => host.shadowRoot.querySelector('button[role="switch"][aria-label="Safe Mode"]').click());
+    const pageTools=page.locator('#exp-prisma-root').getByText('Page tools',{exact:true});if(!await pageTools.evaluate(n=>n.parentElement.open))await pageTools.click();
+    await page.locator('#exp-prisma-root').getByRole('switch',{name:'Safe Mode',exact:true}).click();
     await page.waitForFunction(() => document.querySelectorAll('.exp-prisma-hit').length === 1);
   } finally { await browser.close(); }
 });
@@ -453,7 +454,7 @@ test('menu routes use simplified labels with scoped secondary disclosures', asyn
     const advancedDisclosures = [...root.querySelectorAll('.route-body:not([hidden]) details > summary')].map((item) => item.textContent.trim());
     openRoute('System');
     const systemVisible = Boolean(root.querySelector('.route-body:not([hidden])'));
-    return { labels, subtitle, appearance, styleCollapsed, advancedDisclosures, systemVisible };
+    return { labels, subtitle, appearance, styleCollapsed, advancedDisclosures, systemVisible, systemItems:[...root.querySelectorAll('[data-exp-product-system] > [data-exp-system-item]')].map(n=>n.dataset.expSystemItem), systemSafeModes:root.querySelectorAll('[data-exp-product-system] [aria-label="Safe Mode"]').length };
   });
   assert.deepEqual(facts.labels, ['Highlights', 'Appearance', 'Advanced', 'System']);
   assert.equal(facts.subtitle, 'Your self-identity. Recognized.');
@@ -462,6 +463,8 @@ test('menu routes use simplified labels with scoped secondary disclosures', asyn
   assert.ok(facts.advancedDisclosures.includes('Language'));
   assert.ok(facts.advancedDisclosures.includes('Sites'));
   assert.equal(facts.systemVisible, true);
+  assert.deepEqual(facts.systemItems,['timeline','diagnostics','issue','preferences','reset']);assert.equal(facts.systemSafeModes,0);
+  assert.ok(facts.advancedDisclosures.includes('Page tools'));assert.ok(facts.advancedDisclosures.includes('Settings transfer'));
 });
 
 test('README screenshots exist at stable docs paths', () => {
