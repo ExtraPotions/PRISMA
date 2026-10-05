@@ -1,5 +1,6 @@
 ## 3.2.3 — 2026-10-03
 
+- Keep PRISMA's signature menu colors alongside other ExtraPotions products.
 - Show a clear System status with safe retry for a suspended scan.
 - Choose Standard, Large, or Extra Large menus on each site.
 - Preview the actual highlight style and animation on light and dark surfaces.

@@ -20,6 +20,7 @@ Open Highlights to explore matches on the current page. Use Highlight Style for 
 
 ## What you can do
 
+- **Distinct menu colors:** PRISMA keeps its signature appearance alongside other ExtraPotions products.
 - **System status:** see Working, Waiting, Paused, or Needs attention, with a reason and a safe recovery action when available.
 - **Live style preview:** compare the actual highlight and animation on light and dark surfaces while adjusting Appearance.
 
