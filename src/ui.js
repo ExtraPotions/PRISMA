@@ -150,7 +150,7 @@ EXP.UI = (() => {
   function renderTools() { const fragment = document.createDocumentFragment(); fragment.append(renderIdentities(), renderContext()); return fragment; }
   function renderAppearanceMenu() {
     const fragment = document.createDocumentFragment();
-    fragment.append(renderLook(), ExtraPotionsCore.createDisclosure('Highlight style', renderHighlightStyle()));
+    fragment.append(renderLook(), ExtraPotionsCore.createDisclosure('Highlight style', renderHighlightStyle()), renderMenuPreferences());
     return fragment;
   }
   function renderAdvancedMenu() {
@@ -177,14 +177,17 @@ EXP.UI = (() => {
     if (importDraft) { const actions = el('div', { class: 'button-grid' }); actions.append(button('Cancel import', () => { importDraft = null; render(); announce('Import cancelled.'); }, 'secondary'), button('Apply import', () => { EXP.Settings.replace(importDraft, 'import'); importDraft = null; render(); announce('Imported settings applied.'); }, 'primary')); data.append(actions); }
     return data;
   }
-  function renderSettings() {
+  function renderMenuPreferences() {
     const state=EXP.Settings.snapshot();
     const preferences=ExtraPotionsCore.createDisclosure('Menu Preferences',ExtraPotionsCore.createMenuSizeControls());
     preferences.append(switchControl('Auto-close menu', 'Closes after 15 seconds without interaction.', state.menuAutoClose, (menuAutoClose) => update({ menuAutoClose }, 'menu-auto-close')));
     preferences.append(switchControl('Update notifications', 'Off by default. Opt-in checks request release metadata only.', state.updateNotifications, (updateNotifications) => { update({ updateNotifications }, 'update-notifications'); if (updateNotifications) EXP.Updates.check(true).then((result) => announce(result.available ? `Version ${result.latest} is available.` : result.state === 'failed' ? 'Update check failed quietly.' : 'PRISMA is up to date.')); }));
-    healthControl?.dispose();healthControl=ExtraPotionsCore.createProductTimeline('prisma',systemHealthSnapshot,announce);
-    return ExtraPotionsCore.createProductSystem({id:'prisma',version:EXP.VERSION,timeline:healthControl.element,
-      diagnostics:EXP.Diagnostics.createDiagnosticsControls(diagnosticReport,announce),preferences,
+    return preferences;
+  }
+  function renderSettings() {
+    healthControl?.dispose();healthControl=ExtraPotionsCore.createProductTimeline('prisma',systemHealthSnapshot,announce,{layout:'grouped'});
+    return ExtraPotionsCore.createProductSystem({id:'prisma',version:EXP.VERSION,timeline:healthControl.element,layout:'grouped',
+      diagnostics:EXP.Diagnostics.createDiagnosticsControls(diagnosticReport,announce),
       onReset:()=>{importDraft=null;EXP.Settings.resetAll();render();location.reload();},notify:announce
     });
   }
