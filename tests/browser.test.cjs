@@ -463,7 +463,7 @@ test('menu routes use simplified labels with scoped secondary disclosures', asyn
   assert.ok(facts.advancedDisclosures.includes('Language'));
   assert.ok(facts.advancedDisclosures.includes('Sites'));
   assert.equal(facts.systemVisible, true);
-  assert.deepEqual(facts.systemItems,['timeline','diagnostics','issue','preferences','reset']);assert.equal(facts.systemSafeModes,0);
+  assert.deepEqual(facts.systemItems,['status','support','reset']);assert.equal(facts.systemSafeModes,0);
   assert.ok(facts.advancedDisclosures.includes('Page tools'));assert.ok(facts.advancedDisclosures.includes('Settings transfer'));
 });
 
