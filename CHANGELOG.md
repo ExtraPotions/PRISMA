@@ -1,8 +1,8 @@
-## Unreleased
+## 3.2.10 — 2026-10-07
 
-- Gives PRISMA's menu sapphire-blue accents, a navy background, and violet and cyan details inspired by its gem.
-- Replaces nested menu sections with compact tabs while keeping each product's colors and System last.
-- Remembers the selected tab during menu refreshes and supports arrow-key navigation.
+- Organizes related menu settings into compact tabs, with System last.
+- Keeps your selected tab during menu refreshes and supports keyboard navigation.
+- Gives the menu sapphire-blue accents, navy surfaces, and violet and cyan details inspired by its gem.
 
 ## 3.2.9 — 2026-10-07
 
