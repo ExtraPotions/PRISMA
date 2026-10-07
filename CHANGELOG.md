@@ -1,3 +1,9 @@
+## Unreleased
+
+- Gives PRISMA's menu sapphire-blue accents, a navy background, and violet and cyan details inspired by its gem.
+- Replaces nested menu sections with compact tabs while keeping each product's colors and System last.
+- Remembers the selected tab during menu refreshes and supports arrow-key navigation.
+
 ## 3.2.9 — 2026-10-07
 
 - Includes the latest shared ExtraPotions maintenance release.

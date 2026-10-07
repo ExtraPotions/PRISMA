@@ -283,7 +283,7 @@ test('Safe Mode restores the page and can recover through the menu', async () =>
   try {
     await page.locator('#exp-prisma-root').evaluate((host) => { host.shadowRoot.querySelector('.launcher').click(); host.shadowRoot.querySelector('[data-section="advanced"]').click(); [...host.shadowRoot.querySelectorAll('summary')].find(n=>n.textContent==='Page tools').click(); host.shadowRoot.querySelector('button[role="switch"][aria-label="Safe Mode"]').click(); });
     await page.waitForFunction(() => document.querySelectorAll('.exp-prisma-hit').length === 0);
-    const pageTools=page.locator('#exp-prisma-root').getByText('Page tools',{exact:true});if(!await pageTools.evaluate(n=>n.parentElement.open))await pageTools.click();
+    const pageTools=page.locator('#exp-prisma-root').getByRole('tab',{name:'Page',exact:true});if(!await pageTools.evaluate(n=>n.parentElement.open))await pageTools.click();
     await page.locator('#exp-prisma-root').getByRole('switch',{name:'Safe Mode',exact:true}).click();
     await page.waitForFunction(() => document.querySelectorAll('.exp-prisma-hit').length === 1);
   } finally { await browser.close(); }
@@ -456,7 +456,7 @@ test('menu routes use simplified labels with scoped secondary disclosures', asyn
     const advancedDisclosures = [...root.querySelectorAll('.route-body:not([hidden]) details > summary')].map((item) => item.textContent.trim());
     openRoute('System');
     const systemVisible = Boolean(root.querySelector('.route-body:not([hidden])'));
-    return { labels, subtitle, appearance, styleCollapsed, advancedDisclosures, systemVisible, systemItems:[...root.querySelectorAll('[data-exp-product-system] > [data-exp-system-item]')].map(n=>n.dataset.expSystemItem), systemSafeModes:root.querySelectorAll('[data-exp-product-system] [aria-label="Safe Mode"]').length };
+    return { labels, subtitle, appearance, styleCollapsed, advancedDisclosures, systemVisible, systemItems:[...root.querySelectorAll('[data-exp-product-system] [data-exp-system-item]')].map(n=>n.dataset.expSystemItem), systemSafeModes:root.querySelectorAll('[data-exp-product-system] [aria-label="Safe Mode"]').length };
   });
   assert.deepEqual(facts.labels, ['Highlights', 'Appearance', 'Advanced', 'System']);
   assert.equal(facts.subtitle, 'Your self-identity. Recognized.');
@@ -526,7 +526,7 @@ test('sensitive installed page stays unchanged until exact-site opt-in',async t=
  await page.route('https://mail.google.com/**',r=>r.fulfill({contentType:'text/html',body:'<!doctype html><html><body><main>bisexual identity</main></body></html>'}));
  await page.goto('https://mail.google.com/');await page.evaluate(()=>{window.GM_getValue=(_k,d)=>d;window.GM_setValue=()=>{};window.GM_xmlhttpRequest=()=>{};});await page.addScriptTag({content:script});await page.waitForSelector('#exp-prisma-root',{state:'attached'});
  assert.equal(await page.locator('main .exp-prisma-hit').count(),0);
- const root=page.locator('#exp-prisma-root');await root.locator('.launcher').click();await root.locator('[data-section="advanced"]').click();await root.getByText('Sites',{exact:true}).click();
+ const root=page.locator('#exp-prisma-root');await root.locator('.launcher').click();await root.locator('[data-section="advanced"]').click();await root.getByRole('tab',{name:'Sites',exact:true}).click();
  assert.equal(await root.getByRole('switch',{name:'Enable on this site',exact:true}).getAttribute('aria-checked'),'false');
  await root.getByRole('switch',{name:'Enable on this site',exact:true}).click();await page.waitForFunction(()=>document.querySelectorAll('.exp-prisma-hit').length===1);
  assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('exp:v3:prisma:settings')).sensitiveSiteOptIns),['mail.google.com']);
@@ -541,13 +541,13 @@ for(const guard of ['sensitive','disabled','excluded','safe-mode','suite-paused'
   await page.goto('https://mail.google.com/');await page.evaluate(guard=>{const settings={sensitiveSiteOptIns:guard==='sensitive'?[]:['mail.google.com'],enabled:guard!=='disabled',safeMode:guard==='safe-mode',exclusions:guard==='excluded'?['mail.google.com']:[]};localStorage.setItem('exp:v3:prisma:settings',JSON.stringify(settings));if(guard==='suite-paused')localStorage.setItem('exp:v3:suite-site-pause:mail.google.com','1');window.GM_getValue=(_k,d)=>d;window.GM_setValue=()=>{};window.GM_xmlhttpRequest=()=>{};},guard);
   page.setDefaultTimeout(5000);await page.addScriptTag({content:script});await page.waitForSelector('#exp-prisma-root',{state:'attached'});const root=page.locator('#exp-prisma-root');
   await root.locator('.launcher').click();
-  const status=async()=>{await root.locator('[data-section="system"]').click();const support=root.locator('[data-exp-system-item="support"]');if(!await support.evaluate(node=>node.open))await support.locator(':scope > summary').click();const show=root.getByRole('button',{name:'Show Diagnostics',exact:true});if(await show.count())await show.click();await root.locator('.diag').filter({hasText:'"catalog"'}).waitFor();const report=JSON.parse(await root.locator('.diag').textContent());return report.catalog;};
+  const status=async()=>{await root.locator('[data-section="system"]').click();await root.getByRole('tab',{name:'Support',exact:true}).click();const show=root.getByRole('button',{name:'Show Diagnostics',exact:true});if(await show.count())await show.click();await root.locator('.diag').filter({hasText:'"catalog"'}).waitFor();const report=JSON.parse(await root.locator('.diag').textContent());return report.catalog;};
   assert.equal((await status()).state,'deferred');
-  await root.locator('[data-section="appearance"]').click();await root.locator('summary').filter({hasText:/^Highlight style$/}).click();
-  await root.locator('[data-section="advanced"]').click();await root.getByText('Sites',{exact:true}).click();
+  await root.locator('[data-section="appearance"]').click();await root.getByRole('tab',{name:'Style',exact:true}).click();
+  await root.locator('[data-section="advanced"]').click();await root.getByRole('tab',{name:'Sites',exact:true}).click();
   assert.equal(await root.locator('.site-identities .identity-list .row').count(),0);
   assert.equal((await status()).initializations,0);
-  await root.locator('[data-section="advanced"]').click();await root.getByText('Language',{exact:true}).click();
+  await root.locator('[data-section="advanced"]').click();await root.getByRole('tab',{name:'Language',exact:true}).click();
   assert.equal((await status()).initializations,1);
   assert.equal(await page.locator('main .exp-prisma-hit').count(),0);
  });
@@ -557,7 +557,7 @@ test('PRISMA sensitive-site import discloses permissions before deliberate apply
  const browser=await chromium.launch();t.after(()=>browser.close());const page=await browser.newPage();
  await page.route('**/*',r=>r.abort());await page.route('https://mail.google.com/**',r=>r.fulfill({contentType:'text/html',body:'<!doctype html><html><body style="background:white;color:#111"><main>bisexual identity</main></body></html>'}));
  await page.goto('https://mail.google.com/');await page.evaluate(()=>{window.GM_getValue=(_k,d)=>d;window.GM_setValue=()=>{};window.GM_xmlhttpRequest=()=>{};});await page.addScriptTag({content:script});await page.waitForSelector('#exp-prisma-root',{state:'attached'});
- const root=page.locator('#exp-prisma-root');await root.locator('.launcher').click();await root.locator('[data-section="advanced"]').click();await root.getByText('Settings transfer',{exact:true}).click();
+ const root=page.locator('#exp-prisma-root');await root.locator('.launcher').click();await root.locator('[data-section="advanced"]').click();await root.getByRole('tab',{name:'Transfer',exact:true}).click();
  const file={name:'settings.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify({product:'prisma',generation:3,schema:1,settings:{theme:'midnight',sensitiveSiteOptIns:['mail.google.com']}}))};
  await root.locator('input[type=file]').setInputFiles(file);await root.locator('.import-preview').waitFor();assert.match(await root.locator('.import-preview').textContent(),/exact hostnames.*mail.google.com/);
  assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('exp:v3:prisma:settings')).sensitiveSiteOptIns),[]);

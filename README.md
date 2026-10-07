@@ -22,15 +22,17 @@ Open Highlights to explore matches on the current page. Use Highlight Style for 
 
 ## What you can do
 
-- **Simple System menu:** Status stays open with its reason and recovery action, plus recent activity. Support holds Copy Diagnostics and Report a Problem. Reset asks for a second tap inside the menu.
+- **Compact submenu tabs:** switch between related settings without opening a stack of nested menus. Each product keeps its own colors, and System stays last.
 
-- **Distinct menu colors:** PRISMA keeps its signature appearance alongside other ExtraPotions products.
+- **Simple System menu:** The Status tab shows its reason and recovery action, plus recent activity. Support holds Copy Diagnostics and Report a Problem. Reset asks for a second tap inside the menu.
+
+- **Distinct menu colors:** sapphire-blue accents, navy surfaces, and violet and cyan details match PRISMA's gem.
 - **System status:** see Working, Waiting, Paused, or Needs attention, with a reason and a safe recovery action when available.
 - **Live style preview:** compare the actual highlight and animation on light and dark surfaces while adjusting Appearance.
 
 - **Keep your settings:** saved preferences and existing settings exports remain supported as product naming is simplified.
 
-- **Readable menus:** choose Standard (14px text), Large (16px), or Extra Large (18px) from Appearance > Menu Preferences. Captions start at 12px. Labels, dropdowns, toggles, and buttons share consistent spacing and alignment. The choice applies to ExtraPotions menus on this site.
+- **Readable menus:** choose Standard (14px text), Large (16px), or Extra Large (18px) from Appearance > Menu. Captions start at 12px. Labels, dropdowns, toggles, and buttons share consistent spacing and alignment. The choice applies to ExtraPotions menus on this site.
 
 - **Match explanations:** activate a highlight or choose Explain Next Match to see its meaning and sources. Ignore a phrase on the current site directly from its explanation.
 - **Context-aware highlights:** find recognized identity terms while reducing ambiguous matches.
