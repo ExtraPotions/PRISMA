@@ -30,7 +30,7 @@ jobs:
     with:
       tag: ${{ github.event.client_payload.tag || inputs.tag || '' }}
       product: PRISMA
-      node-version: "22"
+      node-version: "24"
       script-asset: prisma.user.js
       icon-asset: assets/prisma-launcher.svg
       release-sections: 1
