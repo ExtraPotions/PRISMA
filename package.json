@@ -1,6 +1,6 @@
 {
   "name": "extrapotions-prisma",
-  "version": "3.2.8",
+  "version": "3.2.9",
   "private": true,
   "description": "PRISMA local context-aware identity-language highlighter",
   "scripts": {

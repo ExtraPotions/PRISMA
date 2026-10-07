@@ -1,7 +1,8 @@
-EXP.VERSION = '3.2.8';
+EXP.VERSION = '3.2.9';
 
 EXP.ReleaseNotes = (() => {
   const notes = Object.freeze({
+    '3.2.9': ["Includes the latest shared ExtraPotions maintenance release.","Checks highlighting and menus alongside all other ExtraPotions products."],
     '3.2.8': ["Makes menu labels and captions easier to read at every size.","Aligns dropdowns, toggles, buttons, and section headings with consistent spacing.","Gives menus more room while keeping each product's signature colors."],
     '3.2.7': ["The standalone install is smaller while keeping all features bundled.","Listed banking, healthcare, and email sites start off with an exact-site opt-in.","Language catalog preparation waits until eligible use or deliberate catalog access."],
     '3.2.6': ["Keep Status open in System with its reason, recovery action, and recent activity.","Group Copy Diagnostics, Show Diagnostics, and Report a Problem under Support; reports include the current status.","Confirm Reset with a second tap inside the menu instead of browser dialogs.","Move Menu Preferences to the end of Appearance."],

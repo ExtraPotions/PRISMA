@@ -2,6 +2,8 @@
 
 # PRISMA
 
+Current release: **3.2.9**.
+
 **Identity language, easier to explore**
 
 Recognize LGBTQ+ identity terms in context, see their colors, and explore recognized terms while you read.

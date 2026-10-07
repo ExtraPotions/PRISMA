@@ -1,3 +1,8 @@
+## 3.2.9 — 2026-10-07
+
+- Includes the latest shared ExtraPotions maintenance release.
+- Checks highlighting and menus alongside all other ExtraPotions products.
+
 ## 3.2.8 — 2026-10-06
 
 - Makes menu labels and captions easier to read at every size.
