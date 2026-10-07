@@ -12,7 +12,7 @@ async function fixture(t, prefix = '', exposeLifecycle = false) {
   const page = await browser.newPage();
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
-  await page.addInitScript({ content: prefix + (exposeLifecycle ? script.replace('EXP.App.start();', 'window.testPrisma = EXP; EXP.App.start();') : script) });
+  await page.addInitScript({ content: prefix + (exposeLifecycle ? require('./load-source.cjs').loadSource().replace('EXP.App.start();', 'window.testPrisma = EXP; EXP.App.start();') : script) });
   await page.route('https://fixture.test/**', route => route.fulfill({ contentType: 'text/html', body: '<!doctype html><style>::backdrop{background:white!important;opacity:1!important;display:block!important}body{background:#17202a;color:#eee}main{min-height:3000px}</style><main><p>bisexual identity</p><button id="site-action">Site action</button></main>' }));
   await page.goto('https://fixture.test/');
   await page.waitForSelector('.exp-prisma-hit');

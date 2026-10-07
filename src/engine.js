@@ -84,7 +84,11 @@ EXP.Engine = (() => {
     for (const [id, record] of matches) if (!record.element.isConnected) { matches.delete(id); metrics.detached += 1; }
     if (currentIndex >= matches.size) currentIndex = matches.size - 1;
   }
-  function canRun(value = settings) { return active && value?.enabled && !value.safeMode && !value.excluded && EXP.Catalog.status().valid; }
+  function canRun(value = settings) {
+    if (!active || !value?.enabled || value.safeMode || value.excluded || ExtraPotionsCore.suiteSitePaused()) return false;
+    EXP.Catalog.ensureInitialized();
+    return EXP.Catalog.status().valid;
+  }
   function processBatch(roots) {return guardedScan(()=>processBatchUnprotected(roots));}
   function processBatchUnprotected(roots) {
     if (location.href !== currentHref) { navigation(); return; }
@@ -147,7 +151,7 @@ EXP.Engine = (() => {
     prune();
     const state = settings || EXP.Settings.effective();
     return Object.freeze({
-      status: !EXP.Catalog.status().valid ? 'catalog-invalid' : state.safeMode ? 'safe-mode' : state.excluded ? 'excluded' : !state.enabled ? 'disabled' : active ? 'ready' : 'stopped',
+      status: EXP.Catalog.status().valid === false ? 'catalog-invalid' : state.safeMode ? 'safe-mode' : state.excluded ? 'excluded' : !state.enabled ? 'disabled' : active ? 'ready' : 'stopped',
       recovery:recovery.snapshot('scan',currentHref),routeEpoch, total: matches.size, summary: summary(), decisions: { ...decisions }, metrics: { ...metrics }, currentIndex,
       temporarilyHidden, matches: ordered().map((record) => ({ matchId: record.matchId, identityId: record.identityId, ...(options.includeMatchText ? { text: record.element.textContent || '' } : {}) }))
     });

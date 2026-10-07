@@ -5,7 +5,9 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { chromium } = require('playwright');
 const script = fs.readFileSync(path.resolve(__dirname, '..', 'prisma.user.js'), 'utf8');
-const catalog = JSON.parse(script.match(/EXP\.CatalogData = (\[[\s\S]*?\n\]);\n/)[1]);
+// Fixture inventory uses readable authored data; every browser below executes the install.
+const catalogSource = fs.readFileSync(path.resolve(__dirname, '../src/catalog-data.js'), 'utf8').replace(/\r\n/g, '\n');
+const catalog = JSON.parse(catalogSource.match(/EXP\.CatalogData = (\[[\s\S]*?\n\]);\n/)[1]);
 
 test('PRISMA does not mount a launcher inside an iframe', async (t) => {
   const browser = await chromium.launch({ headless: true }); t.after(() => browser.close());
@@ -271,7 +273,7 @@ test('global and site identity switches affect the same matcher', async () => {
     await page.locator('#exp-prisma-root').evaluate((host) => { const root = host.shadowRoot; root.querySelector('.launcher').click(); const advanced=root.querySelector('[data-section="advanced"]'); if(advanced.getAttribute('aria-expanded')!=='true') advanced.click(); [...root.querySelectorAll('details > summary')].find((item) => item.textContent.includes('Language'))?.click(); if(root.querySelectorAll('.identity-list .identity').length!==3)throw new Error('Identity catalog must show three defaults');const search=root.querySelector('.search');search.value='Bisexual';search.dispatchEvent(new Event('input',{bubbles:true}));root.querySelector('button[aria-label="Enable Bisexual"]').click(); });
     await page.waitForFunction(() => !document.querySelector('.exp-prisma-hit[data-identity="bisexual"]'));
     assert.equal(await page.locator('.exp-prisma-hit[data-identity="pansexual"]').count(), 1);
-    await page.locator('#exp-prisma-root').evaluate((host) => { const root = host.shadowRoot; const advanced=root.querySelector('[data-section="advanced"]'); if(advanced.getAttribute('aria-expanded')!=='true') advanced.click(); [...root.querySelectorAll('details > summary')].find((item) => item.textContent.includes('Sites'))?.click(); root.querySelector('button[role="switch"][aria-label="Use site overrides"]').click(); const search=root.querySelector('input[aria-label="Search site identity overrides"]'); search.value='Pansexual'; search.dispatchEvent(new Event('input',{bubbles:true})); const select = root.querySelector('select[aria-label="Pansexual"]'); select.value = 'off'; select.dispatchEvent(new Event('change', { bubbles: true })); });
+    await page.locator('#exp-prisma-root').evaluate((host) => { const root = host.shadowRoot; const advanced=root.querySelector('[data-section="advanced"]'); if(advanced.getAttribute('aria-expanded')!=='true') advanced.click(); [...root.querySelectorAll('details > summary')].find((item) => item.textContent.includes('Sites'))?.click(); root.querySelector('button[role="switch"][aria-label="Use site overrides"]').click(); [...root.querySelectorAll('summary')].find(node => node.textContent === 'Identity overrides').click(); const search=root.querySelector('input[aria-label="Search site identity overrides"]'); search.value='Pansexual'; search.dispatchEvent(new Event('input',{bubbles:true})); const select = root.querySelector('select[aria-label="Pansexual"]'); select.value = 'off'; select.dispatchEvent(new Event('change', { bubbles: true })); });
     await page.waitForFunction(() => document.querySelectorAll('.exp-prisma-hit').length === 0);
   } finally { await browser.close(); }
 });
@@ -516,4 +518,50 @@ test('route headers do not carry restated helper tips', async (t) => {
   assert.ok(tips.headers.every((item) => !item.tip && !item.hasTooltip), JSON.stringify(tips.headers));
   assert.ok(tips.rows.length > 0);
   assert.ok(tips.rows.every((item) => !item.tip && !item.hasTooltip), JSON.stringify(tips.rows));
+});
+
+test('sensitive installed page stays unchanged until exact-site opt-in',async t=>{
+ const browser=await chromium.launch();t.after(()=>browser.close());const page=await browser.newPage();
+ await page.route('**/*',r=>r.abort());
+ await page.route('https://mail.google.com/**',r=>r.fulfill({contentType:'text/html',body:'<!doctype html><html><body><main>bisexual identity</main></body></html>'}));
+ await page.goto('https://mail.google.com/');await page.evaluate(()=>{window.GM_getValue=(_k,d)=>d;window.GM_setValue=()=>{};window.GM_xmlhttpRequest=()=>{};});await page.addScriptTag({content:script});await page.waitForSelector('#exp-prisma-root',{state:'attached'});
+ assert.equal(await page.locator('main .exp-prisma-hit').count(),0);
+ const root=page.locator('#exp-prisma-root');await root.locator('.launcher').click();await root.locator('[data-section="advanced"]').click();await root.getByText('Sites',{exact:true}).click();
+ assert.equal(await root.getByRole('switch',{name:'Enable on this site',exact:true}).getAttribute('aria-checked'),'false');
+ await root.getByRole('switch',{name:'Enable on this site',exact:true}).click();await page.waitForFunction(()=>document.querySelectorAll('.exp-prisma-hit').length===1);
+ assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('exp:v3:prisma:settings')).sensitiveSiteOptIns),['mail.google.com']);
+ await root.getByRole('switch',{name:'Enable on this site',exact:true}).click();await page.waitForFunction(()=>!document.querySelector('.exp-prisma-hit'));
+});
+
+// Public diagnostics inspect the real minified install, not private source names.
+for(const guard of ['sensitive','disabled','excluded','safe-mode','suite-paused']) {
+ test('catalog remains deferred across recovery and ordinary menus ('+guard+')',async t=>{
+  const browser=await chromium.launch();t.after(()=>browser.close());const page=await browser.newPage();
+  await page.route('**/*',r=>r.abort());await page.route('https://mail.google.com/**',r=>r.fulfill({contentType:'text/html',body:'<!doctype html><html><body><main>bisexual identity</main></body></html>'}));
+  await page.goto('https://mail.google.com/');await page.evaluate(guard=>{const settings={sensitiveSiteOptIns:guard==='sensitive'?[]:['mail.google.com'],enabled:guard!=='disabled',safeMode:guard==='safe-mode',exclusions:guard==='excluded'?['mail.google.com']:[]};localStorage.setItem('exp:v3:prisma:settings',JSON.stringify(settings));if(guard==='suite-paused')localStorage.setItem('exp:v3:suite-site-pause:mail.google.com','1');window.GM_getValue=(_k,d)=>d;window.GM_setValue=()=>{};window.GM_xmlhttpRequest=()=>{};},guard);
+  page.setDefaultTimeout(5000);await page.addScriptTag({content:script});await page.waitForSelector('#exp-prisma-root',{state:'attached'});const root=page.locator('#exp-prisma-root');
+  await root.locator('.launcher').click();
+  const status=async()=>{await root.locator('[data-section="system"]').click();const support=root.locator('[data-exp-system-item="support"]');if(!await support.evaluate(node=>node.open))await support.locator(':scope > summary').click();const show=root.getByRole('button',{name:'Show Diagnostics',exact:true});if(await show.count())await show.click();await root.locator('.diag').filter({hasText:'"catalog"'}).waitFor();const report=JSON.parse(await root.locator('.diag').textContent());return report.catalog;};
+  assert.equal((await status()).state,'deferred');
+  await root.locator('[data-section="appearance"]').click();await root.locator('summary').filter({hasText:/^Highlight style$/}).click();
+  await root.locator('[data-section="advanced"]').click();await root.getByText('Sites',{exact:true}).click();
+  assert.equal(await root.locator('.site-identities .identity-list .row').count(),0);
+  assert.equal((await status()).initializations,0);
+  await root.locator('[data-section="advanced"]').click();await root.getByText('Language',{exact:true}).click();
+  assert.equal((await status()).initializations,1);
+  assert.equal(await page.locator('main .exp-prisma-hit').count(),0);
+ });
+}
+
+test('PRISMA sensitive-site import discloses permissions before deliberate apply',async t=>{
+ const browser=await chromium.launch();t.after(()=>browser.close());const page=await browser.newPage();
+ await page.route('**/*',r=>r.abort());await page.route('https://mail.google.com/**',r=>r.fulfill({contentType:'text/html',body:'<!doctype html><html><body style="background:white;color:#111"><main>bisexual identity</main></body></html>'}));
+ await page.goto('https://mail.google.com/');await page.evaluate(()=>{window.GM_getValue=(_k,d)=>d;window.GM_setValue=()=>{};window.GM_xmlhttpRequest=()=>{};});await page.addScriptTag({content:script});await page.waitForSelector('#exp-prisma-root',{state:'attached'});
+ const root=page.locator('#exp-prisma-root');await root.locator('.launcher').click();await root.locator('[data-section="advanced"]').click();await root.getByText('Settings transfer',{exact:true}).click();
+ const file={name:'settings.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify({product:'prisma',generation:3,schema:1,settings:{theme:'midnight',sensitiveSiteOptIns:['mail.google.com']}}))};
+ await root.locator('input[type=file]').setInputFiles(file);await root.locator('.import-preview').waitFor();assert.match(await root.locator('.import-preview').textContent(),/exact hostnames.*mail.google.com/);
+ assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('exp:v3:prisma:settings')).sensitiveSiteOptIns),[]);
+ await root.getByRole('button',{name:'Cancel import',exact:true}).click();assert.equal(await root.locator('.import-preview').count(),0);
+ await root.locator('input[type=file]').setInputFiles(file);await root.getByRole('button',{name:'Apply import',exact:true}).click();
+ assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('exp:v3:prisma:settings')).sensitiveSiteOptIns),['mail.google.com']);
 });

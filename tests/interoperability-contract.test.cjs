@@ -17,7 +17,7 @@ test('PRISMA delegates suite and presentation metadata to Core diagnostics boots
 
 test('generated PRISMA userscript keeps the same Core-owned interoperability bootstrap', () => {
   const built = read('prisma.user.js');
-  assert.match(built, /registerDiagnosticsProduct\('prisma'/);
+  assert.match(built, /registerDiagnosticsProduct\(['"]prisma['"]/);
   assert.doesNotMatch(built, /registerSuiteProduct\?\./u);
   assert.doesNotMatch(built, /registerPresentationProvider\?\./u);
 });

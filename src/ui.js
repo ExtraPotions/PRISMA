@@ -34,7 +34,7 @@ EXP.UI = (() => {
 
   function renderHighlightStyle() {
     const state = EXP.Settings.snapshot(); const section = group('Highlight style', 'Visual controls change the renderer without widening the matcher.');
-    stylePreview?.dispose();stylePreview=EXP.Renderer.createPreview(state,EXP.Catalog.get('bisexual')||EXP.Catalog.identities[0]);section.append(stylePreview.element);
+    stylePreview?.dispose();stylePreview=EXP.Renderer.createPreview(state,EXP.CatalogData.find(identity => identity.id === 'bisexual') || EXP.CatalogData[0]);section.append(stylePreview.element);
     section.append(selectControl('Style', 'Uses the same eligible match set.', state.style, [['gradient', 'Gradient'], ['underline', 'Underline'], ['soft-fill', 'Soft Fill']], (style) => update({ style }, 'style')));
     section.append(selectControl('Intensity', 'Changes rendering only.', state.intensity, [['subtle', 'Subtle'], ['balanced', 'Balanced'], ['vivid', 'Vivid']], (intensity) => update({ intensity }, 'intensity')));
     section.append(switchControl('Animation', 'Disabled whenever reduced motion is active.', state.animation, (animation) => update({ animation }, 'animation')));
@@ -136,16 +136,35 @@ EXP.UI = (() => {
   }
   function renderSites() {
     const state = EXP.Settings.snapshot(); const effective = EXP.Settings.effective(); const site = state.siteOverrides[location.hostname] || {}; const section = group('Current Site', location.hostname || 'Local document');
-    section.append(switchControl('Enable on this site', 'Exclusion stops work and restores wrappers for this origin.', !effective.excluded, (enabled) => { const exclusions = state.exclusions.filter((host) => host !== location.hostname); if (!enabled) exclusions.push(location.hostname); update({ exclusions }, 'site-exclusion'); }));
+    if (EXP.SitePolicy.isSensitive(location.hostname)) section.append(el('p', {}, 'This supported banking, healthcare or email site stays unchanged until you enable this exact hostname. Site exclusions and pauses still take priority. Coverage is not universal.'));
+    section.append(switchControl('Enable on this site', 'Known banking, healthcare and email sites require exact-site permission. Coverage is not universal.', !effective.excluded, (enabled) => {
+      const exclusions = state.exclusions.filter(host => host !== location.hostname);
+      if (!enabled) exclusions.push(location.hostname);
+      const host = EXP.SitePolicy.normalizeHost(location.hostname);
+      const sensitiveSiteOptIns = state.sensitiveSiteOptIns.filter(item => item !== host);
+      if (enabled && EXP.SitePolicy.isSensitive(host)) sensitiveSiteOptIns.push(host);
+      update({ exclusions, sensitiveSiteOptIns }, 'site-exclusion');
+    }));
     section.append(switchControl('Use site overrides', 'Creates or removes a current-origin override layer.', Boolean(state.siteOverrides[location.hostname]), (enabled) => { const siteOverrides = { ...state.siteOverrides }; if (enabled) siteOverrides[location.hostname] = { matcherMode: state.matcherMode }; else delete siteOverrides[location.hostname]; update({ siteOverrides }, 'site-override-layer'); }));
     section.append(selectControl('Matching mode override', 'Inherit or override the current origin.', site.matcherMode || 'inherit', [['inherit', 'Inherit global'], ['strict', 'Strict'], ['balanced', 'Balanced'], ['inclusive', 'Inclusive']], (matcherMode) => { const siteOverrides = { ...state.siteOverrides, [location.hostname]: { ...site } }; if (matcherMode === 'inherit') delete siteOverrides[location.hostname].matcherMode; else siteOverrides[location.hostname].matcherMode = matcherMode; update({ siteOverrides }, 'site-matcher-mode'); }, !state.siteOverrides[location.hostname]));
+    const overrideDisclosure = lazyDisclosure('Identity overrides', () => {
     const overrideGroup = el('div', { class: 'site-identities' });
     overrideGroup.append(el('span', { class: 'label' }, 'Identity overrides'));
     const overrideSearch = el('input', { type: 'search', class: 'search', placeholder: 'Search site identity overrides', 'aria-label': 'Search site identity overrides' }); const overrideList = el('div', { class: 'identity-list' });
     const paintOverrides = () => { overrideList.replaceChildren(...EXP.Catalog.search(overrideSearch.value).slice(0,3).map((identity) => { const value = site.identityOverrides?.[identity.id] || 'inherit'; return selectControl(identity.label, 'Current-origin behavior.', value, [['inherit', 'Inherit'], ['on', 'On'], ['off', 'Off']], (mode) => { const current = EXP.Settings.snapshot(); const siteOverrides = { ...current.siteOverrides, [location.hostname]: { ...(current.siteOverrides[location.hostname] || {}) } }; const identityOverrides = { ...(siteOverrides[location.hostname].identityOverrides || {}) }; if (mode === 'inherit') delete identityOverrides[identity.id]; else identityOverrides[identity.id] = mode; siteOverrides[location.hostname].identityOverrides = identityOverrides; update({ siteOverrides }, 'site-identity-override'); }, !state.siteOverrides[location.hostname]); })); if (!overrideList.childElementCount) overrideList.append(el('p', { class: 'empty' }, 'No identities match this search.')); };
-    overrideSearch.addEventListener('input', paintOverrides); paintOverrides(); overrideGroup.append(overrideSearch, overrideList); section.append(overrideGroup);
-    section.append(actionRow('Reset this site', 'Removes only this origin’s exclusion and overrides.', () => { const siteOverrides = { ...state.siteOverrides }; delete siteOverrides[location.hostname]; update({ siteOverrides, exclusions: state.exclusions.filter((host) => host !== location.hostname) }, 'site-reset'); announce('Current-site settings reset.'); }, 'Reset site'));
+    overrideSearch.addEventListener('input', paintOverrides); paintOverrides(); overrideGroup.append(overrideSearch, overrideList); return overrideGroup;
+    });
+    section.append(overrideDisclosure);
+    section.append(actionRow('Reset this site', 'Removes only this origin’s exclusion and overrides.', () => { const siteOverrides = { ...state.siteOverrides }; delete siteOverrides[location.hostname]; update({ siteOverrides, exclusions: state.exclusions.filter((host) => host !== location.hostname), sensitiveSiteOptIns: state.sensitiveSiteOptIns.filter(host => host !== EXP.SitePolicy.normalizeHost(location.hostname)) }, 'site-reset'); announce('Current-site settings reset.'); }, 'Reset site'));
     return section;
+  }
+  function lazyDisclosure(label, renderContent) {
+    const disclosure = ExtraPotionsCore.createDisclosure(label);
+    let populated = false;
+    const populate = () => { if (!populated) { populated = true; disclosure.append(renderContent()); } };
+    disclosure.querySelector('summary').addEventListener('click', () => { if (!disclosure.open) populate(); });
+    disclosure.addEventListener('toggle', () => { if (disclosure.open) populate(); });
+    return disclosure;
   }
   function renderTools() { const fragment = document.createDocumentFragment(); fragment.append(renderIdentities(), renderContext()); return fragment; }
   function renderAppearanceMenu() {
@@ -156,7 +175,7 @@ EXP.UI = (() => {
   function renderAdvancedMenu() {
     const fragment = document.createDocumentFragment();
     fragment.append(
-      ExtraPotionsCore.createDisclosure('Language', renderTools()),
+      lazyDisclosure('Language', renderTools),
       ExtraPotionsCore.createDisclosure('Sites', renderSites()),
       renderSettingsTransfer(),
       ExtraPotionsCore.createDisclosure('Page tools',renderAdvanced())
@@ -174,7 +193,7 @@ EXP.UI = (() => {
     const data=ExtraPotionsCore.createDisclosure('Settings transfer');data.open=Boolean(importDraft);
     const transfer = el('div', { class: 'button-grid' }); transfer.append(button('Export settings', () => download('prisma-settings.json', JSON.stringify(EXP.Settings.exportData(), null, 2))));
     const importRow = row('Import PRISMA settings', 'Validation creates a draft. Apply commits atomically; Cancel changes nothing.'); const file = el('input', { type: 'file', accept: 'application/json,.json', 'aria-label': 'Import PRISMA settings' }); file.addEventListener('change', async () => { try { importDraft = EXP.Settings.prepareImport(JSON.parse(await file.files[0].text())); render(); announce('Import validated. Review and apply or cancel.'); } catch (error) { importDraft = null; announce(error.message, 'error'); } }); file.hidden = true; transfer.append(button('Import settings', () => file.click()), file); data.append(transfer);
-    if (importDraft) { const actions = el('div', { class: 'button-grid' }); actions.append(button('Cancel import', () => { importDraft = null; render(); announce('Import cancelled.'); }, 'secondary'), button('Apply import', () => { EXP.Settings.replace(importDraft, 'import'); importDraft = null; render(); announce('Imported settings applied.'); }, 'primary')); data.append(actions); }
+    if (importDraft) { data.append(el('p', {class:'import-preview'}, importDraft.sensitiveSiteOptIns.length ? `Sensitive-site permissions to restore (exact hostnames): ${importDraft.sensitiveSiteOptIns.join(', ')}` : 'No sensitive-site permissions will be restored.')); const actions = el('div', { class: 'button-grid' }); actions.append(button('Cancel import', () => { importDraft = null; render(); announce('Import cancelled.'); }, 'secondary'), button('Apply import', () => { EXP.Settings.replace(importDraft, 'import'); importDraft = null; render(); announce('Imported settings applied.'); }, 'primary')); data.append(actions); }
     return data;
   }
   function renderMenuPreferences() {

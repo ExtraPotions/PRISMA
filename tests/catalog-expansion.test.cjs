@@ -3,7 +3,7 @@ const test=require('node:test'),assert=require('node:assert/strict'),fs=require(
 function load(){const context={EXP:{}};for(const file of ['catalog-data.js','catalog.js','matcher.js'])vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../src',file),'utf8'),context);return context.EXP;}
 const settings={matcherMode:'balanced',disabledIdentities:[],surroundingContext:true,ambiguityProtection:true,includeRomantic:true};
 test('expanded catalog validates and exposes sourced definitions with separate categories',()=>{
- const exp=load();assert.equal(exp.Catalog.status().valid,true,JSON.stringify(exp.Catalog.status()));
+ const exp=load();exp.Catalog.ensureInitialized();assert.equal(exp.Catalog.status().valid,true,JSON.stringify(exp.Catalog.status()));
  assert.equal(exp.Catalog.get('intersex').category,'Sex characteristics');
  assert.match(exp.Catalog.get('two-spirit').definition,/Indigenous/);
  assert.equal(exp.Catalog.get('graygender').sources[0],'https://www.healthline.com/health/different-genders');

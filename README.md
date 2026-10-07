@@ -60,3 +60,7 @@ Screenshots show the current product with sample content.
 ## About
 
 PRISMA is an independent project and is not affiliated with or endorsed by the websites where it is used.
+
+Smaller install files keep installation lightweight without removing features.
+
+Known banking, healthcare, and email sites stay unchanged until you enable that exact site. Starter coverage is not universal; your site exclusions always take priority.

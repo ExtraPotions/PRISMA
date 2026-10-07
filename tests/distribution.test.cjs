@@ -4,9 +4,10 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const root = path.resolve(__dirname, '..');
+const { loadSource } = require('./load-source.cjs');
 const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
-const source = fs.readFileSync(path.join(root, 'prisma.user.js'), 'utf8');
-const bytes = Buffer.byteLength(source, 'utf8');
+const source = loadSource();
+const bytes = fs.statSync(path.join(root, 'prisma.user.js')).size;
 
 test('distribution metadata and privacy boundaries are present', () => {
   assert.match(source, /@name\s+PRISMA/);
@@ -99,4 +100,16 @@ test('PRISMA settings survive manager storage gaps and mirror to fallback storag
   assert.match(settings, /localStorage\.setItem\(storageKey, JSON\.stringify\(value\)\);/u);
   assert.match(settings, /function load\(\) \{\s*const stored = rawRead\('settings'\);[\s\S]*?state = validate\(stored \|\| defaults\);\s*rawWrite\('settings', state\);/u);
   assert.doesNotMatch(settings, /GM_setValue\(key\(name\), value\); return;/u);
+});
+
+ test('installed executable body is compact while metadata stays intact', () => {
+  const install = fs.readFileSync(path.join(root, 'prisma.user.js'), 'utf8');
+  const metadata = fs.readFileSync(path.join(root, 'src', 'metadata.txt'), 'utf8').replace(/\r\n/g, '\n').trimEnd();
+  assert.ok(install.startsWith(metadata + '\n\n'));
+  assert.doesNotMatch(install, /\beval\s*\(|new\s+Function\b|^\/\/ @(?:require|resource)\s|\bGM_getResourceText\b|data:image\//m);
+  assert.ok(Buffer.byteLength(install) < Buffer.byteLength(loadSource()) * 0.8, 'Install must be substantially smaller than readable assembly');
+  const body = install.slice(metadata.length).trim();
+  assert.ok(body.split('\n').length < 10, 'Executable body must be minified regardless of install size');
+  const grants = text => [...text.matchAll(/^\/\/ @grant\s+(.+)$/gm)].map(match => match[1].trim());
+  assert.deepEqual(grants(install), grants(metadata), 'Every declared grant must be preserved');
 });

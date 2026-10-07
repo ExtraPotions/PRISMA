@@ -28,6 +28,7 @@ EXP.Settings = (() => {
     updateNotifications: false,
     siteOverrides: {},
     ignoredPhrases: [],
+    sensitiveSiteOptIns: [],
     exclusions: []
   });
   let state;
@@ -78,8 +79,9 @@ EXP.Settings = (() => {
 	  const value = name === 'uiTheme' ? normalizedUiTheme : candidate[name];
 	  if (values.includes(value)) next[name] = value;
 	}
-    next.disabledIdentities = uniqueStrings(candidate.disabledIdentities).filter((id) => EXP.Catalog?.has(id) ?? /^[a-z][a-z0-9-]+$/.test(id));
+    next.disabledIdentities = uniqueStrings(candidate.disabledIdentities).filter((id) => EXP.Catalog?.hasRaw(id) ?? /^[a-z][a-z0-9-]+$/.test(id));
     next.ignoredPhrases=uniqueStrings(candidate.ignoredPhrases,200).filter(v=>v.trim()&&v.length<=200).map(v=>v.trim());
+    next.sensitiveSiteOptIns = EXP.SitePolicy?.validateOptIns(candidate.sensitiveSiteOptIns) || [];
     next.exclusions = uniqueStrings(candidate.exclusions).filter(isHost);
     if (typeof candidate.shortcut === 'string' && candidate.shortcut.length <= 40) next.shortcut = candidate.shortcut;
     if (candidate.siteOverrides && typeof candidate.siteOverrides === 'object' && !Array.isArray(candidate.siteOverrides)) {
@@ -91,7 +93,7 @@ EXP.Settings = (() => {
         if (typeof value.ambiguityProtection === 'boolean') site.ambiguityProtection = value.ambiguityProtection;
         if (typeof value.surroundingContext === 'boolean') site.surroundingContext = value.surroundingContext;
         if (value.identityOverrides && typeof value.identityOverrides === 'object' && !Array.isArray(value.identityOverrides)) {
-          site.identityOverrides = Object.fromEntries(Object.entries(value.identityOverrides).filter(([id, mode]) => (EXP.Catalog?.has(id) ?? true) && ['on', 'off'].includes(mode)));
+          site.identityOverrides = Object.fromEntries(Object.entries(value.identityOverrides).filter(([id, mode]) => (EXP.Catalog?.hasRaw(id) ?? true) && ['on', 'off'].includes(mode)));
         }
         next.siteOverrides[host] = site;
       }
@@ -113,7 +115,8 @@ EXP.Settings = (() => {
     const site = current.siteOverrides[host] || {};
     const disabled = new Set(current.disabledIdentities);
     for (const [id, mode] of Object.entries(site.identityOverrides || {})) { if (mode === 'off') disabled.add(id); else disabled.delete(id); }
-    return { ...current, ...site, ignoredPhrases:[...current.ignoredPhrases,...(site.ignoredPhrases||[])], disabledIdentities: [...disabled], excluded: current.exclusions.includes(host) };
+    const sensitiveBlocked = Boolean(EXP.SitePolicy?.blocked(host, current));
+    return { ...current, ...site, ignoredPhrases:[...current.ignoredPhrases,...(site.ignoredPhrases||[])], disabledIdentities: [...disabled], sensitiveBlocked, excluded: current.exclusions.includes(host) || sensitiveBlocked };
   }
   function exportData() { return { product: 'prisma', generation: 3, schema: SCHEMA, settings: snapshot() }; }
   function prepareImport(payload) {

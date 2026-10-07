@@ -1,3 +1,9 @@
+## 3.2.7 — 2026-10-07
+
+- The standalone install is smaller while keeping all features bundled.
+- Listed banking, healthcare, and email sites start off with an exact-site opt-in.
+- Language catalog preparation waits until eligible use or deliberate catalog access.
+
 ## 3.2.6 — 2026-10-06
 
 - Keep Status open in System with its reason, recovery action, and recent activity.
