@@ -28,7 +28,7 @@ Open Highlights to explore matches on the current page. Use Highlight Style for 
 
 - **Keep your settings:** saved preferences and existing settings exports remain supported as product naming is simplified.
 
-- **Readable menus:** choose Standard, Large, or Extra Large from Appearance > Menu Preferences. The choice applies to ExtraPotions menus on this site.
+- **Readable menus:** choose Standard (14px text), Large (16px), or Extra Large (18px) from Appearance > Menu Preferences. Captions start at 12px. Labels, dropdowns, toggles, and buttons share consistent spacing and alignment. The choice applies to ExtraPotions menus on this site.
 
 - **Match explanations:** activate a highlight or choose Explain Next Match to see its meaning and sources. Ignore a phrase on the current site directly from its explanation.
 - **Context-aware highlights:** find recognized identity terms while reducing ambiguous matches.
