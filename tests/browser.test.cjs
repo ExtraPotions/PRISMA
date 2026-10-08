@@ -361,7 +361,7 @@ test('reference-led compact dock keeps one expandable section open', async () =>
         headerBadge: root.querySelector('.header-icon .menu-icon')?.getBoundingClientRect().width,
       };
     });
-    assert.equal(initial.width, await page.evaluate(() => ExtraPotionsCore.menuWidth()));
+    assert.equal(initial.width, await page.evaluate(() => parseFloat(getComputedStyle(document.getElementById('exp-prisma-root')).getPropertyValue('--exp-menu-width'))));
     assert.deepEqual(initial, { ...initial, sections: 4, visibleBodies: 0, openRoute: undefined, headerBadge: await page.locator('#exp-prisma-root [data-exp-part="dock"]').evaluate(n=>n.dataset.expMenuLayout==='lean'?40:38) });
     const changed = await page.locator('#exp-prisma-root').evaluate((host) => {
       const root = host.shadowRoot;
