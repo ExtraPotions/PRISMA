@@ -2,7 +2,7 @@
 
 # PRISMA
 
-Current release: **3.2.11**.
+Current release: **3.2.12**.
 
 **Identity language, easier to explore**
 
