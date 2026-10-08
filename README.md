@@ -2,7 +2,7 @@
 
 # PRISMA
 
-Current release: **3.2.12**.
+Current release: **3.2.13**.
 
 **Identity language, easier to explore**
 
@@ -22,7 +22,7 @@ Open Highlights to explore matches on the current page. Use Highlight Style for 
 
 ## What you can do
 
-- **Lean menus:** subtle dividers and compact tabs keep related settings easy to reach. Every control and setting remains available, each product keeps its own colors, and System stays last.
+- **Lean menus:** distinct category icons, tighter typography, and smaller panels keep settings easy to reach. Every control remains available, with Standard, Large, and Extra Large sizes.
 
 - **Simple System menu:** The Status tab shows its reason and recovery action, plus recent activity. Support holds Copy Diagnostics and Report a Problem. Reset asks for a second tap inside the menu.
 
