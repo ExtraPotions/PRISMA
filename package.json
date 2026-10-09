@@ -10,7 +10,7 @@
     "release:check": "node scripts/release-check.cjs",
     "prepare:release:feature": "node scripts/prepare-feature-release.cjs && npm run build",
     "test:installed-browser": "node scripts/test-installed-browser.cjs",
-    "screenshots": "node scripts/build.cjs && node scripts/capture-screenshots.cjs"
+    "screenshots": "node ../exp-core/scripts/capture-screenshots.cjs PRISMA"
   },
   "devDependencies": {
     "playwright": "1.63.0",
