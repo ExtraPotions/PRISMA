@@ -1,6 +1,6 @@
 {
   "name": "extrapotions-prisma",
-  "version": "3.2.13",
+  "version": "3.2.14",
   "private": true,
   "description": "PRISMA local context-aware identity-language highlighter",
   "scripts": {
@@ -9,7 +9,8 @@
     "test": "node scripts/build.cjs && node --test tests/*.test.cjs",
     "release:check": "node scripts/release-check.cjs",
     "prepare:release:feature": "node scripts/prepare-feature-release.cjs && npm run build",
-    "test:installed-browser": "node scripts/test-installed-browser.cjs"
+    "test:installed-browser": "node scripts/test-installed-browser.cjs",
+    "screenshots": "node scripts/build.cjs && node scripts/capture-screenshots.cjs"
   },
   "devDependencies": {
     "playwright": "1.63.0",
