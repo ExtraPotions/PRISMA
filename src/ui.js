@@ -18,6 +18,12 @@ EXP.UI = (() => {
     noticeController?.show({kicker,title,version,text,details,showAction:available,kind:available?'available':kicker==='Update Complete'?'complete':'current'});
   }
   function hideUpdateCard() { noticeController?.hide(); }
+  function markLauncherUpdate(result = {}) {
+    if (!launcher) return;
+    const ready = Boolean(result.available && result.latest);
+    launcher.classList.toggle('update-available', ready);
+    launcher.setAttribute('aria-label', ready ? `Open PRISMA · Update v${result.latest} Available` : 'Open PRISMA');
+  }
   function showUpdateCard(result={},complete=false,previous=''){const version=complete?EXP.VERSION:result.latest;if(!complete&&!EXP.Core.claimNotice('prisma',`available:${version}`))return;const fallback=['A newer PRISMA build is available.','Install the latest userscript for the newest fixes and improvements.'];const details=complete?EXP.ReleaseNotes.current():(Array.isArray(result.details)&&result.details.length?result.details:fallback);showNotice(updateCard,{kicker:complete?'Update Complete':'Update Available',title:complete?'PRISMA Updated':'New PRISMA Version Available',version,text:complete?`Updated from v${previous} to v${EXP.VERSION}.`:`v${result.latest} is ready to install.`,details,available:!complete},true);}
   const button = (label, action, className = 'action') => { const node = el('button', { type: 'button', class: className }, label); node.addEventListener('click', action); return node; };
   const announce = (message, kind = 'status') => { if (live) { live.textContent = message; live.dataset.kind = kind; } if (!toast) return; toast.textContent=message;toast.hidden=false;toast.style.top=`${Math.max(8,(launcher?.getBoundingClientRect().top||60)-48)}px`;clearTimeout(toastTimer);toastTimer=setTimeout(()=>{if(toast)toast.hidden=true;},3000); };
@@ -200,7 +206,7 @@ EXP.UI = (() => {
     const state=EXP.Settings.snapshot();
     const preferences=ExtraPotionsCore.createDisclosure('Menu Preferences',ExtraPotionsCore.createMenuSizeControls());
     preferences.append(switchControl('Auto-close menu', 'Closes after 15 seconds without interaction.', state.menuAutoClose, (menuAutoClose) => update({ menuAutoClose }, 'menu-auto-close')));
-    preferences.append(switchControl('Update notifications', 'Off by default. Opt-in checks request release metadata only.', state.updateNotifications, (updateNotifications) => { update({ updateNotifications }, 'update-notifications'); if (updateNotifications) EXP.Updates.check(true).then((result) => announce(result.available ? `Version ${result.latest} is available.` : result.state === 'failed' ? 'Update check failed quietly.' : 'PRISMA is up to date.')); }));
+    preferences.append(switchControl('Update notifications', 'Checks GitHub for new releases. Never installs automatically.', state.updateNotifications, (updateNotifications) => { update({ updateNotifications }, 'update-notifications'); if (updateNotifications) EXP.Updates.check(true).then((result) => { markLauncherUpdate(result); announce(result.available ? `Version ${result.latest} is available.` : result.state === 'failed' ? 'Update check failed quietly.' : 'PRISMA is up to date.'); }); }));
     return preferences;
   }
   function renderSettings() {
@@ -283,8 +289,12 @@ EXP.UI = (() => {
     updateCard = noticeController.element;
     applyUiTheme('prisma');
     const previous = EXP.Core.consumeVersionChange('prisma', EXP.VERSION, 'exp:v3:prisma:last-version-v2');
-    if (previous) showUpdateCard({}, true, previous);
-    if (EXP.Settings.snapshot().updateNotifications) EXP.Updates.check(false).then(result => { if (host && result.available) showUpdateCard(result); });
+    if (previous && !EXP.ReleaseNotes.isQuietUpgrade(previous)) showUpdateCard({}, true, previous);
+    if (EXP.Settings.snapshot().updateNotifications) EXP.Updates.check(false).then(result => {
+      if (!host) return;
+      markLauncherUpdate(result);
+      if (result.available && !result.quiet) showUpdateCard(result);
+    });
     unsubscribe = EXP.Engine.subscribe(value => {
       engineState = value;
       if (product?.isOpen && panel.querySelector('[data-section="page"][aria-expanded="true"],[data-section="system"][aria-expanded="true"]')) render();

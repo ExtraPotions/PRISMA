@@ -25,7 +25,7 @@ EXP.Settings = (() => {
     uiTheme: 'prisma',
     menuAutoClose: true,
     menuNotifications: true,
-    updateNotifications: false,
+    updateNotifications: true,
     siteOverrides: {},
     ignoredPhrases: [],
     sensitiveSiteOptIns: [],
