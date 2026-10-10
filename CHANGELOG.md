@@ -1,3 +1,8 @@
+## 3.2.18 — 2026-10-10
+
+- Report a Problem fills in the GitHub issue with a short summary and copies the full diagnostics.
+- Removes the menu footer.
+
 ## 3.2.17 — 2026-10-10
 
 - No longer freezes busy pages like Reddit while highlighting.
