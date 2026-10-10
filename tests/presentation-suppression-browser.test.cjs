@@ -61,3 +61,26 @@ test('PRISMA rescans content when WARD lifts its hide state', async (t) => {
   await page.waitForSelector('#warded .exp-prisma-hit', { timeout: 3000 });
   assert.deepEqual(errors, []);
 });
+
+// Core delivers page batches in chunks, so WARD can hide a card after PRISMA highlighted it in an
+// earlier chunk. Hidden matches stay out of the count and the next/previous order until revealed.
+test('matches inside content WARD hides later drop out of the count until it is revealed', async (t) => {
+  const { page, errors } = await fixture(t);
+  const total = () => page.evaluate(() => JSON.parse(document.querySelector('meta[data-exp-suite-state-product="prisma"][data-exp-suite-state-type="prisma.state-changed"]')?.dataset.expSuiteStatePayload || '{}').total);
+  await page.waitForFunction(() => document.querySelector('meta[data-exp-suite-state-product="prisma"]'));
+  const before = await total();
+  assert.equal(await hits(page, '#shown'), 1);
+  const ward = (state) => page.evaluate((state) => {
+    const node = document.querySelector('#shown');
+    if (state) node.setAttribute('data-exp-presentation-state', JSON.stringify({ ward: { visibility: state } }));
+    else node.removeAttribute('data-exp-presentation-state');
+    node.dispatchEvent(new CustomEvent('exp-core:presentation-state', { bubbles: true, composed: true, detail: JSON.stringify({ protocol: 'exp-presentation-state-v1', source: 'ward', channels: state ? ['visibility'] : [], phase: state ? 'visibility' : null, at: Date.now() }) }));
+    node.append(document.createTextNode(' '));
+  }, state);
+  await ward('hide');
+  await page.waitForFunction((before) => JSON.parse(document.querySelector('meta[data-exp-suite-state-product="prisma"][data-exp-suite-state-type="prisma.state-changed"]').dataset.expSuiteStatePayload).total === before - 1, before, { timeout: 3000 });
+  await ward(null);
+  await page.waitForFunction((before) => JSON.parse(document.querySelector('meta[data-exp-suite-state-product="prisma"][data-exp-suite-state-type="prisma.state-changed"]').dataset.expSuiteStatePayload).total === before, before, { timeout: 3000 });
+  assert.equal(await total(), before);
+  assert.deepEqual(errors, []);
+});

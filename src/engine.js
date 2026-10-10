@@ -23,11 +23,13 @@ EXP.Engine = (() => {
   const ignoredSelector = ['script', 'style', 'noscript', 'template', 'textarea', 'input', 'select', 'option', 'button', 'pre', 'code', '[contenteditable]', '[inert]', '[hidden]', '[aria-hidden="true"]', '[data-exp-owned="1"]'].join(',');
   const notify = () => {
     const value = snapshot();
-    ExtraPotionsCore.publishSuiteState('prisma', 'prisma.state-changed', {
-      status: value.status,
-      total: value.total,
-      temporarilyHidden: Boolean(value.temporarilyHidden),
-    });
+    try {
+      ExtraPotionsCore.publishSuiteState('prisma', 'prisma.state-changed', {
+        status: value.status,
+        total: value.total,
+        temporarilyHidden: Boolean(value.temporarilyHidden),
+      });
+    } catch (error) { EXP.Core.safeError(error, 'prisma.state'); }
     for (const listener of listeners) listener(value);
   };
   const isIgnored = (node) => Boolean(
@@ -130,7 +132,9 @@ EXP.Engine = (() => {
     return reason;
   }
   function navigation() { recovery.clearContext(currentHref);currentHref = location.href; routeEpoch += 1; temporarilyHidden = false; rebuild('navigation'); }
-  function ordered() { prune(); return [...matches.values()].sort((left, right) => { if (left.element === right.element) return 0; return left.element.compareDocumentPosition(right.element) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1; }); }
+  // Matches inside content WARD hides stay recorded but leave the count and navigation; Core
+  // delivers page batches in chunks, so the hide can land after the highlight.
+  function ordered() { prune(); return [...matches.values()].filter((record) => !ExtraPotionsCore.isPresentationSuppressed(record.element)).sort((left, right) => { if (left.element === right.element) return 0; return left.element.compareDocumentPosition(right.element) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1; }); }
   function navigate(delta) {
     const list = ordered();
     if (!list.length) return null;
@@ -157,14 +161,14 @@ EXP.Engine = (() => {
     const term = identity.terms.find(item => item.id === record.termId);
     return Object.freeze({ matchId:record.matchId, text:record.element.textContent || '', identity, term, decisionBand:record.decisionBand, ruleIds:[...record.ruleIds], routeEpoch:record.routeEpoch });
   }
-  function summary() { const totals = {}; for (const record of matches.values()) totals[record.identityId] = (totals[record.identityId] || 0) + 1; return totals; }
+  function summary(list = ordered()) { const totals = {}; for (const record of list) totals[record.identityId] = (totals[record.identityId] || 0) + 1; return totals; }
   function snapshot(options = {}) {
-    prune();
+    const list = ordered();
     const state = settings || EXP.Settings.effective();
     return Object.freeze({
       status: EXP.Catalog.status().valid === false ? 'catalog-invalid' : state.safeMode ? 'safe-mode' : state.excluded ? 'excluded' : !state.enabled ? 'disabled' : active ? 'ready' : 'stopped',
-      recovery:recovery.snapshot('scan',currentHref),routeEpoch, total: matches.size, summary: summary(), decisions: { ...decisions }, metrics: { ...metrics }, currentIndex,
-      temporarilyHidden, matches: ordered().map((record) => ({ matchId: record.matchId, identityId: record.identityId, ...(options.includeMatchText ? { text: record.element.textContent || '' } : {}) }))
+      recovery:recovery.snapshot('scan',currentHref),routeEpoch, total: list.length, summary: summary(list), decisions: { ...decisions }, metrics: { ...metrics }, currentIndex,
+      temporarilyHidden, matches: list.map((record) => ({ matchId: record.matchId, identityId: record.identityId, ...(options.includeMatchText ? { text: record.element.textContent || '' } : {}) }))
     });
   }
   function setTemporaryHidden(value) { temporarilyHidden = Boolean(value); EXP.Renderer.setHidden(temporarilyHidden); notify(); }
