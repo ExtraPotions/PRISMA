@@ -368,7 +368,7 @@ test('reference-led compact dock keeps one expandable section open', async () =>
     const initial = await state();
     assert.equal(initial.width, await page.evaluate(() => parseFloat(getComputedStyle(document.getElementById('exp-prisma-root')).getPropertyValue('--exp-menu-width'))));
     // One section is always open while the menu is visible: the first tab when nothing is remembered.
-    assert.deepEqual(initial, { ...initial, sections: 4, tabs: 4, visibleBodies: 1, selectedTab: 'page', openRoute: 'Highlights', headerBadge: await page.locator('#exp-prisma-root [data-exp-part="dock"]').evaluate(n=>n.dataset.expMenuLayout==='lean'?30:38) });
+    assert.deepEqual(initial, { ...initial, sections: 4, tabs: 4, visibleBodies: 1, selectedTab: 'page', openRoute: 'Highlights', /* deliberate Core 3.8.0 change: the lean header logo is 30px (was 40) */ headerBadge: await page.locator('#exp-prisma-root [data-exp-part="dock"]').evaluate(n=>n.dataset.expMenuLayout==='lean'?30:38) });
     await page.locator('#exp-prisma-root').getByRole('tab', { name: 'Highlights', exact: true }).click();
     assert.deepEqual(await state(), initial);
     await page.locator('#exp-prisma-root').evaluate((host) => host.shadowRoot.querySelector('[data-exp-section-tab="appearance"]').click());

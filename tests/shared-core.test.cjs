@@ -123,14 +123,15 @@ test('current changelog uses shared menu geometry at every width', async t => {
       const panel = host.shadowRoot.querySelector('.panel').getBoundingClientRect();
       const card = host.shadowRoot.querySelector('.update-notice');
       const rect = card.getBoundingClientRect();
-      return { panel: { x: panel.x, y: panel.y, right: panel.right, width: panel.width }, card: { x: rect.x, y: rect.y, right: rect.right, bottom: rect.bottom, width: rect.width }, viewport: { width: innerWidth, height: innerHeight }, kind: card.dataset.noticeKind };
+      return { panel: { x: panel.x, y: panel.y, right: panel.right, bottom: panel.bottom, width: panel.width }, card: { x: rect.x, y: rect.y, right: rect.right, bottom: rect.bottom, width: rect.width }, viewport: { width: innerWidth, height: innerHeight }, kind: card.dataset.noticeKind };
     });
     assert.equal(bounds.kind, 'current');
     assert.ok(Math.abs(bounds.panel.width - bounds.card.width) < 2, JSON.stringify(bounds));
-    // Core places the notice above the menu when it fits; a tall menu puts it beside the menu instead, never overlapping it.
-    const above = Math.abs(bounds.panel.x - bounds.card.x) < 2 && bounds.card.bottom <= bounds.panel.y;
-    const beside = bounds.card.right <= bounds.panel.x && bounds.panel.x - bounds.card.right < 24;
-    assert.ok(above || beside, JSON.stringify(bounds));
+    // The fixture menu is too tall for the notice to fit above it, so Core (placeNotice) must put it beside the menu:
+    // on its left, 8px away, with its bottom edge lined up with the menu's bottom (launchers are anchored at the bottom).
+    assert.ok(Math.abs(bounds.panel.x - bounds.card.right - 8) <= 2, JSON.stringify(bounds));
+    assert.ok(Math.abs(bounds.panel.bottom - bounds.card.bottom) <= 2, JSON.stringify(bounds));
+    assert.ok(bounds.card.bottom > bounds.panel.y, 'notice is beside the menu, not above it: ' + JSON.stringify(bounds));
     assert.ok(bounds.card.x >= 0 && bounds.card.y >= 0 && bounds.card.right <= bounds.viewport.width && bounds.card.bottom <= bounds.viewport.height, JSON.stringify(bounds));
     await page.locator('#exp-prisma-root .update-dismiss').click();
   }
