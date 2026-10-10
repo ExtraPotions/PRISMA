@@ -1,3 +1,9 @@
+## 3.2.20 — 2026-10-10
+
+- Updates the shared foundation to exp-core 3.8.1.
+- Rebuilds shared UI, launcher, diagnostics, notices, and coordination from the pinned Core release.
+- Leaves PRISMA product-specific engine behavior unchanged.
+
 ## 3.2.19 — 2026-10-10
 
 - Redesigned menu with tabs and a cleaner look.

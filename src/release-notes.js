@@ -1,7 +1,8 @@
-EXP.VERSION = '3.2.19';
+EXP.VERSION = '3.2.20';
 
 EXP.ReleaseNotes = (() => {
   const notes = Object.freeze({
+    '3.2.20': ['Updates the shared foundation to exp-core 3.8.1.','Rebuilds shared UI, launcher, diagnostics, notices, and coordination from the pinned Core release.','Leaves PRISMA product-specific engine behavior unchanged.'],
     '3.2.19': ["Redesigned menu with tabs and a cleaner look.","Shows a live status line in the menu header."],
     '3.2.18': ["Report a Problem fills in the GitHub issue with a short summary and copies the full diagnostics.","Removes the menu footer."],
     '3.2.17': ["No longer freezes busy pages like Reddit while highlighting.","Leaves out highlights inside content WARD hides."],
