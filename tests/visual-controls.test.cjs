@@ -13,7 +13,7 @@ async function fixture(t, css = '') {
   await page.addInitScript({content:script}); await page.goto('https://fixture.test/page');
   await page.waitForSelector('.exp-prisma-hit');
   await page.locator('#exp-prisma-root .launcher').click();
-  await page.locator('#exp-prisma-root [data-section="appearance"]').click();
+  await page.locator('#exp-prisma-root [data-exp-section-tab="appearance"]').click();
   await page.locator('#exp-prisma-root').getByRole('tab',{name:'Style',exact:true}).click();
   return page;
 }

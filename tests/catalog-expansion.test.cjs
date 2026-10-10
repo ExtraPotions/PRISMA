@@ -40,14 +40,14 @@ test('new neutral entries remain readable in every style and Details exposes sou
  await page.route('https://catalog.test/**',route=>route.fulfill({contentType:'text/html; charset=utf-8',body:'<!doctype html><style>body{background:#17202a;color:#eee}</style><main><p>Graygender identity and asexual orientation.</p></main>'}));
  await page.goto('https://catalog.test/');await page.waitForSelector('.exp-prisma-hit');
  const root=page.locator('#exp-prisma-root');await root.locator('.launcher').click();
- await root.locator('[data-section="appearance"]').click();
+ await root.locator('[data-exp-section-tab="appearance"]').click();
  await root.getByRole('tab',{name:'Style',exact:true}).click();
  for(const style of ['gradient','underline','soft-fill']){
    await page.getByLabel('Style',{exact:true}).selectOption(style);
    const facts=await page.locator('[data-identity="graygender"]').evaluate(node=>({style:node.dataset.style,palette:node.dataset.palette,color:getComputedStyle(node).color,text:getComputedStyle(node).webkitTextFillColor,line:getComputedStyle(node).textDecorationLine}));
    assert.equal(facts.style,'underline');assert.equal(facts.palette,'neutral');assert.equal(facts.color,'rgb(238, 238, 238)');assert.notEqual(facts.text,'rgba(0, 0, 0, 0)');assert.equal(facts.line,'underline');
  }
- await root.locator('[data-section="advanced"]').click();
+ await root.locator('[data-exp-section-tab="advanced"]').click();
  await root.getByRole('tab',{name:'Language',exact:true}).click();
  await page.getByLabel('Search identity catalog').fill('graygender');
  await root.getByRole('button',{name:'Details',exact:true}).click();

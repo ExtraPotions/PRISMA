@@ -10,7 +10,12 @@ test('Core navigation has no unconditional polling loop', () => {
   const navigationBlock = coreSource.match(/function onNavigation[\s\S]*?(?=\n  function registerLauncher)/)?.[0] || '';
   assert.doesNotMatch(navigationBlock, /setInterval\s*\(/);
   const intervals = [...coreSource.matchAll(/setInterval\s*\(/g)];
-  assert.equal(intervals.length, 1);
+  // The menu status label refreshes only while the panel is visible: both intervals are gated on !panel.hidden and cleared on every visibility change.
+  assert.equal(intervals.length, 3);
+  const statusIntervals = [...coreSource.matchAll(/statusTimer\s*=\s*setInterval\s*\(/g)];
+  assert.equal(statusIntervals.length, 2);
+  assert.match(coreSource, /clearInterval\(statusTimer\);statusTimer=0;if\(!panel\.hidden\)\{refreshStatus\(\);statusTimer=setInterval/);
+  assert.match(coreSource, /refreshStatus\(\);if\(!panel\.hidden\)statusTimer=setInterval/);
   assert.match(coreSource, /clearInterval\(timer\)/);
 });
 

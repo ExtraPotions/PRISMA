@@ -88,7 +88,7 @@ test('Escape cancels an import draft before closing the shared menu', async t =>
   const { page } = await fixture(t);
   await page.keyboard.press('Alt+Shift+P');
   assert.equal(await page.locator('#exp-prisma-root .panel').isVisible(), true);
-  await page.locator('#exp-prisma-root [data-section="advanced"]').click();
+  await page.locator('#exp-prisma-root [data-exp-section-tab="advanced"]').click();
   await page.locator('#exp-prisma-root').getByRole('tab',{name:'Transfer',exact:true}).click();
   await page.getByLabel('Import PRISMA settings', { exact: true }).setInputFiles({
     name: 'settings.json', mimeType: 'application/json',
@@ -123,12 +123,15 @@ test('current changelog uses shared menu geometry at every width', async t => {
       const panel = host.shadowRoot.querySelector('.panel').getBoundingClientRect();
       const card = host.shadowRoot.querySelector('.update-notice');
       const rect = card.getBoundingClientRect();
-      return { panel: { x: panel.x, y: panel.y, width: panel.width }, card: { x: rect.x, bottom: rect.bottom, width: rect.width }, kind: card.dataset.noticeKind };
+      return { panel: { x: panel.x, y: panel.y, right: panel.right, width: panel.width }, card: { x: rect.x, y: rect.y, right: rect.right, bottom: rect.bottom, width: rect.width }, viewport: { width: innerWidth, height: innerHeight }, kind: card.dataset.noticeKind };
     });
     assert.equal(bounds.kind, 'current');
     assert.ok(Math.abs(bounds.panel.width - bounds.card.width) < 2, JSON.stringify(bounds));
-    assert.ok(Math.abs(bounds.panel.x - bounds.card.x) < 2, JSON.stringify(bounds));
-    assert.ok(bounds.card.bottom <= bounds.panel.y, JSON.stringify(bounds));
+    // Core places the notice above the menu when it fits; a tall menu puts it beside the menu instead, never overlapping it.
+    const above = Math.abs(bounds.panel.x - bounds.card.x) < 2 && bounds.card.bottom <= bounds.panel.y;
+    const beside = bounds.card.right <= bounds.panel.x && bounds.panel.x - bounds.card.right < 24;
+    assert.ok(above || beside, JSON.stringify(bounds));
+    assert.ok(bounds.card.x >= 0 && bounds.card.y >= 0 && bounds.card.right <= bounds.viewport.width && bounds.card.bottom <= bounds.viewport.height, JSON.stringify(bounds));
     await page.locator('#exp-prisma-root .update-dismiss').click();
   }
 });
