@@ -24,24 +24,30 @@ test('generated PRISMA userscript keeps the same Core-owned interoperability boo
 
 test('PRISMA honors shared presentation suppression before matching text', () => {
   const engine = read('src/engine.js');
-  assert.ok(engine.includes("globalThis.ExtraPotionsCore?.isPresentationSuppressed?.(node?.parentElement)"));
+  assert.ok(engine.includes("ExtraPotionsCore.isPresentationSuppressed(node?.parentElement)"));
+});
+
+test('PRISMA reaches Core through the bundle-local binding, never an unassigned global', () => {
+  for (const file of fs.readdirSync(path.join(root, 'src')).filter((name) => name.endsWith('.js'))) {
+    assert.doesNotMatch(read(`src/${file}`), /globalThis\.ExtraPotionsCore/u, file);
+  }
 });
 
 
 test('PRISMA publishes compact non-identifying suite state', () => {
   const engine = read('src/engine.js');
-  assert.match(engine, /publishSuiteState\?\.\('prisma', 'prisma\.state-changed'/u);
+  assert.match(engine, /ExtraPotionsCore\.publishSuiteState\('prisma', 'prisma\.state-changed'/u);
   assert.match(engine, /status:\s*value\.status/u);
   assert.match(engine, /total:\s*value\.total/u);
   assert.match(engine, /temporarilyHidden/u);
-  const block = engine.slice(engine.indexOf("publishSuiteState?.('prisma'"), engine.indexOf('});', engine.indexOf("publishSuiteState?.('prisma'")) + 3);
+  const block = engine.slice(engine.indexOf("publishSuiteState('prisma'"), engine.indexOf('});', engine.indexOf("publishSuiteState('prisma'")) + 3);
   assert.doesNotMatch(block, /identityId|termId|matches|text|summary/u);
 });
 
 
 test('PRISMA rescans out-of-band WARD presentation changes without duplicating phased batches', () => {
   const source = read('src/main.js');
-  assert.ok(source.includes('observePresentationState?.((event, root) =>'));
+  assert.ok(source.includes('ExtraPotionsCore.observePresentationState((event, root) =>'));
   assert.ok(source.includes("event.source !== 'ward' || event.phase"));
   assert.ok(source.includes('scheduler.schedule(root)'));
   assert.ok(source.includes("{ source: 'ward' }"));

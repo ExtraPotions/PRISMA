@@ -23,7 +23,7 @@ EXP.Engine = (() => {
   const ignoredSelector = ['script', 'style', 'noscript', 'template', 'textarea', 'input', 'select', 'option', 'button', 'pre', 'code', '[contenteditable]', '[inert]', '[hidden]', '[aria-hidden="true"]', '[data-exp-owned="1"]'].join(',');
   const notify = () => {
     const value = snapshot();
-    globalThis.ExtraPotionsCore?.publishSuiteState?.('prisma', 'prisma.state-changed', {
+    ExtraPotionsCore.publishSuiteState('prisma', 'prisma.state-changed', {
       status: value.status,
       total: value.total,
       temporarilyHidden: Boolean(value.temporarilyHidden),
@@ -32,8 +32,15 @@ EXP.Engine = (() => {
   };
   const isIgnored = (node) => Boolean(
     node?.parentElement?.closest(ignoredSelector) ||
-    globalThis.ExtraPotionsCore?.isPresentationSuppressed?.(node?.parentElement)
+    ExtraPotionsCore.isPresentationSuppressed(node?.parentElement)
   );
+  // The walker checks each element's own state once; rejecting it skips the whole subtree,
+  // so text nodes never repeat the ancestor walk that isIgnored does.
+  const isIgnoredElement = (element) => {
+    if (element.matches(ignoredSelector)) return true;
+    if (!element.hasAttribute('data-exp-presentation-state')) return false;
+    return Object.values(ExtraPotionsCore.readPresentationState(element)).some((state) => state?.visibility === 'hide' || state?.visibility === 'collapse');
+  };
   function resetDecisionCounts() { for (const key of Object.keys(decisions)) decisions[key] = 0; }
   function addDecisions(value) { for (const [key, count] of Object.entries(value)) decisions[key] += count; }
   function createRecord(candidate, element) {
@@ -49,8 +56,8 @@ EXP.Engine = (() => {
     matches.set(record.matchId, record);
     return record;
   }
-  function processText(node) {
-    if (!node?.isConnected || !node.nodeValue?.trim() || isIgnored(node)) return;
+  function processText(node, ancestorsChecked = false) {
+    if (!node?.isConnected || !node.nodeValue?.trim() || (!ancestorsChecked && isIgnored(node))) return;
     metrics.nodes += 1;
     const result = EXP.Matcher.find(node.nodeValue, settings);
     addDecisions(result.decisions);
@@ -72,11 +79,15 @@ EXP.Engine = (() => {
       EXP.Renderer.ensureStyle(scan.getRootNode ? scan.getRootNode() : document);
       if (scan.nodeType === Node.TEXT_NODE) processText(scan);
       else {
-        const walker = document.createTreeWalker(scan, NodeFilter.SHOW_TEXT, { acceptNode: (node) => isIgnored(node) || !node.nodeValue?.trim() ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
+        if (scan.nodeType === Node.ELEMENT_NODE && (scan.closest(ignoredSelector) || ExtraPotionsCore.isPresentationSuppressed(scan))) continue;
+        const walker = document.createTreeWalker(scan, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT, { acceptNode: (node) => {
+          if (node.nodeType === Node.ELEMENT_NODE) return isIgnoredElement(node) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_SKIP;
+          return node.nodeValue?.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+        } });
         const nodes = [];
         let node;
         while ((node = walker.nextNode())) nodes.push(node);
-        for (const text of nodes) processText(text);
+        for (const text of nodes) processText(text, true);
       }
     }
   }

@@ -7,7 +7,7 @@ EXP.App = (() => {
     EXP.Settings.load();
     await ready();
     scheduler = EXP.Core.createScheduler((roots) => EXP.Engine.processBatch(roots), { source: 'prisma', characterData: true });
-    presentationCleanup = globalThis.ExtraPotionsCore?.observePresentationState?.((event, root) => {
+    presentationCleanup = ExtraPotionsCore.observePresentationState((event, root) => {
       if (event.source !== 'ward' || event.phase) return;
       scheduler.schedule(root);
     }, { source: 'ward' });
