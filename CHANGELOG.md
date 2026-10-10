@@ -1,3 +1,8 @@
+## 3.2.17 — 2026-10-10
+
+- No longer freezes busy pages like Reddit while highlighting.
+- Leaves out highlights inside content WARD hides.
+
 ## 3.2.16 — 2026-10-09 (quiet)
 
 - Captures README screenshots with the shared ExtraPotions tool.
