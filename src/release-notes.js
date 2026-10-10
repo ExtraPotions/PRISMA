@@ -1,7 +1,8 @@
-EXP.VERSION = '3.2.18';
+EXP.VERSION = '3.2.19';
 
 EXP.ReleaseNotes = (() => {
   const notes = Object.freeze({
+    '3.2.19': ["Redesigned menu with tabs and a cleaner look.","Shows a live status line in the menu header."],
     '3.2.18': ["Report a Problem fills in the GitHub issue with a short summary and copies the full diagnostics.","Removes the menu footer."],
     '3.2.17': ["No longer freezes busy pages like Reddit while highlighting.","Leaves out highlights inside content WARD hides."],
     '3.2.16': ["Captures README screenshots with the shared ExtraPotions tool.","Keeps the README screenshot list in step with the README."],
