@@ -211,7 +211,7 @@ EXP.UI = (() => {
   }
   function renderSettings() {
     healthControl?.dispose();healthControl=ExtraPotionsCore.createProductTimeline('prisma',systemHealthSnapshot,announce,{layout:'grouped'});
-    return ExtraPotionsCore.createProductSystem({id:'prisma',version:EXP.VERSION,timeline:healthControl.element,layout:'grouped',
+    return ExtraPotionsCore.createProductSystem({id:'prisma',version:EXP.VERSION,issueSettings:()=>({current:EXP.Settings.snapshot(),defaults:EXP.Settings.defaults}),timeline:healthControl.element,layout:'grouped',
       diagnostics:EXP.Diagnostics.createDiagnosticsControls(diagnosticReport,announce),
       onReset:()=>{importDraft=null;EXP.Settings.resetAll();render();location.reload();},notify:announce
     });
