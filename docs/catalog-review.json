@@ -1,0 +1,3364 @@
+{
+  "reviewed": "2026-09-26",
+  "scope": "All 135 current catalog entries; documented evidence is distinct from exact palette verification. Wikipedia support grants the requested definition check; other sources require peer-reviewed evidence.",
+  "entries": [
+    {
+      "id": "rainbow",
+      "definition": "A shared symbol of LGBTQ+ communities and pride.",
+      "definitionSources": [
+        "https://gilbertbaker.com/rainbow-flag-color-meanings/"
+      ],
+      "definitionEvidence": "Foundation documents rainbow symbolism; generic community record, not a personal identity.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:Gay_Pride_Flag.svg"
+      ],
+      "flagVariant": "Six-stripe rainbow, Commons 2023 representation",
+      "colors": [
+        "#E50000",
+        "#FF8D00",
+        "#FFEE00",
+        "#028121",
+        "#004CFF",
+        "#770088"
+      ],
+      "flagEvidence": "Exact ordered colors read from Commons inline SVG or explicit RGB table; asset revision 2023-04-12.",
+      "status": "definition-sourced; exact-palette-verified",
+      "limitations": [
+        "Palette represents colors, not complete flag geometry."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Pride_flag"
+        ],
+        "evidence": "Pride flag introduction identifies the rainbow as an LGBTQ community symbol."
+      }
+    },
+    {
+      "id": "progress-pride",
+      "definition": "A rainbow flag with a chevron emphasizing inclusion and continued progress.",
+      "definitionSources": [
+        "https://progress.gay/"
+      ],
+      "definitionEvidence": "Creator explains transgender and marginalized-community chevron.",
+      "flagSources": [
+        "https://progress.gay/"
+      ],
+      "flagVariant": "Daniel Quasar Progress Pride design",
+      "colors": [],
+      "flagEvidence": "Creator documents chevron design and CC0 status; not the intersex-inclusive variant.",
+      "status": "definition-sourced; flag-documented",
+      "limitations": [
+        "Exact palette not verified in this review."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Rainbow_flag_(LGBTQ)"
+        ],
+        "evidence": "Progress subsection defines the inclusion-focused chevron redesign."
+      }
+    },
+    {
+      "id": "philadelphia-pride",
+      "definition": "A rainbow flag adding black and brown stripes to recognize LGBTQ+ people of color.",
+      "definitionSources": [
+        "https://www.phila.gov/press-releases/kenney/city-and-office-of-lgbt-affairs-kick-off-pride-month/"
+      ],
+      "definitionEvidence": "Named definition reviewed in public source.",
+      "flagSources": [
+        "https://www.phila.gov/press-releases/kenney/city-and-office-of-lgbt-affairs-kick-off-pride-month/"
+      ],
+      "flagVariant": "Philadelphia More Color, More Pride (2017)",
+      "colors": [],
+      "flagEvidence": "City launch announcement identifies Tierney collaboration and added stripes.",
+      "status": "definition-sourced; flag-documented",
+      "limitations": [
+        "Exact palette not verified in this review."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Rainbow_flag_(LGBTQ)"
+        ],
+        "evidence": "Philadelphia subsection explains added black/brown stripes recognizing LGBTQ people of color."
+      }
+    },
+    {
+      "id": "gay",
+      "definition": "Attraction to people of the same gender.",
+      "definitionSources": [
+        "https://pflag.org/glossary/"
+      ],
+      "definitionEvidence": "Named definition reviewed in public source.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:New_Gay_Pride_Flag.svg"
+      ],
+      "flagVariant": "gayflagblog seven-stripe gay-men design, Commons SVG",
+      "colors": [
+        "#078D70",
+        "#26CEAA",
+        "#98E8C1",
+        "#FFFFFF",
+        "#7BADE2",
+        "#5049CC",
+        "#3D1A78"
+      ],
+      "flagEvidence": "Exact ordered fills read from current Commons SVG on 2026-09-26. Preserve distinction from general gay/MLM/achillean identities.",
+      "status": "definition-sourced; exact-palette-verified",
+      "limitations": [
+        "Asset-specific palette; not a universal digital flag standard or complete flag drawing.",
+        "Gay is not an exact synonym for achillean or MLM; those include men attracted to multiple genders. A gay-men-specific flag cannot be assumed for every alias."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Gay"
+        ],
+        "evidence": "Lead defines same-sex attraction and notes frequent male-specific usage."
+      }
+    },
+    {
+      "id": "lesbian",
+      "definition": "A woman attracted to women; some nonbinary people also use this identity.",
+      "definitionSources": [
+        "https://pflag.org/glossary/"
+      ],
+      "definitionEvidence": "Named definition reviewed in public source.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:Lesbian_pride_flag_2018.svg"
+      ],
+      "flagVariant": "Emily Gwen seven-stripe orange-pink lesbian design, Commons SVG",
+      "colors": [
+        "#D52D00",
+        "#EF7627",
+        "#FF9A56",
+        "#FFFFFF",
+        "#D162A4",
+        "#B55690",
+        "#A30262"
+      ],
+      "flagEvidence": "Exact fills and y coordinates read from current 669-byte Commons SVG on 2026-09-26.",
+      "status": "definition-sourced; exact-palette-verified",
+      "limitations": [
+        "Asset-specific palette; not a universal digital flag standard or complete flag drawing.",
+        "WLW is broader than lesbian and can include bisexual women; the flag does not describe every alias."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Lesbian"
+        ],
+        "evidence": "Lead defines female homosexuality; self-identification section expressly includes nonbinary lesbians."
+      }
+    },
+    {
+      "id": "bisexual",
+      "definition": "Attraction to more than one gender.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-types-of-sexuality"
+      ],
+      "definitionEvidence": "Existing concise definition checked against the named entry in the public glossary.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:Bisexual_Pride_Flag.svg"
+      ],
+      "flagVariant": "Michael Page three-band bisexual design, 2:1:2 proportions",
+      "colors": [
+        "#D60270",
+        "#D60270",
+        "#9B4F96",
+        "#0038A8",
+        "#0038A8"
+      ],
+      "flagEvidence": "Exact ordered colors read from Commons inline SVG or explicit RGB table; asset revision current file inspected 2026-09-26.",
+      "status": "definition-sourced; exact-palette-verified",
+      "limitations": [
+        "Palette represents colors, not complete flag geometry."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Bisexuality"
+        ],
+        "evidence": "Lead defines attraction to more than one gender."
+      }
+    },
+    {
+      "id": "pansexual",
+      "definition": "Attraction regardless of gender.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-types-of-sexuality"
+      ],
+      "definitionEvidence": "Existing concise definition checked against the named entry in the public glossary.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:Pansexuality_Pride_Flag.svg"
+      ],
+      "flagVariant": "Three-stripe pansexual flag",
+      "colors": [
+        "#FF218C",
+        "#FFD800",
+        "#21B1FF"
+      ],
+      "flagEvidence": "Exact ordered colors read from Commons inline SVG or explicit RGB table; asset revision 2023-03-20.",
+      "status": "definition-sourced; exact-palette-verified",
+      "limitations": [
+        "Palette represents colors, not complete flag geometry."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Pansexuality"
+        ],
+        "evidence": "Lead includes attraction regardless of gender."
+      }
+    },
+    {
+      "id": "transgender",
+      "definition": "A gender that differs from the sex assigned at birth.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-genders"
+      ],
+      "definitionEvidence": "Existing concise definition checked against the named entry in the public glossary.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:Transgender_Pride_flag.svg"
+      ],
+      "flagVariant": "Monica Helms five-stripe design",
+      "colors": [
+        "#5BCEFA",
+        "#F5A9B8",
+        "#FFFFFF",
+        "#F5A9B8",
+        "#5BCEFA"
+      ],
+      "flagEvidence": "Exact ordered colors read from Commons inline SVG or explicit RGB table; asset revision 2023-06-26.",
+      "status": "definition-sourced; exact-palette-verified",
+      "limitations": [
+        "Palette represents colors, not complete flag geometry."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Transgender"
+        ],
+        "evidence": "Lead distinguishes gender identity from assigned sex."
+      }
+    },
+    {
+      "id": "transmasculine",
+      "definition": "A transgender identity aligned with masculinity; not necessarily a man.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-genders"
+      ],
+      "definitionEvidence": "Existing concise definition checked against the named entry in the public glossary.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:Transmasculine_Pride_Flag.png"
+      ],
+      "flagVariant": "Throwawayacountyay alternative transmasculine design (2019)",
+      "colors": [],
+      "flagEvidence": "Commons source identifies an alternative design; does not validate inherited seven-stripe palette.",
+      "status": "definition-sourced; flag-documented",
+      "limitations": [
+        "Exact palette not verified in this review."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Transgender"
+        ],
+        "evidence": "Related terminology defines masculine-aligned binary or nonbinary people assigned female at birth."
+      }
+    },
+    {
+      "id": "transfeminine",
+      "definition": "A transgender identity aligned with femininity; not necessarily a woman.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-genders"
+      ],
+      "definitionEvidence": "Existing concise definition checked against the named entry in the public glossary.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:Transfeminine_Pride_Flag.png"
+      ],
+      "flagVariant": "Transfeminine alternative flag represented on Commons",
+      "colors": [],
+      "flagEvidence": "Public flag file documented; inherited palette not matched.",
+      "status": "definition-sourced; flag-documented",
+      "limitations": [
+        "Exact palette not verified in this review."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Transgender"
+        ],
+        "evidence": "Related terminology defines feminine-aligned binary or nonbinary people assigned male at birth."
+      }
+    },
+    {
+      "id": "non-binary",
+      "definition": "A gender identity outside an exclusively man-or-woman binary.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-genders"
+      ],
+      "definitionEvidence": "Existing concise definition checked against the named entry in the public glossary.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:Nonbinary_flag.svg"
+      ],
+      "flagVariant": "Kye Rowan four-stripe design",
+      "colors": [
+        "#FFF433",
+        "#FFFFFF",
+        "#9B59D0",
+        "#2D2D2D"
+      ],
+      "flagEvidence": "Exact ordered colors read from Commons inline SVG or explicit RGB table; asset revision 2023-05-25.",
+      "status": "definition-sourced; exact-palette-verified",
+      "limitations": [
+        "Palette represents colors, not complete flag geometry."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Non-binary"
+        ],
+        "evidence": "Lead defines genders beyond the male/female binary."
+      }
+    },
+    {
+      "id": "asexual",
+      "definition": "Little or no sexual attraction.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-types-of-sexuality"
+      ],
+      "definitionEvidence": "Existing concise definition checked against the named entry in the public glossary.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:Asexual_Pride_Flag.svg"
+      ],
+      "flagVariant": "Four-stripe asexual flag",
+      "colors": [
+        "#000000",
+        "#A3A3A3",
+        "#FFFFFF",
+        "#800080"
+      ],
+      "flagEvidence": "Exact ordered colors read from Commons inline SVG or explicit RGB table; asset revision 2018-04-06.",
+      "status": "definition-sourced; exact-palette-verified",
+      "limitations": [
+        "Palette represents colors, not complete flag geometry."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Asexuality"
+        ],
+        "evidence": "Lead and infobox describe absent or minimal sexual attraction."
+      }
+    },
+    {
+      "id": "aromantic",
+      "definition": "Little or no romantic attraction.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-types-of-sexuality"
+      ],
+      "definitionEvidence": "Existing concise definition checked against the named entry in the public glossary.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:Aromantic_Pride_Flag.svg"
+      ],
+      "flagVariant": "Cameron Whimsy five-stripe design",
+      "colors": [
+        "#3DA542",
+        "#A7D379",
+        "#FFFFFF",
+        "#A9A9A9",
+        "#000000"
+      ],
+      "flagEvidence": "Exact ordered colors read from Commons inline SVG or explicit RGB table; asset revision 2018-04-07.",
+      "status": "definition-sourced; exact-palette-verified",
+      "limitations": [
+        "Palette represents colors, not complete flag geometry."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Aromanticism"
+        ],
+        "evidence": "Lead defines absent or minimal romantic attraction."
+      }
+    },
+    {
+      "id": "aroace",
+      "definition": "Both aromantic and asexual.",
+      "definitionSources": [
+        "https://www.aromanticism.org/en/basic-terms"
+      ],
+      "definitionEvidence": "Named definition reviewed in public source.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:Aroace_flag.svg"
+      ],
+      "flagVariant": "Aroaesflags sunset aroace design, Rummskartoffel Commons SVG",
+      "colors": [
+        "#E28C00",
+        "#ECCD00",
+        "#FFFFFF",
+        "#62AEDC",
+        "#203856"
+      ],
+      "flagEvidence": "Exact rect fill colors and heights read from Commons SVG; header identifies aroaesflags original post and public-domain design.",
+      "status": "definition-sourced; exact-palette-verified",
+      "limitations": [
+        "Asset-specific palette; not a universal digital flag standard or complete flag drawing."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Aromanticism"
+        ],
+        "evidence": "Definition section explicitly identifies people both aromantic and asexual as aroace."
+      }
+    },
+    {
+      "id": "oriented-aroace",
+      "definition": "An aroace identity that also recognizes significant attraction that is neither romantic nor sexual.",
+      "definitionSources": [
+        "https://www.aromanticism.org/en/identity-terms"
+      ],
+      "definitionEvidence": "AUREA defines additional attraction alongside aroace; originally specified no romantic or sexual attraction.",
+      "flagSources": [
+        "https://biaroace.tumblr.com/post/175789820577/oriented-aroace-flag-this-flag-is-meant-to"
+      ],
+      "flagVariant": "Biaroace four-stripe oriented aroace flag (2018)",
+      "colors": [
+        "#161639",
+        "#7EA2B6",
+        "#FFFFFF",
+        "#36AEA0"
+      ],
+      "flagEvidence": "Creator explicitly supplies ordered hex colors on July 11, 2018.",
+      "status": "definition-sourced; exact-palette-verified",
+      "limitations": [
+        "Palette represents colors, not complete flag geometry."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://de.wikipedia.org/wiki/Aromantik"
+        ],
+        "evidence": "German article defines oriented/angled aroace through significant tertiary attraction; separately defines tertiary attraction as neither romantic nor sexual. It groups the two labels, so do not infer they are always interchangeable."
+      }
+    },
+    {
+      "id": "acespec",
+      "definition": "An umbrella for asexual identities and experiences of limited or conditional sexual attraction.",
+      "definitionSources": [
+        "https://www.aromanticism.org/en/basic-terms"
+      ],
+      "definitionEvidence": "Named definition reviewed in public source.",
+      "flagSources": [
+        "https://lgbtqia.fandom.com/wiki/Asexual_spectrum"
+      ],
+      "flagVariant": "Asexual-spectrum flag variants",
+      "colors": [],
+      "flagEvidence": "Public spectrum article documents an ace-spectrum flag and use of asexual flag; inherited five-stripe palette not matched.",
+      "status": "definition-sourced; flag-documented",
+      "limitations": [
+        "Exact palette not verified in this review."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Asexuality"
+        ],
+        "evidence": "Lead describes ace spectrum as the broader range of asexual subidentities."
+      }
+    },
+    {
+      "id": "arospec",
+      "definition": "An umbrella for aromantic identities and experiences of limited, conditional, or otherwise nonnormative romantic attraction.",
+      "definitionSources": [
+        "https://www.aromanticism.org/en/basic-terms"
+      ],
+      "definitionEvidence": "Named definition reviewed in public source.",
+      "flagSources": [
+        "https://lgbtqia.fandom.com/wiki/Pride_flag_gallery"
+      ],
+      "flagVariant": "Variant attribution unresolved",
+      "colors": [],
+      "flagEvidence": "Named flag is catalogued in the public flag gallery; this establishes documentation, not exact colors.",
+      "status": "definition-sourced; flag-documented",
+      "limitations": [
+        "Exact palette not verified in this review.",
+        "Gallery confirms a flag exists, but the inherited palette has not been matched to an identified variant."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Aromanticism"
+        ],
+        "evidence": "Spectrum section explains umbrella and conditional, weak or rare attraction."
+      }
+    },
+    {
+      "id": "demisexual",
+      "definition": "Sexual attraction that develops after an emotional bond.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-types-of-sexuality"
+      ],
+      "definitionEvidence": "Existing concise definition checked against the named entry in the public glossary.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:Demisexual_Pride_Flag.svg"
+      ],
+      "flagVariant": "Black triangle with white-purple-gray bands",
+      "colors": [
+        "#000000",
+        "#FFFFFF",
+        "#6E0070",
+        "#D2D2D2"
+      ],
+      "flagEvidence": "Exact ordered colors read from Commons inline SVG or explicit RGB table; asset revision 2018-04-07.",
+      "status": "definition-sourced; exact-palette-verified",
+      "limitations": [
+        "Palette represents colors, not complete flag geometry.",
+        "Demi alone can describe other partial identities or orientations, not only demisexual."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Demisexuality"
+        ],
+        "evidence": "Definition section requires an emotional bond before sexual attraction."
+      }
+    },
+    {
+      "id": "demiromantic",
+      "definition": "Romantic attraction only after an emotional connection forms.",
+      "definitionSources": [
+        "https://www.aromanticism.org/en/identity-terms"
+      ],
+      "definitionEvidence": "Named definition reviewed in public source.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:Demiromantic_Pride_Flag.svg"
+      ],
+      "flagVariant": "Demiromantic black triangle with white-green-gray bands",
+      "colors": [
+        "#000000",
+        "#FFFFFF",
+        "#338A37",
+        "#D2D2D2"
+      ],
+      "flagEvidence": "Exact path fill colors and coordinates read from Commons SVG, revision 2025-06-12.",
+      "status": "definition-sourced; exact-palette-verified",
+      "limitations": [
+        "Asset-specific palette; not a universal digital flag standard or complete flag drawing."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Aromanticism"
+        ],
+        "evidence": "Spectrum section defines attraction after a close nonromantic bond."
+      }
+    },
+    {
+      "id": "graysexual",
+      "definition": "Sexual attraction experienced rarely or under limited circumstances.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-types-of-sexuality"
+      ],
+      "definitionEvidence": "Existing concise definition checked against the named entry in the public glossary.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:Grey_asexuality_flag.svg"
+      ],
+      "flagVariant": "Five-stripe gray-asexual flag, Commons SVG",
+      "colors": [
+        "#740195",
+        "#B2B2B2",
+        "#FFFFFF",
+        "#B2B2B2",
+        "#740195"
+      ],
+      "flagEvidence": "Exact path fill colors and y coordinates read from current Commons SVG on 2026-09-26.",
+      "status": "definition-sourced; exact-palette-verified",
+      "limitations": [
+        "Asset-specific palette; not a universal digital flag standard or complete flag drawing."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Gray_asexuality"
+        ],
+        "evidence": "Definitions describe infrequent, weak or conditional sexual attraction."
+      }
+    },
+    {
+      "id": "grayromantic",
+      "definition": "Romantic attraction that is rare, weak, unreliable, or arises under limited circumstances.",
+      "definitionSources": [
+        "https://www.aromanticism.org/en/identity-terms"
+      ],
+      "definitionEvidence": "Named definition reviewed in public source.",
+      "flagSources": [
+        "https://pride-color-schemes.tumblr.com/post/146792327505/gray-aromantic"
+      ],
+      "flagVariant": "Gray-aromantic flag variants",
+      "colors": [],
+      "flagEvidence": "Public flag archive linked by AUREA inspected; exact values not verified.",
+      "status": "definition-sourced; flag-documented",
+      "limitations": [
+        "Exact palette not verified in this review."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Aromanticism"
+        ],
+        "evidence": "Spectrum section defines weak, infrequent or conditional romantic attraction."
+      }
+    },
+    {
+      "id": "cupiosexual",
+      "definition": "Desiring a sexual relationship despite experiencing little or no sexual attraction.",
+      "definitionSources": [
+        "https://lgbtqia.fandom.com/wiki/Asexual_spectrum"
+      ],
+      "definitionEvidence": "Named definition reviewed in public source.",
+      "flagSources": [
+        "https://lgbtqia.fandom.com/wiki/Asexual_spectrum"
+      ],
+      "flagVariant": "Cupiosexual flag documented in spectrum article",
+      "colors": [],
+      "flagEvidence": "Article displays named cupiosexual flag; legacy pink-white-gray-black palette not corroborated.",
+      "status": "definition-sourced; flag-documented",
+      "limitations": [
+        "Exact palette not verified in this review."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Asexuality"
+        ],
+        "evidence": "Microlabels section defines relationship desire without sexual attraction."
+      }
+    },
+    {
+      "id": "fraysexual",
+      "definition": "Attraction to less familiar people that can fade as familiarity or emotional connection grows.",
+      "definitionSources": [
+        "https://lgbtqia.fandom.com/wiki/Asexual_spectrum"
+      ],
+      "definitionEvidence": "Named definition reviewed in public source.",
+      "flagSources": [
+        "https://lgbtqia.fandom.com/wiki/Asexual_spectrum"
+      ],
+      "flagVariant": "Fraysexual flag documented in spectrum article",
+      "colors": [],
+      "flagEvidence": "Article displays named fraysexual flag; exact values not verified.",
+      "status": "definition-sourced; flag-documented",
+      "limitations": [
+        "Exact palette not verified in this review."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Gray_asexuality"
+        ],
+        "evidence": "Fraysexuality section describes attraction to unfamiliar people that can disappear with emotional connection."
+      }
+    },
+    {
+      "id": "lithromantic",
+      "definition": "Romantic attraction without wanting reciprocation, or attraction that fades when reciprocated.",
+      "definitionSources": [
+        "https://www.aromanticism.org/en/identity-terms"
+      ],
+      "definitionEvidence": "Named definition reviewed in public source.",
+      "flagSources": [
+        "https://pride-color-schemes.tumblr.com/post/146499968709/akoi-akoine-lith-akoin"
+      ],
+      "flagVariant": "Akoi/lith flag variants",
+      "colors": [],
+      "flagEvidence": "Public flag archive linked by AUREA inspected; exact values not verified.",
+      "status": "definition-sourced; flag-documented",
+      "limitations": [
+        "Exact palette not verified in this review."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Aromanticism"
+        ],
+        "evidence": "Spectrum section describes unwanted reciprocation or attraction disappearing when reciprocated."
+      }
+    },
+    {
+      "id": "genderfluid",
+      "definition": "A gender experience that changes over time.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-genders"
+      ],
+      "definitionEvidence": "Existing concise definition checked against the named entry in the public glossary.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:Genderfluidity_Pride-Flag.svg"
+      ],
+      "flagVariant": "JJ Poole five-stripe design, Commons representation",
+      "colors": [
+        "#FF75A2",
+        "#F5F5F5",
+        "#BE18D6",
+        "#2C2C2C",
+        "#333EBD"
+      ],
+      "flagEvidence": "Exact ordered colors read from Commons inline SVG or explicit RGB table; asset revision 2021-09-02.",
+      "status": "definition-sourced; exact-palette-verified",
+      "limitations": [
+        "Palette represents colors, not complete flag geometry."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Non-binary"
+        ],
+        "evidence": "Genderfluid section defines gender changing with time and situation."
+      }
+    },
+    {
+      "id": "genderflux",
+      "definition": "A gender experience whose intensity changes over time.",
+      "definitionSources": [
+        "https://lgbtqia.fandom.com/wiki/Genderflux"
+      ],
+      "definitionEvidence": "Named definition reviewed in public source.",
+      "flagSources": [
+        "https://lgbtqia.fandom.com/wiki/Genderflux"
+      ],
+      "flagVariant": "Six-stripe genderflux flag",
+      "colors": [],
+      "flagEvidence": "Article identifies six stripe colors and uncertain creator.",
+      "status": "definition-sourced; flag-documented",
+      "limitations": [
+        "Exact palette not verified in this review."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/List_of_gender_identities"
+        ],
+        "evidence": "Identity name appears in the Wikipedia list; this supports listed status only, not the full catalog definition or scientific approval."
+      }
+    },
+    {
+      "id": "genderqueer",
+      "definition": "A gender identity outside exclusively binary categories.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-genders"
+      ],
+      "definitionEvidence": "Existing concise definition checked against the named entry in the public glossary.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:Genderqueer_Pride_Flag.svg"
+      ],
+      "flagVariant": "Marilyn Roxie three-stripe design",
+      "colors": [
+        "#B57EDC",
+        "#FFFFFF",
+        "#4A8123"
+      ],
+      "flagEvidence": "Exact ordered colors read from Commons inline SVG or explicit RGB table; asset revision 2018-04-07.",
+      "status": "definition-sourced; exact-palette-verified",
+      "limitations": [
+        "Palette represents colors, not complete flag geometry."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Non-binary"
+        ],
+        "evidence": "Terms section describes identities beyond binary categories."
+      }
+    },
+    {
+      "id": "agender",
+      "definition": "Having no gender, or not identifying with gender.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-genders"
+      ],
+      "definitionEvidence": "Existing concise definition checked against the named entry in the public glossary.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:Agender_pride_flag.svg"
+      ],
+      "flagVariant": "Salem Fontana seven-stripe design",
+      "colors": [
+        "#000000",
+        "#B9B9B9",
+        "#FFFFFF",
+        "#B8F483",
+        "#FFFFFF",
+        "#B9B9B9",
+        "#000000"
+      ],
+      "flagEvidence": "Exact ordered colors read from Commons inline SVG or explicit RGB table; asset revision 2023-06-18.",
+      "status": "definition-sourced; exact-palette-verified",
+      "limitations": [
+        "Palette represents colors, not complete flag geometry."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Non-binary"
+        ],
+        "evidence": "Agender section describes lacking gender."
+      }
+    },
+    {
+      "id": "bigender",
+      "definition": "Experiencing two genders, together or at different times.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-genders"
+      ],
+      "definitionEvidence": "Existing concise definition checked against the named entry in the public glossary.",
+      "flagSources": [
+        "https://lgbtqia.fandom.com/wiki/Pride_flag_gallery"
+      ],
+      "flagVariant": "Variant attribution unresolved",
+      "colors": [],
+      "flagEvidence": "Named flag is catalogued in the public flag gallery; this establishes documentation, not exact colors.",
+      "status": "definition-sourced; flag-documented",
+      "limitations": [
+        "Exact palette not verified in this review.",
+        "Gallery confirms a flag exists, but the inherited palette has not been matched to an identified variant."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Non-binary"
+        ],
+        "evidence": "Bigender section defines two genders, simultaneous or changing."
+      }
+    },
+    {
+      "id": "pangender",
+      "definition": "Experiencing many or all genders within one’s cultural and personal experience.",
+      "definitionSources": [
+        "https://lgbtqia.fandom.com/wiki/Pangender"
+      ],
+      "definitionEvidence": "Named definition reviewed in public source.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:Pangender_flag.svg"
+      ],
+      "flagVariant": "Seven-stripe pangender flag, Nikki Commons SVG (2020)",
+      "colors": [
+        "#FFF798",
+        "#FEDDCC",
+        "#FFEBFC",
+        "#FFFFFF",
+        "#FFEBFC",
+        "#FEDDCC",
+        "#FFF798"
+      ],
+      "flagEvidence": "Exact fills and stripe dimensions read from 291-byte Commons SVG, revision 2020-06-29.",
+      "status": "definition-sourced; exact-palette-verified",
+      "limitations": [
+        "Asset-specific palette; not a universal digital flag standard or complete flag drawing."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Non-binary"
+        ],
+        "evidence": "Pangender section defines multiple or all genders."
+      }
+    },
+    {
+      "id": "demigirl",
+      "definition": "A partial connection to being a girl or woman.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-genders"
+      ],
+      "definitionEvidence": "Existing concise definition checked against the named entry in the public glossary.",
+      "flagSources": [
+        "https://lgbtqia.fandom.com/wiki/Pride_flag_gallery"
+      ],
+      "flagVariant": "Variant attribution unresolved",
+      "colors": [],
+      "flagEvidence": "Named flag is catalogued in the public flag gallery; this establishes documentation, not exact colors.",
+      "status": "definition-sourced; flag-documented",
+      "limitations": [
+        "Exact palette not verified in this review.",
+        "Gallery confirms a flag exists, but the inherited palette has not been matched to an identified variant."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Non-binary"
+        ],
+        "evidence": "Demigender section explicitly defines partial female identification."
+      }
+    },
+    {
+      "id": "demiboy",
+      "definition": "A partial connection to being a boy or man.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-genders"
+      ],
+      "definitionEvidence": "Existing concise definition checked against the named entry in the public glossary.",
+      "flagSources": [
+        "https://lgbtqia.fandom.com/wiki/Pride_flag_gallery"
+      ],
+      "flagVariant": "Variant attribution unresolved",
+      "colors": [],
+      "flagEvidence": "Named flag is catalogued in the public flag gallery; this establishes documentation, not exact colors.",
+      "status": "definition-sourced; flag-documented",
+      "limitations": [
+        "Exact palette not verified in this review.",
+        "Gallery confirms a flag exists, but the inherited palette has not been matched to an identified variant."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Non-binary"
+        ],
+        "evidence": "Demigender section explicitly defines partial male identification."
+      }
+    },
+    {
+      "id": "demigender",
+      "definition": "A partial connection to a gender.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-genders"
+      ],
+      "definitionEvidence": "Existing concise definition checked against the named entry in the public glossary.",
+      "flagSources": [
+        "https://lgbtqia.fandom.com/wiki/Pride_flag_gallery"
+      ],
+      "flagVariant": "Variant attribution unresolved",
+      "colors": [],
+      "flagEvidence": "Named flag is catalogued in the public flag gallery; this establishes documentation, not exact colors.",
+      "status": "definition-sourced; flag-documented",
+      "limitations": [
+        "Exact palette not verified in this review.",
+        "Gallery confirms a flag exists, but the inherited palette has not been matched to an identified variant."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Non-binary"
+        ],
+        "evidence": "Demigender section defines partial gender connection."
+      }
+    },
+    {
+      "id": "maverique",
+      "definition": "An autonomous gender outside male, female, and neutral categories; not an absence of gender.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-genders"
+      ],
+      "definitionEvidence": "Existing concise definition checked against the named entry in the public glossary.",
+      "flagSources": [
+        "https://nonbinary.wiki/wiki/Maverique"
+      ],
+      "flagVariant": "Yellow-white-orange maverique flag",
+      "colors": [],
+      "flagEvidence": "Community encyclopedia describes colors and Vesper H. identity origin.",
+      "status": "definition-sourced; flag-documented",
+      "limitations": [
+        "Exact palette not verified in this review."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/List_of_gender_identities"
+        ],
+        "evidence": "Identity name appears in the Wikipedia list; this supports listed status only, not the full catalog definition or scientific approval."
+      }
+    },
+    {
+      "id": "androgyne",
+      "definition": "A gender involving masculine and feminine aspects, or a position between them; appearance need not reflect identity.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-genders"
+      ],
+      "definitionEvidence": "Existing concise definition checked against the named entry in the public glossary.",
+      "flagSources": [
+        "https://lgbtqia.fandom.com/wiki/Pride_flag_gallery"
+      ],
+      "flagVariant": "Variant attribution unresolved",
+      "colors": [],
+      "flagEvidence": "Named flag is catalogued in the public flag gallery; this establishes documentation, not exact colors.",
+      "status": "definition-sourced; flag-documented",
+      "limitations": [
+        "Exact palette not verified in this review.",
+        "Androgynous may describe expression rather than androgyne identity.",
+        "Gallery confirms a flag exists, but the inherited palette has not been matched to an identified variant."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Androgyny"
+        ],
+        "evidence": "Gender identity section defines masculine and feminine aspects separately from appearance."
+      }
+    },
+    {
+      "id": "neutrois",
+      "definition": "A neutral gender identity; some people use the term for an absence of gender.",
+      "definitionSources": [
+        "https://nonbinary.wiki/wiki/Neutrois"
+      ],
+      "definitionEvidence": "Named definition reviewed in public source.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:Neutrois_flag.svg"
+      ],
+      "flagVariant": "White-green-black vertical neutrois tricolor, Commons SVG",
+      "colors": [
+        "#FFFFFF",
+        "#008000",
+        "#000000"
+      ],
+      "flagEvidence": "SVG uses white, CSS green, and default black in three vertical bands; current 740-byte representation inspected 2026-09-26. This differs in orientation from the commonly documented horizontal tricolor.",
+      "status": "definition-sourced; exact-palette-verified",
+      "limitations": [
+        "Asset-specific palette; not a universal digital flag standard or complete flag drawing."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Neutrois"
+        ],
+        "evidence": "Redirected Agender article, Neutrois section: neutral gender with overlap in agender usage."
+      }
+    },
+    {
+      "id": "trigender",
+      "definition": "Experiencing three genders, together or at different times.",
+      "definitionSources": [
+        "https://en.wikipedia.org/wiki/Non-binary"
+      ],
+      "definitionEvidence": "Article explicitly describes shifting among any three genders.",
+      "flagSources": [
+        "https://lgbtqia.fandom.com/wiki/Pride_flag_gallery"
+      ],
+      "flagVariant": "Variant attribution unresolved",
+      "colors": [],
+      "flagEvidence": "Named flag is catalogued in the public flag gallery; this establishes documentation, not exact colors.",
+      "status": "definition-sourced; flag-documented",
+      "limitations": [
+        "Exact palette not verified in this review.",
+        "Gallery confirms a flag exists, but the inherited palette has not been matched to an identified variant."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Non-binary",
+          "https://es.wikipedia.org/wiki/Identidad_de_g%C3%A9nero"
+        ],
+        "evidence": "Bigender section defines shifting among three genders; simultaneous usage supported by Spanish gender-identity article."
+      }
+    },
+    {
+      "id": "polygender",
+      "definition": "Experiencing multiple genders.",
+      "definitionSources": [
+        "https://nonbinary.wiki/wiki/Polygender"
+      ],
+      "definitionEvidence": "Named definition reviewed in public source.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:Polygender_Pride_Flag.png"
+      ],
+      "flagVariant": "Five-stripe polygender flag, Commons raster representation (2020)",
+      "colors": [
+        "#000000",
+        "#939393",
+        "#ED94C4",
+        "#F5ED81",
+        "#64BBE6"
+      ],
+      "flagEvidence": "Exact pixels sampled at the center of each of five stripes from original 1153x692 PNG (12348 bytes), Commons revision 2020-07-11. These values identify that asset, not an official creator specification.",
+      "status": "definition-sourced; exact-palette-verified",
+      "limitations": [
+        "Asset-specific palette; not a universal digital flag standard or complete flag drawing."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Non-binary"
+        ],
+        "evidence": "Polygender section defines multiple genders."
+      }
+    },
+    {
+      "id": "genderfae",
+      "definition": "Gender fluidity that excludes masculine and man-aligned genders.",
+      "definitionSources": [
+        "https://lgbtqia.fandom.com/wiki/Genderfluid"
+      ],
+      "definitionEvidence": "Named definition reviewed in public source.",
+      "flagSources": [
+        "https://lgbtqia.fandom.com/wiki/Genderfluid"
+      ],
+      "flagVariant": "genderfae seven-stripe flag",
+      "colors": [],
+      "flagEvidence": "Public article describes this named flag; exact values not verified.",
+      "status": "definition-sourced; flag-documented",
+      "limitations": [
+        "Exact palette not verified in this review."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/List_of_gender_identities"
+        ],
+        "evidence": "Identity name appears in the Wikipedia list; this supports listed status only, not the full catalog definition or scientific approval."
+      }
+    },
+    {
+      "id": "genderfaun",
+      "definition": "Gender fluidity that excludes feminine and woman-aligned genders.",
+      "definitionSources": [
+        "https://lgbtqia.fandom.com/wiki/Genderfluid"
+      ],
+      "definitionEvidence": "Named definition reviewed in public source.",
+      "flagSources": [
+        "https://lgbtqia.fandom.com/wiki/Genderfluid"
+      ],
+      "flagVariant": "genderfaun seven-stripe flag",
+      "colors": [],
+      "flagEvidence": "Public article describes this named flag; exact values not verified.",
+      "status": "definition-sourced; flag-documented",
+      "limitations": [
+        "Exact palette not verified in this review."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/List_of_gender_identities"
+        ],
+        "evidence": "Identity name appears in the Wikipedia list; this supports listed status only, not the full catalog definition or scientific approval."
+      }
+    },
+    {
+      "id": "genderflor",
+      "definition": "Gender fluidity that excludes masculine, feminine, man-aligned, and woman-aligned genders.",
+      "definitionSources": [
+        "https://lgbtqia.fandom.com/wiki/Genderfluid"
+      ],
+      "definitionEvidence": "Named definition reviewed in public source.",
+      "flagSources": [
+        "https://lgbtqia.fandom.com/wiki/Genderfluid"
+      ],
+      "flagVariant": "genderflor seven-stripe flag",
+      "colors": [],
+      "flagEvidence": "Public article describes this named flag; exact values not verified.",
+      "status": "definition-sourced; flag-documented",
+      "limitations": [
+        "Exact palette not verified in this review."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "unverified",
+        "sources": [],
+        "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+      }
+    },
+    {
+      "id": "omnisexual",
+      "definition": "Attraction to all genders, with gender playing a role in attraction.",
+      "definitionSources": [
+        "https://lgbtqia.fandom.com/wiki/Omnisexual"
+      ],
+      "definitionEvidence": "Named definition reviewed in public source.",
+      "flagSources": [
+        "https://lgbtqia.fandom.com/wiki/Omnisexual"
+      ],
+      "flagVariant": "Pastelmemer five-stripe omnisexual flag (2015)",
+      "colors": [
+        "#FC9CCC",
+        "#FC54BC",
+        "#240444",
+        "#645CFC",
+        "#8CA4FC"
+      ],
+      "flagEvidence": "Article explicitly supplies top-to-bottom hex values, citing Pride Color Schemes.",
+      "status": "definition-sourced; exact-palette-verified",
+      "limitations": [
+        "Palette represents colors, not complete flag geometry."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Omnisexuality"
+        ],
+        "evidence": "Lead defines attraction to all genders with gender contributing to attraction."
+      }
+    },
+    {
+      "id": "polysexual",
+      "definition": "Sexual attraction to multiple, but not necessarily all, genders.",
+      "definitionSources": [
+        "https://en.wikipedia.org/wiki/Polysexuality"
+      ],
+      "definitionEvidence": "Named definition reviewed in public source.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:Polysexuality_Pride_Flag.svg"
+      ],
+      "flagVariant": "Samlin three-stripe design, Commons representation",
+      "colors": [
+        "#F61CB9",
+        "#07D569",
+        "#1C92F6"
+      ],
+      "flagEvidence": "Exact ordered colors read from Commons inline SVG or explicit RGB table; asset revision 2018-04-06.",
+      "status": "definition-sourced; exact-palette-verified",
+      "limitations": [
+        "Palette represents colors, not complete flag geometry."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Polysexuality"
+        ],
+        "evidence": "Lead defines attraction to multiple genders, not necessarily all."
+      }
+    },
+    {
+      "id": "polyamorous",
+      "definition": "Having or being open to multiple loving relationships with everyone’s knowledge and consent.",
+      "definitionSources": [
+        "https://en.wikipedia.org/wiki/Polyamory"
+      ],
+      "definitionEvidence": "Named definition reviewed in public source.",
+      "flagSources": [
+        "https://www.uwgb.edu/getmedia/16a85f6c-62ef-40f8-9c3e-df956da1adb5/What-in-the-Pride-Flag-does-this-mean.pdf"
+      ],
+      "flagVariant": "Blue-magenta-purple tricolor with white chevron and yellow heart",
+      "colors": [],
+      "flagEvidence": "University guide documents design geometry; current three-color catalog omits emblem and chevron colors.",
+      "status": "definition-sourced; flag-documented",
+      "limitations": [
+        "Exact palette not verified in this review."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Polyamory"
+        ],
+        "evidence": "Lead defines multiple intimate relationships with informed consent of partners."
+      }
+    },
+    {
+      "id": "heteroflexible",
+      "definition": "Primarily attracted to a different gender, with occasional same-gender attraction.",
+      "definitionSources": [
+        "https://pflag.org/glossary/"
+      ],
+      "definitionEvidence": "Named definition reviewed in public source.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:Heteroflexible_flag.svg"
+      ],
+      "flagVariant": "Heteroflexible flag represented on Commons",
+      "colors": [],
+      "flagEvidence": "Commons indexed description identifies flag; exact asset palette not inspected.",
+      "status": "definition-sourced; flag-documented",
+      "limitations": [
+        "Exact palette not verified in this review."
+      ],
+      "reviewedAt": "2026-09-26",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Heteroflexibility"
+        ],
+        "evidence": "Lead defines predominantly heterosexual attraction with limited same-sex attraction."
+      }
+    },
+    {
+      "id": "homoflexible",
+      "definition": "Mostly attracted to the same gender, with occasional attraction to other genders.",
+      "definitionSources": [
+        "https://bi.org/en/glossary/homoflexible/"
+      ],
+      "definitionEvidence": "Bi.org places the term under the bi umbrella and describes predominantly homosexual attraction.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:Homoflexible_flag.svg"
+      ],
+      "flagVariant": "Nikki Commons vector, March 2021",
+      "colors": [
+        "#EE3124",
+        "#F57F29",
+        "#FFF000",
+        "#58B947",
+        "#0054A6",
+        "#9F248F",
+        "#000000",
+        "#333333",
+        "#666666",
+        "#999999",
+        "#BBBBBB",
+        "#FFFFFF"
+      ],
+      "flagEvidence": "Original SVG read: outer rainbow stripes top to bottom, followed by the central inset grayscale segments top to bottom. Geometry is essential.",
+      "status": "palette-verified",
+      "limitations": "Colors are ordered by region, not twelve full-width stripes. This is a documented variant, not a universal standard.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Heteroflexibility"
+        ],
+        "evidence": "Lead explicitly defines homoflexibility as the corresponding pattern where homosexual attraction predominates."
+      }
+    },
+    {
+      "id": "bicurious",
+      "definition": "Exploring possible attraction to people of the same and different genders.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-types-of-sexuality"
+      ],
+      "definitionEvidence": "Healthline describes curiosity and exploration of bisexual attraction.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:Bicurious_flag.svg"
+      ],
+      "flagVariant": "Nikki Commons vector, restored August 2022",
+      "colors": [
+        "#F347F8",
+        "#F787FA",
+        "#FDC6FD",
+        "#FFFFFF",
+        "#C6E0FD",
+        "#76B5FA",
+        "#2D8CF7"
+      ],
+      "flagEvidence": "Original SVG read; top-to-bottom order verified. White and outer bands have different heights.",
+      "status": "palette-verified",
+      "limitations": "The 2022 reverted recoloring differs; selected the current original-vector revision.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Bi-curious"
+        ],
+        "evidence": "Article describes curiosity or experimentation concerning attraction outside the person’s usual orientation."
+      }
+    },
+    {
+      "id": "abrosexual",
+      "definition": "Experiencing changes in sexual orientation or attraction over time.",
+      "definitionSources": [
+        "https://www.dictionary.com/culture/gender-sexuality/abrosexual"
+      ],
+      "definitionEvidence": "Dictionary.com describes a fluid sexual orientation.",
+      "flagSources": [
+        "https://www.colorado.edu/culturalconnections/media/1023"
+      ],
+      "flagVariant": "Five-stripe green-to-pink flag",
+      "colors": [],
+      "flagEvidence": "University of Colorado pride guide documents the green, light green, white, pink and dark pink flag.",
+      "status": "flag-documented-palette-unverified",
+      "limitations": "Flag documented; origin dates conflict between secondary sources. Exact palette not read.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Plurisexuality"
+        ],
+        "evidence": "Lead explicitly defines abrosexual through changes in attractions over time."
+      }
+    },
+    {
+      "id": "multisexual",
+      "definition": "An umbrella term for attraction to more than one gender.",
+      "definitionSources": [
+        "https://en.wikipedia.org/wiki/Plurisexuality"
+      ],
+      "definitionEvidence": "The article lists multisexuality as an umbrella synonym for plurisexuality.",
+      "flagSources": [
+        "https://www.fugues.com/wp-content/uploads/2025/08/Fugues_EXPO-2025.pdf"
+      ],
+      "flagVariant": "2019 multisexual proposal",
+      "colors": [],
+      "flagEvidence": "Public flag exhibition document identifies a multisexual flag with purple, white, blue and pink.",
+      "status": "flag-documented-palette-unverified",
+      "limitations": "Secondary flag documentation only. Existing pink-white-blue palette has not been matched to this variant.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Plurisexuality"
+        ],
+        "evidence": "Lead names multisexuality as an alternative term for attraction to multiple sexes or genders."
+      }
+    },
+    {
+      "id": "intersex",
+      "definition": "Born with variations in sex characteristics outside typical male or female patterns.",
+      "definitionSources": [
+        "https://interactadvocates.org/faq/"
+      ],
+      "definitionEvidence": "InterACT distinguishes sex characteristics from gender identity.",
+      "flagSources": [
+        "https://morgancarpenter.com/intersex-flag/"
+      ],
+      "flagVariant": "Morgan Carpenter 2013",
+      "colors": [
+        "#FFD800",
+        "#7902AA"
+      ],
+      "flagEvidence": "Creator specifies yellow background and purple ring, with exact HTML colors.",
+      "status": "palette-verified",
+      "limitations": "Color order is background then emblem; must preserve the ring. Intersex is not itself a gender.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Intersex"
+        ],
+        "evidence": "Lead describes congenital variations in sex characteristics outside typical male/female definitions."
+      }
+    },
+    {
+      "id": "two-spirit",
+      "definition": "A culturally specific term used by some Indigenous people for identities or roles involving gender, sexuality and spirituality.",
+      "definitionSources": [
+        "https://www.onwa.ca/love",
+        "https://cejce.berkeley.edu/centers/gender-equity-resource-center/resources/educational-resources/terms-and-definitions"
+      ],
+      "definitionEvidence": "Indigenous organization and university sources emphasize Indigenous cultural context.",
+      "flagSources": [
+        "https://www.wpi.edu/offices/diversity/student-resources/lgbtqiap-student-support/lgbtqiap-flags-terms"
+      ],
+      "flagVariant": "Rainbow field with two feathers and circle",
+      "colors": [],
+      "flagEvidence": "WPI documents the two-feather variant.",
+      "status": "flag-documented-palette-unverified",
+      "limitations": "Not a universal Indigenous identity or universal flag. Community and nation-specific self-identification matter; colors not verified.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Two-spirit"
+        ],
+        "evidence": "Article describes an Indigenous North American umbrella term for culturally specific gender and social identities."
+      }
+    },
+    {
+      "id": "sapphic",
+      "definition": "A term for women and some woman-aligned nonbinary people attracted to women.",
+      "definitionSources": [
+        "https://pflag.org/glossary/"
+      ],
+      "definitionEvidence": "PFLAG includes lesbian, bi, pan and other women-loving-women experiences.",
+      "flagSources": [
+        "https://www.lgbtqnation.com/2022/06/sapphic-pride-flag/"
+      ],
+      "flagVariant": "Simplified violet emblem, 2017",
+      "colors": [],
+      "flagEvidence": "Public article distinguishes the simplified violet from the earlier two-flower design.",
+      "status": "flag-documented-palette-unverified",
+      "limitations": "Violet emblem cannot be represented by a flat stripe palette.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Sapphism"
+        ],
+        "evidence": "Terminology section includes women/woman-aligned individuals attracted to women and some nonbinary people."
+      }
+    },
+    {
+      "id": "queerplatonic",
+      "definition": "A committed nonromantic relationship understood by its participants as going beyond usual friendship expectations.",
+      "definitionSources": [
+        "https://www.aromanticism.org/en/faq"
+      ],
+      "definitionEvidence": "AUREA defines the relationship through participants and cultural context; it need not be asexual.",
+      "flagSources": [
+        "https://prideflag.fandom.com/wiki/Queerplatonic_Flag"
+      ],
+      "flagVariant": "Yellow, pink, white, gray and black variant",
+      "colors": [],
+      "flagEvidence": "Indexed wiki documents the five-stripe queerplatonic flag.",
+      "status": "flag-documented-palette-unverified",
+      "limitations": "Flag source is a community wiki; original creator and exact palette not verified.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Queerplatonic_relationship"
+        ],
+        "evidence": "Article defines nonromantic close relationships and commitment beyond conventional friendship."
+      }
+    },
+    {
+      "id": "butch",
+      "definition": "A masculine-of-center identity or expression, often associated with lesbian and queer communities.",
+      "definitionSources": [
+        "https://pflag.org/glossary/"
+      ],
+      "definitionEvidence": "PFLAG describes masculine presentation and identity without restricting it to one orientation.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:Butch_Flag.png"
+      ],
+      "flagVariant": "Butchspace / Mod Jim orange flag, 2017",
+      "colors": [],
+      "flagEvidence": "Commons documents the orange variant and links its creator post.",
+      "status": "flag-documented-palette-unverified",
+      "limitations": "Existing orange-white-purple catalog palette is not verified against this variant.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Butch_and_femme"
+        ],
+        "evidence": "Article defines butch through masculine identity/expression in lesbian and queer contexts."
+      }
+    },
+    {
+      "id": "femme",
+      "definition": "A feminine-of-center identity or expression used in LGBTQ communities.",
+      "definitionSources": [
+        "https://pflag.org/glossary/"
+      ],
+      "definitionEvidence": "PFLAG describes feminine presentation and identity.",
+      "flagSources": [
+        "https://prideflag.fandom.com/wiki/Femme_Flag"
+      ],
+      "flagVariant": "Noodle purple flag",
+      "colors": [],
+      "flagEvidence": "Indexed flag wiki attributes the purple flag to Tumblr user noodle.",
+      "status": "flag-documented-palette-unverified",
+      "limitations": "Secondary attribution only; exact palette not verified.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Butch_and_femme"
+        ],
+        "evidence": "Article defines femme through feminine identity/expression in lesbian and queer contexts."
+      }
+    },
+    {
+      "id": "bear",
+      "definition": "A community identity within gay and queer culture associated with a broad, often bearded or hairy masculine appearance.",
+      "definitionSources": [
+        "https://marybaldwin.edu/news/2024/06/03/hidden-history-how-mbu-helped-invent-an-international-gay-pride-flag/"
+      ],
+      "definitionEvidence": "University history discusses the bear community and Craig Byrnes’s design.",
+      "flagSources": [
+        "https://marybaldwin.edu/news/2024/06/03/hidden-history-how-mbu-helped-invent-an-international-gay-pride-flag/",
+        "https://en.wikipedia.org/wiki/Bear_flag_(gay_culture)"
+      ],
+      "flagVariant": "International Bear Brotherhood flag, 1995",
+      "colors": [],
+      "flagEvidence": "University interview documents Byrnes; flag description includes seven stripes and a paw emblem.",
+      "status": "flag-documented-palette-unverified",
+      "limitations": "Body type is not an eligibility rule. Paw emblem and stripe geometry must be preserved; exact values not read.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Bear_(gay_culture)"
+        ],
+        "evidence": "Article describes the gay subculture and masculine/hairy appearance associated with bear identification."
+      }
+    },
+    {
+      "id": "leather",
+      "definition": "A community term for the leather subculture, with roots in LGBTQ history.",
+      "definitionSources": [
+        "https://www.schwulesmuseum.de/bibliothek-archiv/object-of-the-month-may-leather-pride-flag/?lang=en"
+      ],
+      "definitionEvidence": "Public museum article provides historical context for the community flag.",
+      "flagSources": [
+        "https://www.schwulesmuseum.de/bibliothek-archiv/object-of-the-month-may-leather-pride-flag/?lang=en"
+      ],
+      "flagVariant": "Tony DeBlase Leather Pride flag, 1989",
+      "colors": [],
+      "flagEvidence": "Museum documents nine alternating blue/black stripes with central white stripe and red heart. Creator did not prescribe color meanings.",
+      "status": "flag-documented-palette-unverified",
+      "limitations": "Museum page is public history, not an adult membership source. Do not invent meanings or reduce heart geometry to stripes.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Leather_subculture"
+        ],
+        "evidence": "Article describes leather-related subculture and LGBTQ historical context."
+      }
+    },
+    {
+      "id": "straight-ally",
+      "definition": "A heterosexual person who actively supports LGBTQ equality.",
+      "definitionSources": [
+        "https://pflag.org/glossary/",
+        "https://www.bloomingtonpridemn.org/pride-flags"
+      ],
+      "definitionEvidence": "PFLAG describes allyship as ongoing action; local Pride organization documents straight allies.",
+      "flagSources": [
+        "https://www.bloomingtonpridemn.org/pride-flags"
+      ],
+      "flagVariant": "Black-and-white stripes with rainbow A",
+      "colors": [],
+      "flagEvidence": "Pride organization documents this ally flag.",
+      "status": "flag-documented-palette-unverified",
+      "limitations": "Ally alone is broader than straight ally; current LGBTQ ally alias should not imply heterosexuality. Origin uncertain; palette unread.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Straight_ally"
+        ],
+        "evidence": "Article defines heterosexual/cisgender support for LGBTQ civil rights and equality."
+      }
+    },
+    {
+      "id": "questioning",
+      "definition": "Exploring or reconsidering sexual orientation, gender identity or expression.",
+      "definitionSources": [
+        "https://pflag.org/glossary/"
+      ],
+      "definitionEvidence": "PFLAG defines questioning as an exploration process.",
+      "flagSources": [
+        "https://lgbtqidentity.wikitide.org/wiki/Questioning"
+      ],
+      "flagVariant": "ProtegoEtServio 2016 proposal",
+      "colors": [],
+      "flagEvidence": "Indexed wiki distinguishes a general questioning proposal from gender-only questioning flags.",
+      "status": "flag-documented-palette-unverified",
+      "limitations": "Multiple proposals; no universal flag. Palette and creator post unverified.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Questioning_(sexuality_and_gender)"
+        ],
+        "evidence": "Lead defines exploring sexual orientation, sexual identity or gender while unsure about applying labels."
+      }
+    },
+    {
+      "id": "altersex",
+      "definition": "A term for having or wanting sex characteristics outside typical binary patterns, distinguished from being born intersex.",
+      "definitionSources": [
+        "https://gender.fandom.com/wiki/Altersex"
+      ],
+      "definitionEvidence": "Indexed community wiki explains the term’s history and distinction from intersex.",
+      "flagSources": [
+        "https://lgbtqia.fandom.com/fr/wiki/Altersexe"
+      ],
+      "flagVariant": "Pastelmemer proposal, May 2017",
+      "colors": [],
+      "flagEvidence": "French community wiki documents mint, blue, white, purple and pink flag.",
+      "status": "flag-documented-palette-unverified",
+      "limitations": "Community terminology with variable use; secondary flag attribution only. Do not classify intersex people as altersex automatically.",
+      "verification": {
+        "status": "unverified",
+        "sources": [],
+        "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+      }
+    },
+    {
+      "id": "androx",
+      "definition": "A gender described as between male and androgyne.",
+      "definitionSources": [
+        "https://queer-dictionary.crd.co/"
+      ],
+      "definitionEvidence": "Public community glossary explicitly defines Androx between male/man/boy and androgyne.",
+      "flagSources": [
+        "https://queer-dictionary.crd.co/"
+      ],
+      "flagVariant": "Community glossary illustration",
+      "colors": [],
+      "flagEvidence": "An image is placed directly under the Androx entry.",
+      "status": "flag-documented-palette-unverified",
+      "limitations": "Creator, date, acceptance and exact palette of this illustration unverified.",
+      "verification": {
+        "status": "unverified",
+        "sources": [],
+        "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+      }
+    },
+    {
+      "id": "anesigender",
+      "definition": "Experiencing one gender while feeling comfortable identifying with another.",
+      "definitionSources": [
+        "https://www.accessmhct.com/wp-content/uploads/sites/4/2021/09/ACCESS-MH-Peds-Gender-Talk-1022021-copy.pdf"
+      ],
+      "definitionEvidence": "Public pediatric education presentation includes this definition.",
+      "flagSources": [],
+      "flagVariant": "",
+      "colors": [],
+      "flagEvidence": "No stable public creator or educational flag documentation located.",
+      "status": "flag-unresolved",
+      "limitations": "Definition supported by educational glossary; flag unresolved.",
+      "verification": {
+        "status": "unverified",
+        "sources": [],
+        "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+      }
+    },
+    {
+      "id": "apagender",
+      "definition": "Having little concern about which gender others perceive or assign to you.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-genders",
+        "https://queer-dictionary.crd.co/"
+      ],
+      "definitionEvidence": "Healthline gender-apathetic entry and community glossary describe indifference to gender categorization.",
+      "flagSources": [
+        "https://queer-dictionary.crd.co/"
+      ],
+      "flagVariant": "Community glossary illustration",
+      "colors": [],
+      "flagEvidence": "Image directly accompanies the Apagender/Gender Apathetic entry.",
+      "status": "flag-documented-palette-unverified",
+      "limitations": "Do not equate indifference to labels with necessarily having no gender. Original flag provenance and exact colors unverified.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Agender#Gender_apathetic"
+        ],
+        "evidence": "Section explicitly equates apagender with gender apathy and explains indifference to gender identity and gendered comments."
+      }
+    },
+    {
+      "id": "boy",
+      "definition": "A male child or young person; also used as a gender self-description.",
+      "definitionSources": [
+        "https://en.wikipedia.org/wiki/Boy",
+        "https://unece.org/sites/default/files/2025-04/B-1%20Sex%20and%20gender%20identity%20indicators%20in%20surveys%20%28Italy%29_1.pdf"
+      ],
+      "definitionEvidence": "Dictionary-style article gives ordinary usage; UNECE survey presentation records Boy in gender self-descriptions.",
+      "flagSources": [],
+      "flagVariant": "",
+      "colors": [],
+      "flagEvidence": "No distinct broadly documented Boy flag verified.",
+      "status": "flag-unresolved",
+      "limitations": "Do not substitute demiboy, neoboy or cis-man flags.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Boy"
+        ],
+        "evidence": "Article supports the ordinary male-child/young-person meaning; it does not establish a distinct pride identity or flag."
+      }
+    },
+    {
+      "id": "boyflux",
+      "definition": "A gender whose masculine intensity varies over time.",
+      "definitionSources": [
+        "https://lgbtqia.fandom.com/wiki/Genderflux"
+      ],
+      "definitionEvidence": "Indexed community article describes variation from fully masculine through partial connection to genderlessness.",
+      "flagSources": [
+        "https://nonbinary.wiki/wiki/Category:Boyflux_pride_flags"
+      ],
+      "flagVariant": "Multiple Boyflux proposals",
+      "colors": [],
+      "flagEvidence": "Public media category lists several named Boyflux flag variants.",
+      "status": "flag-documented-palette-unverified",
+      "limitations": "Variant not selected; cannot treat the category as one canonical design or palette.",
+      "verification": {
+        "status": "unverified",
+        "sources": [],
+        "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+      }
+    },
+    {
+      "id": "cisgender",
+      "definition": "Having a gender identity that aligns with sex assigned at birth.",
+      "definitionSources": [
+        "https://pflag.org/glossary/"
+      ],
+      "definitionEvidence": "PFLAG provides the alignment definition.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:Cisgender_flag.svg"
+      ],
+      "flagVariant": "Commons cisgender flag proposal",
+      "colors": [],
+      "flagEvidence": "Commons labels the file a cisgender flag, vector by Nikki in 2021.",
+      "status": "flag-documented-palette-unverified",
+      "limitations": "Proposed design, not evidence of universal use; original design authorship and exact palette unresolved.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Cisgender"
+        ],
+        "evidence": "Definition describes alignment between assigned sex/gender and personal gender identity."
+      }
+    },
+    {
+      "id": "cis-man",
+      "definition": "A man whose gender identity aligns with being assigned male at birth.",
+      "definitionSources": [
+        "https://pflag.org/glossary/"
+      ],
+      "definitionEvidence": "Compositional application of PFLAG’s cisgender definition.",
+      "flagSources": [
+        "https://queerdom.fandom.com/wiki/Cisgender"
+      ],
+      "flagVariant": "Community wiki cis-man illustration",
+      "colors": [],
+      "flagEvidence": "Indexed page labels a cis-man flag image.",
+      "status": "flag-documented-palette-unverified",
+      "limitations": "Flag authorship and adoption unclear; palette not verified. Cisgender does not imply heterosexual.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Cisgender"
+        ],
+        "evidence": "Definitions section explicitly explains cis male and analogous cis man as male assigned male at birth."
+      }
+    },
+    {
+      "id": "cis-woman",
+      "definition": "A woman whose gender identity aligns with being assigned female at birth.",
+      "definitionSources": [
+        "https://pflag.org/glossary/"
+      ],
+      "definitionEvidence": "Compositional application of PFLAG’s cisgender definition.",
+      "flagSources": [
+        "https://queerdom.fandom.com/wiki/Cisgender"
+      ],
+      "flagVariant": "Community wiki cis-woman illustration",
+      "colors": [],
+      "flagEvidence": "Indexed page labels a cis-woman flag image.",
+      "status": "flag-documented-palette-unverified",
+      "limitations": "Flag authorship and adoption unclear; palette not verified. Cisgender does not imply heterosexual.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Cisgender"
+        ],
+        "evidence": "Definitions section explicitly explains cis female and analogous cis woman as female assigned female at birth."
+      }
+    },
+    {
+      "id": "crossdresser",
+      "definition": "Someone who wears clothing culturally associated with another gender.",
+      "definitionSources": [
+        "https://en.wikipedia.org/wiki/Cross-dressing"
+      ],
+      "definitionEvidence": "Article distinguishes clothing expression from gender identity and orientation.",
+      "flagSources": [
+        "https://csd-deutschland.de/wp-content/uploads/2022/03/WEB_Queerstimme-CSD-DE-2022.pdf"
+      ],
+      "flagVariant": "Iryna Neklyudova / Magdeburg crossdresser flag, 2022",
+      "colors": [],
+      "flagEvidence": "Public CSD publication documents the crossdresser flag designed for Magdeburg remembrance.",
+      "status": "flag-documented-palette-unverified",
+      "limitations": "A specific documented variant; diagonal geometry and exact colors unverified. Transvestite is a dated, sometimes offensive alias unless self-chosen.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Cross-dressing"
+        ],
+        "evidence": "Article defines wearing clothing associated with another gender and distinguishes expression from orientation."
+      }
+    },
+    {
+      "id": "demifemme",
+      "definition": "A partial connection to femininity alongside a gender experience outside the binary.",
+      "definitionSources": [
+        "https://youthrex.com/wp-content/uploads/2020/10/Queer-Glossary_2022_Digital.pdf"
+      ],
+      "definitionEvidence": "YouthREX educational glossary explicitly lists Demigirl/Demifemme and explains the less gendered wording.",
+      "flagSources": [],
+      "flagVariant": "",
+      "colors": [],
+      "flagEvidence": "Demigirl flag pages mention demifemme, but a distinct demifemme flag was not independently verified.",
+      "status": "flag-unresolved",
+      "limitations": "Do not silently substitute a demigirl flag. Sources vary on demifeminine equivalence; alias needs review.",
+      "verification": {
+        "status": "unverified",
+        "sources": [],
+        "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+      }
+    },
+    {
+      "id": "demimasc",
+      "definition": "A partial connection to masculinity alongside a gender experience outside the binary.",
+      "definitionSources": [
+        "https://gender.fandom.com/wiki/Demimasc",
+        "https://youthrex.com/wp-content/uploads/2020/10/Queer-Glossary_2022_Digital.pdf"
+      ],
+      "definitionEvidence": "Community wiki distinguishes this broad identity from demimasculine; educational glossary groups Demiboy/Demimasc.",
+      "flagSources": [
+        "https://gender.fandom.com/wiki/Demimasc"
+      ],
+      "flagVariant": "Shewhowalkswiththee proposal, October 2018",
+      "colors": [],
+      "flagEvidence": "Wiki documents the flag and links the original creator post, which was unavailable in this browser.",
+      "status": "flag-documented-palette-unverified",
+      "limitations": "Remove or qualify demimasculine alias: this source explicitly says it is distinct. Palette not verified.",
+      "verification": {
+        "status": "unverified",
+        "sources": [],
+        "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+      }
+    },
+    {
+      "id": "eunuch",
+      "definition": "A historical and sometimes self-chosen term associated with castration and, in some cultures, a distinct social or gender role.",
+      "definitionSources": [
+        "https://en.wikipedia.org/wiki/Eunuch"
+      ],
+      "definitionEvidence": "Public historical article documents varying roles and contexts.",
+      "flagSources": [],
+      "flagVariant": "",
+      "colors": [],
+      "flagEvidence": "A Sekhet-specific proposal was located, but not verified as a generic eunuch flag.",
+      "status": "flag-unresolved",
+      "limitations": "Do not treat all eunuchs as one gender or substitute a culture-specific Sekhet flag for everyone.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Eunuch"
+        ],
+        "evidence": "Historical article supports castration-associated use and varied social roles, including non-castrated historical categories."
+      }
+    },
+    {
+      "id": "faunetflux",
+      "definition": "A fluid and fluctuating gender experience that can include feminine genders without being fully a woman.",
+      "definitionSources": [
+        "https://gender.fandom.com/f/t/Faunetflux"
+      ],
+      "definitionEvidence": "Indexed wiki topic describes genderfaunet with changes in intensity.",
+      "flagSources": [
+        "https://gender.fandom.com/f/t/Faunetflux"
+      ],
+      "flagVariant": "Community wiki Faunetflux illustration",
+      "colors": [],
+      "flagEvidence": "Indexed topic identifies a corresponding flag, but the main article returned a fetch error.",
+      "status": "flag-documented-palette-unverified",
+      "limitations": "Definition and flag evidence are limited to indexed community content; creator/date/palette require verification.",
+      "verification": {
+        "status": "unverified",
+        "sources": [],
+        "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+      }
+    },
+    {
+      "id": "female",
+      "definition": "A term used for sex classification and, in some contexts, a person’s gender self-description.",
+      "definitionSources": [
+        "https://interactadvocates.org/faq/"
+      ],
+      "definitionEvidence": "InterACT explains distinctions among male/female sex characteristics and male/female gender language.",
+      "flagSources": [],
+      "flagVariant": "",
+      "colors": [],
+      "flagEvidence": "No general Female flag independently verified.",
+      "status": "flag-unresolved",
+      "limitations": "Context matters. Do not infer sex traits, birth assignment or cisgender status from this self-description.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Intersex"
+        ],
+        "evidence": "Article distinguishes sex classification from gender identity and discusses female self-identification. Supports contextual use, not equating identity with anatomy."
+      }
+    },
+    {
+      "id": "femboy",
+      "definition": "A usually male-identified person with a feminine style or expression.",
+      "definitionSources": [
+        "https://en.wikipedia.org/wiki/Femboy"
+      ],
+      "definitionEvidence": "Article describes feminine expression, especially among young men, without requiring a sexual orientation.",
+      "flagSources": [
+        "https://en.wikipedia.org/wiki/Femboy"
+      ],
+      "flagVariant": "Seven-stripe femboy proposal",
+      "colors": [],
+      "flagEvidence": "Article describes a seven-stripe pink, pale-pink, white and blue flag.",
+      "status": "flag-documented-palette-unverified",
+      "limitations": "Proposed community design; exact palette not verified. The term must be self-applied, not used to misgender trans women.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Femboy"
+        ],
+        "evidence": "Lead and definitions describe feminine presentation among usually male individuals without specifying orientation."
+      }
+    },
+    {
+      "id": "futch",
+      "definition": "An identity or presentation combining aspects of butch and femme.",
+      "definitionSources": [
+        "https://lgbt.fandom.com/es/wiki/Futch"
+      ],
+      "definitionEvidence": "Spanish community wiki describes a place between butch and femme.",
+      "flagSources": [
+        "https://lgbt.fandom.com/es/wiki/Futch"
+      ],
+      "flagVariant": "Spencer Hastings / Wellick proposal, 2017",
+      "colors": [],
+      "flagEvidence": "Wiki attributes a combined butch/femme design to this creator.",
+      "status": "flag-documented-palette-unverified",
+      "limitations": "Secondary attribution only; not necessarily genderfluid and not an orientation by itself. Palette unverified.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Butch_and_femme"
+        ],
+        "evidence": "Terminology paragraph explicitly defines futch as combining butch and femme characteristics."
+      }
+    },
+    {
+      "id": "gender-anarchist",
+      "definition": "A self-description associated with rejecting imposed gender rules and hierarchies.",
+      "definitionSources": [
+        "https://c4ss.org/content/54814"
+      ],
+      "definitionEvidence": "Public advocacy essay discusses gender anarchism as opposition to gender hierarchy.",
+      "flagSources": [],
+      "flagVariant": "",
+      "colors": [],
+      "flagEvidence": "No sufficiently documented corresponding flag located.",
+      "status": "flag-unresolved",
+      "limitations": "Political and personal uses vary. Do not substitute anarcho-feminist or genderqueer flags.",
+      "verification": {
+        "status": "unverified",
+        "sources": [],
+        "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+      }
+    },
+    {
+      "id": "gender-neutral",
+      "definition": "A neutral gender identity or expression; the term also describes language and spaces that do not specify gender.",
+      "definitionSources": [
+        "https://nonbinary.wiki/wiki/Gender_Neutral"
+      ],
+      "definitionEvidence": "Wiki separates identity, expression and other uses.",
+      "flagSources": [
+        "https://nonbinary.wiki/wiki/Gender_Neutral"
+      ],
+      "flagVariant": "Multiple gender-neutral proposals",
+      "colors": [],
+      "flagEvidence": "Page documents two 2016 enbygsrd proposals and another unattributed design.",
+      "status": "flag-documented-palette-unverified",
+      "limitations": "No single universally accepted flag; selected variant and exact colors unresolved.",
+      "verification": {
+        "status": "unverified",
+        "sources": [],
+        "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+      }
+    },
+    {
+      "id": "gender-nonconforming",
+      "definition": "Expressing gender outside a culture’s expected norms.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-genders"
+      ],
+      "definitionEvidence": "Healthline distinguishes presentation from assumptions about identity.",
+      "flagSources": [
+        "https://www.freedressing.org/pride_flag.html",
+        "https://commons.wikimedia.org/wiki/File:Gendercreative_pride_flag.svg"
+      ],
+      "flagVariant": "Leslie Krause Gender Creative Pride flag, 2015",
+      "colors": [
+        "#8B17B3",
+        "#FFFFFF",
+        "#8B17B3"
+      ],
+      "flagEvidence": "Creator identifies the purpose; original Commons SVG read, with 200/100/200 band heights.",
+      "status": "palette-verified",
+      "limitations": "This named Gender Creative variant represents gender nonconformity; not a universal GNC design.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Gender_nonconformity"
+        ],
+        "evidence": "Article explains expression and behavior differing from culturally expected gender norms."
+      }
+    },
+    {
+      "id": "gender-questioning",
+      "definition": "Exploring or reconsidering one’s gender identity or expression.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-genders"
+      ],
+      "definitionEvidence": "Healthline explicitly lists gender questioning.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:Gender_questioning_flag.png"
+      ],
+      "flagVariant": "Enbygsrd proposal, September 2016",
+      "colors": [],
+      "flagEvidence": "Commons identifies the designer and gender-questioning flag.",
+      "status": "flag-documented-palette-unverified",
+      "limitations": "Proposal, not universal standard; original raster colors not inspected.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Questioning_(sexuality_and_gender)"
+        ],
+        "evidence": "Lead explicitly includes exploration of gender, not only sexuality."
+      }
+    },
+    {
+      "id": "genderfuck",
+      "definition": "Deliberately challenging or mixing conventional gender categories through identity or expression.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-genders"
+      ],
+      "definitionEvidence": "Healthline describes challenging the gender binary.",
+      "flagSources": [
+        "https://lgbtqia.fandom.com/wiki/Genderfuck"
+      ],
+      "flagVariant": "Jasper / yo-ho-sebastian proposal",
+      "colors": [],
+      "flagEvidence": "Indexed community wiki documents a purple field with a skull motif.",
+      "status": "flag-documented-palette-unverified",
+      "limitations": "Multiple proposals exist. Emblem cannot be flattened into stripes; palette unverified.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Gender_bender"
+        ],
+        "evidence": "Lead explicitly calls bending expected gender roles genderfuck and describes challenging restrictive norms."
+      }
+    },
+    {
+      "id": "genderless",
+      "definition": "Experiencing no gender or a lack of gender.",
+      "definitionSources": [
+        "https://queer-dictionary.crd.co/",
+        "https://nonbinary.wiki/wiki/Genderless"
+      ],
+      "definitionEvidence": "Community glossary gives this definition; Nonbinary Wiki redirects Genderless to Agender.",
+      "flagSources": [
+        "https://queer-dictionary.crd.co/"
+      ],
+      "flagVariant": "Community glossary genderless illustration",
+      "colors": [],
+      "flagEvidence": "Glossary explicitly includes a Genderless image separate from its Agender image.",
+      "status": "flag-documented-palette-unverified",
+      "limitations": "Some people use agender synonymously; do not assume every person chooses that label. Illustration provenance and palette unverified.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Agender"
+        ],
+        "evidence": "Lead explicitly lists genderless as lack-of-gender terminology."
+      }
+    },
+    {
+      "id": "girl",
+      "definition": "A female child or young person; also used as a gender self-description.",
+      "definitionSources": [
+        "https://en.wikipedia.org/wiki/Girl",
+        "https://unece.org/sites/default/files/2025-04/B-1%20Sex%20and%20gender%20identity%20indicators%20in%20surveys%20%28Italy%29_1.pdf"
+      ],
+      "definitionEvidence": "Article gives ordinary usage; survey context supports gendered self-descriptions.",
+      "flagSources": [],
+      "flagVariant": "",
+      "colors": [],
+      "flagEvidence": "No distinct broadly documented Girl flag verified.",
+      "status": "flag-unresolved",
+      "limitations": "Do not substitute demigirl, neogirl or cis-woman flags.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Girl"
+        ],
+        "evidence": "Article supports the ordinary female-child/young-person meaning; it does not establish a distinct pride identity or flag."
+      }
+    },
+    {
+      "id": "girlflux",
+      "definition": "A gender whose feminine intensity varies over time.",
+      "definitionSources": [
+        "https://gender.fandom.com/wiki/Girlflux"
+      ],
+      "definitionEvidence": "Wiki describes varying strength of female/feminine gender connection.",
+      "flagSources": [
+        "https://gender.fandom.com/wiki/Girlflux"
+      ],
+      "flagVariant": "Kitsuneshay proposal, August 2015",
+      "colors": [],
+      "flagEvidence": "Wiki documents this flag and several alternatives.",
+      "status": "flag-documented-palette-unverified",
+      "limitations": "Dates differ for later variants; do not treat every flag as the same 2015 design. Palette unverified.",
+      "verification": {
+        "status": "unverified",
+        "sources": [],
+        "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+      }
+    },
+    {
+      "id": "glitchgender",
+      "definition": "A community term for a gender experienced as glitch-like or difficult to make sense of.",
+      "definitionSources": [
+        "https://nonbinary.wiki/wiki/User:TheZoodles/Draft"
+      ],
+      "definitionEvidence": "Only a user draft was located with the relevant definition; this is not a reviewed encyclopedia article.",
+      "flagSources": [],
+      "flagVariant": "",
+      "colors": [],
+      "flagEvidence": "Search located mirrors and informal alternative proposals, without a sufficiently verified public original.",
+      "status": "flag-unresolved",
+      "limitations": "Definition provisional: weak draft-only evidence. Flag unresolved; keep visibly pending rather than claiming verified coverage.",
+      "verification": {
+        "status": "unverified",
+        "sources": [],
+        "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+      }
+    },
+    {
+      "id": "graygender",
+      "definition": "A weak or ambivalent connection to gender. ",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-genders"
+      ],
+      "definitionEvidence": "Healthline describes graygender as a less strong investment or identification with gender.",
+      "flagSources": [
+        "https://lgbtqia.fandom.com/wiki/Graygender"
+      ],
+      "flagVariant": "Common graygender community flag",
+      "colors": [],
+      "flagEvidence": "Indexed article links a 2015 Pride-Flags upload; another wiki attributes design to Invernom.",
+      "status": "flag-documented-palette-unverified",
+      "limitations": "Creator attribution conflicts across secondary pages. Exact palette not verified.",
+      "verification": {
+        "status": "unverified",
+        "sources": [],
+        "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+      }
+    },
+    {
+      "id": "gynx",
+      "definition": "A gender described as between female and androgyne.",
+      "definitionSources": [
+        "https://cupidpride.wordpress.com/2018/01/11/opalescentorbisian-gynx-a-gender-inbetween/",
+        "https://queer-dictionary.crd.co/"
+      ],
+      "definitionEvidence": "Public reblog of opalescentorbisian describes the identity; glossary agrees.",
+      "flagSources": [
+        "https://cupidpride.wordpress.com/2018/01/11/opalescentorbisian-gynx-a-gender-inbetween/"
+      ],
+      "flagVariant": "Opalescentorbisian designs, archived public reblog January 2018",
+      "colors": [],
+      "flagEvidence": "Post shows two designs and identifies the first as the author’s main design.",
+      "status": "flag-documented-palette-unverified",
+      "limitations": "Author’s use of official is not evidence of universal adoption. Exact colors unverified.",
+      "verification": {
+        "status": "unverified",
+        "sources": [],
+        "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+      }
+    },
+    {
+      "id": "hijra",
+      "definition": "A culturally specific South Asian identity and community with distinct gender and social traditions.",
+      "definitionSources": [
+        "https://en.wikipedia.org/wiki/Hijra_(South_Asia)"
+      ],
+      "definitionEvidence": "Article documents South Asian community history and kinship traditions.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:Hijra_flag.svg"
+      ],
+      "flagVariant": "Samira / FloralFemmes proposed Hijra flag",
+      "colors": [
+        "#FFCCE6",
+        "#FFFFFF",
+        "#C10000",
+        "#FFFFFF",
+        "#B9E0FB"
+      ],
+      "flagEvidence": "Original Commons SVG read; top-to-bottom bands verified.",
+      "status": "palette-verified",
+      "limitations": "Explicitly proposed/unofficial; not a universal community flag. Do not equate every hijra with transgender or intersex. Current Wikipedia article carries quality concerns; seek a community/institutional definition corroborator.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Hijra_(South_Asia)"
+        ],
+        "evidence": "Article supports culturally specific South Asian gender/community identity. Article carries quality concerns; verification mark should indicate source coverage, not blanket reliability."
+      }
+    },
+    {
+      "id": "intersex-female",
+      "definition": "An intersex person who identifies as female.",
+      "definitionSources": [
+        "https://interactadvocates.org/faq/"
+      ],
+      "definitionEvidence": "InterACT explicitly explains that intersex people may identify as women/female, men/male or nonbinary.",
+      "flagSources": [],
+      "flagVariant": "",
+      "colors": [],
+      "flagEvidence": "No distinct intersex-female flag independently verified.",
+      "status": "flag-unresolved",
+      "limitations": "Compositional definition. IAFAB describes birth assignment, not present gender, and must not be substituted. Generic intersex flag may only be labeled as umbrella representation.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Intersex#Legal_recognition"
+        ],
+        "evidence": "Section explicitly discusses intersex people who self-describe as female/women; supports the compositional definition."
+      }
+    },
+    {
+      "id": "intersex-male",
+      "definition": "An intersex person who identifies as male.",
+      "definitionSources": [
+        "https://interactadvocates.org/faq/"
+      ],
+      "definitionEvidence": "InterACT explicitly explains that intersex people may identify as men/male, women/female or nonbinary.",
+      "flagSources": [],
+      "flagVariant": "",
+      "colors": [],
+      "flagEvidence": "No distinct intersex-male flag independently verified.",
+      "status": "flag-unresolved",
+      "limitations": "Compositional definition. IAMAB describes birth assignment, not present gender, and must not be substituted. Generic intersex flag may only be labeled as umbrella representation.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Intersex#Legal_recognition"
+        ],
+        "evidence": "Section explicitly discusses intersex people who self-describe as male/men; supports the compositional definition."
+      }
+    },
+    {
+      "id": "male",
+      "definition": "A sex-category term; it is distinct from the gender identity man.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-genders"
+      ],
+      "definitionEvidence": "Gender vs. sex section distinguishes sex characteristics and gender.",
+      "flagSources": [
+        "https://new.lgbtqia.wiki/wiki/Male"
+      ],
+      "flagVariant": "Queerflagswithbenton 2020 proposed male flag",
+      "colors": [],
+      "flagEvidence": "Page credits creator and publication on 18 September 2020; not automatically a man flag.",
+      "status": "flag-documented",
+      "limitations": "Exact palette not verified.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Male"
+        ],
+        "evidence": "Article distinguishes biological sex usage from gender-role/identity usage. Catalog term is identified, but categorical wording that male is always distinct from man is too absolute."
+      }
+    },
+    {
+      "id": "man",
+      "definition": "A gender identity that includes cisgender and transgender men.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-genders"
+      ],
+      "definitionEvidence": "Article identifies man as a gender identity; cisgender and transgender sections distinguish assignment from identity.",
+      "flagSources": [],
+      "flagVariant": "",
+      "colors": [],
+      "flagEvidence": "No sufficiently supported flag specific to this exact catalog entry found in this review. Related identity or umbrella flags were not silently substituted.",
+      "status": "definition-sourced",
+      "limitations": "Exact palette not verified.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Man"
+        ],
+        "evidence": "Article covers men as a gender and explicitly includes transgender men."
+      }
+    },
+    {
+      "id": "masc",
+      "definition": "Short for masculine; used for masculine expression or identity.",
+      "definitionSources": [
+        "https://en.wiktionary.org/wiki/masc"
+      ],
+      "definitionEvidence": "Public entry directly defines this term.",
+      "flagSources": [],
+      "flagVariant": "",
+      "colors": [],
+      "flagEvidence": "No sufficiently supported flag specific to this exact catalog entry found in this review. Related identity or umbrella flags were not silently substituted.",
+      "status": "definition-sourced",
+      "limitations": "Exact palette not verified.",
+      "verification": {
+        "status": "unverified",
+        "sources": [],
+        "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+      }
+    },
+    {
+      "id": "mullerian",
+      "definition": "A community sex descriptor referring to development of the Müllerian ducts.",
+      "definitionSources": [
+        "https://beyond-mogai-pride-flags.tumblr.com/post/737626793265217536/werwolffian-pride-flag"
+      ],
+      "definitionEvidence": "Public creator post defines Müllerian by paramesonephric-duct development. Community wording, not a clinical diagnosis.",
+      "flagSources": [],
+      "flagVariant": "",
+      "colors": [],
+      "flagEvidence": "Creator-linked Wolffian/Müllerian pair discovered through Wolffian source, but Müllerian design not independently inspected.",
+      "status": "definition-sourced",
+      "limitations": "Community anatomical terminology needs care; compound wer/wif variants are not substitutes for this entry.",
+      "verification": {
+        "status": "unverified",
+        "sources": [],
+        "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+      }
+    },
+    {
+      "id": "multigender",
+      "definition": "An umbrella for experiencing more than one gender.",
+      "definitionSources": [
+        "https://lgbtqia.fandom.com/wiki/Multigender"
+      ],
+      "definitionEvidence": "Public entry directly defines this term.",
+      "flagSources": [
+        "https://lgbtqia.fandom.com/wiki/Multigender"
+      ],
+      "flagVariant": "Five-stripe proposed multigender design",
+      "colors": [],
+      "flagEvidence": "Wiki documents use by January 2016; creator and meanings unresolved.",
+      "status": "flag-documented",
+      "limitations": "Exact palette not verified.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Non-binary#Polygender"
+        ],
+        "evidence": "Polygender section identifies multigender as experiencing multiple genders."
+      }
+    },
+    {
+      "id": "musicgender",
+      "definition": "Gender described through musical theory, rather than a particular music genre.",
+      "definitionSources": [
+        "https://lgbt.fandom.com/es/wiki/Musicg%C3%A9nero"
+      ],
+      "definitionEvidence": "Spanish community reference explicitly distinguishes musicgender from musicagender and musigender.",
+      "flagSources": [
+        "https://lgbt.fandom.com/es/wiki/Musicg%C3%A9nero"
+      ],
+      "flagVariant": "Musicgender flag and alternatives",
+      "colors": [],
+      "flagEvidence": "Article displays main and alternate designs; original asset colors unverified.",
+      "status": "flag-documented",
+      "limitations": "Exact palette not verified.",
+      "verification": {
+        "status": "unverified",
+        "sources": [],
+        "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+      }
+    },
+    {
+      "id": "neogender",
+      "definition": "An umbrella for recently coined gender labels, often those coined since 2000.",
+      "definitionSources": [
+        "https://gend3r.com/index.php/Neogender"
+      ],
+      "definitionEvidence": "Public entry directly defines this term.",
+      "flagSources": [
+        "https://gend3r.com/index.php/Neogender"
+      ],
+      "flagVariant": "Green neogender flag by rando-pride-flags",
+      "colors": [],
+      "flagEvidence": "Page documents green and yellow versions; meanings unknown.",
+      "status": "flag-documented",
+      "limitations": "Exact palette not verified.",
+      "verification": {
+        "status": "unverified",
+        "sources": [],
+        "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+      }
+    },
+    {
+      "id": "omnigender",
+      "definition": "Experiencing many or all genders; distinctions from pangender vary.",
+      "definitionSources": [
+        "https://lgbtqia.fandom.com/wiki/Pangender"
+      ],
+      "definitionEvidence": "Distinction section documents competing meanings without consensus.",
+      "flagSources": [
+        "https://www.wpi.edu/offices/diversity/student-resources/lgbtqiap-student-support/lgbtqiap-flags-terms"
+      ],
+      "flagVariant": "Omnigender design in WPI educational guide",
+      "colors": [],
+      "flagEvidence": "University page displays an omnigender flag; distinguishes its account from pangender.",
+      "status": "flag-documented",
+      "limitations": "Exact palette not verified.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/List_of_gender_identities#O"
+        ],
+        "evidence": "Explicitly listed under O; this page does not establish the catalog definition or its relationship to pangender."
+      }
+    },
+    {
+      "id": "paraboy",
+      "definition": "Identifying mostly, but not entirely, as a boy or man.",
+      "definitionSources": [
+        "https://new.lgbtqia.wiki/wiki/Paraboy"
+      ],
+      "definitionEvidence": "Public entry directly defines this term.",
+      "flagSources": [
+        "https://lgbtqia.fandom.com/fr/wiki/Paraboy"
+      ],
+      "flagVariant": "Paraboy flag in French wiki",
+      "colors": [],
+      "flagEvidence": "Page displays a flag under this term; provenance and exact palette unresolved.",
+      "status": "flag-documented",
+      "limitations": "Exact palette not verified.",
+      "verification": {
+        "status": "unverified",
+        "sources": [],
+        "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+      }
+    },
+    {
+      "id": "paragirl",
+      "definition": "Identifying mostly, but not entirely, as a girl or woman.",
+      "definitionSources": [
+        "https://new.lgbtqia.wiki/wiki/Paragender"
+      ],
+      "definitionEvidence": "Paragender subgender table explicitly defines paragirl as mostly girl/woman; canonical indexed page reviewed. Live open presents human-verification challenge.",
+      "flagSources": [
+        "https://gender.fandom.com/wiki/Paragirl"
+      ],
+      "flagVariant": "Pridearchive 2014 paragirl design",
+      "colors": [],
+      "flagEvidence": "Specific entry documents creator/date and gray/white/orange/pink-center design; cites exact pridearchive post 92689899026.",
+      "status": "flag-documented",
+      "limitations": "Exact palette not verified.",
+      "verification": {
+        "status": "unverified",
+        "sources": [],
+        "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+      }
+    },
+    {
+      "id": "pivotgender",
+      "definition": "Gender that changes depending on the people present.",
+      "definitionSources": [
+        "https://gender.fandom.com/wiki/Mirrorgender"
+      ],
+      "definitionEvidence": "Lists expecgender and pivotgender as alternative names; describes gender changing around others.",
+      "flagSources": [
+        "https://prideflag.fandom.com/wiki/Pivotgender_Flag"
+      ],
+      "flagVariant": "Pridearchive pivotgender design",
+      "colors": [],
+      "flagEvidence": "Page names aliases and gray/yellow/pink/blue meanings; original designer unknown.",
+      "status": "flag-documented",
+      "limitations": "Exact palette not verified.",
+      "verification": {
+        "status": "unverified",
+        "sources": [],
+        "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+      }
+    },
+    {
+      "id": "pupgender",
+      "definition": "A xenogender described through puppy-like qualities or connection to puppies.",
+      "definitionSources": [
+        "https://nonbinary.wiki/wiki/Pupgender"
+      ],
+      "definitionEvidence": "Public entry directly defines this term.",
+      "flagSources": [
+        "https://queer-community.fandom.com/wiki/Pupgender"
+      ],
+      "flagVariant": "Kandipaws design and viraldoll alternate",
+      "colors": [],
+      "flagEvidence": "Both designs documented separately with creator reference links; emblem geometry matters.",
+      "status": "flag-documented",
+      "limitations": "Exact palette not verified.",
+      "verification": {
+        "status": "unverified",
+        "sources": [],
+        "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+      }
+    },
+    {
+      "id": "queer-femme",
+      "definition": "A queer self-description connected to femme identity or expression.",
+      "definitionSources": [
+        "https://en.wikipedia.org/wiki/Femme"
+      ],
+      "definitionEvidence": "Modern queer-femme usage extends beyond women and presentation alone.",
+      "flagSources": [],
+      "flagVariant": "",
+      "colors": [],
+      "flagEvidence": "No sufficiently supported flag specific to this exact catalog entry found in this review. Related identity or umbrella flags were not silently substituted.",
+      "status": "definition-sourced",
+      "limitations": "Femme flag sources found, but no distinct queer-femme variant verified; avoid equating identity with appearance.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Femme"
+        ],
+        "evidence": "Article explicitly discusses queer femme identity, including uses not dependent on feminine aesthetics."
+      }
+    },
+    {
+      "id": "salmacian",
+      "definition": "A self-description for people who desire mixed genital anatomy.",
+      "definitionSources": [
+        "https://salmacian.org/"
+      ],
+      "definitionEvidence": "Public community homepage distinguishes bodily goals from gender and from being intersex.",
+      "flagSources": [
+        "https://salmacian.org/"
+      ],
+      "flagVariant": "Anonymous 2016 five-stripe design; Sign of Salmacis alternate",
+      "colors": [],
+      "flagEvidence": "Community homepage distinguishes blue/light-blue/purple/light-green/green design and Erikatharsis alternate.",
+      "status": "flag-documented",
+      "limitations": "Exact palette not verified.",
+      "verification": {
+        "status": "unverified",
+        "sources": [],
+        "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+      }
+    },
+    {
+      "id": "tomboy",
+      "definition": "A girl or woman with expression or interests culturally associated with masculinity.",
+      "definitionSources": [
+        "https://en.wikipedia.org/wiki/Tomboy"
+      ],
+      "definitionEvidence": "Public entry directly defines this term.",
+      "flagSources": [
+        "https://neuroqueer.fandom.com/fr/wiki/Tomboy"
+      ],
+      "flagVariant": "2017 tomboy design",
+      "colors": [],
+      "flagEvidence": "Page documents blue/brown/white/pink stripes and a distinct mascgirl alternate.",
+      "status": "flag-documented",
+      "limitations": "Exact palette not verified.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Tomboy"
+        ],
+        "evidence": "Lead defines a girl or young woman with traits or behaviors culturally associated with boys and men."
+      }
+    },
+    {
+      "id": "trans-man",
+      "definition": "A man who is transgender.",
+      "definitionSources": [
+        "https://pflag.org/glossary/"
+      ],
+      "definitionEvidence": "Transgender entry and AFAB guidance explicitly discuss transgender men.",
+      "flagSources": [
+        "https://www.reddit.com/r/QueerVexillology/comments/v7scfp/ftmtrans_man_pride_flag_made_by_me/"
+      ],
+      "flagVariant": "Creator-proposed 2022 trans-man flag",
+      "colors": [],
+      "flagEvidence": "Creator explicitly distinguishes proposal from transmasculine umbrella flag.",
+      "status": "flag-documented",
+      "limitations": "Exact palette not verified.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Trans_man"
+        ],
+        "evidence": "Lead identifies a man assigned female at birth and describes male gender identity."
+      }
+    },
+    {
+      "id": "trans-non-binary",
+      "definition": "A person who identifies as both transgender and nonbinary.",
+      "definitionSources": [
+        "https://lgbtqia.fandom.com/wiki/Transgender"
+      ],
+      "definitionEvidence": "Non-binary distinction subsection directly defines trans non-binary and notes not all nonbinary people identify as trans.",
+      "flagSources": [
+        "https://queerplus.wikioasis.org/wiki/Nonbinary"
+      ],
+      "flagVariant": "Trans-nonbinary design, creator unknown",
+      "colors": [],
+      "flagEvidence": "Article gallery explicitly identifies a trans nonbinary flag by unknown creator.",
+      "status": "flag-documented",
+      "limitations": "Exact palette not verified.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Non-binary"
+        ],
+        "evidence": "Article documents overlapping transgender and nonbinary identities without requiring all nonbinary people to identify as transgender."
+      }
+    },
+    {
+      "id": "trans-woman",
+      "definition": "A woman who is transgender.",
+      "definitionSources": [
+        "https://gender.fandom.com/wiki/Trans_Woman"
+      ],
+      "definitionEvidence": "Public entry directly defines this term.",
+      "flagSources": [
+        "https://gender.fandom.com/wiki/Trans_Woman"
+      ],
+      "flagVariant": "Trans-woman flag attributed to Pride-Flags",
+      "colors": [],
+      "flagEvidence": "Main and alternate designs are identified in gallery.",
+      "status": "flag-documented",
+      "limitations": "Exact palette not verified.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Trans_woman"
+        ],
+        "evidence": "Lead identifies a woman assigned male at birth."
+      }
+    },
+    {
+      "id": "transine",
+      "definition": "A community term for a trans or nonbinary identity without desired medical transition; usage varies.",
+      "definitionSources": [],
+      "definitionEvidence": "Targeted searches for transine with gender, definition, and flag returned no direct public educational/creator definition. A Reddit comment repeats a claim; insufficient evidence. The homonymous enzyme is unrelated.",
+      "flagSources": [],
+      "flagVariant": "",
+      "colors": [],
+      "flagEvidence": "No sufficiently supported flag specific to this exact catalog entry found in this review. Related identity or umbrella flags were not silently substituted.",
+      "status": "unresolved",
+      "limitations": "Definition and flag unresolved; do not certify existing draft.",
+      "verification": {
+        "status": "unverified",
+        "sources": [],
+        "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+      }
+    },
+    {
+      "id": "transsexual",
+      "definition": "A historical self-description some people retain, often emphasizing sex or transition; not a label to impose.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-genders"
+      ],
+      "definitionEvidence": "Public entry directly defines this term.",
+      "flagSources": [],
+      "flagVariant": "",
+      "colors": [],
+      "flagEvidence": "Flags of the World documents a design under Transsexual flag, but its historical correction explicitly says Johnathan Andrew intended it for transgender people generally. No exclusively transsexual design certified.",
+      "status": "definition-sourced",
+      "limitations": "Exact palette not verified.",
+      "flagCandidates": [
+        "https://www.crwflags.com/fotw/flags/qq-tsf.html"
+      ],
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Transsexual#Terminology"
+        ],
+        "evidence": "Terminology section documents historical use and people who retain this self-description while others reject it."
+      }
+    },
+    {
+      "id": "versandrogyne",
+      "definition": "An androgyne whose balance of femininity and masculinity fluctuates.",
+      "definitionSources": [
+        "https://beyond-mogai-pride-flags.tumblr.com/post/179943829185/versandrogynous-pride-flag"
+      ],
+      "definitionEvidence": "Primary flag/definition post dated 9 November 2018.",
+      "flagSources": [
+        "https://beyond-mogai-pride-flags.tumblr.com/post/179943829185/versandrogynous-pride-flag"
+      ],
+      "flagVariant": "2018 Versandrogynous design",
+      "colors": [],
+      "flagEvidence": "Primary definition/flag post; exact asset palette not extracted.",
+      "status": "flag-documented",
+      "limitations": "Exact palette not verified.",
+      "verification": {
+        "status": "unverified",
+        "sources": [],
+        "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+      }
+    },
+    {
+      "id": "voidboy",
+      "definition": "In one usage, gendervoid with a slight connection to boyhood.",
+      "definitionSources": [
+        "https://www.reddit.com/r/XenogendersAndMore/comments/ypxbkp/"
+      ],
+      "definitionEvidence": "Public creator post explains its own 2022 interpretation and designs.",
+      "flagSources": [],
+      "flagVariant": "",
+      "colors": [],
+      "flagEvidence": "Unresolved for the catalog definition. Gallery identifies both flags, but this applies to plurality meaning, not automatically the 2022 gendervoid interpretation.",
+      "status": "definition-sourced",
+      "limitations": "Competing meaning: Pluralpedia Voidgender means gender disconnected from a material body, explicitly distinct from gendervoid. Do not present either interpretation as universal.",
+      "flagCandidates": [
+        "https://pluralpedia.org/w/Voidgender"
+      ],
+      "verification": {
+        "status": "unverified",
+        "sources": [],
+        "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+      }
+    },
+    {
+      "id": "voidgirl",
+      "definition": "In one usage, gendervoid with a slight connection to girlhood.",
+      "definitionSources": [
+        "https://www.reddit.com/r/XenogendersAndMore/comments/ypxbkp/"
+      ],
+      "definitionEvidence": "Public creator post explains its own 2022 interpretation and designs.",
+      "flagSources": [],
+      "flagVariant": "",
+      "colors": [],
+      "flagEvidence": "Unresolved for the catalog definition. Gallery identifies both flags, but this applies to plurality meaning, not automatically the 2022 gendervoid interpretation.",
+      "status": "definition-sourced",
+      "limitations": "Competing meaning: Pluralpedia Voidgender means gender disconnected from a material body, explicitly distinct from gendervoid. Do not present either interpretation as universal.",
+      "flagCandidates": [
+        "https://pluralpedia.org/w/Voidgender"
+      ],
+      "verification": {
+        "status": "unverified",
+        "sources": [],
+        "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+      }
+    },
+    {
+      "id": "wolffian",
+      "definition": "A community sex descriptor referring to development of the Wolffian ducts.",
+      "definitionSources": [
+        "https://beyond-mogai-pride-flags.tumblr.com/post/737626793265217536/werwolffian-pride-flag"
+      ],
+      "definitionEvidence": "Public creator post defines Wolffian by mesonephric-duct development. Community wording, not a clinical diagnosis.",
+      "flagSources": [
+        "https://queerdom.fandom.com/wiki/Wolffian"
+      ],
+      "flagVariant": "Mourningmogaicrew 2021 design",
+      "colors": [],
+      "flagEvidence": "Page credits flag and symbol to 31 August 2021 and links original archived post.",
+      "status": "flag-documented",
+      "limitations": "Exact palette not verified.",
+      "verification": {
+        "status": "unverified",
+        "sources": [],
+        "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+      }
+    },
+    {
+      "id": "woman",
+      "definition": "A gender identity that includes cisgender and transgender women.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-genders"
+      ],
+      "definitionEvidence": "Article identifies woman as a gender identity; cisgender and transgender sections distinguish assignment from identity.",
+      "flagSources": [],
+      "flagVariant": "",
+      "colors": [],
+      "flagEvidence": "No sufficiently supported flag specific to this exact catalog entry found in this review. Related identity or umbrella flags were not silently substituted.",
+      "status": "definition-sourced",
+      "limitations": "Exact palette not verified.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Woman"
+        ],
+        "evidence": "Article includes cisgender and transgender women and distinguishes assigned sex from affirmed gender."
+      }
+    },
+    {
+      "id": "xenogender",
+      "definition": "Gender described using concepts beyond conventional male and female categories.",
+      "definitionSources": [
+        "https://nonbinary.wiki/index.php?mobileaction=toggle_view_mobile&title=Catgender"
+      ],
+      "definitionEvidence": "Redirected Xenogender article and featured-article text support definition.",
+      "flagSources": [
+        "https://nonbinary.wiki/index.php?title=File%3AXenogender_without_symbol.png"
+      ],
+      "flagVariant": "Xenogender design without symbol",
+      "colors": [],
+      "flagEvidence": "File record links imoga-pride post and December 2020 upload.",
+      "status": "flag-documented",
+      "limitations": "Exact palette not verified.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Non-binary#Xenogender"
+        ],
+        "evidence": "Section describes gender through concepts outside conventional male/female categories, including nature and abstract concepts."
+      }
+    },
+    {
+      "id": "xxy",
+      "definition": "A chromosome pattern with two X chromosomes and one Y chromosome.",
+      "definitionSources": [
+        "https://medlineplus.gov/genetics/condition/klinefelter-syndrome/"
+      ],
+      "definitionEvidence": "Government genetics resource defines 47,XXY; chromosome pattern is not a gender label.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:Trans_intersex_pride_flag_XXY.svg"
+      ],
+      "flagVariant": "Trans/intersex/XXY combination proposal",
+      "colors": [],
+      "flagEvidence": "2024 creator-uploaded design combines three specific symbols; not a universal XXY flag.",
+      "status": "flag-documented",
+      "limitations": "Exact palette not verified.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/XXY"
+        ],
+        "evidence": "Article defines two X chromosomes and one Y chromosome. This supports a chromosome descriptor, not a gender identity."
+      }
+    },
+    {
+      "id": "aliagender",
+      "definition": "Gender outside existing categories.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-genders"
+      ],
+      "definitionEvidence": "Public entry directly defines this term.",
+      "flagSources": [],
+      "flagVariant": "",
+      "colors": [],
+      "flagEvidence": "Unresolved for the catalog definition. Secondary palette listing only; creator and variant provenance not established.",
+      "status": "definition-sourced",
+      "limitations": "Color-code listing is weak provenance and conflicts with other discovered design descriptions. Keep neutral until a creator-linked variant is selected.",
+      "flagCandidates": [
+        "https://www.flagcolorcodes.com/aliagender"
+      ],
+      "verification": {
+        "status": "unverified",
+        "sources": [],
+        "evidence": "No supporting Wikipedia or peer-reviewed reference confirmed in this review."
+      }
+    },
+    {
+      "id": "aporagender",
+      "definition": "A distinct gender beyond male, female, or their combination.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-genders"
+      ],
+      "definitionEvidence": "Public entry directly defines this term.",
+      "flagSources": [
+        "https://gend3r.com/index.php/Aporagender"
+      ],
+      "flagVariant": "Hyaenahart aporagender design",
+      "colors": [],
+      "flagEvidence": "Page names creator and explains blue/pink/purple/yellow meanings.",
+      "status": "flag-documented",
+      "limitations": "Exact palette not verified.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/List_of_gender_identities#A"
+        ],
+        "evidence": "Explicitly listed with citations under A; membership does not establish the entire definition."
+      }
+    },
+    {
+      "id": "gendervoid",
+      "definition": "Gender experienced as absent or empty.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-genders"
+      ],
+      "definitionEvidence": "Public entry directly defines this term.",
+      "flagSources": [
+        "https://www.dictionary.com/culture/gender-sexuality/gendervoid"
+      ],
+      "flagVariant": "Gendervoid design attributed to Pride-Flags",
+      "colors": [],
+      "flagEvidence": "Dictionary article displays flag with credit; does not establish exact palette or original designer.",
+      "status": "flag-documented",
+      "limitations": "Exact palette not verified.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Agender#Gendervoid"
+        ],
+        "evidence": "Section describes an absence of gender experience or identity."
+      }
+    },
+    {
+      "id": "intergender",
+      "definition": "Gender between male and female; some use it specifically for gender shaped by being intersex.",
+      "definitionSources": [
+        "https://nonbinary.wiki/wiki/Intergender"
+      ],
+      "definitionEvidence": "Documents both broader historical usage and intersex-specific usage.",
+      "flagSources": [
+        "https://lgbtqia.fandom.com/wiki/Intergender"
+      ],
+      "flagVariant": "Interpunked/cripdeaf 2020 design",
+      "colors": [],
+      "flagEvidence": "Yellow/purple design with white circle, explicitly distinguished from older striped 2014 variants.",
+      "status": "flag-documented",
+      "limitations": "Exact palette not verified.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/List_of_gender_identities#I"
+        ],
+        "evidence": "List explicitly defines an identity between male and female. It does not support the additional intersex-specific usage in the catalog wording."
+      }
+    },
+    {
+      "id": "allosexual",
+      "definition": "Experiencing sexual attraction outside the asexual spectrum.",
+      "definitionSources": [
+        "https://en.wikipedia.org/wiki/Allosexuality"
+      ],
+      "definitionEvidence": "Definition distinguishes typical attraction from the asexual spectrum; avoids excluding graysexual people from the ace spectrum.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:Allosexual_flag.svg"
+      ],
+      "flagVariant": "2021 Commons zedsexual/allosexual representation",
+      "colors": [
+        "#FFFFFF",
+        "#A9A9A9",
+        "#000000",
+        "#FFFFFF",
+        "#000000",
+        "#A9A9A9",
+        "#FFFFFF"
+      ],
+      "flagEvidence": "Raw SVG inspected: nested white/gray/black/white shapes produce seven horizontal stripes. Revision 20 June 2021 08:28; asset https://upload.wikimedia.org/wikipedia/commons/f/f5/Allosexual_flag.svg",
+      "status": "palette-verified",
+      "limitations": "Exact colors verified for this identified digital representation only; not a universal standard for all variants.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Allosexuality"
+        ],
+        "evidence": "Lead distinguishes typical sexual attraction from the asexual spectrum and notes that frequency is not specified."
+      }
+    },
+    {
+      "id": "androsexual",
+      "definition": "Attraction to men or masculinity.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-types-of-sexuality"
+      ],
+      "definitionEvidence": "Public entry directly defines this term.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:Androsexual_Pride_Flag.png"
+      ],
+      "flagVariant": "Equality-universe-roy archived representation",
+      "colors": [],
+      "flagEvidence": "2020 upload references 2015 Tumblr documentation; not creator-certified colors.",
+      "status": "flag-documented",
+      "limitations": "Exact palette not verified.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Androphilia_and_gynephilia"
+        ],
+        "evidence": "Lead defines attraction to men or masculinity; historical-use section explicitly identifies androsexual as a synonym."
+      }
+    },
+    {
+      "id": "autosexual",
+      "definition": "Sexual attraction directed toward oneself.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-types-of-sexuality"
+      ],
+      "definitionEvidence": "Public entry directly defines this term.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:Autosexual_pride_flag.svg"
+      ],
+      "flagVariant": "Kautr 2021 raster-wrapped representation",
+      "colors": [],
+      "flagEvidence": "File has raster content rather than SVG fills; palette not extracted.",
+      "status": "flag-documented",
+      "limitations": "Exact palette not verified.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Autosexuality"
+        ],
+        "evidence": "Lead defines attraction primarily directed toward oneself."
+      }
+    },
+    {
+      "id": "autoromantic",
+      "definition": "Romantic attraction directed toward oneself.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-types-of-sexuality"
+      ],
+      "definitionEvidence": "Public entry directly defines this term.",
+      "flagSources": [
+        "https://queerdom.fandom.com/wiki/Autoromantic"
+      ],
+      "flagVariant": "Pride-Flags 2017 representation",
+      "colors": [],
+      "flagEvidence": "Describes blue/gray flag with green heart and black arrow outline; cannot be faithfully expressed as stripe palette alone.",
+      "status": "flag-documented",
+      "limitations": "Exact palette not verified.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Autosexuality"
+        ],
+        "evidence": "Lead explicitly identifies autoromanticism as the romantic equivalent."
+      }
+    },
+    {
+      "id": "biromantic",
+      "definition": "Romantic attraction to more than one gender.",
+      "definitionSources": [
+        "https://lgbtqia.fandom.com/wiki/Biromantic"
+      ],
+      "definitionEvidence": "Avoids Healthline wording that incorrectly implies biromantics cannot experience sexual attraction.",
+      "flagSources": [
+        "https://lgbtqia.fandom.com/wiki/Biromantic"
+      ],
+      "flagVariant": "Pride-Flags 2016 heart design",
+      "colors": [],
+      "flagEvidence": "Pale background with bisexual-colored heart; page also warns article needs rewrite.",
+      "status": "flag-documented",
+      "limitations": "Exact palette not verified.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Romantic_orientation#Romantic_identities"
+        ],
+        "evidence": "Identity list describes romantic attraction to same and other genders, including two or more."
+      }
+    },
+    {
+      "id": "gynesexual",
+      "definition": "Attraction to women or femininity.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-types-of-sexuality"
+      ],
+      "definitionEvidence": "Public entry directly defines this term.",
+      "flagSources": [
+        "https://lgbtqia.fandom.com/wiki/Gynesexual"
+      ],
+      "flagVariant": "Fem-/Gyne-/Gyno- design documented 2016",
+      "colors": [],
+      "flagEvidence": "Creator and meanings unknown; Commons PNG has disputed-description notice, so no exact palette certification.",
+      "status": "flag-documented",
+      "limitations": "Exact palette not verified.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Androphilia_and_gynephilia"
+        ],
+        "evidence": "Lead defines attraction to women or femininity; gynephilia section explicitly identifies gynesexual as a synonym."
+      }
+    },
+    {
+      "id": "heterosexual",
+      "definition": "Attraction to a different gender.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-types-of-sexuality"
+      ],
+      "definitionEvidence": "Public entry directly defines this term.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:Heterosexual_flag_(black-white_stripes).svg"
+      ],
+      "flagVariant": "Nikki 2020 black/white proposal",
+      "colors": [
+        "#000000",
+        "#FFFFFF",
+        "#000000",
+        "#FFFFFF",
+        "#000000",
+        "#FFFFFF"
+      ],
+      "flagEvidence": "Raw SVG inspected: white base and black rectangles at y=0,2,4 give six alternating stripes. Asset https://upload.wikimedia.org/wikipedia/commons/6/6a/Heterosexual_flag_%28black-white_stripes%29.svg",
+      "status": "palette-verified",
+      "limitations": "Exact colors verified for this identified digital representation only; not a universal standard for all variants.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Heterosexuality"
+        ],
+        "evidence": "Lead describes romantic or sexual attraction to a different/opposite sex or gender."
+      }
+    },
+    {
+      "id": "homosexual",
+      "definition": "Attraction to the same gender; terminology preferences vary.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-types-of-sexuality"
+      ],
+      "definitionEvidence": "Public entry directly defines this term.",
+      "flagSources": [],
+      "flagVariant": "",
+      "colors": [],
+      "flagEvidence": "No sufficiently supported flag specific to this exact catalog entry found in this review. Related identity or umbrella flags were not silently substituted.",
+      "status": "definition-sourced",
+      "limitations": "Exact palette not verified.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Homosexuality"
+        ],
+        "evidence": "Lead describes romantic or sexual attraction to the same sex or gender; article also discusses terminology."
+      }
+    },
+    {
+      "id": "monosexual",
+      "definition": "Attraction to one gender.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-types-of-sexuality"
+      ],
+      "definitionEvidence": "Public entry directly defines this term.",
+      "flagSources": [
+        "https://lgbtqia.fandom.com/wiki/Monosexual"
+      ],
+      "flagVariant": "Proposed monosexual design",
+      "colors": [],
+      "flagEvidence": "Definition article explicitly displays a proposed monosexual flag.",
+      "status": "flag-documented",
+      "limitations": "Exact palette not verified.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Monosexuality"
+        ],
+        "evidence": "Lead defines romantic or sexual attraction to one sex or gender."
+      }
+    },
+    {
+      "id": "panromantic",
+      "definition": "Romantic attraction regardless of gender.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-types-of-sexuality"
+      ],
+      "definitionEvidence": "Public entry directly defines this term.",
+      "flagSources": [
+        "https://mogailabel.fandom.com/wiki/Panromantic"
+      ],
+      "flagVariant": "Pansexual-derived heart designs",
+      "colors": [],
+      "flagEvidence": "Article distinguishes several panromantic designs; exact one/geometry must be selected before palette extraction.",
+      "status": "flag-documented",
+      "limitations": "Exact palette not verified.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Romantic_orientation#Romantic_identities"
+        ],
+        "evidence": "List defines romantic attraction regardless of gender."
+      }
+    },
+    {
+      "id": "polyromantic",
+      "definition": "Romantic attraction to multiple, not necessarily all, genders.",
+      "definitionSources": [
+        "https://mogailabel.fandom.com/wiki/Panromantic"
+      ],
+      "definitionEvidence": "Polyromantic comparison subsection states multiple but not necessarily all genders.",
+      "flagSources": [
+        "https://www.deviantart.com/pride-flags/art/Polyromantic-1-607943635"
+      ],
+      "flagVariant": "Polyromantic (1), published by Pride-Flags in 2016",
+      "colors": [],
+      "flagEvidence": "Publicly titled Polyromantic (1) by Pride-Flags, published May 10, 2016. Exact palette values not verified; no upgrade to color or definition verification.",
+      "status": "definition-sourced; flag-documented",
+      "limitations": "Exact palette not verified.",
+      "flagCandidates": [
+        "https://lgbtqia.fandom.com/wiki/Category%3AFlags"
+      ],
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Romantic_orientation#Romantic_identities"
+        ],
+        "evidence": "List defines romantic attraction to various but not all genders; catalog wording not necessarily all is broader. Use the narrower wording if claiming full Wikipedia definition support."
+      }
+    },
+    {
+      "id": "sapiosexual",
+      "definition": "Attraction centered on perceived intelligence.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-types-of-sexuality"
+      ],
+      "definitionEvidence": "Public entry directly defines this term.",
+      "flagSources": [
+        "https://lgbt.fandom.com/es/wiki/Sapiosexualidad"
+      ],
+      "flagVariant": "Multiple proposed sapiosexual designs",
+      "colors": [],
+      "flagEvidence": "Reference shows three versions; none certified as universal.",
+      "status": "flag-documented",
+      "limitations": "Exact palette not verified.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Sexual_identity"
+        ],
+        "evidence": "Article identifies attraction to intelligence and treats this as a descriptor rather than a sexual orientation."
+      }
+    },
+    {
+      "id": "skoliosexual",
+      "definition": "A contested label for attraction to nonbinary or transgender people.",
+      "definitionSources": [
+        "https://www.healthline.com/health/different-types-of-sexuality"
+      ],
+      "definitionEvidence": "Public entry directly defines this term.",
+      "flagSources": [],
+      "flagVariant": "",
+      "colors": [],
+      "flagEvidence": "Unresolved for the catalog definition. Article treats skoliosexual as former ceterosexual name and displays a ceterosexual flag. Equivalence is contested; do not silently rename or assign.",
+      "status": "definition-sourced",
+      "limitations": "Term and boundaries contested; no palette assigned from related ceterosexual design.",
+      "flagCandidates": [
+        "https://lgbtqia.fandom.com/wiki/Sexual_orientation"
+      ],
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://es.wikipedia.org/wiki/Ceterosexualidad"
+        ],
+        "evidence": "Spanish article explicitly names skoliosexualidad as the former term and documents disputed definitions involving transgender and nonbinary people. Terminological equivalence is contested; this establishes recognition, not endorsement or a universal scope."
+      }
+    },
+    {
+      "id": "unlabeled",
+      "definition": "Choosing not to label one’s orientation or gender.",
+      "definitionSources": [
+        "https://commons.wikimedia.org/wiki/File:Unlabeled_Pride_Flag.svg"
+      ],
+      "definitionEvidence": "File caption directly includes both orientation and gender.",
+      "flagSources": [
+        "https://commons.wikimedia.org/wiki/File:Unlabeled_Pride_Flag.svg"
+      ],
+      "flagVariant": "December 2020 pastel four-stripe representation",
+      "colors": [
+        "#E7F9E4",
+        "#FFFFFF",
+        "#DEF0F7",
+        "#FAE2C3"
+      ],
+      "flagEvidence": "Raw SVG inspected: green white blue orange, RGB 231/249/228,255/255/255,222/240/247,250/226/195. Asset https://upload.wikimedia.org/wikipedia/commons/6/6c/Unlabeled_Pride_Flag.svg revision 10 May 2025 21:10.",
+      "status": "palette-verified",
+      "limitations": "Exact colors verified for this identified digital representation only; not a universal standard for all variants.",
+      "verification": {
+        "status": "wikipedia",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Sexual_identity#Unlabeled_sexuality"
+        ],
+        "evidence": "Section documents choosing not to label sexual identity. It does not directly support the extra gender scope in the catalog definition."
+      }
+    }
+  ]
+}

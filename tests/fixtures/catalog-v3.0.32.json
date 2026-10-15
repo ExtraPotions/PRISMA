@@ -1,0 +1,421 @@
+[
+  {
+    "id": "rainbow",
+    "words": [
+      "queer",
+      "lgbtq",
+      "lgbtq+",
+      "lgbt",
+      "lgbt+",
+      "lgbtqia",
+      "lgbtqia+",
+      "pride flag",
+      "pride flags"
+    ]
+  },
+  {
+    "id": "progress-pride",
+    "words": [
+      "progress pride",
+      "progresspride",
+      "inclusive pride"
+    ]
+  },
+  {
+    "id": "philadelphia-pride",
+    "words": [
+      "philadelphia pride",
+      "philly pride",
+      "more color more pride"
+    ]
+  },
+  {
+    "id": "gay",
+    "words": [
+      "gay",
+      "achillean",
+      "mlm"
+    ]
+  },
+  {
+    "id": "lesbian",
+    "words": [
+      "lesbian",
+      "wlw"
+    ]
+  },
+  {
+    "id": "bisexual",
+    "words": [
+      "bisexual"
+    ]
+  },
+  {
+    "id": "pansexual",
+    "words": [
+      "pansexual"
+    ]
+  },
+  {
+    "id": "transgender",
+    "words": [
+      "transgender"
+    ]
+  },
+  {
+    "id": "transmasculine",
+    "words": [
+      "transmasculine",
+      "transmasc"
+    ]
+  },
+  {
+    "id": "transfeminine",
+    "words": [
+      "transfeminine",
+      "transfem",
+      "transfemme"
+    ]
+  },
+  {
+    "id": "non-binary",
+    "words": [
+      "nonbinary",
+      "non-binary",
+      "enby"
+    ]
+  },
+  {
+    "id": "asexual",
+    "words": [
+      "asexual"
+    ]
+  },
+  {
+    "id": "aromantic",
+    "words": [
+      "aromantic"
+    ]
+  },
+  {
+    "id": "aroace",
+    "words": [
+      "aroace",
+      "aromantic asexual",
+      "aromantic-asexual",
+      "aromantic/asexual"
+    ]
+  },
+  {
+    "id": "oriented-aroace",
+    "words": [
+      "oriented aroace",
+      "oriented-aroace",
+      "orientedaroace"
+    ]
+  },
+  {
+    "id": "acespec",
+    "words": [
+      "acespec",
+      "ace-spec",
+      "ace spectrum",
+      "asexual spectrum"
+    ]
+  },
+  {
+    "id": "arospec",
+    "words": [
+      "arospec",
+      "aro-spec",
+      "aro spectrum",
+      "aromantic spectrum"
+    ]
+  },
+  {
+    "id": "demisexual",
+    "words": [
+      "demisexual",
+      "demi"
+    ]
+  },
+  {
+    "id": "demiromantic",
+    "words": [
+      "demiromantic"
+    ]
+  },
+  {
+    "id": "graysexual",
+    "words": [
+      "graysexual",
+      "greysexual",
+      "gray-asexual",
+      "grey-asexual"
+    ]
+  },
+  {
+    "id": "grayromantic",
+    "words": [
+      "grayromantic",
+      "greyromantic",
+      "gray-aromantic",
+      "grey-aromantic"
+    ]
+  },
+  {
+    "id": "cupiosexual",
+    "words": [
+      "cupiosexual",
+      "cupio"
+    ]
+  },
+  {
+    "id": "fraysexual",
+    "words": [
+      "fraysexual",
+      "fray"
+    ]
+  },
+  {
+    "id": "lithromantic",
+    "words": [
+      "lithromantic",
+      "akoiromantic",
+      "lithro",
+      "akoi"
+    ]
+  },
+  {
+    "id": "genderfluid",
+    "words": [
+      "genderfluid",
+      "gender-fluid"
+    ]
+  },
+  {
+    "id": "genderflux",
+    "words": [
+      "genderflux"
+    ]
+  },
+  {
+    "id": "genderqueer",
+    "words": [
+      "genderqueer",
+      "gender-queer"
+    ]
+  },
+  {
+    "id": "agender",
+    "words": [
+      "agender"
+    ]
+  },
+  {
+    "id": "bigender",
+    "words": [
+      "bigender"
+    ]
+  },
+  {
+    "id": "pangender",
+    "words": [
+      "pangender"
+    ]
+  },
+  {
+    "id": "demigirl",
+    "words": [
+      "demigirl"
+    ]
+  },
+  {
+    "id": "demiboy",
+    "words": [
+      "demiboy"
+    ]
+  },
+  {
+    "id": "demigender",
+    "words": [
+      "demigender"
+    ]
+  },
+  {
+    "id": "maverique",
+    "words": [
+      "maverique"
+    ]
+  },
+  {
+    "id": "androgyne",
+    "words": [
+      "androgyne",
+      "androgynous"
+    ]
+  },
+  {
+    "id": "neutrois",
+    "words": [
+      "neutrois"
+    ]
+  },
+  {
+    "id": "trigender",
+    "words": [
+      "trigender"
+    ]
+  },
+  {
+    "id": "polygender",
+    "words": [
+      "polygender"
+    ]
+  },
+  {
+    "id": "genderfae",
+    "words": [
+      "genderfae",
+      "genderdoe"
+    ]
+  },
+  {
+    "id": "genderfaun",
+    "words": [
+      "genderfaun",
+      "genderfawn"
+    ]
+  },
+  {
+    "id": "genderflor",
+    "words": [
+      "genderflor"
+    ]
+  },
+  {
+    "id": "omnisexual",
+    "words": [
+      "omnisexual",
+      "omni"
+    ]
+  },
+  {
+    "id": "polysexual",
+    "words": [
+      "polysexual"
+    ]
+  },
+  {
+    "id": "polyamorous",
+    "words": [
+      "polyamorous",
+      "polyam",
+      "polyamory"
+    ]
+  },
+  {
+    "id": "heteroflexible",
+    "words": [
+      "heteroflexible",
+      "hetero-flexible",
+      "heteroflex"
+    ]
+  },
+  {
+    "id": "homoflexible",
+    "words": [
+      "homoflexible",
+      "homo-flexible",
+      "homoflex"
+    ]
+  },
+  {
+    "id": "bicurious",
+    "words": [
+      "bicurious",
+      "bi-curious",
+      "bi curious"
+    ]
+  },
+  {
+    "id": "abrosexual",
+    "words": [
+      "abrosexual",
+      "abro"
+    ]
+  },
+  {
+    "id": "multisexual",
+    "words": [
+      "multisexual",
+      "multi"
+    ]
+  },
+  {
+    "id": "intersex",
+    "words": [
+      "intersex"
+    ]
+  },
+  {
+    "id": "two-spirit",
+    "words": [
+      "two-spirit",
+      "two spirit",
+      "twospirit"
+    ]
+  },
+  {
+    "id": "sapphic",
+    "words": [
+      "sapphic"
+    ]
+  },
+  {
+    "id": "queerplatonic",
+    "words": [
+      "queerplatonic",
+      "queer-platonic",
+      "qpr"
+    ]
+  },
+  {
+    "id": "butch",
+    "words": [
+      "butch"
+    ]
+  },
+  {
+    "id": "femme",
+    "words": [
+      "femme"
+    ]
+  },
+  {
+    "id": "bear",
+    "words": [
+      "bear pride"
+    ]
+  },
+  {
+    "id": "leather",
+    "words": [
+      "leather pride"
+    ]
+  },
+  {
+    "id": "straight-ally",
+    "words": [
+      "straight ally",
+      "lgbtq ally",
+      "lgbtq allies"
+    ]
+  },
+  {
+    "id": "questioning",
+    "words": [
+      "questioning"
+    ]
+  }
+]
