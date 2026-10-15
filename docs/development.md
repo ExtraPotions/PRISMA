@@ -24,3 +24,11 @@ Suite-wide steps (shared Core changes, release order, screenshots, adding a prod
 
 - The install stays between 100 and 512 KiB, with no `@resource`, `@require` or embedded images.
 - README screenshots (`appearance.png`, `highlights-demo.png`) match `docs/screenshots.config.cjs`. Shot routes use current tab names, for example `section: 'Look', tab: 'Style'`.
+
+## Single local release gate
+
+Run `npm run verify:release` once. It builds and runs all release checks, including the full suite and published Core pin check. Do not run `npm test` separately first. Windows test entry points limit concurrency to two files; CI keeps its normal concurrency.
+
+Publishing calls the reusable Verify workflow and reuses its checked artifact for the exact commit. Commit generated files before requesting a release; CI rejects build drift rather than committing or rebasing during publication. The publisher checks the stored commit and SHA256 checksums and does not rebuild.
+
+Claude, Codex and Antigravity should follow this gate and acknowledge the applicable workflow rules in their next handoff. The workspace AGENTS.md contains the shared routing; completed history belongs in HANDOFF.md, with TASK.md limited to the current assignment.

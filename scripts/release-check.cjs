@@ -19,6 +19,5 @@ const bytes = Buffer.byteLength(script, 'utf8');
 if (bytes < 100 * 1024 || bytes > 512 * 1024) throw new Error(`Direct-install userscript must be 100–512 KiB (got ${bytes} bytes).`);
 if (/^\/\/ @require\s+/m.test(script)) throw new Error('Remote executable JavaScript dependency detected.');
 execFileSync(process.execPath, [path.join(root, 'scripts', 'build.cjs'), '--check'], { stdio: 'inherit' });
-const tests = fs.readdirSync(path.join(root, 'tests')).filter((name) => name.endsWith('.test.cjs')).map((name) => path.join(root, 'tests', name));
-execFileSync(process.execPath, ['--test', ...tests], { stdio: 'inherit' });
+execFileSync(process.execPath, [path.join(__dirname, 'run-tests.cjs')], { stdio: 'inherit' });
 console.log('Release check passed locally. No remote action was performed.');
