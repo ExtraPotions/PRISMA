@@ -1,7 +1,8 @@
-EXP.VERSION = '3.2.28';
+EXP.VERSION = '3.2.29';
 
 EXP.ReleaseNotes = (() => {
   const notes = Object.freeze({
+    '3.2.29': ["Maintenance release; product features and settings are unchanged.","Includes the current shared foundation."],
     '3.2.28': ["Keeps the launcher clear of floating site buttons that mark themselves as a button on their outer element.","Updates the shared foundation to exp-core 3.9.3."],
     '3.2.27': ["Keeps the launcher clear of Twitch's Sign Up bar at phone width.","Keeps the launcher clear of floating site buttons such as a store's shopping assistant, with the shared foundation updated to exp-core 3.9.2."],
     '3.2.26': ["Never highlights inside page or SVG titles, so tab titles, bookmarks, and history keep their words.","Updates the shared foundation to exp-core 3.9.1, which keeps the launcher in its corner on Reddit and makes long feeds scroll more smoothly."],
@@ -127,7 +128,7 @@ EXP.ReleaseNotes = (() => {
     ])
   });
   function current() { return notes[EXP.VERSION] || Object.freeze(['Current PRISMA improvements and fixes.']); }
-  const QUIET_RELEASES = Object.freeze(["3.2.16"]);
+  const QUIET_RELEASES = Object.freeze(["3.2.29","3.2.16"]);
   function isQuietUpgrade(previous) { return ExtraPotionsCore.isQuietUpgrade(previous, EXP.VERSION, Object.keys(notes), QUIET_RELEASES); }
   return Object.freeze({ current, isQuietUpgrade, QUIET_RELEASES });
 })();
