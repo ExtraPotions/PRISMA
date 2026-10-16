@@ -19,8 +19,8 @@ EXP.Matcher = (() => {
     expression = alternatives.length ? new RegExp(alternatives.join('|'), 'giu') : null;
   }
   function boundary(text, start, end) {
-    const before = start > 0 ? text[start - 1] : '';
-    const after = end < text.length ? text[end] : '';
+    const before = [...text.slice(Math.max(0, start - 2), start)].at(-1) || '';
+    const after = end < text.length ? String.fromCodePoint(text.codePointAt(end)) : '';
     return (!before || !wordLike.test(before)) && (!after || !wordLike.test(after));
   }
   function evaluate(record, sourceText, start, end, settings) {

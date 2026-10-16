@@ -193,7 +193,7 @@ EXP.UI = (() => {
     );
     return fragment;
   }
-  function diagnosticReport() { const core = EXP.Core.diagnosticSnapshot(); return EXP.Diagnostics.createDiagnosticsReport('PRISMA', { host, settings: EXP.Settings.exportData(), updates: EXP.Updates.status(), product: { id: 'prisma', version: EXP.VERSION }, lifecycle: engineState.status, routeEpoch: engineState.routeEpoch, catalog: EXP.Catalog.status(), matches: { total: engineState.total, byIdentityId: engineState.summary, decisionBands: engineState.decisions }, processing: engineState.metrics, safeMode: EXP.Settings.snapshot().safeMode, core }); }
+  function diagnosticReport() { const core = EXP.Core.diagnosticSnapshot(); return EXP.Diagnostics.createDiagnosticsReport('PRISMA', { host, settings: EXP.Settings.diagnosticSnapshot(), updates: EXP.Updates.status(), product: { id: 'prisma', version: EXP.VERSION }, lifecycle: engineState.status, routeEpoch: engineState.routeEpoch, catalog: EXP.Catalog.status(), matches: { total: engineState.total, byIdentityId: engineState.summary, decisionBands: engineState.decisions }, processing: engineState.metrics, safeMode: EXP.Settings.snapshot().safeMode, core }); }
   function renderAdvanced() {
     const state = EXP.Settings.snapshot(); const section = group();
     section.append(switchControl('Safe Mode', 'Immediately restores the page and keeps this recovery menu available.', state.safeMode, (safeMode) => update({ safeMode }, 'safe-mode')));
@@ -216,7 +216,7 @@ EXP.UI = (() => {
   }
   function renderSettings() {
     healthControl?.dispose();healthControl=ExtraPotionsCore.createProductTimeline('prisma',systemHealthSnapshot,announce,{layout:'grouped'});
-    return ExtraPotionsCore.createProductSystem({id:'prisma',version:EXP.VERSION,issueSettings:()=>({current:EXP.Settings.snapshot(),defaults:EXP.Settings.defaults}),timeline:healthControl.element,layout:'grouped',
+    return ExtraPotionsCore.createProductSystem({id:'prisma',version:EXP.VERSION,issueSettings:()=>({current:EXP.Settings.diagnosticSnapshot(),defaults:EXP.Settings.diagnosticSnapshot(EXP.Settings.defaults)}),timeline:healthControl.element,layout:'grouped',
       diagnostics:EXP.Diagnostics.createDiagnosticsControls(diagnosticReport,announce),
       onReset:()=>{importDraft=null;EXP.Settings.resetAll();render();location.reload();},notify:announce
     });

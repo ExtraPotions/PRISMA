@@ -107,6 +107,10 @@ EXP.Settings = (() => {
     return snapshot();
   }
   function snapshot() { return ExtraPotionsCore.cloneSettings(state || defaults); }
+  function diagnosticSnapshot(value = snapshot()) {
+    const { ignoredPhrases, siteOverrides, disabledIdentities, exclusions, sensitiveSiteOptIns, ...settings } = value;
+    return { ...settings, ignoredPhraseCount: ignoredPhrases.length, siteOverrideCount: Object.keys(siteOverrides).length, disabledIdentityCount: disabledIdentities.length, exclusionCount: exclusions.length, sensitiveSiteOptInCount: sensitiveSiteOptIns.length };
+  }
   function replace(value, reason = 'replace') { if(ExtraPotionsCore.productDataResetting?.('prisma'))return snapshot(); const next = validate(value);  rawWrite('settings', next); state = next; for (const listener of listeners) listener(snapshot(), reason); return snapshot(); }
   function update(patch, reason = 'update') { return replace({ ...snapshot(), ...patch }, reason); }
   function subscribe(listener) { listeners.add(listener); return () => listeners.delete(listener); }
@@ -129,5 +133,5 @@ EXP.Settings = (() => {
     for (const listener of listeners) listener(snapshot(), 'product-reset');
     return snapshot();
   }
-  return Object.freeze({resetAll, PREFIX, SCHEMA, defaults, validate, load, snapshot, replace, update, subscribe, effective, exportData, prepareImport, hasStored: () => rawRead('settings') !== undefined });
+  return Object.freeze({resetAll, PREFIX, SCHEMA, defaults, validate, load, snapshot, diagnosticSnapshot, replace, update, subscribe, effective, exportData, prepareImport, hasStored: () => rawRead('settings') !== undefined });
 })();
