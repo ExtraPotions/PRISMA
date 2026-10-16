@@ -1,3 +1,9 @@
+## 3.2.30 — 2026-10-16
+
+- Uses less memory before the menu is first opened, with shared foundation exp-core 3.9.5.
+- Leaves ignored phrases out of diagnostics and respects Unicode word boundaries.
+- Rechecks edited highlights and finds text inside nested and newly updated open shadow roots.
+
 ## 3.2.29 — 2026-10-16 (quiet)
 
 - Maintenance release; product features and settings are unchanged.
