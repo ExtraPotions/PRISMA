@@ -10,6 +10,35 @@ EXP.Engine = (() => {
   let settings = null;
   let active = false;
   let currentHref = location.href;
+  const contentObservers = new Map();
+  const changedRoots = new Set();
+  let contentFrame = 0;
+  function observeContent(root) {
+    if (contentObservers.has(root)) return;
+    const observer = new MutationObserver(records => {
+      if (!active) return;
+      for (const mutation of records) {
+        const target = mutation.target.nodeType === Node.TEXT_NODE ? mutation.target.parentElement : mutation.target;
+        const hit = target?.closest?.(`.${EXP.Renderer.HIT}`);
+        if (hit) {
+          const parent = EXP.Renderer.restore(hit);
+          if (parent) changedRoots.add(parent);
+        } else if (target && root instanceof ShadowRoot && !target.closest?.('[data-exp-owned="1"]')) changedRoots.add(target);
+      }
+      if (changedRoots.size && !contentFrame) contentFrame = requestAnimationFrame(() => {
+        contentFrame = 0;
+        const roots = [...changedRoots]; changedRoots.clear();
+        processBatch(roots);
+      });
+    });
+    observer.observe(root, { childList: true, subtree: true, characterData: true });
+    contentObservers.set(root, observer);
+  }
+  function stopContentObservers() {
+    for (const observer of contentObservers.values()) observer.disconnect();
+    contentObservers.clear(); changedRoots.clear();
+    cancelAnimationFrame(contentFrame); contentFrame = 0;
+  }
   const recovery=ExtraPotionsCore.createRecoveryGuard();
   function guardedScan(run,force=false) {
     if(ExtraPotionsCore.suiteSitePaused())return false;
@@ -72,13 +101,17 @@ EXP.Engine = (() => {
   }
   function collectRoots(root) {
     const roots = [root];
-    const base = root?.querySelectorAll ? root : null;
-    if (base) for (const element of base.querySelectorAll('*')) if (element.shadowRoot) roots.push(element.shadowRoot);
+    for (let index = 0; index < roots.length; index++) {
+      const base = roots[index];
+      const elements = [...(base.nodeType === Node.ELEMENT_NODE ? [base] : []), ...(base.querySelectorAll?.('*') || [])];
+      for (const element of elements) if (element.shadowRoot && !element.closest(ignoredSelector)) roots.push(element.shadowRoot);
+    }
     return roots;
   }
   function scanRoot(root) {
     if (!root?.isConnected && !(root instanceof ShadowRoot)) return;
     for (const scan of collectRoots(root)) {
+      if (scan instanceof ShadowRoot) observeContent(scan);
       EXP.Renderer.ensureStyle(scan.getRootNode ? scan.getRootNode() : document);
       if (scan.nodeType === Node.TEXT_NODE) processText(scan);
       else {
@@ -96,6 +129,7 @@ EXP.Engine = (() => {
   }
   function prune() {
     for (const [id, record] of matches) if (!record.element.isConnected) { matches.delete(id); metrics.detached += 1; }
+    for (const [root, observer] of contentObservers) if (root instanceof ShadowRoot && !root.host.isConnected) { observer.disconnect(); contentObservers.delete(root); }
     if (currentIndex >= matches.size) currentIndex = matches.size - 1;
   }
   function canRun(value = settings) {
@@ -173,8 +207,8 @@ EXP.Engine = (() => {
     });
   }
   function setTemporaryHidden(value) { temporarilyHidden = Boolean(value); EXP.Renderer.setHidden(temporarilyHidden); notify(); }
-  function start() { active = true; settings = EXP.Settings.effective(); rebuild('start'); }
-  function stop() { active = false; EXP.Renderer.clear(); matches.clear(); notify(); }
+  function start() { active = true; observeContent(document.documentElement); settings = EXP.Settings.effective(); rebuild('start'); }
+  function stop() { active = false; stopContentObservers(); EXP.Renderer.clear(); matches.clear(); notify(); }
   function cleanup() { stop(); EXP.Renderer.cleanup(); listeners.clear(); }
   return Object.freeze({ retry, start, stop, cleanup, rebuild, navigation, processBatch, snapshot, explain, navigateNext: () => navigate(1), navigatePrevious: () => navigate(-1), navigateTo, setTemporaryHidden, highlightAll: () => setTemporaryHidden(false), subscribe(listener) { listeners.add(listener); return () => listeners.delete(listener); } });
 })();

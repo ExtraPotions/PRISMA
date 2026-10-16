@@ -190,6 +190,14 @@ EXP.Renderer = (() => {
     node.replaceWith(fragment);
     return records;
   }
+  function restore(span) {
+    if (!wrappers.delete(span)) return null;
+    if (!span.isConnected || !span.matches(`.${HIT}`)) return null;
+    const parent = span.parentNode;
+    span.replaceWith(document.createTextNode(span.textContent || ''));
+    parent?.normalize?.();
+    return parent;
+  }
   function clear() {
     stopPresentation();
     const parents = new Set();
@@ -230,5 +238,5 @@ EXP.Renderer = (() => {
   function setHidden(value) { hidden = Boolean(value); if (currentSettings) refresh(currentSettings); }
   function focus(record) { if (!record?.element?.isConnected) return false; record.element.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'auto' }); record.element.focus({ preventScroll: true }); record.element.dataset.current = '1'; setTimeout(() => { if (record.element) delete record.element.dataset.current; }, 1200); return true; }
   function cleanup() { clear(); for (const style of styles.values()) style.remove(); styles.clear(); hidden = false; }
-  return Object.freeze({ HIT, createPreview, ensureStyle, wrap, clear, refresh, setHidden, focus, cleanup, wrapperCount: () => [...wrappers].filter((node) => node.isConnected).length });
+  return Object.freeze({ HIT, createPreview, ensureStyle, wrap, restore, clear, refresh, setHidden, focus, cleanup, wrapperCount: () => [...wrappers].filter((node) => node.isConnected).length });
 })();
