@@ -128,6 +128,7 @@ EXP.Engine = (() => {
     }
   }
   function prune() {
+    EXP.Renderer.pruneDetached();
     for (const [id, record] of matches) if (!record.element.isConnected) { matches.delete(id); metrics.detached += 1; }
     for (const [root, observer] of contentObservers) if (root instanceof ShadowRoot && !root.host.isConnected) { observer.disconnect(); contentObservers.delete(root); }
     if (currentIndex >= matches.size) currentIndex = matches.size - 1;

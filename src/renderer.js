@@ -237,6 +237,7 @@ EXP.Renderer = (() => {
   }
   function setHidden(value) { hidden = Boolean(value); if (currentSettings) refresh(currentSettings); }
   function focus(record) { if (!record?.element?.isConnected) return false; record.element.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'auto' }); record.element.focus({ preventScroll: true }); record.element.dataset.current = '1'; setTimeout(() => { if (record.element) delete record.element.dataset.current; }, 1200); return true; }
+  function pruneDetached() { for (const span of wrappers) if (!span.isConnected) wrappers.delete(span); }
   function cleanup() { clear(); for (const style of styles.values()) style.remove(); styles.clear(); hidden = false; }
-  return Object.freeze({ HIT, createPreview, ensureStyle, wrap, restore, clear, refresh, setHidden, focus, cleanup, wrapperCount: () => [...wrappers].filter((node) => node.isConnected).length });
+  return Object.freeze({ HIT, createPreview, ensureStyle, wrap, restore, clear, refresh, setHidden, focus, cleanup, pruneDetached, wrapperCount: () => [...wrappers].filter((node) => node.isConnected).length });
 })();
