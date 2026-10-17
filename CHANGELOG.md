@@ -1,3 +1,8 @@
+## 3.2.32 — 2026-10-17
+
+- Releases removed highlighted content from memory during normal page updates.
+- Keeps highlights intact when page content moves within the document.
+
 ## 3.2.31 — 2026-10-17
 
 - Keeps native dropdown options readable with matching menu colors.
