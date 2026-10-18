@@ -1,7 +1,13 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
-// Opens a shared-menu submenu detail view by its row label; 'Overview' returns to the section's home view.
-async function openSubmenu(scope,label){const title=scope.locator('.exp-submenu-detail:not([hidden])>.exp-submenu-title:visible');if(await title.count()&&(await title.first().textContent())===label)return;const back=scope.locator('.exp-submenu-detail:not([hidden])>.exp-submenu-back:visible');while(await back.count())await back.first().click();if(label!=='Overview')await scope.locator('.exp-submenu-row:visible').filter({hasText:new RegExp('^'+label+'$')}).click();}
+// Opens the current inline settings group without collapsing an already-open disclosure.
+async function openSubmenu(scope,label){
+ const aliases={Style:'Highlight style',Menu:'Menu Preferences',Transfer:'Settings transfer',Effects:'Effects & integrations',Profiles:'Profiles & sites',Page:'Page tools',Retailers:'Retailer modules',Review:'Protection review',Activity:'Page activity',Playback:'Playback options',Alerts:'Notifications',Patterns:'Advanced Amazon',Tools:'Page tools'};
+ if(label==='Overview')return;
+ const shortcut=scope.locator('[data-exp-menu-shortcut="'+label.toLowerCase()+'"]');if(await shortcut.count()){await shortcut.click();return;}
+ const summary=scope.locator('summary:visible').filter({hasText:new RegExp('^'+(aliases[label]||label)+'(?: .*)?'+'$')}).first();
+ await summary.waitFor();if(!await summary.evaluate(n=>n.parentElement.open))await summary.click();
+}
 function load(){const context={EXP:{}};for(const file of ['catalog-data.js','catalog.js','matcher.js'])vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../src',file),'utf8'),context);return context.EXP;}
 const settings={matcherMode:'balanced',disabledIdentities:[],surroundingContext:true,ambiguityProtection:true,includeRomantic:true};
 test('expanded catalog validates and exposes sourced definitions with separate categories',()=>{

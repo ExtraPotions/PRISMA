@@ -1,6 +1,7 @@
 EXP.UI = (() => {
   let healthControl;
   let stylePreview;
+  let pageActions;
   function systemHealthSnapshot() {
     const settings=EXP.Settings.snapshot(),data=EXP.Engine.snapshot({includeMatchText:false}),checkedAt=Date.now();
     if(settings.safeMode||ExtraPotionsCore.suiteSitePaused()||data.status==='disabled')return {state:'paused',reason:'Highlighting is paused. Saved preferences are preserved.',checkedAt};
@@ -30,7 +31,7 @@ EXP.UI = (() => {
   const button = (label, action, className = 'action') => { const node = el('button', { type: 'button', class: className }, label); node.addEventListener('click', action); return node; };
   const announce = (message, kind = 'status') => { if (live) { live.textContent = message; live.dataset.kind = kind; } if (!toast) return; toast.textContent=message;toast.hidden=false;toast.style.top=`${Math.max(8,(launcher?.getBoundingClientRect().top||60)-48)}px`;clearTimeout(toastTimer);toastTimer=setTimeout(()=>{if(toast)toast.hidden=true;},3000); };
   function group(title) { const node = el('section', { class: 'group' }); if (title) node.append(el('h3', {}, title)); return node; }
-  function row(label, help = '') { const node = el('div', { class: 'row' }); const copy = el('div', { class: 'copy' }); copy.append(el('span', { class: 'label' }, label)); node.append(copy); return node; }
+  function row(label, help = '') { const node = el('div', { class: 'row' }); const copy = el('div', { class: 'copy' }); const title=el('span', { class: 'label' }, label);ExtraPotionsCore.setMenuHelp(title,help);copy.append(title); node.append(copy); return node; }
   function switchControl(label, help, value, change, disabled = false) { const node = row(label, help); const control = el('button', { type: 'button', class: 'switch', role: 'switch', 'aria-checked': String(Boolean(value)), 'aria-label': label }); control.disabled = disabled; control.append(el('span', { 'aria-hidden': 'true' })); control.addEventListener('click', () => { const next = control.getAttribute('aria-checked') !== 'true'; control.setAttribute('aria-checked', String(next)); change(next); }); node.append(control); return node; }
   function selectControl(label, help, value, choices, change, disabled = false) { const node = row(label, help); const select = el('select', { 'aria-label': label }); select.disabled = disabled; for (const [id, name] of choices) { const option = el('option', { value: id }, name); option.selected = id === value; select.append(option); } select.addEventListener('change', () => change(select.value)); node.append(select); return node; }
   function actionRow(label, help, action, actionLabel = label, disabled = false) { const node = row(label, help); const control = button(actionLabel, action); if (['Reset','Reset site','Restore'].includes(actionLabel)) control.classList.add('warn'); control.disabled = disabled; node.append(control); return node; }
@@ -209,13 +210,13 @@ EXP.UI = (() => {
   }
   function renderMenuPreferences() {
     const state=EXP.Settings.snapshot();
-    const preferences=ExtraPotionsCore.createDisclosure('Menu Preferences',ExtraPotionsCore.createMenuSizeControls());
+    const preferences=document.createElement('div');preferences.append(ExtraPotionsCore.createMenuSizeControls());
     preferences.append(switchControl('Auto-close menu', 'Closes after 15 seconds without interaction.', state.menuAutoClose, (menuAutoClose) => update({ menuAutoClose }, 'menu-auto-close')));
     preferences.append(switchControl('Update notifications', 'Checks GitHub for new releases. Never installs automatically.', state.updateNotifications, (updateNotifications) => { update({ updateNotifications }, 'update-notifications'); if (updateNotifications) EXP.Updates.check(true).then((result) => { markLauncherUpdate(result); announce(result.available ? `Version ${result.latest} is available.` : result.state === 'failed' ? 'Update check failed quietly.' : 'PRISMA is up to date.'); }); }));
     return preferences;
   }
   function renderSettings() {
-    healthControl?.dispose();healthControl=ExtraPotionsCore.createProductTimeline('prisma',systemHealthSnapshot,announce,{layout:'grouped'});
+    healthControl?.dispose();healthControl=ExtraPotionsCore.createProductTimeline('prisma',systemHealthSnapshot,announce,{layout:'grouped',showActivity:false});
     return ExtraPotionsCore.createProductSystem({id:'prisma',version:EXP.VERSION,issueSettings:()=>({current:EXP.Settings.diagnosticSnapshot(),defaults:EXP.Settings.diagnosticSnapshot(EXP.Settings.defaults)}),timeline:healthControl.element,layout:'grouped',
       diagnostics:EXP.Diagnostics.createDiagnosticsControls(diagnosticReport,announce),
       onReset:()=>{importDraft=null;EXP.Settings.resetAll();render();location.reload();},notify:announce
@@ -224,6 +225,7 @@ EXP.UI = (() => {
   const routeRenderers = { page: renderPage, appearance: renderAppearanceMenu, advanced: renderAdvancedMenu, system: renderSettings };
   function render() {
     engineState = EXP.Engine.snapshot({ includeMatchText: false });
+    pageActions?.refresh();
     product?.renderActive();
     product?.refresh();
   }
@@ -263,6 +265,7 @@ EXP.UI = (() => {
     });
     ExtraPotionsCore.setMenuStatus('prisma', systemHealthSnapshot);
     ({ host, shadow, launcher, panel } = product);
+    pageActions=ExtraPotionsCore.createPageActions({host,shadow,label:'PRISMA',visible:()=>{const state=EXP.Settings.snapshot();return state.enabled&&!state.safeMode&&!ExtraPotionsCore.suiteSitePaused()&&EXP.Engine.snapshot({includeMatchText:false}).total>0;},actions:[{label:'Previous Match',run:()=>{const result=EXP.Engine.navigatePrevious();announce(result?`Match ${result.position} of ${result.total}.`:'No match to navigate.');}},{label:'Next Match',run:()=>{const result=EXP.Engine.navigateNext();announce(result?`Match ${result.position} of ${result.total}.`:'No match to navigate.');}}]});
     EXP.Core.injectStyle(shadow, '.catalog-detail{padding:8px;margin:4px 0 8px;border:1px solid var(--theme-line);border-radius:7px;background:var(--theme-bg);font-size:var(--exp-font-size-small,11px);line-height:1.45;overflow-wrap:anywhere}.catalog-detail[hidden]{display:none!important}.catalog-detail p{margin:6px 0}.catalog-detail a{display:block;color:var(--theme-accent2);margin-top:5px}.catalog-palette{height:20px;border:1px solid var(--theme-line);border-radius:4px}', { expPrismaCatalog: '1' });
     panel.classList.add('panel');
     panel.setAttribute('aria-modal', 'true');
@@ -303,6 +306,7 @@ EXP.UI = (() => {
     });
     unsubscribe = EXP.Engine.subscribe(value => {
       engineState = value;
+      pageActions?.refresh();
       if (product?.isOpen && panel.querySelector('[data-section="page"][aria-expanded="true"],[data-section="system"][aria-expanded="true"]')) render();
     });
     document.addEventListener('keydown', bindKeys, true);
@@ -310,6 +314,7 @@ EXP.UI = (() => {
     render();
   }
   function cleanup() {
+    pageActions?.destroy();pageActions=null;
     document.removeEventListener('keydown', bindKeys, true);
     document.removeEventListener('exp-prisma:explain', explainEvent, true);
     stylePreview?.dispose();healthControl?.dispose();unsubscribe?.(); clearTimeout(toastTimer); noticeController?.destroy(); product?.destroy();

@@ -1,7 +1,8 @@
-EXP.VERSION = '3.2.32';
+EXP.VERSION = '3.2.33';
 
 EXP.ReleaseNotes = (() => {
   const notes = Object.freeze({
+    '3.2.33': ["Uses a compact sidebar with inline settings, bounded help and three menu sizes.","Keeps diagnostics buttons readable and removes the activity list that repeated Status."],
     '3.2.32': ["Releases removed highlighted content from memory during normal page updates.","Keeps highlights intact when page content moves within the document."],
     '3.2.31': ["Keeps native dropdown options readable with matching menu colors.","Includes Core 3.9.6 to avoid parsing duplicate injected menu styles."],
     '3.2.30': ["Uses less memory before the menu is first opened, with shared foundation exp-core 3.9.5.","Leaves ignored phrases out of diagnostics and respects Unicode word boundaries.","Rechecks edited highlights and finds text inside nested and newly updated open shadow roots."],

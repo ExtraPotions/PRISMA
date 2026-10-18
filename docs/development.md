@@ -23,7 +23,7 @@ Suite-wide steps (shared Core changes, release order, screenshots, adding a prod
 ## Things the checks hold fixed
 
 - The install stays between 100 and 512 KiB, with no `@resource`, `@require` or embedded images.
-- README screenshots (`appearance.png`, `highlights-demo.png`) match `docs/screenshots.config.cjs`. Shot routes use current tab names, for example `section: 'Look', tab: 'Style'`.
+- README screenshots (`appearance.png`, `highlights-demo.png`) match `docs/screenshots.config.cjs`. Shot routes use current tab names, for example `section: 'Look', tab: 'Highlight style'`.
 
 ## Manual checks and publication
 
@@ -32,3 +32,4 @@ Build the changed product and choose relevant manual tests. `release:check` and 
 Both GitHub workflows are manual: Manual tests runs the suite; Publish release uploads the selected commit's existing built assets and SHA256SUMS without rebuilding or testing. Commit generated files before an authorized publication. Publishing requires an explicit user request; commits, pushes and tag pushes do not start it. Existing releases are not overwritten.
 
 Core synchronization is deliberate local work. There is no scheduled sync, automatic product release, pin wait or release-order gate. See the suite guide's Shipping section. Claim and handoff rules remain in workspace AGENTS.md.
+

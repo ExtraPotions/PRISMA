@@ -1,3 +1,8 @@
+## 3.2.33 — 2026-10-18
+
+- Uses a compact sidebar with inline settings, bounded help and three menu sizes.
+- Keeps diagnostics buttons readable and removes the activity list that repeated Status.
+
 ## 3.2.32 — 2026-10-17
 
 - Releases removed highlighted content from memory during normal page updates.
