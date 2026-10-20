@@ -1,4 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
-  <title id="title">PRISMA Launcher Gem</title><desc id="desc">A borderless triangular spectrum crystal with magenta, violet, and cyan facets.</desc>
-  <polygon points="512,188 820,782 204,782" fill="#151020"/><polygon points="512,188 512,494 332,690 204,782" fill="#ff9af0"/><polygon points="512,188 690,690 512,494" fill="#a985ff"/><polygon points="512,188 820,782 690,690" fill="#5fe9f4"/><polygon points="204,782 332,690 512,494 512,782" fill="#d933bf"/><polygon points="512,494 690,690 820,782 512,782" fill="#277ddd"/><polygon points="332,690 512,494 512,782" fill="#7137d6"/><polygon points="512,494 690,690 512,782" fill="#3752e8"/><polygon points="512,188 548,466 512,494 476,466" fill="#fff0b0"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">PRISMA Launcher Gem</title>
+  <desc id="desc">Borderless triangular spectrum crystal with broad joined magenta, violet and cyan facets. No inset symbol.</desc>
+  <polygon points="64,4 94,63 64,80" fill="#a985ff"/>
+  <polygon points="94,63 123,121 64,80" fill="#5fe9f4"/>
+  <polygon points="123,121 64,121 64,80" fill="#277ddd"/>
+  <polygon points="64,121 5,121 64,80" fill="#7137d6"/>
+  <polygon points="5,121 34,63 64,80" fill="#d933bf"/>
+  <polygon points="34,63 64,4 64,80" fill="#ff9af0"/>
 </svg>

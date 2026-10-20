@@ -1,3 +1,9 @@
+## 3.2.34 — 2026-10-20
+
+- Refreshes the triangular gem facets and approved product tagline.
+- Uses the shared compact menu with support and reset grouped inside System.
+- Keeps paired diagnostics controls readable in smaller layouts.
+
 ## 3.2.33 — 2026-10-18
 
 - Uses a compact sidebar with inline settings, bounded help and three menu sizes.

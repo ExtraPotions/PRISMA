@@ -469,7 +469,7 @@ test('menu routes use simplified labels with scoped secondary disclosures', asyn
     return { labels, subtitle, appearance, styleCollapsed, advancedDisclosures, systemVisible, systemItems:[...root.querySelectorAll('[data-exp-product-system] [data-exp-system-item]')].map(n=>n.dataset.expSystemItem), systemSafeModes:root.querySelectorAll('[data-exp-product-system] [aria-label="Safe Mode"]').length };
   });
   assert.deepEqual(facts.labels, ['Highlights', 'Appearance', 'Advanced', 'System']);
-  assert.equal(facts.subtitle, 'Your self-identity. Recognized.');
+  assert.equal(facts.subtitle, 'Your identity, in focus');
   assert.deepEqual(facts.appearance, ['Accessibility', 'Highlight style']);
   assert.equal(facts.styleCollapsed, true);
   assert.ok(facts.advancedDisclosures.includes('Language'));

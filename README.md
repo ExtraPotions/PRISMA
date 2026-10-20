@@ -2,7 +2,7 @@
 
 # PRISMA
 
-**Identity language, easier to explore.**
+**Your identity, in focus**
 
 [![Install PRISMA](docs/badges/install.svg)](https://github.com/ExtraPotions/PRISMA/releases/latest/download/prisma.user.js)
 [![Code: PolyForm Noncommercial 1.0.0](docs/badges/code.svg)](LICENSE-CODE.md)
@@ -33,6 +33,8 @@ Known banking, healthcare, and email sites stay unchanged unless you enable PRIS
 </table>
 
 Screenshots use sample content.
+
+All ExtraPotions menus share the same Core template. Open **System** for status, diagnostics, troubleshooting and Reset. Donations remain in the header heart.
 
 ## Support
 
