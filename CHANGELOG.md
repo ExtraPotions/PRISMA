@@ -1,3 +1,8 @@
+## 3.2.35 — 2026-10-20
+
+- Keep Show Diagnostics, Copy Diagnostics and Reset All Settings directly accessible in System.
+- Keep shared menus, themes and launchers working independently of retired SHIFT.
+
 ## 3.2.34 — 2026-10-20
 
 - Refreshes the triangular gem facets and approved product tagline.

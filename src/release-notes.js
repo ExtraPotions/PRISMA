@@ -1,7 +1,8 @@
-EXP.VERSION = '3.2.34';
+EXP.VERSION = '3.2.35';
 
 EXP.ReleaseNotes = (() => {
   const notes = Object.freeze({
+    '3.2.35': ["Keep Show Diagnostics, Copy Diagnostics and Reset All Settings directly accessible in System.","Keep shared menus, themes and launchers working independently of retired SHIFT."],
     '3.2.34': ["Refreshes the triangular gem facets and approved product tagline.","Uses the shared compact menu with support and reset grouped inside System.","Keeps paired diagnostics controls readable in smaller layouts."],
     '3.2.33': ["Uses a compact sidebar with inline settings, bounded help and three menu sizes.","Keeps diagnostics buttons readable and removes the activity list that repeated Status."],
     '3.2.32': ["Releases removed highlighted content from memory during normal page updates.","Keeps highlights intact when page content moves within the document."],

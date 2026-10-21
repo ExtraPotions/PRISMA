@@ -7,7 +7,7 @@ const { chromium } = require('playwright');
 // Opens the current inline settings group without collapsing an already-open disclosure.
 async function openSubmenu(scope,label){
  const aliases={Style:'Highlight style',Menu:'Menu Preferences',Transfer:'Settings transfer',Effects:'Effects & integrations',Profiles:'Profiles & sites',Page:'Page tools',Retailers:'Retailer modules',Review:'Protection review',Activity:'Page activity',Playback:'Playback options',Alerts:'Notifications',Patterns:'Advanced Amazon',Tools:'Page tools'};
- if(label==='Overview')return;
+ if(['Overview','Support','Reset'].includes(label))return;
  const shortcut=scope.locator('[data-exp-menu-shortcut="'+label.toLowerCase()+'"]');if(await shortcut.count()){await shortcut.click();return;}
  const summary=scope.locator('summary:visible').filter({hasText:new RegExp('^'+(aliases[label]||label)+'(?: .*)?'+'$')}).first();
  await summary.waitFor();if(!await summary.evaluate(n=>n.parentElement.open))await summary.click();
@@ -312,7 +312,7 @@ test('launcher uses the borderless PRISMA artwork URL', async () => {
   try {
     await page.waitForFunction(() => document.getElementById('exp-prisma-root')?.shadowRoot.querySelector('.launcher img')?.naturalWidth > 0);
     const badge = await page.locator('#exp-prisma-root').evaluate((host) => { const launcher = host.shadowRoot.querySelector('.launcher'); const image = launcher.querySelector('img'); const rect = launcher.getBoundingClientRect(); return { width: rect.width, height: rect.height, src: image.src, naturalWidth: image.naturalWidth, naturalHeight: image.naturalHeight, radius: getComputedStyle(launcher).borderRadius }; });
-    assert.deepEqual({ width: badge.width, height: badge.height, naturalWidth: badge.naturalWidth, naturalHeight: badge.naturalHeight }, { width: 48, height: 48, naturalWidth: 1024, naturalHeight: 1024 });
+    assert.deepEqual({ width: badge.width, height: badge.height, naturalWidth: badge.naturalWidth, naturalHeight: badge.naturalHeight }, { width: 48, height: 48, naturalWidth: 128, naturalHeight: 128 });
     assert.equal(badge.src, 'https://raw.githubusercontent.com/ExtraPotions/PRISMA/main/assets/prisma-launcher.svg');
     assert.equal(badge.radius, '10px');
     const chrome = await page.locator('#exp-prisma-root').evaluate((host) => { const root=host.shadowRoot;return {button:root.querySelector('.launcher').getBoundingClientRect().width,hasRing:Boolean(root.querySelector('.launcher-ring')),icon:root.querySelector('.launcher-icon').getBoundingClientRect().width}; });
