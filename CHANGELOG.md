@@ -1,3 +1,8 @@
+## 3.2.37 — 2026-10-24
+
+- Stack match actions in full-width rows at every menu size.
+- Use the compact shared menu while preserving themes and highlight controls.
+
 ## 3.2.36 — 2026-10-20
 
 - Add extra spacing above Reset All Settings in System.

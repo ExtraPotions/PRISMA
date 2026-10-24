@@ -376,7 +376,7 @@ test('reference-led compact dock keeps one expandable section open', async () =>
     const initial = await state();
     assert.equal(initial.width, await page.evaluate(() => parseFloat(getComputedStyle(document.getElementById('exp-prisma-root')).getPropertyValue('--exp-menu-width'))));
     // One section is always open while the menu is visible: the first tab when nothing is remembered.
-    assert.deepEqual(initial, { ...initial, sections: 4, tabs: 4, visibleBodies: 1, selectedTab: 'page', openRoute: 'Highlights', headerBadge: await page.locator('#exp-prisma-root [data-exp-part="dock"]').evaluate(n=>n.dataset.expMenuLayout==='lean'?28:38) });
+    assert.deepEqual(initial, { ...initial, sections: 4, tabs: 4, visibleBodies: 1, selectedTab: 'page', openRoute: 'Highlights', headerBadge: await page.locator('#exp-prisma-root [data-exp-part="dock"]').evaluate(n=>n.dataset.expMenuLayout==='lean'?24:38) });
     await page.locator('#exp-prisma-root').getByRole('tab', { name: 'Highlights', exact: true }).click();
     assert.deepEqual(await state(), initial);
     await page.locator('#exp-prisma-root').evaluate((host) => host.shadowRoot.querySelector('[data-exp-section-tab="appearance"]').click());
@@ -459,7 +459,7 @@ test('menu routes use simplified labels with scoped secondary disclosures', asyn
       [...root.querySelectorAll('.nav button.route')].find((button) => button.querySelector('.fl-tool-title')?.textContent === label)?.click();
     };
     openRoute('Appearance');
-    const appearance = [...root.querySelectorAll('.route-body:not([hidden]) h3')].map((heading) => heading.textContent.trim());
+    const appearance = [...root.querySelectorAll('.route-body:not([hidden]) .group[aria-label]')].map((group) => group.getAttribute('aria-label'));
     const styleDisclosure = [...root.querySelectorAll('.route-body:not([hidden]) details')].find((item) => item.querySelector(':scope > summary')?.textContent.includes('Highlight style'));
     const styleCollapsed = Boolean(styleDisclosure && !styleDisclosure.open);
     openRoute('Advanced');
@@ -468,8 +468,8 @@ test('menu routes use simplified labels with scoped secondary disclosures', asyn
     const systemVisible = Boolean(root.querySelector('.route-body:not([hidden])'));
     return { labels, subtitle, appearance, styleCollapsed, advancedDisclosures, systemVisible, systemItems:[...root.querySelectorAll('[data-exp-product-system] [data-exp-system-item]')].map(n=>n.dataset.expSystemItem), systemSafeModes:root.querySelectorAll('[data-exp-product-system] [aria-label="Safe Mode"]').length };
   });
-  assert.deepEqual(facts.labels, ['Highlights', 'Appearance', 'Advanced', 'System']);
-  assert.equal(facts.subtitle, 'Your identity, in focus');
+  assert.deepEqual(facts.labels, ['Highlights', 'Advanced', 'Appearance', 'System']);
+  assert.equal(facts.subtitle, '', 'the menu has no tagline');
   assert.deepEqual(facts.appearance, ['Accessibility', 'Highlight style']);
   assert.equal(facts.styleCollapsed, true);
   assert.ok(facts.advancedDisclosures.includes('Language'));
