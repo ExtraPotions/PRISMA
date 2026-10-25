@@ -12,6 +12,6 @@ module.exports = {
   shots: [
     // The sample page with live highlights next to the open Highlights menu.
     { file: 'highlights-demo.png', section: 'Highlights', include: 'page' },
-    { file: 'appearance.png', section: 'Look', tab: 'Highlight style', viewport: { width: 900, height: 1400 } },
+    { file: 'appearance.gif', section: 'Look', tab: 'Highlight style', viewport: { width: 900, height: 1400 } },
   ],
 };

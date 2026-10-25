@@ -34,7 +34,7 @@ Known banking, healthcare, and email sites stay unchanged unless you enable PRIS
 <table>
   <tr>
     <td width="50%" valign="top" align="center"><a href="docs/screenshots/highlights-demo.png"><img src="docs/screenshots/highlights-demo.png" width="320" alt="PRISMA: identity highlights in sample text"></a><br><strong>Highlights on a page</strong></td>
-    <td width="50%" valign="top" align="center"><a href="docs/screenshots/appearance.png"><img src="docs/screenshots/appearance.png" width="220" alt="PRISMA: highlight style with live preview"></a><br><strong>Highlight style with live preview</strong></td>
+    <td width="50%" valign="top" align="center"><a href="docs/screenshots/appearance.gif"><img src="docs/screenshots/appearance.gif" width="220" alt="PRISMA: highlight style with live preview"></a><br><strong>Highlight style with live preview</strong></td>
   </tr>
 </table>
 
