@@ -63,14 +63,41 @@ EXP.Renderer = (() => {
   // Contrast of each palette color against the surface the word sits on (WCAG relative luminance).
   let canvasContext = null;
   const parsed = new Map();
+  function parseColor(value) {
+    if (!value || typeof value !== 'string') return null;
+    const str = value.trim().toLowerCase();
+    if (str === 'transparent') return [0, 0, 0, 0];
+    if (str.startsWith('#')) {
+      const hex = str.slice(1);
+      if (hex.length === 3) return [parseInt(hex[0] + hex[0], 16), parseInt(hex[1] + hex[1], 16), parseInt(hex[2] + hex[2], 16), 1];
+      if (hex.length === 6) return [parseInt(hex.slice(0, 2), 16), parseInt(hex.slice(2, 4), 16), parseInt(hex.slice(4, 6), 16), 1];
+      if (hex.length === 8) return [parseInt(hex.slice(0, 2), 16), parseInt(hex.slice(2, 4), 16), parseInt(hex.slice(4, 6), 16), parseInt(hex.slice(6, 8), 16) / 255];
+      return null;
+    }
+    const rgb = /^rgba?\(\s*([\d.]+)\s*(?:,|\s+)\s*([\d.]+)\s*(?:,|\s+)\s*([\d.]+)(?:\s*(?:,|\/)\s*([\d.]+%?))?\s*\)$/.exec(str);
+    if (rgb) {
+      const r = Math.min(255, Math.max(0, parseFloat(rgb[1])));
+      const g = Math.min(255, Math.max(0, parseFloat(rgb[2])));
+      const b = Math.min(255, Math.max(0, parseFloat(rgb[3])));
+      let a = 1;
+      if (rgb[4] !== undefined) {
+        a = rgb[4].endsWith('%') ? parseFloat(rgb[4]) / 100 : parseFloat(rgb[4]);
+        a = Math.min(1, Math.max(0, a));
+      }
+      return [r, g, b, a];
+    }
+    return null;
+  }
   function rgba(value) {
     if (parsed.has(value)) return parsed.get(value);
-    let result = null;
-    try {
-      canvasContext ||= Object.assign(document.createElement('canvas'), { width: 1, height: 1 }).getContext('2d', { willReadFrequently: true });
-      canvasContext.clearRect(0, 0, 1, 1); canvasContext.fillStyle = '#000'; canvasContext.fillStyle = value; canvasContext.fillRect(0, 0, 1, 1);
-      const [r, g, b, a] = canvasContext.getImageData(0, 0, 1, 1).data; result = [r, g, b, a / 255];
-    } catch {}
+    let result = parseColor(value);
+    if (!result) {
+      try {
+        canvasContext ||= Object.assign(document.createElement('canvas'), { width: 1, height: 1 }).getContext('2d', { willReadFrequently: true });
+        canvasContext.clearRect(0, 0, 1, 1); canvasContext.fillStyle = '#000'; canvasContext.fillStyle = value; canvasContext.fillRect(0, 0, 1, 1);
+        const [r, g, b, a] = canvasContext.getImageData(0, 0, 1, 1).data; result = [r, g, b, a / 255];
+      } catch {}
+    }
     if (parsed.size > 200) parsed.clear();
     parsed.set(value, result); return result;
   }

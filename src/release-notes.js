@@ -1,7 +1,8 @@
-EXP.VERSION = '3.2.38';
+EXP.VERSION = '3.2.39';
 
 EXP.ReleaseNotes = (() => {
   const notes = Object.freeze({
+    '3.2.39': ["Deterministic RGB and Hex color parsing for contrast checks before canvas rasterization fallback.","Improve contrast evaluation reliability and eliminate canvas read overhead for standard highlight colors."],
     '3.2.38': ["Use compact choices and show animation and site-override controls when enabled.","Keep preferences in verified manager storage with recovery for unreadable saved data.","Release detached shadow styles and restore highlights when cards return."],
     '3.2.37': ["Stack match actions in full-width rows at every menu size.","Use the compact shared menu while preserving themes and highlight controls."],
     '3.2.36': ["Add extra spacing above Reset All Settings in System.","Update bundled Core to 3.9.10 with the shared Reset placement rule."],

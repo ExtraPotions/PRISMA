@@ -61,3 +61,26 @@ test('a page class change that leaves the colors alone does not rewrite any high
   for(let i=0;i<4;i++){await page.evaluate(i=>document.body.classList.toggle('scrolled',i%2===0),i);await page.waitForTimeout(300);}
   assert.equal(await page.evaluate(()=>window.__rewrites),0,'highlights are only rewritten when their readability changes');
 });
+
+test('deterministic color parser handles standard colors when canvas reads are blocked', async t => {
+  const browser = await chromium.launch();
+  t.after(() => browser.close());
+  const page = await browser.newPage();
+  await page.route('**/*', r => r.fulfill({ body: '<html><body style="background:#1d090f;color:#eaeaea;font-size:14px"><main>The bisexual community.</main></body></html>', contentType: 'text/html' }));
+  await page.goto('https://fixture.test/');
+  await page.evaluate(() => {
+    const orig = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function() {
+      const ctx = orig.apply(this, arguments);
+      if (ctx) ctx.getImageData = () => { throw new Error('Canvas read blocked'); };
+      return ctx;
+    };
+  });
+  await page.addScriptTag({ content: script });
+  await page.locator('#exp-prisma-root .launcher').click();
+  await page.locator('#exp-prisma-root [data-exp-section-tab="appearance"]').click();
+  await openSubmenu(page.locator('#exp-prisma-root'), 'Style');
+  await page.locator('#exp-prisma-root select[aria-label="Style"]').selectOption('gradient');
+  const fallback = await page.locator('main .exp-prisma-hit').evaluate(n => n.dataset.contrastFallback || '0');
+  assert.equal(fallback, '1', 'correctly falls back on dark page even when canvas reads throw');
+});

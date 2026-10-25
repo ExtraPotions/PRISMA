@@ -1,3 +1,8 @@
+## 3.2.39 — 2026-10-25
+
+- Deterministic RGB and Hex color parsing for contrast checks before canvas rasterization fallback.
+- Improve contrast evaluation reliability and eliminate canvas read overhead for standard highlight colors.
+
 ## 3.2.38 — 2026-10-25
 
 - Use compact choices and show animation and site-override controls when enabled.
