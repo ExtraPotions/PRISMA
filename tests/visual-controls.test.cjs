@@ -18,7 +18,7 @@ async function fixture(t, css = '') {
   const browser = await chromium.launch(); t.after(() => browser.close());
   const page = await browser.newPage();
   await page.route('https://fixture.test/**', route => route.fulfill({ contentType:'text/html', body:`<style>${css}</style><main id="content">The bisexual community.</main>` }));
-  await page.addInitScript({content:script}); await page.goto('https://fixture.test/page');
+  await page.addInitScript({content:require('./manager-storage.cjs')+script}); await page.goto('https://fixture.test/page');
   await page.waitForSelector('.exp-prisma-hit');
   await page.locator('#exp-prisma-root .launcher').click();
   await page.locator('#exp-prisma-root [data-exp-section-tab="appearance"]').click();

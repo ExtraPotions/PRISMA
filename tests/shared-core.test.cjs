@@ -102,9 +102,9 @@ test('Escape cancels an import draft before closing the shared menu', async t =>
     name: 'settings.json', mimeType: 'application/json',
     buffer: Buffer.from(JSON.stringify({ product: 'prisma', generation: 3, schema: 1, settings: { style: 'underline' } })),
   });
-  await page.getByRole('button', { name: 'Apply import', exact: true }).waitFor();
+  await page.getByRole('button', { name: 'Apply', exact: true }).waitFor();
   await page.keyboard.press('Escape');
-  assert.equal(await page.getByRole('button', { name: 'Apply import', exact: true }).count(), 0);
+  assert.equal(await page.getByRole('button', { name: 'Apply', exact: true }).count(), 0);
   assert.equal(await page.locator('#exp-prisma-root .panel').isVisible(), true);
   assert.equal(await page.locator('.exp-prisma-hit').getAttribute('data-style'), 'gradient');
   await page.keyboard.press('Escape');

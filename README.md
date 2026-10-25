@@ -8,6 +8,12 @@
 [![Code: PolyForm Noncommercial 1.0.0](docs/badges/code.svg)](LICENSE-CODE.md)
 [![Artwork and documentation: CC BY-NC-SA 4.0](docs/badges/assets.svg)](LICENSE-ASSETS.md)
 
+## Latest changes
+
+- Use compact choices and show animation and site-override controls when enabled.
+- Keep preferences in verified manager storage with recovery for unreadable saved data.
+- Release detached shadow styles and restore highlights when cards return.
+
 ## Get started
 
 1. Install a userscript manager such as [Violentmonkey](https://violentmonkey.github.io/get-it/) or [Tampermonkey](https://www.tampermonkey.net/).

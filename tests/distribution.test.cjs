@@ -92,16 +92,7 @@ test('canonical borderless artwork is referenced without embedded image bytes', 
   assert.match(source, /launcher\.replaceChildren\(mark\)/u);
 });
 
-test('PRISMA settings survive manager storage gaps and mirror to fallback storage', () => {
-  const settings = fs.readFileSync(path.join(root, 'src', 'settings.js'), 'utf8');
-  assert.match(settings, /const value = GM_getValue\(storageKey, undefined\);\s*if \(value !== undefined\) return value;/u);
-  assert.match(settings, /const value = localStorage\.getItem\(storageKey\);\s*if \(value !== null\) \{/u);
-  assert.match(settings, /if \(typeof GM_setValue === 'function'\) GM_setValue\(storageKey, parsed\);/u);
-  assert.match(settings, /if \(typeof GM_setValue === 'function'\) GM_setValue\(storageKey, value\);/u);
-  assert.match(settings, /localStorage\.setItem\(storageKey, JSON\.stringify\(value\)\);/u);
-  assert.match(settings, /function load\(\) \{\s*const stored = rawRead\('settings'\);[\s\S]*?state = validate\(stored \|\| defaults\);\s*rawWrite\('settings', state\);/u);
-  assert.doesNotMatch(settings, /GM_setValue\(key\(name\), value\); return;/u);
-});
+test('PRISMA settings use isolated manager storage and expose recovery state',()=>{const settings=fs.readFileSync(path.join(root,'src','settings.js'),'utf8');assert.doesNotMatch(settings,/localStorage\.setItem/);for(const api of ['storageStatus','retrySave','recoveryData'])assert.match(settings,new RegExp('function '+api+'\\('));});
 
  test('installed executable body is compact while metadata stays intact', () => {
   const install = fs.readFileSync(path.join(root, 'prisma.user.js'), 'utf8');

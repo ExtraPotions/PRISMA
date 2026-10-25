@@ -1,7 +1,8 @@
-EXP.VERSION = '3.2.37';
+EXP.VERSION = '3.2.38';
 
 EXP.ReleaseNotes = (() => {
   const notes = Object.freeze({
+    '3.2.38': ["Use compact choices and show animation and site-override controls when enabled.","Keep preferences in verified manager storage with recovery for unreadable saved data.","Release detached shadow styles and restore highlights when cards return."],
     '3.2.37': ["Stack match actions in full-width rows at every menu size.","Use the compact shared menu while preserving themes and highlight controls."],
     '3.2.36': ["Add extra spacing above Reset All Settings in System.","Update bundled Core to 3.9.10 with the shared Reset placement rule."],
     '3.2.35': ["Keep Show Diagnostics, Copy Diagnostics and Reset All Settings directly accessible in System.","Keep shared menus, themes and launchers working independently of retired SHIFT."],

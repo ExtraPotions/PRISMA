@@ -31,7 +31,7 @@ test('Wikipedia verification cannot be inferred merely from another public defin
 });
 test('Romantic identities switch updates current-page matches, survives reload, and leaves definitions available',async t=>{
  const {chromium}=require('playwright');const browser=await chromium.launch();t.after(()=>browser.close());const page=await browser.newPage();
- await page.addInitScript({content:fs.readFileSync(path.join(__dirname,'../prisma.user.js'),'utf8')});
+ await page.addInitScript({content:require('./manager-storage.cjs')+fs.readFileSync(path.join(__dirname,'../prisma.user.js'),'utf8')});
  await page.route('https://romantic.test/**',route=>route.fulfill({contentType:'text/html; charset=utf-8',body:'<!doctype html><p>Biromantic orientation and bisexual pride.</p>'}));
  await page.goto('https://romantic.test/');await page.waitForSelector('[data-identity="bisexual"]');
  assert.equal(await page.locator('[data-identity="biromantic"]').count(),0);

@@ -227,8 +227,8 @@ EXP.Renderer = (() => {
     const shadow=element.attachShadow({mode:'open'});ensureStyle(shadow);
     const samples=[];
     for(const [name,bg,fg] of [['Light','#ffffff','#16161c'],['Dark','#18181d','#f4f4f6']]){
-      const card=document.createElement('div');card.style.cssText=`background:${bg};color:${fg};border:1px solid #777;border-radius:7px;padding:10px;margin-top:6px;line-height:1.5;font:var(--exp-font-size-body,13px)/1.5 system-ui`;
-      const label=document.createElement('small');label.textContent=name+' preview';label.style.cssText='display:block;font-size:var(--exp-font-size-small,11px)';
+      const card=document.createElement('div');card.setAttribute('aria-label',name+' preview');card.style.cssText=`display:flex;align-items:center;gap:8px;box-sizing:border-box;min-height:26px;background:${bg};color:${fg};border:1px solid #777;border-radius:7px;padding:3px 8px;margin-top:4px;font:var(--exp-font-size-body,13px)/1.4 system-ui`;
+      const label=document.createElement('small');label.textContent=name;label.style.cssText='flex:none;font-size:var(--exp-font-size-small,11px)';
       const sample=document.createElement('span');card.append(label,sample);shadow.append(card);samples.push(sample);surfaces.push({color:rgba(bg),node:card});
     }
     function refreshPreview(value,selected){for(const sample of samples){sample.removeAttribute('style');sample.removeAttribute('class');sample.textContent=selected?.label||'Identity language';if(selected&&!(value.disabledIdentities||[]).includes(selected.id)){sample.className=HIT;applyVisual(sample,{identity:selected},value,surfaces[samples.indexOf(sample)]);}else sample.textContent+=' (disabled)';}}
@@ -237,7 +237,15 @@ EXP.Renderer = (() => {
   }
   function setHidden(value) { hidden = Boolean(value); if (currentSettings) refresh(currentSettings); }
   function focus(record) { if (!record?.element?.isConnected) return false; record.element.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'auto' }); record.element.focus({ preventScroll: true }); record.element.dataset.current = '1'; setTimeout(() => { if (record.element) delete record.element.dataset.current; }, 1200); return true; }
-  function pruneDetached() { for (const span of wrappers) if (!span.isConnected) wrappers.delete(span); }
+  function pruneDetached() {
+    // Virtualized cards may return later. Leave plain original text for the next scan,
+    // rather than an untracked owned wrapper that the walker would intentionally skip.
+    for (const span of wrappers) if (!span.isConnected) {
+      if(span.parentNode)span.replaceWith(span.ownerDocument.createTextNode(span.textContent||''));
+      wrappers.delete(span);
+    }
+    for (const [root,style] of styles) if(root.host&&!root.host.isConnected){style.remove();styles.delete(root);}
+  }
   function cleanup() { clear(); for (const style of styles.values()) style.remove(); styles.clear(); hidden = false; }
   return Object.freeze({ HIT, createPreview, ensureStyle, wrap, restore, clear, refresh, setHidden, focus, cleanup, pruneDetached, wrapperCount: () => [...wrappers].filter((node) => node.isConnected).length });
 })();

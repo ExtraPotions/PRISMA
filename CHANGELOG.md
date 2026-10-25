@@ -1,3 +1,9 @@
+## 3.2.38 — 2026-10-25
+
+- Use compact choices and show animation and site-override controls when enabled.
+- Keep preferences in verified manager storage with recovery for unreadable saved data.
+- Release detached shadow styles and restore highlights when cards return.
+
 ## 3.2.37 — 2026-10-24
 
 - Stack match actions in full-width rows at every menu size.

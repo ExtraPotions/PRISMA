@@ -19,7 +19,7 @@ const catalog = JSON.parse(catalogSource.match(/EXP\.CatalogData = (\[[\s\S]*?\n
 
 test('PRISMA does not mount a launcher inside an iframe', async (t) => {
   const browser = await chromium.launch({ headless: true }); t.after(() => browser.close());
-  const page = await browser.newPage();
+  const page = await browser.newPage();await page.addInitScript({content:require('./manager-storage.cjs')});
   await page.setContent('<!doctype html><html><body><iframe srcdoc="<!doctype html><html><body><p>Embedded</p></body></html>"></iframe></body></html>');
   const frame = page.frames().find((candidate) => candidate !== page.mainFrame());
   await frame.evaluate(() => { const values = new Map(); window.GM_getValue = (key, fallback) => values.has(key) ? values.get(key) : fallback; window.GM_setValue = (key, value) => values.set(key, value); window.GM_xmlhttpRequest = () => {}; });
@@ -31,7 +31,7 @@ test('PRISMA does not mount a launcher inside an iframe', async (t) => {
 test('GM_addElement cannot leak menu CSS onto the page', async (t) => {
   const browser = await chromium.launch({ headless: true });
   t.after(() => browser.close());
-  const page = await browser.newPage({ viewport: { width: 1100, height: 800 } });
+  const page = await browser.newPage({ viewport: { width: 1100, height: 800 } });await page.addInitScript({content:require('./manager-storage.cjs')});
   await page.addInitScript(() => {
     window.GM_getValue = (_key, fallback) => fallback;
     window.GM_setValue = () => {};
@@ -74,7 +74,7 @@ test('GM_addElement cannot leak menu CSS onto the page', async (t) => {
 
 async function fixture(html) {
   const browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage();
+  const page = await browser.newPage();await page.addInitScript({content:require('./manager-storage.cjs')});
   await page.addInitScript(() => { const key = 'exp:v3:prisma:settings'; if (!localStorage.getItem(key)) localStorage.setItem(key, JSON.stringify({ includeRomantic: true })); });
   await page.addInitScript({ content: script });
   await page.route('https://fixture.test/**', (route) => route.fulfill({ status: 200, contentType: 'text/html; charset=utf-8', body: html }));
@@ -88,7 +88,7 @@ const hitData = (page) => page.locator('.exp-prisma-hit[data-match-id]').evaluat
 test('version action reuses the update-complete card for the current changelog', async (t) => {
   const browser = await chromium.launch({ headless: true });
   t.after(() => browser.close());
-  const page = await browser.newPage();
+  const page = await browser.newPage();await page.addInitScript({content:require('./manager-storage.cjs')});
   await page.addInitScript({ content: `localStorage.setItem('exp:v3:prisma:last-version-v2','3.0.31');\n${script}` });
   await page.route('https://fixture.test/**', (route) => route.fulfill({ status:200, contentType:'text/html', body:'<!doctype html><html><body><main>bisexual identity</main></body></html>' }));
   await page.goto('https://fixture.test/page');
@@ -394,7 +394,7 @@ test('reference-led compact dock keeps one expandable section open', async () =>
 
 test('menu CSS stays in the shadow root when constructable sheets are unavailable', async (t) => {
   const browser = await chromium.launch({ headless: true }); t.after(() => browser.close());
-  const page = await browser.newPage();
+  const page = await browser.newPage();await page.addInitScript({content:require('./manager-storage.cjs')});
   await page.setContent('<!doctype html><html><body><main>The bisexual community.</main></body></html>');
   await page.evaluate(() => {
     const values = new Map();
@@ -427,7 +427,7 @@ test('menu CSS stays in the shadow root when constructable sheets are unavailabl
 
 test('PRISMA paints launcher chrome when the page forbids inline style tags', async (t) => {
   const browser = await chromium.launch({ headless: true }); t.after(() => browser.close());
-  const page = await browser.newPage();
+  const page = await browser.newPage();await page.addInitScript({content:require('./manager-storage.cjs')});
   await page.setContent('<!doctype html><html><head><meta http-equiv="Content-Security-Policy" content="default-src \'none\'; img-src data:; style-src scryfall.com *.scryfall.com"></head><body><main>The bisexual community.</main></body></html>');
   await page.evaluate(() => {
     const values = new Map();
@@ -531,24 +531,24 @@ test('route headers do not carry restated helper tips', async (t) => {
 });
 
 test('sensitive installed page stays unchanged until exact-site opt-in',async t=>{
- const browser=await chromium.launch();t.after(()=>browser.close());const page=await browser.newPage();
+ const browser=await chromium.launch();t.after(()=>browser.close());const page=await browser.newPage();await page.addInitScript({content:require('./manager-storage.cjs')});
  await page.route('**/*',r=>r.abort());
  await page.route('https://mail.google.com/**',r=>r.fulfill({contentType:'text/html',body:'<!doctype html><html><body><main>bisexual identity</main></body></html>'}));
- await page.goto('https://mail.google.com/');await page.evaluate(()=>{window.GM_getValue=(_k,d)=>d;window.GM_setValue=()=>{};window.GM_xmlhttpRequest=()=>{};});await page.addScriptTag({content:script});await page.waitForSelector('#exp-prisma-root',{state:'attached'});
+ await page.goto('https://mail.google.com/');await page.evaluate(()=>{window.GM_xmlhttpRequest=()=>{};});await page.addScriptTag({content:script});await page.waitForSelector('#exp-prisma-root',{state:'attached'});
  assert.equal(await page.locator('main .exp-prisma-hit').count(),0);
  const root=page.locator('#exp-prisma-root');await root.locator('.launcher').click();await root.locator('[data-exp-section-tab="advanced"]').click();await openSubmenu(root,'Sites');
  assert.equal(await root.getByRole('switch',{name:'Enable on this site',exact:true}).getAttribute('aria-checked'),'false');
  await root.getByRole('switch',{name:'Enable on this site',exact:true}).click();await page.waitForFunction(()=>document.querySelectorAll('.exp-prisma-hit').length===1);
- assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('exp:v3:prisma:settings')).sensitiveSiteOptIns),['mail.google.com']);
+ assert.deepEqual(await page.evaluate(()=>GM_getValue('exp:v3:prisma:settings',{}).sensitiveSiteOptIns),['mail.google.com']);
  await root.getByRole('switch',{name:'Enable on this site',exact:true}).click();await page.waitForFunction(()=>!document.querySelector('.exp-prisma-hit'));
 });
 
 // Public diagnostics inspect the real minified install, not private source names.
 for(const guard of ['sensitive','disabled','excluded','safe-mode','suite-paused']) {
  test('catalog remains deferred across recovery and ordinary menus ('+guard+')',async t=>{
-  const browser=await chromium.launch();t.after(()=>browser.close());const page=await browser.newPage();
+  const browser=await chromium.launch();t.after(()=>browser.close());const page=await browser.newPage();await page.addInitScript({content:require('./manager-storage.cjs')});
   await page.route('**/*',r=>r.abort());await page.route('https://mail.google.com/**',r=>r.fulfill({contentType:'text/html',body:'<!doctype html><html><body><main>bisexual identity</main></body></html>'}));
-  await page.goto('https://mail.google.com/');await page.evaluate(guard=>{const settings={sensitiveSiteOptIns:guard==='sensitive'?[]:['mail.google.com'],enabled:guard!=='disabled',safeMode:guard==='safe-mode',exclusions:guard==='excluded'?['mail.google.com']:[]};localStorage.setItem('exp:v3:prisma:settings',JSON.stringify(settings));if(guard==='suite-paused')localStorage.setItem('exp:v3:suite-site-pause:mail.google.com','1');window.GM_getValue=(_k,d)=>d;window.GM_setValue=()=>{};window.GM_xmlhttpRequest=()=>{};},guard);
+  await page.goto('https://mail.google.com/');await page.evaluate(guard=>{const settings={sensitiveSiteOptIns:guard==='sensitive'?[]:['mail.google.com'],enabled:guard!=='disabled',safeMode:guard==='safe-mode',exclusions:guard==='excluded'?['mail.google.com']:[]};localStorage.setItem('exp:v3:prisma:settings',JSON.stringify(settings));if(guard==='suite-paused')localStorage.setItem('exp:v3:suite-site-pause:mail.google.com','1');window.GM_xmlhttpRequest=()=>{};},guard);
   page.setDefaultTimeout(5000);await page.addScriptTag({content:script});await page.waitForSelector('#exp-prisma-root',{state:'attached'});const root=page.locator('#exp-prisma-root');
   await root.locator('.launcher').click();
   const status=async()=>{await root.locator('[data-exp-section-tab="system"]').click();await openSubmenu(root,'Support');const show=root.getByRole('button',{name:'Show Diagnostics',exact:true});if(await show.count())await show.click();await root.locator('.diag').filter({hasText:'"catalog"'}).waitFor();const report=JSON.parse(await root.locator('.diag').textContent());return report.catalog;};
@@ -564,16 +564,16 @@ for(const guard of ['sensitive','disabled','excluded','safe-mode','suite-paused'
 }
 
 test('PRISMA sensitive-site import discloses permissions before deliberate apply',async t=>{
- const browser=await chromium.launch();t.after(()=>browser.close());const page=await browser.newPage();
+ const browser=await chromium.launch();t.after(()=>browser.close());const page=await browser.newPage();await page.addInitScript({content:require('./manager-storage.cjs')});
  await page.route('**/*',r=>r.abort());await page.route('https://mail.google.com/**',r=>r.fulfill({contentType:'text/html',body:'<!doctype html><html><body style="background:white;color:#111"><main>bisexual identity</main></body></html>'}));
- await page.goto('https://mail.google.com/');await page.evaluate(()=>{window.GM_getValue=(_k,d)=>d;window.GM_setValue=()=>{};window.GM_xmlhttpRequest=()=>{};});await page.addScriptTag({content:script});await page.waitForSelector('#exp-prisma-root',{state:'attached'});
+ await page.goto('https://mail.google.com/');await page.evaluate(()=>{window.GM_xmlhttpRequest=()=>{};});await page.addScriptTag({content:script});await page.waitForSelector('#exp-prisma-root',{state:'attached'});
  const root=page.locator('#exp-prisma-root');await root.locator('.launcher').click();await root.locator('[data-exp-section-tab="advanced"]').click();await openSubmenu(root,'Transfer');
  const file={name:'settings.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify({product:'prisma',generation:3,schema:1,settings:{theme:'midnight',sensitiveSiteOptIns:['mail.google.com']}}))};
  await root.locator('input[type=file]').setInputFiles(file);await root.locator('.import-preview').waitFor();assert.match(await root.locator('.import-preview').textContent(),/exact hostnames.*mail.google.com/);
- assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('exp:v3:prisma:settings')).sensitiveSiteOptIns),[]);
- await root.getByRole('button',{name:'Cancel import',exact:true}).click();assert.equal(await root.locator('.import-preview').count(),0);
- await root.locator('input[type=file]').setInputFiles(file);await root.getByRole('button',{name:'Apply import',exact:true}).click();
- assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem('exp:v3:prisma:settings')).sensitiveSiteOptIns),['mail.google.com']);
+ assert.deepEqual(await page.evaluate(()=>GM_getValue('exp:v3:prisma:settings',{}).sensitiveSiteOptIns),[]);
+ await root.getByRole('button',{name:'Cancel',exact:true}).click();assert.equal(await root.locator('.import-preview').count(),0);
+ await root.locator('input[type=file]').setInputFiles(file);await root.getByRole('button',{name:'Apply',exact:true}).click();
+ assert.deepEqual(await page.evaluate(()=>GM_getValue('exp:v3:prisma:settings',{}).sensitiveSiteOptIns),['mail.google.com']);
 });
 
 // Browsers read a page title from the text directly inside <title>; a highlight wrapped there dropped the term from
@@ -581,7 +581,7 @@ test('PRISMA sensitive-site import discloses permissions before deliberate apply
 test('page titles, including titles set later and SVG titles, are never highlighted', async (t) => {
   const browser = await chromium.launch({ headless: true });
   t.after(() => browser.close());
-  const page = await browser.newPage();
+  const page = await browser.newPage();await page.addInitScript({content:require('./manager-storage.cjs')});
   await page.addInitScript({ content: script });
   await page.route('https://titles.test/**', (route) => route.fulfill({ contentType: 'text/html; charset=utf-8', body: '<!doctype html><html><head><title>r/lgbt: home for the LGBTQ+ and bisexual community</title></head><body><p id="body-hit">A bisexual person.</p><svg width="20" height="20"><title id="svg-title">pansexual flag</title><rect width="20" height="20"/></svg></body></html>' }));
   await page.goto('https://titles.test/');
