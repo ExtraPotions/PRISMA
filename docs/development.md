@@ -23,7 +23,7 @@ Suite-wide steps (shared Core changes, release order, screenshots, adding a prod
 ## Things the checks hold fixed
 
 - The install stays between 100 and 512 KiB, with no `@resource`, `@require` or embedded images.
-- README screenshots (`appearance.png`, `highlights-demo.png`) match `docs/screenshots.config.cjs`. Shot routes use current tab names, for example `section: 'Look', tab: 'Highlight style'`.
+- README screenshots (`appearance.gif`, `highlights-demo.png`) match `docs/screenshots.config.cjs`. Shot routes use current tab names, for example `section: 'Look', tab: 'Highlight style'`.
 
 ## Manual checks and publication
 

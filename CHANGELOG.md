@@ -1,3 +1,9 @@
+## 3.2.40 — 2026-10-26
+
+- Arrange Previous/Next and Highlight All/Explain next into two rows.
+- Restore rounded-square header buttons.
+- Simplify documentation and remove unused badges and superseded screenshots.
+
 ## 3.2.39 — 2026-10-25
 
 - Deterministic RGB and Hex color parsing for contrast checks before canvas rasterization fallback.
