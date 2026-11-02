@@ -15,18 +15,13 @@ After installing, refresh a page and open the PRISMA gem. [Setup and controls â†
 
 Known banking, healthcare and email sites stay unchanged unless you enable PRISMA for that site.
 
-## See it in action
+## Screenshots
 
-<img src="docs/screenshots/highlights-demo.png" width="640" alt="Identity highlights and PRISMA controls on a sample page">
+<img src="docs/screenshots/menu-light.png" width="324" alt="PRISMA Light menu with expandable groups closed">
 
-<details>
-<summary>More screenshots</summary>
+<img src="docs/screenshots/menu-dark.png" width="324" alt="PRISMA Dark menu with expandable groups closed">
 
-![Menu walkthrough and highlight styles](docs/screenshots/appearance.gif)
-
-</details>
-
-Screenshots use sample content.
+<img src="docs/screenshots/changelog.png" width="324" alt="PRISMA changelog notice with the current version and release notes">
 
 ---
 
@@ -35,3 +30,4 @@ Screenshots use sample content.
 Donations are optional. All features remain available without donating.
 
 PRISMA is independent and is not affiliated with or endorsed by the websites where it is used.
+Menus use Slate Blue in Light, Dark or System mode.

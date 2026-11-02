@@ -22,7 +22,7 @@ EXP.Settings = (() => {
     safeMode: false,
     shortcut: '',
     launcherPosition: 'automatic-end-bottom',
-    uiTheme: 'prisma',
+    uiTheme: 'system',
     menuAutoClose: true,
     menuNotifications: true,
     updateNotifications: true,
@@ -78,17 +78,15 @@ EXP.Settings = (() => {
   function validate(candidate) {
     if (!candidate || typeof candidate !== 'object' || Array.isArray(candidate)) throw Object.assign(new Error('Settings must be an object'), { code: 'SETTINGS_TYPE' });
     const next = ExtraPotionsCore.cloneSettings(defaults);
-	const themeAliases = { warm: 'ember', discord: 'glacier', pine: 'verdant', obsidian: 'contrast' };
-	const normalizedUiTheme = themeAliases[candidate.uiTheme] || candidate.uiTheme;
-    for (const name of ['enabled', 'animation', 'labels', 'ambiguityProtection', 'surroundingContext', 'includeRomantic', 'highContrast', 'safeMode', 'updateNotifications', 'menuAutoClose', 'menuNotifications']) if (typeof candidate[name] === 'boolean') next[name] = candidate[name];
+    for (const name of ['enabled', 'animation', 'labels', 'ambiguityProtection', 'surroundingContext', 'includeRomantic', 'safeMode', 'updateNotifications', 'menuAutoClose', 'menuNotifications']) if (typeof candidate[name] === 'boolean') next[name] = candidate[name];
     const enums = {
       animationStyle: ['pulse', 'shimmer', 'glow'],
-      style: ['gradient', 'underline', 'soft-fill'], intensity: ['subtle', 'balanced', 'vivid'], matcherMode: ['strict', 'balanced', 'inclusive'],
+      style: ['gradient', 'underline', 'soft-fill'], matcherMode: ['strict', 'balanced', 'inclusive'],
       reducedMotion: ['system', 'reduce', 'allow'], nonColorIndicator: ['underline', 'outline', 'off'],
-      screenReaderBehavior: ['original-text', 'announce-on-focus'], launcherPosition: ['automatic-end-bottom', 'end-top', 'end-bottom', 'start-top', 'start-bottom'], uiTheme: ['ember', 'midnight', 'glacier', 'contrast', 'verdant', 'pride', 'crimson', 'prisma']
+      screenReaderBehavior: ['original-text', 'announce-on-focus'], launcherPosition: ['automatic-end-bottom', 'end-top', 'end-bottom', 'start-top', 'start-bottom'], uiTheme: ['light', 'dark', 'system']
     };
     for (const [name, values] of Object.entries(enums)) {
-	  const value = name === 'uiTheme' ? normalizedUiTheme : candidate[name];
+	  const value = candidate[name];
 	  if (values.includes(value)) next[name] = value;
 	}
     next.disabledIdentities = uniqueStrings(candidate.disabledIdentities).filter((id) => EXP.Catalog?.hasRaw(id) ?? /^[a-z][a-z0-9-]+$/.test(id));

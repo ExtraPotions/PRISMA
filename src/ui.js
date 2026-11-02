@@ -14,8 +14,7 @@ EXP.UI = (() => {
   const ICON_URL = 'https://raw.githubusercontent.com/ExtraPotions/PRISMA/main/assets/prisma-launcher.svg';
   const routeNames = Object.freeze([['page', 'Highlights'], ['appearance', 'Appearance'], ['advanced', 'Advanced'], ['system', 'System']]);
   let host, shadow, launcher, panel, live, toast, product, noticeController, toastTimer, updateCard, engineState, importDraft = null, unsubscribe, explainedMatchId = '';
-  const PRODUCT_THEME = {"id":"prisma","name":"PRISMA gem","swatch":"linear-gradient(135deg,#090f20 0 38%,#6aaaff 38% 69%,#5fe9f4 69% 100%)","canvas":"#090f20","surface":"#121e36","primary":"#6aaaff","companion":"#a985ff","counterpoint":"#5fe9f4","interactive":"#8ebfff","bg":"#090f20","panel":"#121e36","line":"#324b72","text":"#edf3ff","muted":"#a9bbd8","accent":"#6aaaff","accent2":"#8ebfff","skin":"linear-gradient(135deg,#6aaaff 0%,#a985ff 52%,#5fe9f4 100%)","skinVertical":"linear-gradient(180deg,#6aaaff 0%,#a985ff 52%,#5fe9f4 100%)"};
-  const UI_THEMES = ExtraPotionsCore.themes(PRODUCT_THEME);
+  const UI_THEMES = ExtraPotionsCore.themes();
   const el = (tag, attrs = {}, text) => { const node = document.createElement(tag); for (const [name, value] of Object.entries(attrs)) { if (name === 'class') node.className = value; else node.setAttribute(name, value); } if (text !== undefined) node.textContent = text; return node; };
   function showNotice(node, {kicker,title,version=EXP.VERSION,text='',details=[],available=false}) {
     noticeController?.show({kicker,title,version,text,details,showAction:available,kind:available?'available':kicker==='Update Complete'?'complete':'current'});
@@ -38,7 +37,6 @@ EXP.UI = (() => {
   function selectControl(label, help, value, choices, change, disabled = false) { const node = row(label, help, true); const select = el('select', { 'aria-label': label }); select.disabled = disabled; for (const [id, name] of choices) { const option = el('option', { value: id }, name); option.selected = id === value; select.append(option); } select.addEventListener('change', () => change(select.value)); node.append(select); return node; }
   function actionRow(label, help, action, actionLabel = label, disabled = false) { const node = row(label, help); const control = button(actionLabel, action); if (['Reset','Reset site','Restore'].includes(actionLabel)) control.classList.add('warn'); control.disabled = disabled; node.append(control); return node; }
   function statusRow(label, help, value = '') { const node = row(label, help); if (value) node.append(el('output', { class: 'status-value' }, value)); return node; }
-  const PRIDE_RAINBOW = 'linear-gradient(90deg,#c97b83,#d29a70,#d0c07d,#70a886,#7091b6,#a27ba9)';
   function applyUiTheme(id) { ExtraPotionsCore.applyTheme(host, id, UI_THEMES); }
   function update(patch, reason) { const next = EXP.Settings.update(patch, reason); render();const storage=EXP.Settings.storageStatus();if(storage.error)announce(storage.error,'error');return next; }
   function download(name, text) { const url = URL.createObjectURL(new Blob([text], { type: 'application/json' })); const link = el('a', { href: url, download: name }); link.click(); setTimeout(() => URL.revokeObjectURL(url), 0); }
@@ -47,7 +45,6 @@ EXP.UI = (() => {
     const state = EXP.Settings.snapshot(); const section = group('Highlight style', 'Visual controls change the renderer without widening the matcher.');
     stylePreview?.dispose();stylePreview=EXP.Renderer.createPreview(state,EXP.CatalogData.find(identity => identity.id === 'bisexual') || EXP.CatalogData[0]);section.append(stylePreview.element);
     section.append(selectControl('Style', 'Uses the same eligible match set.', state.style, [['gradient', 'Gradient'], ['underline', 'Underline'], ['soft-fill', 'Soft Fill']], (style) => update({ style }, 'style')));
-    section.append(selectControl('Intensity', 'Changes rendering only.', state.intensity, [['subtle', 'Subtle'], ['balanced', 'Balanced'], ['vivid', 'Vivid']], (intensity) => update({ intensity }, 'intensity')));
     section.append(switchControl('Animation', 'Disabled whenever reduced motion is active.', state.animation, (animation) => update({ animation }, 'animation')));
     if (state.animation) section.append(selectControl('Animation style', '', state.animationStyle, [['pulse', 'Pulse'], ['shimmer', 'Shimmer'], ['glow', 'Glow']], (animationStyle) => update({ animationStyle }, 'animation-style'), !state.animation));
     section.append(switchControl('Identity labels', 'Available by pointer and keyboard focus when enabled.', state.labels, (labels) => update({ labels }, 'labels')));
@@ -57,10 +54,9 @@ EXP.UI = (() => {
     const state = EXP.Settings.snapshot();
     const a11y = group('Accessibility', 'Non-color and spoken behavior remain independent from identity colors.');
     a11y.append(selectControl('Reduce motion', 'Follow system, always reduce, or allow configured animation.', state.reducedMotion, [['system', 'Follow system'], ['reduce', 'Reduce'], ['allow', 'Allow']], (reducedMotion) => update({ reducedMotion }, 'reduced-motion')));
-    a11y.append(switchControl('High contrast', 'Uses a strong local outline and system colors where required.', state.highContrast, (highContrast) => update({ highContrast }, 'high-contrast')));
     a11y.append(selectControl('Non-color indicator', 'Visible even when hue differences are unavailable.', state.nonColorIndicator, [['underline', 'Underline'], ['outline', 'Outline'], ['off', 'Off']], (nonColorIndicator) => update({ nonColorIndicator }, 'non-color-indicator')));
     a11y.append(selectControl('Screen reader', 'Original text is the quiet default; announcements occur only on explicit navigation.', state.screenReaderBehavior, [['original-text', 'Original text'], ['announce-on-focus', 'Announce on focus']], (screenReaderBehavior) => update({ screenReaderBehavior }, 'screen-reader-behavior')));
-    const fragment = document.createDocumentFragment(); fragment.append(a11y); return fragment;
+    const fragment = document.createDocumentFragment(); fragment.append(ExtraPotionsCore.createThemeModeControl({value:state.uiTheme,onChange:uiTheme=>update({uiTheme},'menu-theme')}),a11y); return fragment;
   }
   function identityRow(identity, state) {
     const enabled = !state.disabledIdentities.includes(identity.id); const item = el('div', { class: 'identity' }); const copy = el('div', { class: 'copy' }); copy.append(el('span', { class: 'label' }, identity.label)); item.append(copy);
@@ -231,6 +227,7 @@ EXP.UI = (() => {
     pageActions?.refresh();
     product?.renderActive();
     product?.refresh();
+    if(host)applyUiTheme(EXP.Settings.snapshot().uiTheme);
   }
   function bindKeys(event) {
     const shortcut = EXP.Settings.snapshot().shortcut;
@@ -259,7 +256,6 @@ EXP.UI = (() => {
     product = ExtraPotionsCore.createProduct({
       id: 'prisma', name: 'PRISMA', version: EXP.VERSION,
       artwork: ICON_URL,
-      theme: PRODUCT_THEME,
       getSettings: () => EXP.Settings.snapshot(),
       onSettings: (next, reason) => update(next, reason),
       sections: routeNames.map(([id, label]) => ({ id, label, render: () => routeRenderers[id]() })),
@@ -299,7 +295,7 @@ EXP.UI = (() => {
       },
     });
     updateCard = noticeController.element;
-    applyUiTheme('prisma');
+    applyUiTheme(EXP.Settings.snapshot().uiTheme);
     const previous = EXP.Core.consumeVersionChange('prisma', EXP.VERSION, 'exp:v3:prisma:last-version-v2');
     if (previous && !EXP.ReleaseNotes.isQuietUpgrade(previous)) showUpdateCard({}, true, previous);
     if (EXP.Settings.snapshot().updateNotifications) EXP.Updates.check(false).then(result => {

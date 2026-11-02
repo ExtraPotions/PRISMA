@@ -1,3 +1,9 @@
+## 3.3.0 — 2026-11-02
+
+- Use Slate Blue Light, Dark or System for the PRISMA menu while preserving identity highlight colors.
+- Migrate retired color choices to System and remove extra theme and opacity controls.
+- Show product-only Light, Dark and current changelog screenshots.
+
 ## 3.2.40 — 2026-10-26
 
 - Arrange Previous/Next and Highlight All/Explain next into two rows.

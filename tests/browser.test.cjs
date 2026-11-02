@@ -481,7 +481,7 @@ test('menu routes use simplified labels with scoped secondary disclosures', asyn
 
 test('README screenshots exist at stable docs paths', () => {
   const root = path.resolve(__dirname, '..');
-  const expected = ['highlights-demo.png', 'appearance.gif'];
+  const expected = ['menu-light.png', 'menu-dark.png', 'changelog.png'];
   for (const name of expected) {
     const file = path.join(root, 'docs', 'screenshots', name);
     assert.ok(fs.existsSync(file), `missing screenshot ${name}`);
@@ -489,7 +489,7 @@ test('README screenshots exist at stable docs paths', () => {
   }
   const readme = fs.readFileSync(path.join(root, 'README.md'), 'utf8');
   assert.doesNotMatch(readme, /^## Menu$/m);
-  assert.match(readme, /^## See it in action$/m);
+  assert.match(readme, /^## Screenshots$/m);
   for (const name of expected) assert.match(readme, new RegExp(`docs/screenshots/${name.replace('.', '\\.')}`));
 });
 

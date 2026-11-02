@@ -24,3 +24,7 @@ Open **System** for status, diagnostics, troubleshooting and Reset. Menu sizing 
 ## Support and verification
 
 [Report a problem](https://github.com/ExtraPotions/PRISMA/issues) or read the [development notes](development.md) for supported behavior and verification limits. Screenshots use sample content; iPad-sized captures use touch emulation and do not establish installed iPad browser support.
+
+## Appearance
+
+Menu theme uses Slate Blue with Light, Dark and System. System follows your device and updates when its appearance changes. Identity highlight colors remain tied to their definitions. Legacy palette settings migrate to System. Gem themes, palette choices and custom menu opacity are no longer available.
