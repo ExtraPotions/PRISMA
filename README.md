@@ -17,11 +17,9 @@ Known banking, healthcare and email sites stay unchanged unless you enable PRISM
 
 ## Screenshots
 
-<img src="docs/screenshots/menu-light.png" width="324" alt="PRISMA Light menu with expandable groups closed">
-
-<img src="docs/screenshots/menu-dark.png" width="324" alt="PRISMA Dark menu with expandable groups closed">
-
-<img src="docs/screenshots/changelog.png" width="324" alt="PRISMA changelog notice with the current version and release notes">
+| Light | Dark | Changelog |
+| :---: | :---: | :---: |
+| <img src="docs/screenshots/menu-light.png" width="324" alt="PRISMA Light menu with expandable groups closed"> | <img src="docs/screenshots/menu-dark.png" width="324" alt="PRISMA Dark menu with expandable groups closed"> | <img src="docs/screenshots/changelog.png" width="324" alt="PRISMA changelog notice with the current version and release notes"> |
 
 ---
 
