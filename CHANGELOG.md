@@ -1,3 +1,10 @@
+## 3.4.0 — 2026-11-11
+
+- Lighten page load: skip small embedded frames and start highlighting after the page has loaded.
+- Put Highlight style first in Look, followed by accessibility and menu options.
+- Keep Diagnostics on one row with Show and Copy, and outline Reset all settings.
+- Use sentence-case labels and a refreshed menu header.
+
 ## 3.3.0 — 2026-11-02
 
 - Use Slate Blue Light, Dark or System for the PRISMA menu while preserving identity highlight colors.
