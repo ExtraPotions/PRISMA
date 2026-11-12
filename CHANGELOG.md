@@ -1,3 +1,8 @@
+## 3.4.1 — 2026-11-12
+
+- Use sentence-case wording in update and changelog notices.
+- Include shared Core 3.12.1.
+
 ## 3.4.0 — 2026-11-11
 
 - Lighten page load: skip small embedded frames and start highlighting after the page has loaded.
