@@ -1,3 +1,9 @@
+## 3.6.0 — 2026-11-12
+
+- Remove the floating page-actions bar; its actions stay in the menu.
+- On Twitch, show PRISMA's own plain icon in the top bar next to the other ExtraPotions products.
+- Drop hover tips from settings that explain themselves, such as Style, Animation and Update notifications.
+
 ## 3.5.0 — 2026-11-12
 
 - Show menu sections as drawers in charcoal with PRISMA blue; the menu reopens on the drawer you used last.
