@@ -1,3 +1,8 @@
+## 3.5.0 — 2026-11-12
+
+- Show menu sections as drawers in charcoal with PRISMA blue; the menu reopens on the drawer you used last.
+- Keep the shared launcher order when another ExtraPotions product is switched off or added.
+
 ## 3.4.2 — 2026-11-12
 
 - Tidy the update and changelog notices: a button-style GitHub release control, even spacing and a flat panel.
