@@ -1,5 +1,7 @@
 # <img src="assets/prisma-launcher.svg" width="48" height="48" alt=""> PRISMA
 
+> **Retired — 2026-11-13.** PRISMA is no longer maintained and gets no further updates. Its releases, history and source stay available for reference.
+
 Highlight LGBTQ+ identity terms in their flag colors and explore their definitions and sources.
 
 [Install PRISMA](https://github.com/ExtraPotions/PRISMA/releases/latest/download/prisma.user.js) · Requires [Violentmonkey](https://violentmonkey.github.io/get-it/) or [Tampermonkey](https://www.tampermonkey.net/).
